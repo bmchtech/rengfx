@@ -40,8 +40,6 @@ docs/
 .nfs*
 
 # ---> C++
-# Prerequisites
-*.d
 
 # Compiled Object files
 *.slo
@@ -74,8 +72,6 @@ docs/
 *.app
 
 # ---> C
-# Prerequisites
-*.d
 
 # Object files
 *.o
