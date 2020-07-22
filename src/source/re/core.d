@@ -2,6 +2,7 @@ module re.core;
 
 import re.util.logger;
 import re.gfx.window;
+import raylib;
 
 /**
 Core class
@@ -9,6 +10,7 @@ Core class
 class Core {
     public Logger log;
     public Window window;
+    public bool running;
 
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
@@ -25,7 +27,28 @@ class Core {
     }
 
     public void run() {
-        // start the game instance
+        running = true;
+        // start the game loop
+        while (running) {
+            running = !raylib.WindowShouldClose();
+
+            update();
+            draw();
+        }
+    }
+
+    public void exit() {
+        running = false;
+    }
+
+    protected void update() {
+        // TODO: update
+    }
+
+    protected void draw() {
+        raylib.BeginDrawing();
+        // TODO: draw
+        raylib.EndDrawing();
     }
 
     public void destroy() {
