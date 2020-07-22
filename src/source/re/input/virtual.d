@@ -3,16 +3,20 @@ module re.input.virtual;
 import re.input.input;
 import std.algorithm;
 
+/// monitors a single unit for input
 abstract class InputNode {
     void update();
 }
 
+/// a virtual input composed of input node units
 abstract class VirtualInput {
     public InputNode[] nodes;
     public abstract void update();
 }
 
+/// a virtual button
 class VirtualButton : VirtualInput {
+    /// monitors a single button
     abstract class ButtonNode : InputNode {
         @property public bool is_down();
         @property public bool is_up();
@@ -20,9 +24,12 @@ class VirtualButton : VirtualInput {
         @property public bool is_released();
     }
 
+    /// monitors a keyboard key
     class KeyboardKey : ButtonNode {
+        /// the key being monitored
         public Keys key;
 
+        /// creates a keyboard key node
         this(Keys key) {
             this.key = key;
         }

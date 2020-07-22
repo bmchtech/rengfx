@@ -13,21 +13,25 @@ struct Transform {
 
     // 2d wrappers
 
+    /// gets 2d position
     @property Vector2 position2() {
         auto pos = position;
         return Vector2(pos.x, pos.y);
     }
 
+    /// sets 2d position
     @property Vector2 position2(Vector2 value) {
         position = Vector3(value.x, value.y, 0);
         return value;
     }
 
+    /// gets 2d scale
     @property Vector2 scale2() {
         auto scl = scale;
         return Vector2(scl.x, scl.y);
     }
 
+    /// sets 2d scale
     @property Vector2 scale2(Vector2 value) {
         scale = Vector3(value.x, value.y, 1);
         return value;
@@ -35,31 +39,37 @@ struct Transform {
 
     // main sub-transforms
 
+    /// gets 3d position
     @property Vector3 position() {
         update_transform();
         return _position;
     }
 
+    /// sets 3d position
     @property Vector3 position(Vector3 value) {
         _dirty = true;
         return _position = value;
     }
 
+    /// gets 3d scale
     @property Vector3 scale() {
         update_transform();
         return _scale;
     }
 
+    /// sets 3d scale
     @property Vector3 scale(Vector3 value) {
         _dirty = true;
         return _scale = value;
     }
 
+    /// gets Z-axis rotation
     @property float rotation() {
         update_transform();
         return _rotation;
     }
 
+    /// sets Z-axis rotation
     @property float rotation(float radians) {
         _dirty = true;
         return _rotation = radians;

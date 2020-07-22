@@ -49,9 +49,14 @@ static class RectangleExt {
     }
 }
 
+/// integer rectangle
 struct RectangleInt {
-    int x, y, w, h;
+    int x;
+    int y;
+    int w;
+    int h;
 
+    /// creates an int rectangle
     this(int x, int y, int w, int h) {
         this.x = x;
         this.y = y;
