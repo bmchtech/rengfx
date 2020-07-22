@@ -1,21 +1,30 @@
 module re.core;
 
 import re.util.logger;
+import re.gfx.window;
 
 /**
 Core class
 */
 class Core {
     public Logger log;
+    public Window window;
 
-    this() {
+    this(int width, int height, string title) {
+        log = new Logger(Logger.Verbosity.Information);
+        log.sinks ~= new Logger.ConsoleSink();
+
+        window = new Window(width, height);
+        window.initialize();
+        window.set_title(title);
+
         initialize();
     }
 
     protected void initialize() {
-        // TODO: initialize things
+    }
 
-        log = new Logger(Logger.Verbosity.Information);
-        log.sinks ~= new Logger.ConsoleSink();
+    public void run() {
+        // start the game instance
     }
 }
