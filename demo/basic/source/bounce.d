@@ -9,7 +9,7 @@ import re.math;
 class BounceScene : Scene {
     /// ball bounce direction
     private Vector2 direction = Vector2(1, 1);
-    private float speed = 5;
+    private float speed = 240;
     private Entity ball;
 
     override void on_start() {
@@ -42,6 +42,6 @@ class BounceScene : Scene {
         }
 
         // move ball
-        ball.position2 = ball.position2 + direction * speed;
+        ball.position2 = ball.position2 + direction * speed * Time.deltaTime;
     }
 }
