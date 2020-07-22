@@ -1,6 +1,6 @@
 module play;
 
-import re.core;
+import re;
 static import raylib;
 
 class PlayScene : Scene {

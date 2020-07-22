@@ -3,6 +3,7 @@ module re.ecs.scene;
 public import re.time;
 import star.entity;
 static import raylib;
+import re.ecs.renderable;
 
 class Scene {
     public raylib.Color clearColor;
@@ -24,11 +25,17 @@ class Scene {
         auto dt = Time.deltaTime;
 
         // ecs update
-        // ecsManager.update(dt);
+        // ecsManager.systems.update(cast(double) dt);
     }
 
     public void draw() {
         raylib.ClearBackground(clearColor);
+
+        // render components
+        foreach (entity; ecsManager.entities.entities!(Renderable)) {
+            auto renderable = entity.component!Renderable();
+            renderable.render();
+        }
     }
 
     public void begin() {
