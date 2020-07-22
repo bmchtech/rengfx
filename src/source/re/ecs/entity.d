@@ -12,14 +12,6 @@ class Entity {
     public Transform transform;
     public string name;
 
-    @property Vector2 position() {
-        return transform.position;
-    }
-
-    @property Vector2 position(Vector2 value) {
-        return transform.position = value;
-    }
-
     public void initialize() {
         alive = true;
         components.clear();
@@ -48,5 +40,22 @@ class Entity {
 
     public T[] get_components(T)() {
         return components.filter!(x => x is T);
+    }
+
+    // - transform
+    @property Vector2 position2() {
+        return transform.position2;
+    }
+
+    @property Vector2 position2(Vector2 value) {
+        return transform.position2 = value;
+    }
+
+    @property Vector3 position() {
+        return transform.position;
+    }
+
+    @property Vector3 position(Vector3 value) {
+        return transform.position = value;
     }
 }

@@ -16,6 +16,6 @@ class SpriteRenderer : Component, Renderable {
     public void render() {
         // draw the sprite
         auto tex_rect = raylib.Rectangle(0, 0, sprite.texture.width, sprite.texture.height);
-        raylib.DrawTextureRec(sprite.texture, tex_rect, entity.position, raylib.WHITE);
+        raylib.DrawTextureRec(sprite.texture, tex_rect, entity.position2, raylib.WHITE);
     }
 }

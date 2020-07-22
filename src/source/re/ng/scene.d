@@ -67,9 +67,20 @@ class Scene {
 
     // - ecs
 
-    public Entity create_entity(string name, Vector2 pos = Vector2(0, 0)) {
+    public Entity create_entity(string name) {
         auto nt = ecs.create_entity();
         nt.name = name;
+        return nt;
+    }
+
+    public Entity create_entity(string name, Vector2 pos = Vector2(0, 0)) {
+        auto nt = create_entity(name);
+        nt.position2 = pos;
+        return nt;
+    }
+
+    public Entity create_entity(string name, Vector3 pos = Vector3(0, 0, 0)) {
+        auto nt = create_entity(name);
         nt.position = pos;
         return nt;
     }
