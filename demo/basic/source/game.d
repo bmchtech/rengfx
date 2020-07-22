@@ -16,6 +16,8 @@ class Game : Core {
         log.verbosity = Logger.Verbosity.Trace;
         log.info("basic demo game initialized.");
 
+        content.base_path = "../content/";
+
         // set up stuff and things
         scene = new PlayScene();
     }
