@@ -31,7 +31,7 @@ class Scene {
 
     /// called internally to update ecs
     public void update() {
-        auto dt = Time.deltaTime;
+        auto dt = Time.delta_time;
 
         // TODO: update components
         foreach (component; ecs.storage.updatable_components) {
