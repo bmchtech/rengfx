@@ -1,9 +1,9 @@
 module re.scene;
 
-public import raylib;
+public static import raylib;
 
 class Scene {
-    public Color clearColor;
+    public raylib.Color clearColor;
 
     this() {
         // initialize

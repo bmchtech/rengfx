@@ -5,7 +5,7 @@ import re.scene;
 
 class PlayScene : Scene {
     this() {
-        clearColor = LIGHTGRAY;
+        clearColor = raylib.LIGHTGRAY;
     }
 
     override void on_start() {
