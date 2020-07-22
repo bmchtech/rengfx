@@ -1,16 +1,17 @@
 module re.ng.scene;
 
 public import re.time;
-import star.entity;
 static import raylib;
 import re.gfx.renderable;
+import re.ecs;
 
 class Scene {
     public raylib.Color clearColor;
-    private star.entity.Engine ecsManager;
+    protected EntityManager ecs;
 
     this() {
         // initialize
+        ecs = new EntityManager();
     }
 
     protected void on_start() {
@@ -24,34 +25,25 @@ class Scene {
     public void update() {
         auto dt = Time.deltaTime;
 
-        // ecs update
-        // ecsManager.systems.update(cast(double) dt);
+        // TODO: update components
     }
 
     public void draw() {
         raylib.ClearBackground(clearColor);
 
-        // render components
-        foreach (entity; ecsManager.entities.entities!(Renderable)) {
-            auto renderable = entity.component!Renderable();
-            renderable.render();
-        }
+        // TODO: render components
     }
 
     public void begin() {
         // set up ecs
-        ecsManager = new star.entity.Engine;
+        ecs = new EntityManager;
 
         on_start();
     }
 
     public void end() {
         unload();
-    }
 
-    // - ecs
-
-    public Entity create_entity() {
-        return ecsManager.entities.create();
+        ecs.destroy();
     }
 }

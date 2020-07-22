@@ -2,12 +2,7 @@
 	"fileVersion": 1,
 	"versions": {
 		"colorize": "1.0.5",
-		"consoled": "1.0.4",
 		"datefmt": "1.0.4",
-		"evael-ecs": "0.0.1",
-		"evael-lib": "0.0.1",
 		"raylib-d": "3.0.2",
-		"star-entity": "1.0.9",
-		"unit-threaded": "1.0.4"
 	}
 }
