@@ -2,6 +2,8 @@ module re.ng.scene;
 
 public import re.time;
 static import raylib;
+import re;
+import std.string;
 import re.ecs;
 import re.ng.updatable;
 import re.ng.renderable;
@@ -29,8 +31,7 @@ class Scene {
         // TODO: update components
         foreach (nt; ecs.entities) {
             foreach (component; nt.components) {
-                if (is(component : Updatable)) {
-                    auto updatable = cast(Updatable) component;
+                if (auto updatable = cast(Updatable) component) {
                     updatable.update();
                 }
             }
@@ -43,8 +44,7 @@ class Scene {
         // TODO: render components
         foreach (nt; ecs.entities) {
             foreach (component; nt.components) {
-                if (is(component : Renderable)) {
-                    auto renderable = cast(Renderable) component;
+                if (auto renderable = cast(Renderable) component) {
                     renderable.render();
                 }
             }
