@@ -108,23 +108,19 @@ class Logger {
         // }
     }
 
-    // public static class FileSink : ILogSink, IDisposable {
-    //     public string path;
-    //     private StreamWriter sw;
+    public static class FileSink : ILogSink {
+        public string path;
+        private File of;
 
-    //     public FileSink(string path) {
-    //         this.path = path;
-    //         this.sw = new StreamWriter(File.Open(path, FileMode.Append, FileAccess.Write));
-    //     }
+        this(string path) {
+            this.path = path;
+            this.of = File(path, "a");
+        }
 
-    //     public void write_line(string log, Verbosity level) {
-    //         sw.Write(formatMeta(level));
-    //         sw.write_line($" {log}");
-    //         sw.Flush();
-    //     }
-
-    //     public void Dispose() {
-    //         sw.Dispose();
-    //     }
-    // }
+        public void write_line(string log, Verbosity level) {
+            of.write(formatMeta(level));
+            of.writeln(" {log}");
+            of.flush();
+        }
+    }
 }
