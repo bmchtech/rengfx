@@ -1,5 +1,7 @@
 module re.ecs.component;
 
-class Component {
+import re.ecs.entity;
 
+class Component {
+    public Entity entity;
 }
