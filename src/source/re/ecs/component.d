@@ -144,6 +144,8 @@ class ComponentStorage {
                     // find the id that points to the old place
                     auto other_id_pos = other.components.countUntil!(x => x.index == last_slot);
                     other.components[other_id_pos].index = id.index; // point to the new place
+                    // shrink the array
+                    storage.length--;
                 }
 
                 return; // done
