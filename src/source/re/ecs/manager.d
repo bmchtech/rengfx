@@ -5,16 +5,21 @@ import re.ecs.component;
 import std.algorithm;
 import std.array;
 
+/// manages the entity/component system
 class EntityManager {
+    /// list of all entities
     public Entity[] entities;
+    /// helper to store components in an optimized way
     public ComponentStorage storage;
     private size_t[] entities_to_remove;
     private size_t entity_counter;
 
+    /// sets up the ECS
     this() {
         storage = new ComponentStorage(this);
     }
 
+    /// create a fresh entity
     public Entity create_entity() {
         auto nt = new Entity(this);
         nt.initialize();
@@ -23,11 +28,13 @@ class EntityManager {
         return nt;
     }
 
+    /// remove an entity
     public void remove_entity(Entity entity) {
         entities.remove!(x => x == entity);
         // TODO: entity pooling
     }
 
+    /// keeps all the ducks in line
     public void update() {
         entities_to_remove = [];
         for (size_t i = 0; i < entities.length; i++) {
@@ -43,8 +50,9 @@ class EntityManager {
         }
     }
 
+    /// destroy all entities and components and clean up
     public void destroy() {
-        // destroy all entities
+        assert(0, "not implemented");
     }
 }
 
@@ -67,6 +75,7 @@ unittest {
     class Butter : Component {
         public bool tasty = true;
     }
+
     class Jelly : Component {
         public int rank = 4;
     }

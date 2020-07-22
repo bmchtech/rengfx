@@ -7,7 +7,9 @@ import std.datetime;
 import datefmt;
 import colorize;
 
+/// a utility class for displaying diagnostic messages
 class Logger {
+    /// how verbose the messages are
     enum Verbosity {
         Trace = 4,
         Information = 3,
@@ -16,7 +18,9 @@ class Logger {
         Critical = 0
     }
 
+    /// maximum message verbosity
     public Verbosity verbosity;
+    /// message output targets
     public ILogSink[] sinks;
 
     /**
@@ -26,6 +30,7 @@ class Logger {
         this.verbosity = verbosity;
     }
 
+    /// writes a message
     public void write_line(string log, Verbosity level) {
         if (level <= verbosity) {
             foreach (sink; sinks) {
@@ -34,22 +39,27 @@ class Logger {
         }
     }
 
+    /// writes a message at TRACE verbosity
     public void trace(string log) {
         write_line(log, Verbosity.Trace);
     }
 
+    /// writes a message at INFO verbosity
     public void info(string log) {
         write_line(log, Verbosity.Information);
     }
 
+    /// writes a message at WARNING verbosity
     public void warn(string log) {
         write_line(log, Verbosity.Warning);
     }
 
+    /// writes a message at ERROR verbosity
     public void err(string log) {
         write_line(log, Verbosity.Error);
     }
 
+    /// writes a message at CRITICAL verbosity
     public void crit(string log) {
         write_line(log, Verbosity.Critical);
     }
@@ -76,10 +86,13 @@ class Logger {
         return format("[%s/:%s]", shortVerbosity(level), time.format("%H:%M:%S"));
     }
 
+    /// a sink that accepts log messages
     public interface ILogSink {
+        /// writes a message to the sink
         void write_line(string log, Verbosity level);
     }
 
+    /// a sink that outputs to the console
     public static class ConsoleSink : ILogSink {
         public void write_line(string log, Verbosity level) {
             auto col = colorFor(level);
@@ -105,6 +118,7 @@ class Logger {
         }
     }
 
+    /// a sink that outputs to a file
     public static class FileSink : ILogSink {
         public string path;
         private File of;
