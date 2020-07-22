@@ -42,6 +42,6 @@ class BounceScene : Scene {
         }
 
         // move ball
-        ball.position2 = ball.position2 + direction * speed * Time.deltaTime;
+        ball.position2 = ball.position2 + direction * speed * Time.delta_time;
     }
 }
