@@ -2,7 +2,6 @@ module re.ng.scene;
 
 public import re.time;
 static import raylib;
-import re.gfx.renderable;
 import re.ecs;
 import re.ng.updatable;
 import re.ng.renderable;
