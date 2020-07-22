@@ -1,7 +1,9 @@
 module re.gfx.renderable;
 
-abstract class Renderable {
-    public void render() {
+import re.ng.renderable;
 
+class Sprite : Renderable {
+    public void render() {
+        
     }
 }

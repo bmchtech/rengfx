@@ -1,5 +1,5 @@
 module re.ecs.component;
 
-struct Component {
+class Component {
 
 }
