@@ -90,8 +90,9 @@ unittest {
     sandwich1.remove_component!Butter();
 
     // make sure everything else is still good
-    assert(!sandwich1.has_component!Butter());
-    assert(sandwich1.has_component!Jelly());
-    assert(sandwich2.has_component!Butter());
-    assert(sandwich3.has_component!Jelly());
+    enum msg = "component storage is unstable";
+    assert(!sandwich1.has_component!Butter(), msg);
+    assert(sandwich1.has_component!Jelly(), msg);
+    assert(sandwich2.has_component!Butter(), msg);
+    assert(sandwich3.has_component!Jelly(), msg);
 }
