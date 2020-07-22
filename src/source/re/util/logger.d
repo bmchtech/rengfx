@@ -5,6 +5,7 @@ import std.format;
 import std.conv;
 import std.datetime;
 import datefmt;
+import colorize;
 
 class Logger {
     enum Verbosity {
@@ -81,31 +82,27 @@ class Logger {
 
     public static class ConsoleSink : ILogSink {
         public void write_line(string log, Verbosity level) {
-            // Console.ResetColor();
-            // var col = colorFor(level);
-            // Console.ForegroundColor = col;
-            // Console.BackgroundColor = ConsoleColor.Black;
-            write(formatMeta(level));
-            // Console.ResetColor();
-            writefln(" %s", log);
+            auto col = colorFor(level);
+            colorize.cwritef(formatMeta(level).color(col, colorize.bg.black));
+            colorize.cwritefln(" %s", log);
         }
 
-        // private ConsoleColor colorFor(Verbosity level) {
-        //     switch (level) {
-        //     case Verbosity.Trace:
-        //         return ConsoleColor.Gray;
-        //     case Verbosity.Information:
-        //         return ConsoleColor.Green;
-        //     case Verbosity.Warning:
-        //         return ConsoleColor.Yellow;
-        //     case Verbosity.Error:
-        //         return ConsoleColor.Red;
-        //     case Verbosity.Critical:
-        //         return ConsoleColor.DarkRed;
-        //     default:
-        //         return ConsoleColor.White;
-        //     }
-        // }
+        private colorize.fg colorFor(Verbosity level) {
+            switch (level) {
+            case Verbosity.Trace:
+                return colorize.fg.light_black;
+            case Verbosity.Information:
+                return colorize.fg.green;
+            case Verbosity.Warning:
+                return colorize.fg.yellow;
+            case Verbosity.Error:
+                return colorize.fg.light_red;
+            case Verbosity.Critical:
+                return colorize.fg.red;
+            default:
+                return colorize.fg.white;
+            }
+        }
     }
 
     public static class FileSink : ILogSink {
