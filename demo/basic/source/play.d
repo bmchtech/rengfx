@@ -5,7 +5,7 @@ import re.scene;
 
 class PlayScene : Scene {
     this() {
-        // TODO: stuff
+        clearColor = LIGHTGRAY;
     }
 
     override void on_start() {
