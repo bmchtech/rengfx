@@ -16,14 +16,17 @@ class Scene {
         ecs = new EntityManager();
     }
 
+    /// called at the start of the scene
     protected void on_start() {
 
     }
 
+    /// called right before cleanup
     protected void unload() {
 
     }
 
+    /// called internally to update ecs
     public void update() {
         auto dt = Time.deltaTime;
 
@@ -34,6 +37,7 @@ class Scene {
         }
     }
 
+    /// called internally to render ecs
     public void draw() {
         raylib.ClearBackground(clear_color);
 
@@ -44,6 +48,7 @@ class Scene {
         }
     }
 
+    /// called internally on scene creation
     public void begin() {
         // set up ecs
         ecs = new EntityManager;
@@ -51,6 +56,7 @@ class Scene {
         on_start();
     }
 
+    /// called internally on scene destruction
     public void end() {
         unload();
 
@@ -59,18 +65,21 @@ class Scene {
 
     // - ecs
 
+    /// create an entity given a name
     public Entity create_entity(string name) {
         auto nt = ecs.create_entity();
         nt.name = name;
         return nt;
     }
 
+    /// create an entity given a name and a 2d position
     public Entity create_entity(string name, Vector2 pos = Vector2(0, 0)) {
         auto nt = create_entity(name);
         nt.position2 = pos;
         return nt;
     }
 
+    /// create an entity given a name and a 3d position
     public Entity create_entity(string name, Vector3 pos = Vector3(0, 0, 0)) {
         auto nt = create_entity(name);
         nt.position = pos;
