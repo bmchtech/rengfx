@@ -2,15 +2,17 @@ module re.core;
 
 import re.util.logger;
 import re.gfx.window;
+import re.scene;
 import raylib;
 
 /**
 Core class
 */
 class Core {
-    public Logger log;
-    public Window window;
-    public bool running;
+    public static Logger log;
+    public static Window window;
+    public static bool running;
+    private static Scene _scene;
 
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
@@ -37,18 +39,37 @@ class Core {
         }
     }
 
-    public void exit() {
+    public static void exit() {
         running = false;
     }
 
     protected void update() {
-        // TODO: update
+        if (scene !is null) {
+            scene.update();
+        }
     }
 
     protected void draw() {
         raylib.BeginDrawing();
-        // TODO: draw
+        if (scene !is null) {
+            scene.draw();
+        }
         raylib.EndDrawing();
+    }
+
+    static @property Scene scene() {
+        return _scene;
+    }
+
+    static @property Scene scene(Scene value) {
+        if (_scene !is null) {
+            // end old scene
+            _scene.end();
+            _scene = null;
+        }
+        // begin new one
+        value.begin();
+        return _scene = value;
     }
 
     public void destroy() {
