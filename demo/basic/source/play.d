@@ -8,7 +8,7 @@ import re.ng.position;
 
 class PlayScene : Scene {
     this() {
-        clear_color = raylib.LIGHTGRAY;
+        clear_color = raylib.BLACK;
     }
 
     override void on_start() {
