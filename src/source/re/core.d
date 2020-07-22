@@ -27,4 +27,8 @@ class Core {
     public void run() {
         // start the game instance
     }
+
+    public void destroy() {
+        window.destroy();
+    }
 }
