@@ -1,4 +1,4 @@
-module re.scene;
+module re.ecs.scene;
 
 public import re.time;
 import star.entity;
@@ -24,7 +24,7 @@ class Scene {
         auto dt = Time.deltaTime;
 
         // ecs update
-        ecsManager.update(dt);
+        // ecsManager.update(dt);
     }
 
     public void draw() {

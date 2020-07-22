@@ -2,7 +2,7 @@ module re.core;
 
 import re.util.logger;
 import re.gfx.window;
-public import re.scene;
+public import re.ecs.scene;
 static import raylib;
 
 /**

@@ -8,6 +8,7 @@
 		"evael-lib": "0.0.1",
 		"raylib-d": "3.0.2",
 		"reng": {"path":"../../src"},
+		"star-entity": "1.0.9",
 		"unit-threaded": "1.0.4"
 	}
 }
