@@ -2,7 +2,7 @@ module re.ecs.scene;
 
 public import re.time;
 import star.entity;
-public static import raylib;
+static import raylib;
 
 class Scene {
     public raylib.Color clearColor;
