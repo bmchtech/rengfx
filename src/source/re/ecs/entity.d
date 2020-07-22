@@ -1,20 +1,27 @@
 module re.ecs.entity;
 
 import std.array;
+import std.conv;
 import std.algorithm.iteration;
 import std.algorithm.searching;
+import re.ecs.manager;
 import re.ecs.component;
 import re.math;
 
 class Entity {
-    public Appender!(Component[]) components;
+    public size_t id;
     public bool alive;
     public Transform transform;
     public string name;
+    public EntityManager manager;
+    public ComponentId[] components;
+
+    this(EntityManager manager) {
+        this.manager = manager;
+    }
 
     public void initialize() {
         alive = true;
-        components.clear();
     }
 
     public void destroy() {
@@ -22,24 +29,37 @@ class Entity {
     }
 
     public T add_component(T)(T component) {
-        components ~= component;
+        auto id = manager.storage.insert(this, component);
+        components ~= id;
         component.entity = this;
         return component;
     }
 
+    public void remove_component(T)() {
+        auto component = get_component!T();
+        remove_component(component);
+    }
+
+    public void remove_component(T)(T component) {
+        manager.storage.remove(this, component);
+    }
+
     public bool has_component(T)() {
-        return components.data.any!(x => cast(T) x);
+        // return components.data.any!(x => cast(T) x);
+        return manager.storage.has_component!T(this);
     }
 
     public T get_component(T)() {
-        auto i = components.data.countUntil!(x => cast(T) x !is null);
-        assert(i < components.data.length,
-                "no matching component was found. use has_component() to ensure that the component exists.");
-        return cast(T) components.data[i];
+        // auto i = components.data.countUntil!(x => cast(T) x !is null);
+        // assert(i < components.data.length,
+        //         "no matching component was found. use has_component() to ensure that the component exists.");
+        // return cast(T) components.data[i];
+        return cast(T) manager.storage.get!T(this);
+
     }
 
     public T[] get_components(T)() {
-        return components.filter!(x => x is T);
+        return manager.storage.get_all!T(this);
     }
 
     // - transform

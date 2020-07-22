@@ -5,8 +5,6 @@ static import raylib;
 import re;
 import std.string;
 import re.ecs;
-import re.ng.updatable;
-import re.ng.renderable;
 import re.math;
 
 class Scene {
@@ -30,12 +28,9 @@ class Scene {
         auto dt = Time.deltaTime;
 
         // TODO: update components
-        foreach (nt; ecs.entities) {
-            foreach (component; nt.components) {
-                if (auto updatable = cast(Updatable) component) {
-                    updatable.update();
-                }
-            }
+        foreach (component; ecs.storage.updatable_components) {
+            auto updatable = cast(Updatable) component;
+            updatable.update();
         }
     }
 
@@ -43,12 +38,9 @@ class Scene {
         raylib.ClearBackground(clear_color);
 
         // TODO: render components
-        foreach (nt; ecs.entities) {
-            foreach (component; nt.components) {
-                if (auto renderable = cast(Renderable) component) {
-                    renderable.render();
-                }
-            }
+        foreach (component; ecs.storage.renderable_components) {
+            auto renderable = cast(Renderable) component;
+            renderable.render();
         }
     }
 

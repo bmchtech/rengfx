@@ -1,4 +1,4 @@
-module re.ng.renderable;
+module re.ecs.renderable;
 
 interface Renderable {
     void render();

@@ -1,4 +1,4 @@
-module re.ng.updatable;
+module re.ecs.updatable;
 
 interface Updatable {
     void update();
