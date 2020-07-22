@@ -3,6 +3,10 @@
 	"versions": {
 		"colorize": "1.0.5",
 		"datefmt": "1.0.4",
-		"raylib-d": "3.0.2",
+		"ddmp": "0.0.1-0.dev.3",
+		"fluent-asserts": "0.13.3",
+		"libdparse": "0.14.0",
+		"raylib-d": {"path":"../lib/raylib-d"},
+		"stdx-allocator": "2.77.5"
 	}
 }
