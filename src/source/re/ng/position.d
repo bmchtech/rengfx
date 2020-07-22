@@ -1,7 +1,9 @@
 module re.ng.position;
 static import raylib;
 
-class Position {
+import re.ecs.component;
+
+class Position : Component {
     public raylib.Vector2 vec;
 
     this(float x, float y) {
