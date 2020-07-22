@@ -1,6 +1,7 @@
 {
 	"fileVersion": 1,
 	"versions": {
+		"datefmt": "1.0.4",
 		"evael-ecs": "0.0.1",
 		"evael-lib": "0.0.1",
 		"raylib-d": "3.0.2",
