@@ -10,6 +10,7 @@ class Entity {
     public Appender!(Component[]) components;
     public bool alive;
     public Transform transform;
+    public string name;
 
     @property Vector2 position() {
         return transform.position;

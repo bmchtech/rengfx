@@ -7,6 +7,7 @@ import std.string;
 import re.ecs;
 import re.ng.updatable;
 import re.ng.renderable;
+import re.math;
 
 class Scene {
     public raylib.Color clear_color;
@@ -62,5 +63,14 @@ class Scene {
         unload();
 
         ecs.destroy();
+    }
+
+    // - ecs
+
+    public Entity create_entity(string name, Vector2 pos = Vector2(0, 0)) {
+        auto nt = ecs.create_entity();
+        nt.name = name;
+        nt.position = pos;
+        return nt;
     }
 }
