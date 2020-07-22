@@ -3,21 +3,23 @@ module re.input.virtual;
 import re.input.input;
 import std.algorithm;
 
-/// monitors a single unit for input
-abstract class InputNode {
-    void update();
-}
-
 /// a virtual input composed of input node units
 abstract class VirtualInput {
-    public InputNode[] nodes;
-    public abstract void update();
+    public Node[] nodes;
+    public void update() {
+    }
+
+    /// monitors a single unit for input
+    static abstract class Node {
+        void update() {
+        }
+    }
 }
 
 /// a virtual button
 class VirtualButton : VirtualInput {
     /// monitors a single button
-    abstract class ButtonNode : InputNode {
+    static abstract class Node : VirtualInput.Node {
         @property public bool is_down();
         @property public bool is_up();
         @property public bool is_pressed();
@@ -25,7 +27,7 @@ class VirtualButton : VirtualInput {
     }
 
     /// monitors a keyboard key
-    class KeyboardKey : ButtonNode {
+    static class KeyboardKey : Node {
         /// the key being monitored
         public Keys key;
 
@@ -52,24 +54,25 @@ class VirtualButton : VirtualInput {
     }
 
     @property public bool is_down() {
-        return nodes.any!(x => (cast(ButtonNode) x).is_down);
+        return nodes.any!(x => (cast(Node) x).is_down);
     }
 
     @property public bool is_up() {
-        return nodes.any!(x => (cast(ButtonNode) x).is_up);
+        return nodes.any!(x => (cast(Node) x).is_up);
     }
 
     @property public bool is_pressed() {
-        return nodes.any!(x => (cast(ButtonNode) x).is_pressed);
+        return nodes.any!(x => (cast(Node) x).is_pressed);
     }
 
     @property public bool is_released() {
-        return nodes.any!(x => (cast(ButtonNode) x).is_released);
+        return nodes.any!(x => (cast(Node) x).is_released);
     }
 }
 
 unittest {
-    auto the_button = VirtualButton();
-    the_button.nodes ~= VirtualButton.KeyboardKey(Keys.KEY_E);
+    auto the_button = new VirtualButton();
+    the_button.nodes ~= new VirtualButton.KeyboardKey(Keys.KEY_E);
 
+    assert(the_button.nodes.length > 0);
 }
