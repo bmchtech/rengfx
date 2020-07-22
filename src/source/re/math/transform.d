@@ -1,15 +1,17 @@
 module re.math.transform;
 
 public import raylib : Vector2, Vector3, Matrix4;
+
 public static import raymath;
 
 struct Transform {
     private bool _dirty;
-    private Vector3 _position;
+    private Vector3 _position = Vector3(0, 0, 0);
+    private Vector3 _scale = Vector3(1, 1, 1);
     private float _rotation = 0;
-    Matrix4 _localTransform;
+    private Matrix4 _localTransform;
 
-    // 2d position wrapper
+    // 2d wrappers
 
     @property Vector2 position2() {
         auto pos = position;
@@ -18,6 +20,16 @@ struct Transform {
 
     @property Vector2 position2(Vector2 value) {
         position = Vector3(value.x, value.y, 0);
+        return value;
+    }
+
+    @property Vector2 scale2() {
+        auto scl = scale;
+        return Vector2(scl.x, scl.y);
+    }
+
+    @property Vector2 scale2(Vector2 value) {
+        scale = Vector3(value.x, value.y, 1);
         return value;
     }
 
@@ -31,6 +43,16 @@ struct Transform {
     @property Vector3 position(Vector3 value) {
         _dirty = true;
         return _position = value;
+    }
+
+    @property Vector3 scale() {
+        update_transform();
+        return _scale;
+    }
+
+    @property Vector3 scale(Vector3 value) {
+        _dirty = true;
+        return _scale = value;
     }
 
     @property float rotation() {
@@ -48,13 +70,13 @@ struct Transform {
             // recompute matrices
             auto translation_mat = raymath.MatrixTranslate(_position.x, _position.y, _position.z);
             auto rotation_mat = raymath.MatrixRotateZ(_rotation);
-            auto scale_mat = raymath.MatrixScale(1, 1, 1);
+            auto scale_mat = raymath.MatrixScale(_scale.x, _scale.y, _scale.z);
 
             auto tmp1 = raymath.MatrixMultiply(scale_mat, rotation_mat);
             auto tmp2 = raymath.MatrixMultiply(tmp1, translation_mat);
 
             _localTransform = tmp2;
-            
+
             _dirty = false;
         }
     }
