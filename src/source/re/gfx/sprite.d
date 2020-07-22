@@ -1,9 +1,11 @@
 module re.gfx.sprite;
 
-import re.ng.renderable;
+static import raylib;
 
-class Sprite : Renderable {
-    public void render() {
-        
+class Sprite {
+    private raylib.Texture2D texture;
+
+    this(raylib.Texture2D texture) {
+        this.texture = texture;
     }
 }
