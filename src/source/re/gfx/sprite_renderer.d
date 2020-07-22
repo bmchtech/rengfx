@@ -14,7 +14,8 @@ class SpriteRenderer : Component, Renderable {
 
     public void render() {
         // draw the sprite
-        raylib.DrawTextureRec(sprite.texture, sprite.src_rect, entity.position2, raylib.WHITE);
+        auto dest_rect = Rectangle(entity.position2.x, entity.position2.y, sprite.src_rect.width, sprite.src_rect.height);
+        raylib.DrawTexturePro(sprite.texture, sprite.src_rect, dest_rect, sprite.origin, entity.rotation, raylib.WHITE);
     }
 
     public void debug_render() {
