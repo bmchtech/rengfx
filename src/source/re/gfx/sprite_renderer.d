@@ -1,7 +1,6 @@
 module re.gfx.sprite_renderer;
 
 import re.gfx.sprite;
-import re.ng.renderable;
 import re.ecs;
 import re.math;
 static import raylib;
