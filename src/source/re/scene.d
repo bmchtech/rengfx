@@ -1,6 +1,10 @@
 module re.scene;
 
+public import raylib;
+
 class Scene {
+    public Color clearColor;
+
     this() {
         // initialize
     }
@@ -18,7 +22,7 @@ class Scene {
     }
 
     public void draw() {
-
+        raylib.ClearBackground(clearColor);
     }
 
     public void begin() {
