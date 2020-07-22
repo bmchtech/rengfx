@@ -1,12 +1,14 @@
 module re.math.transform;
 
-public import raylib : Vector2, Vector3;
+public import raylib : Vector2, Vector3, Matrix4;
 
 struct Transform {
     private bool _dirty;
-
     private Vector3 _position;
     private float _rotation;
+    Matrix4 _localTransform;
+
+    // 2d position wrapper
 
     @property Vector2 position2() {
         auto pos = position;
@@ -18,12 +20,15 @@ struct Transform {
         return value;
     }
 
+    // main sub-transforms
+
     @property Vector3 position() {
         update_transform();
         return _position;
     }
 
     @property Vector3 position(Vector3 value) {
+        _dirty = true;
         return _position = value;
     }
 
@@ -33,10 +38,16 @@ struct Transform {
     }
 
     @property float rotation(float radians) {
+        _dirty = true;
         return _rotation = radians;
     }
 
     private void update_transform() {
-
+        if (_dirty) {
+            // recompute matrices
+            
+            
+            _dirty = false;
+        }
     }
 }
