@@ -1,9 +1,9 @@
-module re.ecs.scene;
+module re.ng.scene;
 
 public import re.time;
 import star.entity;
 static import raylib;
-import re.ecs.renderable;
+import re.gfx.renderable;
 
 class Scene {
     public raylib.Color clearColor;
