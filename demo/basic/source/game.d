@@ -1,6 +1,8 @@
 module game;
+
 import re.core;
 import std.stdio;
+import play;
 
 class Game : Core {
     this() {
@@ -11,6 +13,7 @@ class Game : Core {
         super.initialize();
 
         // set up stuff and things
+        scene = new PlayScene();
 
         log.info("basic demo game initialized.");
     }
