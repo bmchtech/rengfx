@@ -1,7 +1,7 @@
 module re.gfx.window;
 
 import std.string;
-import raylib;
+static import raylib;
 
 class Window {
     private int width;

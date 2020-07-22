@@ -3,7 +3,7 @@ module re.core;
 import re.util.logger;
 import re.gfx.window;
 import re.scene;
-import raylib;
+static import raylib;
 
 /**
 Core class
