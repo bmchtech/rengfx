@@ -6,7 +6,7 @@ import bounce;
 
 class Game : Core {
 	this() {
-		super(960, 540, "basic demo");
+		super(540, 360, "basic demo");
 	}
 
 	override void initialize() {

@@ -4,8 +4,8 @@ import std.string;
 static import raylib;
 
 class Window {
-    private int width;
-    private int height;
+    public int width;
+    public int height;
 
     this(int width, int height) {
         this.width = width;
