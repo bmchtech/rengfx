@@ -1,4 +1,4 @@
-module re.gfx.renderable;
+module re.gfx.sprite;
 
 import re.ng.renderable;
 

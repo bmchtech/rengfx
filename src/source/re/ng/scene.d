@@ -8,7 +8,7 @@ import re.ng.updatable;
 import re.ng.renderable;
 
 class Scene {
-    public raylib.Color clearColor;
+    public raylib.Color clear_color;
     protected EntityManager ecs;
 
     this() {
@@ -39,7 +39,7 @@ class Scene {
     }
 
     public void draw() {
-        raylib.ClearBackground(clearColor);
+        raylib.ClearBackground(clear_color);
 
         // TODO: render components
         foreach (nt; ecs.entities) {

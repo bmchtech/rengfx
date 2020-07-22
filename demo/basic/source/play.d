@@ -5,7 +5,7 @@ static import raylib;
 
 class PlayScene : Scene {
     this() {
-        clearColor = raylib.LIGHTGRAY;
+        clear_color = raylib.LIGHTGRAY;
     }
 
     override void on_start() {

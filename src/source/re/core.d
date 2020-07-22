@@ -1,6 +1,7 @@
 module re.core;
 
 import re.util.logger;
+import re.content;
 import re.gfx.window;
 import re.ng.scene;
 static import raylib;
@@ -11,6 +12,7 @@ Core class
 class Core {
     public static Logger log;
     public static Window window;
+    public static ContentManager content;
     public static bool running;
     private static Scene _scene;
 
@@ -18,9 +20,12 @@ class Core {
         log = new Logger(Logger.Verbosity.Information);
         log.sinks ~= new Logger.ConsoleSink();
 
+
         window = new Window(width, height);
         window.initialize();
         window.set_title(title);
+
+        content = new ContentManager();
 
         initialize();
     }
@@ -73,6 +78,7 @@ class Core {
     }
 
     public void destroy() {
+        content.destroy();
         window.destroy();
     }
 }
