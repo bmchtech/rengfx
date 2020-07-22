@@ -1,6 +1,8 @@
 module re.math.rect;
 
-struct RectI {
+public import raylib: Rectangle;
+
+struct RectangleInt {
     int x, y, w, h;
 
     this(int x, int y, int w, int h) {

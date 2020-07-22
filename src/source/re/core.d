@@ -15,6 +15,7 @@ class Core {
     public static ContentManager content;
     public static bool running;
     private static Scene _scene;
+    public static bool debug_render;
 
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
