@@ -45,6 +45,9 @@ class Scene {
         foreach (component; ecs.storage.renderable_components) {
             auto renderable = cast(Renderable) component;
             renderable.render();
+            if (Core.debug_render) {
+                renderable.debug_render();
+            }
         }
     }
 

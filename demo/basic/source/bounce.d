@@ -1,6 +1,7 @@
 module bounce;
 
 import re;
+import re.input;
 import re.gfx;
 static import raylib;
 import re.math;
@@ -8,7 +9,7 @@ import re.math;
 class BounceScene : Scene {
     /// ball bounce direction
     private Vector2 direction = Vector2(1, 1);
-    private float speed = 10;
+    private float speed = 5;
     private Entity ball;
 
     override void on_start() {
@@ -21,6 +22,8 @@ class BounceScene : Scene {
     }
 
     override void update() {
+        Core.debug_render = Input.is_key_down(Keys.KEY_TAB);
+
         // update direction
         if (ball.position2.x >= Core.window.width) {
             direction = Vector2(-1, direction.y);

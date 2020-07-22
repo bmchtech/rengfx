@@ -12,9 +12,20 @@ class SpriteRenderer : Component, Renderable {
         this.sprite = sprite;
     }
 
+    private Rectangle sprite_tex_rect() {
+        pragma(inline, true) return Rectangle(0, 0,
+                sprite.texture.width, sprite.texture.height);
+    }
+
     public void render() {
         // draw the sprite
-        auto tex_rect = raylib.Rectangle(0, 0, sprite.texture.width, sprite.texture.height);
-        raylib.DrawTextureRec(sprite.texture, tex_rect, entity.position2, raylib.WHITE);
+        raylib.DrawTextureRec(sprite.texture, sprite_tex_rect(), entity.position2, raylib.WHITE);
+    }
+
+    public void debug_render() {
+        auto tex_rec = sprite_tex_rect();
+        raylib.DrawRectangleLines(cast(int) entity.position2.x,
+                cast(int) entity.position2.y, cast(int) tex_rec.width,
+                cast(int) tex_rec.height, raylib.RED);
     }
 }
