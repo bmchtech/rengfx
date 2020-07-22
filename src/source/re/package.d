@@ -1,4 +1,4 @@
 module re;
 
 public import re.core;
-public import re.ecs.scene;
+public import re.ng.scene;
