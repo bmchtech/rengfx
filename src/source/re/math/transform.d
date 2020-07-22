@@ -1,11 +1,12 @@
 module re.math.transform;
 
 public import raylib : Vector2, Vector3, Matrix4;
+public static import raymath;
 
 struct Transform {
     private bool _dirty;
     private Vector3 _position;
-    private float _rotation;
+    private float _rotation = 0;
     Matrix4 _localTransform;
 
     // 2d position wrapper
@@ -45,7 +46,14 @@ struct Transform {
     private void update_transform() {
         if (_dirty) {
             // recompute matrices
-            
+            auto translation_mat = raymath.MatrixTranslate(_position.x, _position.y, _position.z);
+            auto rotation_mat = raymath.MatrixRotateZ(_rotation);
+            auto scale_mat = raymath.MatrixScale(1, 1, 1);
+
+            auto tmp1 = raymath.MatrixMultiply(scale_mat, rotation_mat);
+            auto tmp2 = raymath.MatrixMultiply(tmp1, translation_mat);
+
+            _localTransform = tmp2;
             
             _dirty = false;
         }
