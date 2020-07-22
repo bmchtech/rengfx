@@ -33,7 +33,10 @@ class Scene {
     public void update() {
         auto dt = Time.delta_time;
 
-        // TODO: update components
+        // update ecs
+        ecs.update();
+
+        // update components
         foreach (component; ecs.storage.updatable_components) {
             auto updatable = cast(Updatable) component;
             updatable.update();
@@ -44,7 +47,7 @@ class Scene {
     public void draw() {
         raylib.ClearBackground(clear_color);
 
-        // TODO: render components
+        // render components
         foreach (component; ecs.storage.renderable_components) {
             auto renderable = cast(Renderable) component;
             renderable.render();
