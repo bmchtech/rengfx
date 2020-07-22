@@ -4,7 +4,9 @@ import re;
 import std.stdio;
 import bounce;
 
+/// the game for the basic demo
 class Game : Core {
+	/// sets up the game
 	this() {
 		super(540, 360, "basic demo");
 	}

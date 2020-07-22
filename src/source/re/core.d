@@ -10,13 +10,20 @@ static import raylib;
 Core class
 */
 class Core {
+    /// logger utility
     public static Logger log;
+    /// game window
     public static Window window;
+    /// content manager
     public static ContentManager content;
+    /// whether the game is running
     public static bool running;
+    /// the current scene
     private static Scene _scene;
+    /// whether to draw debug information
     public static bool debug_render;
 
+    /// sets up a game core
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
         log.sinks ~= new Logger.ConsoleSink();
@@ -34,6 +41,7 @@ class Core {
     protected void initialize() {
     }
 
+    /// starts the game
     public void run() {
         running = true;
         // start the game loop
@@ -45,6 +53,7 @@ class Core {
         }
     }
 
+    /// gracefully exits the game
     public static void exit() {
         running = false;
     }
@@ -63,10 +72,12 @@ class Core {
         raylib.EndDrawing();
     }
 
+    /// gets the current scene
     static @property Scene scene() {
         return _scene;
     }
 
+    /// sets the current scene
     static @property Scene scene(Scene value) {
         if (_scene !is null) {
             // end old scene
@@ -78,6 +89,7 @@ class Core {
         return _scene = value;
     }
 
+    /// releases all resources and cleans up
     public void destroy() {
         content.destroy();
         window.destroy();

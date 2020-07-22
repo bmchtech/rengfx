@@ -7,10 +7,13 @@ import std.string;
 import re.ecs;
 import re.math;
 
+/// represents a collection of entities that draw to a texture
 class Scene {
+    /// the cleared background color
     public raylib.Color clear_color;
     protected EntityManager ecs;
 
+    /// creates a new scene
     this() {
         // initialize
         ecs = new EntityManager();
