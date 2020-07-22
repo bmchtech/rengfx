@@ -25,11 +25,12 @@ class Entity {
     }
 
     public bool has_component(T)() {
-        return components.any!(x => x is T);
+        return components.data.any!(x => is(x : T));
     }
 
     public T get_component(T)() {
         auto i = components.data.countUntil!(x => is(x : T));
+        assert(i < components.data.length, "no matching component was found. use has_component() to ensure that the component exists.");
         return cast(T) components.data[i];
     }
 
