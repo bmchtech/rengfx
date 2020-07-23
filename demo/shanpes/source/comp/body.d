@@ -6,7 +6,9 @@ import comp.input;
 
 class ShapeBody : Component, Updatable {
     /// movement speed
-    enum speed = 40;
+    enum move_speed = 40;
+    /// turn speed
+    enum turn_speed = PI / 2;
     private InputController controller;
 
     override void setup() {
@@ -14,6 +16,9 @@ class ShapeBody : Component, Updatable {
     }
 
     void update() {
-        entity.position2 = entity.position2 + (controller.move.value * speed * Time.delta_time);
+        entity.position2 = entity.position2 + (controller.move.value * move_speed * Time.delta_time);
+
+        entity.transform.rotation = entity.transform.rotation + (
+                controller.turn.value * turn_speed * Time.delta_time);
     }
 }

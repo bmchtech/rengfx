@@ -18,7 +18,8 @@ class Square : Component, Renderable {
     }
 
     void render() {
-        raylib.DrawRectangleV(entity.position2, size, color);
+        raylib.DrawRectanglePro(Rectangle(entity.position2.x,
+                entity.position2.y, size.x, size.y), size / 2, entity.transform.rotation * RAD2DEG, color);
     }
 
     void debug_render() {
