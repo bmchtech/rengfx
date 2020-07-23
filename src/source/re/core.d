@@ -15,7 +15,7 @@ static import raylib;
 /**
 Core class
 */
-class Core {
+abstract class Core {
     /// logger utility
     public static Logger log;
 
@@ -77,8 +77,8 @@ class Core {
         initialize();
     }
 
-    protected void initialize() {
-    }
+    /// sets up the game
+    abstract void initialize();
 
     /// starts the game
     public void run() {
