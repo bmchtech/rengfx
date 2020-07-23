@@ -12,7 +12,8 @@ abstract class Scene {
     /// the cleared background color
     public raylib.Color clear_color;
     protected EntityManager ecs;
-    protected raylib.RenderTexture2D render_texture;
+    /// the render target
+    public raylib.RenderTexture2D render_texture;
 
     /// creates a new scene
     this() {
