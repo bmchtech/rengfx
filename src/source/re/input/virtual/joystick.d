@@ -66,11 +66,11 @@ class VirtualJoystick : VirtualInput {
                     }
                 } else {
                     _turned_x = false;
-                    _value.x = 1;
+                    _value.x = -1;
                 }
             } else if (Input.is_key_down(right)) {
                 _turned_x = false;
-                _value.x = -1;
+                _value.x = 1;
             } else {
                 _turned_x = false;
                 _value.x = 0;
@@ -95,11 +95,11 @@ class VirtualJoystick : VirtualInput {
                     }
                 } else {
                     _turned_y = false;
-                    _value.y = 1;
+                    _value.y = -1;
                 }
             } else if (Input.is_key_down(down)) {
                 _turned_y = false;
-                _value.y = -1;
+                _value.y = 1;
             } else {
                 _turned_y = false;
                 _value.y = 0;
