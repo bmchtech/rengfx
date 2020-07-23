@@ -130,6 +130,13 @@ class Core {
 
     }
 
+     public static Scene get_scene(T)() {
+        // TODO: support the multi scene
+        // for now, just return a casted scene
+        // return cast(T) scene;
+        return scene;
+    }
+
     /// gets the current scene
     static @property Scene scene() {
         return _scene;
