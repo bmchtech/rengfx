@@ -38,3 +38,34 @@ abstract class VirtualInput {
         }
     }
 }
+
+unittest {
+    import re.ecs;
+    import std.algorithm;
+
+    class InputComponent : Component {
+        public VirtualButton bonk;
+
+        this() {
+            bonk = new VirtualButton();
+            bonk.nodes ~= new VirtualButton.LogicButton();
+        }
+
+        override void destroy() {
+            bonk.unregister();
+        }
+    }
+
+    auto ecs = new EntityManager();
+    auto nt = ecs.create_entity();
+    auto controls = new InputComponent();
+    nt.add_component(controls);
+    // make sure input is registered
+    assert(Input.virtual_inputs.any!(x => x == controls.bonk));
+    assert(nt.has_component!InputComponent);
+    ecs.destroy();
+    // make sure entity was deactivated
+    assert(!nt.alive);
+    // make sure input is unregistered
+    assert(!Input.virtual_inputs.any!(x => x == controls.bonk));
+}
