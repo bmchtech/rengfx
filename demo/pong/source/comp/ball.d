@@ -5,11 +5,14 @@ import re.math;
 import re.gfx;
 import std.random;
 import comp.score;
+import comp.paddle;
+import std.math;
 
 class Ball : Component, Updatable {
     private float speed = 160;
     private Vector2 direction;
     private SpriteRenderer spr_ren;
+    private Paddle[] paddles;
 
     override void setup() {
         spr_ren = entity.get_component!SpriteRenderer;
@@ -24,6 +27,10 @@ class Ball : Component, Updatable {
         entity.position2 = Vector2(Core.window.width / 2, Core.window.height / 2);
     }
 
+    void bounce_on(Paddle paddle) {
+        paddles ~= paddle;
+    }
+
     void update() {
         // update direction
         if (entity.position2.x + spr_ren.bounds.width / 2 >= Core.window.width) {
@@ -32,6 +39,16 @@ class Ball : Component, Updatable {
 
         if (entity.position2.x - spr_ren.bounds.width / 2 <= 0) {
             direction = Vector2(1, direction.y);
+        }
+
+        foreach (paddle; paddles) {
+            // check if within paddle Y
+            if (abs(entity.position2.y - paddle.entity.position2.y) < 5) {
+                // check paddle X
+                if (abs(entity.position2.x - paddle.entity.position2.x) < 60) {
+                    direction = Vector2(direction.x, -direction.y);
+                }
+            }
         }
 
         if (entity.position2.y + spr_ren.bounds.height / 2 >= Core.window.height) {
