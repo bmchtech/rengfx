@@ -104,28 +104,7 @@ class ComponentStorage {
         foreach (id; entity.components) {
             auto component = get(id);
             if (component == to_remove) {
-                // delete the component id from the entity
-                entity.components = entity.components.remove!(x => x == id);
-
-                // - update component storage
-                auto storage = get_storage(id);
-                // empty the slot, and swap it to the end
-                storage[id.index] = null; // dereference
-                if (storage.length > 1) { // check if we need to swap
-                    auto last_slot = cast(size_t) storage.length - 1;
-                    auto tmp = storage[last_slot];
-                    assert(tmp.entity);
-                    storage[last_slot] = storage[id.index];
-                    storage[id.index] = tmp;
-                    // find out who owns tmp, and tell them that their component has moved
-                    auto other = tmp.entity;
-                    // find the id that points to the old place
-                    auto other_id_pos = other.components.countUntil!(x => x.index == last_slot);
-                    other.components[other_id_pos].index = id.index; // point to the new place
-                    // shrink the array
-                    storage.length--;
-                }
-
+                remove(entity, id);
                 return; // done
             }
         }
@@ -133,8 +112,35 @@ class ComponentStorage {
                 "no matching component was found. use has_component() to ensure that the component exists.");
     }
 
+    private void remove(Entity entity, ComponentId id) {
+        // delete the component id from the entity
+        entity.components = entity.components.remove!(x => x == id);
+
+        // - update storage
+        auto storage = get_storage(id);
+        // empty the slot, and swap it to the end
+        storage[id.index].destroy(); // cleanup
+        storage[id.index] = null; // dereference
+        if (storage.length > 1) { // check if we need to swap
+            auto last_slot = cast(size_t) storage.length - 1;
+            auto tmp = storage[last_slot];
+            assert(tmp.entity);
+            storage[last_slot] = storage[id.index];
+            storage[id.index] = tmp;
+            // find out who owns tmp, and tell them that their component has moved
+            auto other = tmp.entity;
+            // find the id that points to the old place
+            auto other_id_pos = other.components.countUntil!(x => x.index == last_slot);
+            other.components[other_id_pos].index = id.index; // point to the new place
+            // shrink the array
+            storage.length--;
+        }
+    }
+
     /// destroy all components attached to an entity
     public void destroy_all(Entity entity) {
-        assert(0, "not implemented");
+        foreach (id; entity.components) {
+            remove(entity, id);
+        }
     }
 }
