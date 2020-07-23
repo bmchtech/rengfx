@@ -68,10 +68,10 @@ unittest {
     auto nt = ecs.create_entity();
     auto food = new Food();
     nt.add_component(food);
-    assert(nt.has_component!Food(), "component was not properly added");
+    assert(nt.has_component!Food, "component was not properly added");
     assert(nt.get_component!Food == food, "component cannot be retrieved");
     nt.remove_component!Food();
-    assert(!nt.has_component!Food(), "component cannot be removed");
+    assert(!nt.has_component!Food, "component cannot be removed");
     nt.destroy();
     assert(!nt.alive);
 }
@@ -92,21 +92,21 @@ unittest {
 
     sandwich1.add_component(new Butter());
     sandwich1.add_component(new Jelly());
-    assert(sandwich1.has_component!Butter());
-    assert(sandwich1.has_component!Jelly());
+    assert(sandwich1.has_component!Butter);
+    assert(sandwich1.has_component!Jelly);
 
     sandwich2.add_component(new Butter());
-    assert(sandwich2.has_component!Butter());
+    assert(sandwich2.has_component!Butter);
 
     sandwich3.add_component(new Jelly());
-    assert(sandwich3.has_component!Jelly());
+    assert(sandwich3.has_component!Jelly);
 
-    sandwich1.remove_component!Butter();
+    sandwich1.remove_component!Butter;
 
     // make sure everything else is still good
     enum msg = "component storage is unstable";
-    assert(!sandwich1.has_component!Butter(), msg);
-    assert(sandwich1.has_component!Jelly(), msg);
-    assert(sandwich2.has_component!Butter(), msg);
-    assert(sandwich3.has_component!Jelly(), msg);
+    assert(!sandwich1.has_component!Butter, msg);
+    assert(sandwich1.has_component!Jelly, msg);
+    assert(sandwich2.has_component!Butter, msg);
+    assert(sandwich3.has_component!Jelly, msg);
 }
