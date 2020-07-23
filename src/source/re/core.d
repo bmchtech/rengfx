@@ -35,11 +35,15 @@ class Core {
 
     /// whether to draw debug information
     public static bool debug_render;
+
     /// debugger utility
     debug public static Debugger debugger;
 
     /// whether the game is running
     public static bool running;
+
+    /// whether graphics should be disabled
+    public static bool headless = false;
 
     /// whether to pause when unfocused
     public static bool pause_on_focus_lost = false;
@@ -49,9 +53,11 @@ class Core {
         log = new Logger(Logger.Verbosity.Information);
         log.sinks ~= new Logger.ConsoleSink();
 
-        window = new Window(width, height);
-        window.initialize();
-        window.set_title(title);
+        if (!Core.headless) {
+            window = new Window(width, height);
+            window.initialize();
+            window.set_title(title);
+        }
 
         content = new ContentManager();
 
@@ -103,6 +109,8 @@ class Core {
     }
 
     protected void draw() {
+        if (Core.headless)
+            return;
         if (raylib.IsWindowMinimized()) {
             return; // suppress draw
         }
@@ -137,6 +145,8 @@ class Core {
     /// releases all resources and cleans up
     public void destroy() {
         content.destroy();
-        window.destroy();
+        if (!Core.headless) {
+            window.destroy();
+        }
     }
 }
