@@ -9,7 +9,9 @@ import comp.paddle;
 import std.math;
 
 class Ball : Component, Updatable {
-    private float speed = 160;
+    private enum base_speed = 160;
+    private float speed = base_speed;
+    private float speed_up = 20;
     private Vector2 direction;
     private SpriteRenderer spr_ren;
     private Paddle[] paddles;
@@ -23,6 +25,7 @@ class Ball : Component, Updatable {
         auto x_dir = [-1, 1].choice(Rng.rng);
         auto y_dir = [-1, 1].choice(Rng.rng);
         direction = Vector2(x_dir, y_dir);
+        speed = base_speed;
 
         entity.position2 = Vector2(Core.window.width / 2, Core.window.height / 2);
     }
@@ -64,5 +67,8 @@ class Ball : Component, Updatable {
         }
 
         entity.position2 = entity.position2 + (direction * speed * Time.delta_time);
+
+        // increase speed
+        speed += Time.delta_time * speed_up;
     }
 }
