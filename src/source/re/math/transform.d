@@ -7,7 +7,8 @@ struct Transform {
     private Vector3 _position = Vector3(0, 0, 0);
     private Vector3 _scale = Vector3(1, 1, 1);
     private float _rotation = 0;
-    private Matrix4 _localTransform;
+    private Matrix4 _localToWorldTransform;
+    private Matrix4 _worldToLocalTransform;
 
     // 2d wrappers
 
@@ -73,19 +74,34 @@ struct Transform {
         return _rotation = radians;
     }
 
+    /// gets local-to-world transform
+    @property Matrix4 local_to_world_transform() {
+        update_transform();
+        return _localToWorldTransform;
+    }
+
+    /// gets world-to-local transform
+    @property Matrix4 world_to_local_transform() {
+        update_transform();
+        return _worldToLocalTransform;
+    }
+
     private void update_transform() {
-        if (_dirty) {
-            // recompute matrices
-            auto translation_mat = raymath.MatrixTranslate(_position.x, _position.y, _position.z);
-            auto rotation_mat = raymath.MatrixRotateZ(_rotation);
-            auto scale_mat = raymath.MatrixScale(_scale.x, _scale.y, _scale.z);
+        if (!_dirty)
+            return;
 
-            auto tmp1 = raymath.MatrixMultiply(scale_mat, rotation_mat);
-            auto tmp2 = raymath.MatrixMultiply(tmp1, translation_mat);
+        // recompute matrices
+        auto translation_mat = raymath.MatrixTranslate(_position.x, _position.y, _position.z);
+        auto rotation_mat = raymath.MatrixRotateZ(_rotation);
+        auto scale_mat = raymath.MatrixScale(_scale.x, _scale.y, _scale.z);
 
-            _localTransform = tmp2;
+        auto tmp1 = raymath.MatrixMultiply(scale_mat, rotation_mat);
+        auto tmp2 = raymath.MatrixMultiply(tmp1, translation_mat);
 
-            _dirty = false;
-        }
+        _localToWorldTransform = tmp2;
+        _worldToLocalTransform = raymath.MatrixInvert(_localToWorldTransform);
+
+        _dirty = false;
+
     }
 }
