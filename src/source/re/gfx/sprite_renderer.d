@@ -1,6 +1,6 @@
 module re.gfx.sprite_renderer;
 
-import re.gfx.sprite;
+import re.gfx;
 import re.ecs;
 import re.math;
 import re.ng.debugger;
@@ -10,7 +10,7 @@ class SpriteRenderer : Component, Renderable {
     /// the sprite
     public Sprite sprite;
     /// color tint
-    public raylib.Color color = raylib.WHITE;
+    public Color color = Colors.WHITE;
 
     this(Sprite sprite) {
         this.sprite = sprite;

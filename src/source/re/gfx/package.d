@@ -9,4 +9,4 @@ public import re.gfx.sprite_renderer;
 public import re.gfx.text;
 
 // raylib
-public import raylib: Image, Texture2D;
+public import raylib: Color, Colors, Image, Texture2D;
