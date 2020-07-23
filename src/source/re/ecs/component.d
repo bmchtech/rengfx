@@ -7,7 +7,6 @@ abstract class Component {
     /// owner entity
     public Entity entity;
     public void setup() {
-
     }
 
     public void destroy() {
