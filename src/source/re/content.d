@@ -2,10 +2,11 @@ module re.content;
 
 static import raylib;
 import std.string;
+import re.util.cache;
 
 /// manages external content loading
 class ContentManager {
-    private raylib.Image[string] _cache_images;
+    private KeyedCache!(raylib.Image) _image_cache;
     /// base path for content
     public string base_path = string.init;
 
@@ -21,17 +22,14 @@ class ContentManager {
     /// loads a texture from disk
     public raylib.Texture2D load_texture2d(string path) {
         auto image = raylib.LoadImage(get_path(path));
-        _cache_images[path] = image;
+        _image_cache.put(path, image);
 
         // copy image to VRAM
         return raylib.LoadTextureFromImage(image);
     }
 
-    /// releases all cached resources
+    /// releases all resources
     public void destroy() {
-        // release images
-        foreach (item; _cache_images.byValue()) {
-            raylib.UnloadImage(item);
-        }
+        _image_cache.drop();
     }
 }
