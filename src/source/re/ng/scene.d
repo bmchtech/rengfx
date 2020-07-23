@@ -69,7 +69,8 @@ abstract class Scene {
             // TODO: use scene resolution instead of window resolution
             render_texture = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
             // texture scale filter
-            raylib.SetTextureFilter(render_texture.texture, raylib.TextureFilterMode.FILTER_BILINEAR);
+            raylib.SetTextureFilter(render_texture.texture,
+                    raylib.TextureFilterMode.FILTER_BILINEAR);
         }
 
         on_start();
@@ -128,4 +129,15 @@ unittest {
     scene.begin();
     scene.update();
     scene.end();
+}
+
+unittest {
+    class TestScene : Scene {
+    }
+
+    Core.headless = true;
+
+    auto scene = new TestScene();
+    Core.scene = scene;
+    assert(Core.get_scene!TestScene == scene);
 }
