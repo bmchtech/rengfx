@@ -69,6 +69,16 @@ class VirtualAxis : VirtualInput {
             }
         }
     }
+
+    @property public float value() {
+        foreach (node; nodes) {
+            auto val = (cast(Node) node).value;
+            if (val != 0) {
+                return val;
+            }
+        }
+        return 0;
+    }
 }
 
 unittest {

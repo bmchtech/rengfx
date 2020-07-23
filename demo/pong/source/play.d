@@ -5,6 +5,7 @@ import re.gfx;
 import re.math;
 static import raylib;
 import input;
+import paddle;
 
 class PlayScene : Scene {
     override void on_start() {
@@ -20,10 +21,12 @@ class PlayScene : Scene {
         auto player = create_entity("player", Vector2(Core.window.width / 2, Core.window.height - padding));
         player.add_component(new SpriteRenderer(paddle_sprite));
         player.add_component!PlayerController();
+        player.add_component!Paddle();
 
         auto alice = create_entity("alice", Vector2(Core.window.width / 2, padding));
         alice.add_component(new SpriteRenderer(paddle_sprite));
         alice.add_component!LogicController();
+        player.add_component!Paddle();
 
         auto ball = create_entity("ball", Vector2(Core.window.width / 2, Core.window.height / 2));
         ball.add_component(new SpriteRenderer(new Sprite(ball_tex)));
