@@ -9,3 +9,4 @@ public import re.ecs;
 
 // util
 public import re.util.logger;
+public import re.util.rng;
