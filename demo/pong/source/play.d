@@ -24,5 +24,8 @@ class PlayScene : Scene {
         auto alice = create_entity("alice", Vector2(Core.window.width / 2, padding));
         alice.add_component(new SpriteRenderer(paddle_sprite));
         alice.add_component!LogicController();
+
+        auto ball = create_entity("ball", Vector2(Core.window.width / 2, Core.window.height / 2));
+        ball.add_component(new SpriteRenderer(new Sprite(ball_tex)));
     }
 }
