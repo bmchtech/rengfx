@@ -6,6 +6,7 @@ import re.content;
 import re.gfx.window;
 import re.ng.scene;
 import re.ng.debugger;
+import jar;
 static import raylib;
 
 /**
@@ -18,15 +19,18 @@ class Core {
     public static Window window;
     /// content manager
     public static ContentManager content;
-    /// whether the game is running
-    public static bool running;
     /// the current scene
     private static Scene _scene;
+    /// type registration container
+    public static Jar jar;
 
     /// whether to draw debug information
     public static bool debug_render;
     /// debugger utility
     debug public static Debugger debugger;
+
+    /// whether the game is running
+    public static bool running;
 
     /// sets up a game core
     this(int width, int height, string title) {
@@ -38,6 +42,8 @@ class Core {
         window.set_title(title);
 
         content = new ContentManager();
+
+        jar = new Jar();
 
         debug {
             debugger = new Debugger();
