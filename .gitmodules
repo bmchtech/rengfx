@@ -1,3 +1,0 @@
-[submodule "lib/raylib-d"]
-	path = lib/raylib-d
-	url = https://github.com/xdrie/raylib-d.git
