@@ -1,12 +1,13 @@
 module re.core;
 
 import re.input;
-import re.util.logger;
 import re.content;
 import re.gfx.window;
 import re.ng.scene;
 import re.ng.debugger;
 import re.ng.manager;
+import re.util.logger;
+import re.util.tween.tween_manager;
 import jar;
 static import raylib;
 
@@ -55,6 +56,8 @@ class Core {
         content = new ContentManager();
 
         jar = new Jar();
+
+        managers ~= new TweenManager();
 
         debug {
             debugger = new Debugger();
