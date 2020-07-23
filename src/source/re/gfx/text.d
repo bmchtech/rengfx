@@ -8,8 +8,7 @@ static import raylib;
 
 /// renderable text
 class Text : Component, Renderable {
-    /// text string
-    public string text;
+    private string _text;
     /// text font
     public raylib.Font font;
     /// font size
@@ -35,11 +34,23 @@ class Text : Component, Renderable {
 
     /// create a new text
     this(raylib.Font font, string text, int size, raylib.Color color) {
-        this.text = text;
+        this._text = text;
         this.font = font;
         this.size = size;
         this.color = color;
         update_dimens();
+    }
+
+    /// gets text string
+    @property string text() {
+        return _text;
+    }
+
+    /// sets text string
+    @property string text(string value) {
+        _text = value;
+        update_dimens();
+        return value;
     }
 
     @property Rectangle bounds() {
@@ -57,7 +68,7 @@ class Text : Component, Renderable {
     }
 
     private void update_dimens() {
-        _text_size = raylib.MeasureTextEx(font, toStringz(text), size, spacing);
+        _text_size = raylib.MeasureTextEx(font, toStringz(_text), size, spacing);
         // calculate origin
         auto ori_x = 0.0;
         auto ori_y = 0.0;
@@ -79,10 +90,11 @@ class Text : Component, Renderable {
     public void set_align(Align horiz, Align vert) {
         _horiz_align = horiz;
         _vert_align = vert;
+        update_dimens();
     }
 
     void render() {
-        raylib.DrawTextEx(font, toStringz(text), entity.position2, size, spacing, color);
+        raylib.DrawTextEx(font, toStringz(_text), entity.position2 - _origin, size, spacing, color);
     }
 
     void debug_render() {
