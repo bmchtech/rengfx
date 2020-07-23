@@ -3,7 +3,7 @@ module comp.input;
 import re.ecs;
 import re.input;
 
-class InputController : Component {
+abstract class InputController : Component {
     public VirtualAxis move;
 
     this() {
