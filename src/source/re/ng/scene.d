@@ -14,6 +14,8 @@ abstract class Scene {
     protected EntityManager ecs;
     /// the render target
     public raylib.RenderTexture2D render_texture;
+    /// the render resolution. initialized to Core.default_resolution
+    public Vector2 resolution;
 
     /// creates a new scene
     this() {
@@ -64,6 +66,7 @@ abstract class Scene {
         // set up ecs
         ecs = new EntityManager;
 
+        resolution = Core.default_resolution;
         if (!Core.headless) {
             // create render target
             // TODO: use scene resolution instead of window resolution

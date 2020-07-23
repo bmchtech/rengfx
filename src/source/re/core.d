@@ -49,11 +49,15 @@ class Core {
     /// whether to pause when unfocused
     public static bool pause_on_focus_lost = false;
 
+    /// the default render resolution for all scenes
+    public static Vector2 default_resolution;
+
     /// sets up a game core
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
         log.sinks ~= new Logger.ConsoleSink();
 
+        default_resolution = Vector2(width, height);
         if (!Core.headless) {
             window = new Window(width, height);
             window.initialize();
