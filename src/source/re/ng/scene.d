@@ -32,6 +32,12 @@ abstract class Scene {
         return value;
     }
 
+    @property raylib.TextureFilterMode filter_mode(raylib.TextureFilterMode value) {
+        // texture scale filter
+        raylib.SetTextureFilter(render_texture.texture, value);
+        return value;
+    }
+
     /// called at the start of the scene
     protected void on_start() {
 
@@ -82,8 +88,6 @@ abstract class Scene {
         // create render target
         // TODO: use scene resolution instead of window resolution
         render_texture = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
-        // texture scale filter
-        raylib.SetTextureFilter(render_texture.texture, raylib.TextureFilterMode.FILTER_BILINEAR);
     }
 
     /// called internally on scene creation
