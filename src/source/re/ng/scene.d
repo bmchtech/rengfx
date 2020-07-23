@@ -8,7 +8,7 @@ import re.ecs;
 import re.math;
 
 /// represents a collection of entities that draw to a texture
-class Scene {
+abstract class Scene {
     /// the cleared background color
     public raylib.Color clear_color;
     protected EntityManager ecs;
@@ -94,4 +94,22 @@ class Scene {
         nt.position = pos;
         return nt;
     }
+
+    public Entity get_entity(string name) {
+        return ecs.get_entity(name);
+    }
+}
+
+unittest {
+    class TestScene : Scene {
+        override void on_start() {
+            auto apple = create_entity("apple");
+            assert(get_entity("apple") == apple, "could not get entity by name");
+        }
+    }
+
+    auto scene = new TestScene();
+    scene.begin();
+    scene.update();
+    scene.end();
 }
