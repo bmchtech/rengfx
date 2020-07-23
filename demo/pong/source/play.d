@@ -5,7 +5,8 @@ import re.gfx;
 import re.math;
 static import raylib;
 import input;
-import paddle;
+import comp.paddle;
+import comp.ball;
 
 class PlayScene : Scene {
     override void on_start() {
@@ -30,5 +31,6 @@ class PlayScene : Scene {
 
         auto ball = create_entity("ball", Vector2(Core.window.width / 2, Core.window.height / 2));
         ball.add_component(new SpriteRenderer(new Sprite(ball_tex)));
+        ball.add_component!Ball();
     }
 }
