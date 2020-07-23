@@ -6,7 +6,10 @@ import re.math;
 static import raylib;
 
 class SpriteRenderer : Component, Renderable {
-    private Sprite sprite;
+    /// the sprite
+    public Sprite sprite;
+    /// color tint
+    public raylib.Color color;
 
     this(Sprite sprite) {
         this.sprite = sprite;
@@ -23,7 +26,7 @@ class SpriteRenderer : Component, Renderable {
         auto dest_rect = Rectangle(entity.position2.x, entity.position2.y,
                 sprite.src_rect.width, sprite.src_rect.height);
         raylib.DrawTexturePro(sprite.texture, sprite.src_rect, dest_rect,
-                sprite.origin, entity.transform.rotation, raylib.WHITE);
+                sprite.origin, entity.transform.rotation, color);
     }
 
     public void debug_render() {
