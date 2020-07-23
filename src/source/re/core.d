@@ -125,7 +125,9 @@ abstract class Core {
             // composite screen render to window
             // TODO: support better compositing
             auto tex = scene.render_texture.texture;
-            raylib.DrawTexturePro(tex, Rectangle(0, 0, tex.width, -tex.height), Rectangle(0, 0, window.width, window.height), Vector2(0, 0), 0, raylib.Colors.WHITE);
+            raylib.DrawTexturePro(tex, Rectangle(0, 0, tex.width,
+                    -tex.height), Rectangle(0, 0, window.width, window.height),
+                    Vector2(0, 0), 0, raylib.Colors.WHITE);
         }
         debug {
             debugger.render();
@@ -134,7 +136,7 @@ abstract class Core {
 
     }
 
-     public static T get_scene(T)() {
+    public static T get_scene(T)() {
         // TODO: support the multi scene
         // for now, just return a casted scene
         return cast(T) scene;
