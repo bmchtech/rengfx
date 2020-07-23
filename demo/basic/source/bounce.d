@@ -19,6 +19,10 @@ class BounceScene : Scene {
         ball = create_entity("ball", Vector2(20, 40));
         auto ball_spr = new Sprite(Core.content.load_texture2d("ball.png"));
         ball.add_component(new SpriteRenderer(ball_spr));
+
+        // add text
+        auto hello = create_entity("hello", Vector2(20, Core.window.height - 20));
+        hello.add_component(new Text(Text.default_font, "hello, world!", Text.default_size, raylib.WHITE));
     }
 
     override void update() {
