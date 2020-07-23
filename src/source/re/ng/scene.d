@@ -67,6 +67,8 @@ abstract class Scene {
             // create render target
             // TODO: use scene resolution instead of window resolution
             render_texture = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
+            // texture scale filter
+            raylib.SetTextureFilter(render_texture.texture, raylib.TextureFilterMode.FILTER_BILINEAR);
         }
 
         on_start();
