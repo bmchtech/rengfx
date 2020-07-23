@@ -53,7 +53,9 @@ class EntityManager {
 
     /// destroy all entities and components and clean up
     public void destroy() {
-        assert(0, "not implemented");
+        foreach (entity; entities) {
+            entity.destroy();
+        }
     }
 }
 
@@ -70,6 +72,8 @@ unittest {
     assert(nt.get_component!Food == food, "component cannot be retrieved");
     nt.remove_component!Food();
     assert(!nt.has_component!Food(), "component cannot be removed");
+    nt.destroy();
+    assert(!nt.alive);
 }
 
 unittest {
