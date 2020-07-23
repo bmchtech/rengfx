@@ -6,7 +6,7 @@ import re.gfx;
 import input;
 
 class Paddle : Component, Updatable {
-    public float speed = 80;
+    public float speed = 160;
     private InputController controls;
     private SpriteRenderer spr_ren;
 
