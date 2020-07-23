@@ -5,6 +5,7 @@ import re.util.logger;
 import re.content;
 import re.gfx.window;
 import re.ng.scene;
+import re.ng.debugger;
 static import raylib;
 
 /**
@@ -21,20 +22,26 @@ class Core {
     public static bool running;
     /// the current scene
     private static Scene _scene;
+
     /// whether to draw debug information
     public static bool debug_render;
+    /// debugger utility
+    debug public static Debugger debugger;
 
     /// sets up a game core
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
         log.sinks ~= new Logger.ConsoleSink();
 
-
         window = new Window(width, height);
         window.initialize();
         window.set_title(title);
 
         content = new ContentManager();
+
+        debug {
+            debugger = new Debugger();
+        }
 
         initialize();
     }
@@ -64,12 +71,18 @@ class Core {
         if (scene !is null) {
             scene.update();
         }
+        debug {
+            debugger.update();
+        }
     }
 
     protected void draw() {
         raylib.BeginDrawing();
         if (scene !is null) {
             scene.draw();
+        }
+        debug {
+            debugger.render();
         }
         raylib.EndDrawing();
     }
