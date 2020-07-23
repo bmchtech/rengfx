@@ -1,5 +1,6 @@
 module re.core;
 
+import re.input;
 import re.util.logger;
 import re.content;
 import re.gfx.window;
@@ -59,6 +60,7 @@ class Core {
     }
 
     protected void update() {
+        Input.update();
         if (scene !is null) {
             scene.update();
         }

@@ -1,6 +1,7 @@
 module re.input.input;
 
 import re.math;
+import re.input;
 static import raylib;
 
 alias Keys = raylib.KeyboardKey;
@@ -10,7 +11,16 @@ alias Axes = raylib.GamepadAxis;
 
 /// input helper
 public static class Input {
+    /// global virtual input list
+    public static VirtualInput[] virtual_inputs;
+
     static this() {
+    }
+
+    public static void update() {
+        foreach (input; virtual_inputs) {
+            input.update();
+        }
     }
 
     // - keyboard
