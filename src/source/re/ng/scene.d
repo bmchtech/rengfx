@@ -12,11 +12,10 @@ abstract class Scene {
     /// the cleared background color
     public raylib.Color clear_color;
     protected EntityManager ecs;
+    protected raylib.RenderTexture2D render_texture;
 
     /// creates a new scene
     this() {
-        // initialize
-        ecs = new EntityManager();
     }
 
     /// called at the start of the scene
@@ -45,6 +44,7 @@ abstract class Scene {
 
     /// called internally to render ecs
     public void draw() {
+        raylib.BeginTextureMode(render_texture);
         raylib.ClearBackground(clear_color);
 
         // render components
@@ -55,12 +55,19 @@ abstract class Scene {
                 renderable.debug_render();
             }
         }
+        raylib.EndTextureMode();
     }
 
     /// called internally on scene creation
     public void begin() {
         // set up ecs
         ecs = new EntityManager;
+
+        if (!Core.headless) {
+            // create render target
+            // TODO: use scene resolution instead of window resolution
+            render_texture = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
+        }
 
         on_start();
     }
@@ -70,6 +77,11 @@ abstract class Scene {
         unload();
 
         ecs.destroy();
+
+        if (!Core.headless) {
+            // free render target
+            raylib.UnloadRenderTexture(render_texture);
+        }
     }
 
     // - ecs
@@ -108,6 +120,7 @@ unittest {
         }
     }
 
+    Core.headless = true;
     auto scene = new TestScene();
     scene.begin();
     scene.update();
