@@ -29,6 +29,14 @@ class EntityManager {
         return nt;
     }
 
+    public Entity get_entity(string name) {
+        auto list = entities.find!(x => x.name == name);
+        if (list.length == 0) {
+            assert(0, "no matching entity was found");
+        }
+        return list[0];
+    }
+
     /// remove an entity
     public void remove_entity(Entity entity) {
         entities.remove!(x => x == entity);
