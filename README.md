@@ -2,6 +2,14 @@
 
 RE ENGINE FX
 
+lightweight, expressive, extensible game engine 
+
+## features
++ only dependency is `raylib`
++ Scene-Entity-Component architecture
++ 2d and 3d graphics support
++ highly extensible
+
 ## hacking
 
 requirements:
