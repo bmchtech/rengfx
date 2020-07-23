@@ -8,6 +8,7 @@ import input;
 import comp.paddle;
 import comp.ball;
 import comp.score;
+import comp.ai;
 
 class PlayScene : Scene {
     override void on_start() {
@@ -20,6 +21,10 @@ class PlayScene : Scene {
 
         auto paddle_sprite = new Sprite(paddle_tex);
 
+        auto ball_nt = create_entity("ball", Vector2(Core.window.width / 2, Core.window.height / 2));
+        ball_nt.add_component(new SpriteRenderer(new Sprite(ball_tex)));
+        auto ball = ball_nt.add_component!Ball();
+
         auto player = create_entity("player", Vector2(Core.window.width / 2, Core.window.height - padding));
         player.add_component(new SpriteRenderer(paddle_sprite));
         player.add_component!PlayerController();
@@ -29,10 +34,8 @@ class PlayScene : Scene {
         alice.add_component(new SpriteRenderer(paddle_sprite));
         alice.add_component!LogicController();
         alice.add_component!Paddle();
+        alice.add_component(new AiPlayer(ball));
 
-        auto ball_nt = create_entity("ball", Vector2(Core.window.width / 2, Core.window.height / 2));
-        ball_nt.add_component(new SpriteRenderer(new Sprite(ball_tex)));
-        auto ball = ball_nt.add_component!Ball();
         ball.bounce_on(player.get_component!Paddle());
         ball.bounce_on(alice.get_component!Paddle());
 

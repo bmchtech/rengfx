@@ -22,7 +22,13 @@ class PlayerController : InputController {
 }
 
 class LogicController : InputController {
+    public VirtualAxis.LogicAxis move_logical;
+
     this() {
-        move.nodes ~= new VirtualAxis.LogicAxis();
+        move.nodes ~= (move_logical = new VirtualAxis.LogicAxis());
+    }
+
+    void zero() {
+        move_logical.logic_value = 0;
     }
 }
