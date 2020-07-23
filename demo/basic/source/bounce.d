@@ -13,7 +13,7 @@ class BounceScene : Scene {
     private Entity ball;
 
     override void on_start() {
-        clear_color = raylib.BLACK;
+        clear_color = Colors.BLACK;
 
         // add ball
         ball = create_entity("ball", Vector2(20, 40));
@@ -22,7 +22,7 @@ class BounceScene : Scene {
 
         // add text
         auto hello = create_entity("hello", Vector2(20, Core.window.height - 20));
-        hello.add_component(new Text(Text.default_font, "hello, world!", Text.default_size, raylib.WHITE));
+        hello.add_component(new Text(Text.default_font, "hello, world!", Text.default_size, Colors.WHITE));
     }
 
     override void update() {

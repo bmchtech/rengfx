@@ -1,15 +1,16 @@
 module play;
 
 import re;
+import re.gfx;
 import re.math;
 import comp.square;
 static import raylib;
 
 class PlayScene : Scene {
     override void on_start() {
-        clear_color = raylib.LIGHTGRAY;
+        clear_color = Colors.LIGHTGRAY;
 
         auto player = create_entity("player", Vector2(20, 20));
-        player.add_component(new Square(Vector2(10, 10), raylib.BLUE));
+        player.add_component(new Square(Vector2(10, 10), Colors.BLUE));
     }
 }
