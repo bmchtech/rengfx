@@ -34,7 +34,7 @@ unittest {
 
     immutable auto i1 = num_cache.get("apple");
     assert(!i1.empty);
-    assert(i1 == VAL_APPLE);
+    assert(i1.front == VAL_APPLE);
 
     num_cache.drop();
 
