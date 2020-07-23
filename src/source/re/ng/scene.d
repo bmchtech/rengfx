@@ -75,6 +75,10 @@ abstract class Scene {
     private void update_render_target() {
         if (Core.headless)
             return;
+        // free any old render target
+        if (render_texture == raylib.RenderTexture2D.init) {
+            raylib.UnloadRenderTexture(render_texture);
+        }
         // create render target
         // TODO: use scene resolution instead of window resolution
         render_texture = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
