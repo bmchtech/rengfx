@@ -39,6 +39,7 @@ class Entity {
         auto id = manager.storage.insert(this, component);
         components ~= id;
         component.entity = this;
+        component.setup();
         return component;
     }
 
