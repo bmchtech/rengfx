@@ -32,6 +32,9 @@ class Core {
     /// whether the game is running
     public static bool running;
 
+    /// whether to pause when unfocused
+    public static bool pause_on_focus_lost = false;
+
     /// sets up a game core
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
@@ -73,6 +76,9 @@ class Core {
     }
 
     protected void update() {
+        if (pause_on_focus_lost && raylib.IsWindowMinimized()) {
+            return; // pause
+        }
         Input.update();
         if (scene !is null) {
             scene.update();
@@ -83,6 +89,9 @@ class Core {
     }
 
     protected void draw() {
+        if (raylib.IsWindowMinimized()) {
+            return; // suppress draw
+        }
         raylib.BeginDrawing();
         if (scene !is null) {
             scene.draw();
@@ -91,6 +100,7 @@ class Core {
             debugger.render();
         }
         raylib.EndDrawing();
+
     }
 
     /// gets the current scene
