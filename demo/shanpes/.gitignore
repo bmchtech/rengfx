@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/shanpes
+shanpes.so
+shanpes.dylib
+shanpes.dll
+shanpes.a
+shanpes.lib
+shanpes-test-*
+*.exe
+*.o
+*.obj
+*.lst

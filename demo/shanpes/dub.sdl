@@ -1,0 +1,6 @@
+name "shanpes"
+description "shape demo"
+authors "xdrie"
+copyright "Copyright © 2020, xdrie"
+license "proprietary"
+dependency "reng" path="../../src"
