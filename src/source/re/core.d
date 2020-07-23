@@ -125,7 +125,7 @@ abstract class Core {
             // composite screen render to window
             // TODO: support better compositing
             auto tex = scene.render_texture.texture;
-            raylib.DrawTexturePro(tex, Rectangle(0, 0, tex.width, -tex.height), Rectangle(0, 0, window.width, window.height), Vector2(0, 0), 0, raylib.WHITE);
+            raylib.DrawTexturePro(tex, Rectangle(0, 0, tex.width, -tex.height), Rectangle(0, 0, window.width, window.height), Vector2(0, 0), 0, raylib.Colors.WHITE);
         }
         debug {
             debugger.render();

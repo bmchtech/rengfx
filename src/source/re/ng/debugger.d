@@ -17,6 +17,6 @@ class Debugger {
     }
 
     public static void default_debug_render(Renderable renderable) {
-        raylib.DrawRectangleLinesEx(renderable.bounds, 1, raylib.RED);
+        raylib.DrawRectangleLinesEx(renderable.bounds, 1, raylib.Colors.RED);
     }
 }
