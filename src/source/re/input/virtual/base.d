@@ -12,16 +12,20 @@ enum OverlapBehavior {
 
 /// a virtual input composed of input node units
 abstract class VirtualInput {
+    /// the input node units
     public Node[] nodes;
 
+    /// create and register a virtual input
     this() {
         Input.virtual_inputs ~= this;
     }
 
-    public void destroy() {
+    /// unregister from virtual input updates
+    public void unregister() {
         Input.virtual_inputs = Input.virtual_inputs.remove!(x => x == this);
     }
 
+    /// updates all nodes
     public void update() {
         foreach (node; nodes) {
             node.update();

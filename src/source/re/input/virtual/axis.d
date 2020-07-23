@@ -10,6 +10,15 @@ class VirtualAxis : VirtualInput {
         @property public float value();
     }
 
+    /// logic-controllable axis
+    static class LogicAxis : Node {
+        public float logic_value;
+
+        @property public override float value() {
+            return logic_value;
+        }
+    }
+
     /// monitors a pair of keyboard keys
     static class KeyboardKeys : Node {
         public OverlapBehavior overlap_behavior;
