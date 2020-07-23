@@ -31,6 +31,10 @@ class Entity {
         manager.storage.destroy_all(this);
     }
 
+    public T add_component(T)() {
+        return add_component(new T());
+    }
+
     public T add_component(T)(T component) {
         auto id = manager.storage.insert(this, component);
         components ~= id;
