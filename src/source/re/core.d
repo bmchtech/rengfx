@@ -6,6 +6,7 @@ import re.gfx.window;
 import re.ng.scene;
 import re.ng.debugger;
 import re.ng.manager;
+import re.math;
 import re.util.logger;
 import re.util.tween.tween_manager;
 import jar;
@@ -117,6 +118,10 @@ class Core {
         raylib.BeginDrawing();
         if (scene !is null) {
             scene.draw();
+            // composite screen render to window
+            // TODO: support better compositing
+            auto tex = scene.render_texture.texture;
+            raylib.DrawTexturePro(tex, Rectangle(0, 0, tex.width, -tex.height), Rectangle(0, 0, window.width, window.height), Vector2(0, 0), 0, raylib.WHITE);
         }
         debug {
             debugger.render();
