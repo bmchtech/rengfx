@@ -12,8 +12,6 @@ class Game : Core {
 	}
 
 	override void initialize() {
-		super.initialize();
-
 		log.info("hello, basic game!");
 		content.paths ~= "../content/";
 
