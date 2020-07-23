@@ -8,6 +8,10 @@ class InputComponent : Component {
 
     this() {
         move = new VirtualAxis();
-        move.nodes ~= VirtualAxis.KeyboardKeys(Keys.KEY_LEFT, Keys.KEY_RIGHT);
+        move.nodes ~= new VirtualAxis.KeyboardKeys(Keys.KEY_LEFT, Keys.KEY_RIGHT);
+    }
+
+    public override void destroy() {
+        move.unregister();
     }
 }

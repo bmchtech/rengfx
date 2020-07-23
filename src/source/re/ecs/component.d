@@ -11,6 +11,8 @@ import re.ecs.updatable;
 abstract class Component {
     /// owner entity
     public Entity entity;
+    public void destroy() {
+    }
 }
 
 /// basic component classification

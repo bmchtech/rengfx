@@ -13,6 +13,16 @@ class VirtualButton : VirtualInput {
         @property public bool is_released();
     }
 
+    /// logic-controllable button
+    static class LogicButton : Node {
+        public bool logic_pressed;
+        
+        @property public override bool is_down() { return logic_pressed; }
+        @property public override bool is_up() { return !logic_pressed; }
+        @property public override bool is_pressed() { return logic_pressed; }
+        @property public override bool is_released() { return !logic_pressed; }
+    }
+
     /// monitors a keyboard key
     static class KeyboardKey : Node {
         /// the key being monitored
