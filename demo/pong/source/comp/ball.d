@@ -4,6 +4,7 @@ import re;
 import re.math;
 import re.gfx;
 import std.random;
+import comp.score;
 
 class Ball : Component, Updatable {
     private float speed = 160;
@@ -35,11 +36,13 @@ class Ball : Component, Updatable {
 
         if (entity.position2.y + spr_ren.bounds.height / 2 >= Core.window.height) {
             // hit the bottom, ENEMY SCORE
+            Core.scene.get_entity("score").get_component!Scoreboard().add_point_enemy();
             respawn();
         }
 
         if (entity.position2.y - spr_ren.bounds.height / 2 <= 0) {
             // hit the top, PLAYER SCORE
+            Core.scene.get_entity("score").get_component!Scoreboard().add_point_player();
             respawn();
         }
 
