@@ -3,6 +3,7 @@ module re.gfx.sprite_renderer;
 import re.gfx.sprite;
 import re.ecs;
 import re.math;
+import re.ng.debugger;
 static import raylib;
 
 class SpriteRenderer : Component, Renderable {
@@ -30,6 +31,6 @@ class SpriteRenderer : Component, Renderable {
     }
 
     public void debug_render() {
-        raylib.DrawRectangleLinesEx(bounds, 1, raylib.RED);
+        Debugger.default_debug_render(this);
     }
 }
