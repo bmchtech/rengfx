@@ -13,7 +13,7 @@ class Text : Component, Renderable {
     public raylib.Color color;
     private Vector2 _text_size;
     private Vector2 _origin;
-    private enum default_font_size = 10;
+    public enum default_size = 10;
 
     this(raylib.Font font, string text, int size, raylib.Color color) {
         this.text = text;
@@ -29,7 +29,7 @@ class Text : Component, Renderable {
     }
 
     @property private int spacing() {
-        return size / default_font_size;
+        return size / default_size;
     }
 
     @property public static raylib.Font default_font() {
