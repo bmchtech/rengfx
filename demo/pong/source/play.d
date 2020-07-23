@@ -32,5 +32,9 @@ class PlayScene : Scene {
         auto ball = create_entity("ball", Vector2(Core.window.width / 2, Core.window.height / 2));
         ball.add_component(new SpriteRenderer(new Sprite(ball_tex)));
         ball.add_component!Ball();
+
+        auto pong = create_entity("pong", Vector2(padding, (Core.window.height / 2) - padding));
+        auto pong_text = pong.add_component(new Text(Text.default_font, "pong", Text.default_size, raylib.WHITE));
+        pong_text.set_align(Text.Align.Close, Text.Align.Center);
     }
 }
