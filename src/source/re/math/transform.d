@@ -1,8 +1,6 @@
 module re.math.transform;
 
-public import raylib : Vector2, Vector3, Matrix4;
-
-public static import raymath;
+import re.math;
 
 struct Transform {
     private bool _dirty;
@@ -40,7 +38,7 @@ struct Transform {
     // main sub-transforms
 
     /// gets 3d position
-    @property Vector3 position() {
+    @property ref Vector3 position() return {
         update_transform();
         return _position;
     }
@@ -52,7 +50,7 @@ struct Transform {
     }
 
     /// gets 3d scale
-    @property Vector3 scale() {
+    @property ref Vector3 scale() return {
         update_transform();
         return _scale;
     }
@@ -64,7 +62,7 @@ struct Transform {
     }
 
     /// gets Z-axis rotation
-    @property float rotation() {
+    @property ref float rotation() return {
         update_transform();
         return _rotation;
     }

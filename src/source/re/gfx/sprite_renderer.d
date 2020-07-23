@@ -23,7 +23,7 @@ class SpriteRenderer : Component, Renderable {
         auto dest_rect = Rectangle(entity.position2.x, entity.position2.y,
                 sprite.src_rect.width, sprite.src_rect.height);
         raylib.DrawTexturePro(sprite.texture, sprite.src_rect, dest_rect,
-                sprite.origin, entity.rotation, raylib.WHITE);
+                sprite.origin, entity.transform.rotation, raylib.WHITE);
     }
 
     public void debug_render() {

@@ -79,15 +79,7 @@ class Entity {
         return transform.position2 = value;
     }
 
-    @property float rotation() {
-        return transform.rotation;
-    }
-
-    @property float rotation(float value) {
-        return transform.rotation = value;
-    }
-
-    @property Vector3 position() {
+    @property ref Vector3 position() {
         return transform.position;
     }
 
