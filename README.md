@@ -22,7 +22,11 @@ git clone https://github.com/xdrie/raylib.git && cd raylib
 git checkout 3.0.0_patch
 cd src
 make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc)
+# install (optional)
+sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE
 ```
+
+raylib needs to be in your linker search path for `raylib-d` to find. if it is installed, it should be detected automatically.
 
 build engine:
 ```sh
