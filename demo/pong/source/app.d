@@ -12,7 +12,8 @@ class Game : Core {
 	override void initialize() {
 		super.initialize();
 
-		content.base_path = "../content/";
+		content.paths ~= "../content/";
+		content.paths ~= "content/";
 
 		scene = new PlayScene();
 	}
