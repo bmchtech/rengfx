@@ -4,7 +4,7 @@ import re;
 import re.gfx;
 import re.math;
 static import raylib;
-import input;
+import comp.input;
 import comp.paddle;
 import comp.ball;
 import comp.score;

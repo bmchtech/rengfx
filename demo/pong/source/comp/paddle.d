@@ -3,7 +3,7 @@ module comp.paddle;
 import re;
 import re.math;
 import re.gfx;
-import input;
+import comp.input;
 
 class Paddle : Component, Updatable {
     public float speed = 160;
