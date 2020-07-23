@@ -10,7 +10,7 @@ class SpriteRenderer : Component, Renderable {
     /// the sprite
     public Sprite sprite;
     /// color tint
-    public raylib.Color color;
+    public raylib.Color color = raylib.WHITE;
 
     this(Sprite sprite) {
         this.sprite = sprite;
