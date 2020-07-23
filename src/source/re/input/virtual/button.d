@@ -1,20 +1,7 @@
-module re.input.virtual;
+module re.input.virtual.button;
 
-import re.input.input;
+import re.input;
 import std.algorithm;
-
-/// a virtual input composed of input node units
-abstract class VirtualInput {
-    public Node[] nodes;
-    public void update() {
-    }
-
-    /// monitors a single unit for input
-    static abstract class Node {
-        void update() {
-        }
-    }
-}
 
 /// a virtual button
 class VirtualButton : VirtualInput {

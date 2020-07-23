@@ -1,4 +1,6 @@
 module re.input;
 
 public import re.input.input;
-public import re.input.virtual;
+
+// virtual input
+public import re.input.virtual.base;
