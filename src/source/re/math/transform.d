@@ -38,7 +38,7 @@ struct Transform {
     // main sub-transforms
 
     /// gets 3d position
-    @property ref Vector3 position() return {
+    @property Vector3 position() {
         update_transform();
         return _position;
     }
@@ -50,7 +50,7 @@ struct Transform {
     }
 
     /// gets 3d scale
-    @property ref Vector3 scale() return {
+    @property Vector3 scale() {
         update_transform();
         return _scale;
     }
@@ -62,7 +62,7 @@ struct Transform {
     }
 
     /// gets Z-axis rotation
-    @property ref float rotation() return {
+    @property float rotation() {
         update_transform();
         return _rotation;
     }
