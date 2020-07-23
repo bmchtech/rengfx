@@ -3,6 +3,7 @@ module re.content;
 static import raylib;
 import std.string;
 import std.file;
+import std.path;
 import re.util.cache;
 
 /// manages external content loading
@@ -18,15 +19,16 @@ class ContentManager {
 
     private char* get_path(string path) {
         auto base = string.init;
+        alias join_paths = std.path.buildNormalizedPath;
         // check search paths first
         foreach (search_path; paths) {
             // if the combination path exists, then make this base
-            if (std.file.exists(search_path ~ path)) {
+            if (std.file.exists(join_paths(search_path, path))) {
                 base = search_path;
                 break;
             }
         }
-        return cast(char*) toStringz(base ~ path);
+        return cast(char*) toStringz(join_paths(base, path));
     }
 
     /// loads a texture from disk
