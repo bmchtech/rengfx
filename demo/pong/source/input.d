@@ -17,7 +17,7 @@ class InputController : Component {
 
 class PlayerController : InputController {
     this() {
-        move.nodes ~= new VirtualAxis.KeyboardKeys(Keys.KEY_LEFT, Keys.KEY_RIGHT);
+        move.nodes ~= new VirtualAxis.KeyboardKeys(Keys.KEY_RIGHT, Keys.KEY_LEFT);
     }
 }
 
