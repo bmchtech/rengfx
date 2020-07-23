@@ -6,6 +6,7 @@ import re.content;
 import re.gfx.window;
 import re.ng.scene;
 import re.ng.debugger;
+import re.ng.manager;
 import jar;
 static import raylib;
 
@@ -15,14 +16,21 @@ Core class
 class Core {
     /// logger utility
     public static Logger log;
+
     /// game window
     public static Window window;
+
     /// content manager
     public static ContentManager content;
+
     /// the current scene
     private static Scene _scene;
+
     /// type registration container
     public static Jar jar;
+
+    /// global managers
+    public Manager[] managers;
 
     /// whether to draw debug information
     public static bool debug_render;
@@ -78,6 +86,9 @@ class Core {
     protected void update() {
         if (pause_on_focus_lost && raylib.IsWindowMinimized()) {
             return; // pause
+        }
+        foreach (manager; managers) {
+            manager.update();
         }
         Input.update();
         if (scene !is null) {
