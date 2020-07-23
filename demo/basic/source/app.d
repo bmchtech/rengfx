@@ -15,7 +15,7 @@ class Game : Core {
 		super.initialize();
 
 		log.info("hello, basic game!");
-		content.base_path = "../content/";
+		content.paths ~= "../content/";
 
 		scene = new BounceScene();
 	}
