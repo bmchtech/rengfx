@@ -12,7 +12,7 @@ import comp.ai;
 
 class PlayScene : Scene {
     override void on_start() {
-        clear_color = raylib.BLACK;
+        clear_color = Colors.BLACK;
 
         auto ball_tex = Core.content.load_texture2d("ball.png");
         auto paddle_tex = Core.content.load_texture2d("paddle.png");
@@ -40,11 +40,11 @@ class PlayScene : Scene {
         ball.bounce_on(alice.get_component!Paddle());
 
         auto pong = create_entity("pong", Vector2(padding, Core.window.height / 2));
-        auto pong_text = pong.add_component(new Text(Text.default_font, "pong", Text.default_size, raylib.WHITE));
+        auto pong_text = pong.add_component(new Text(Text.default_font, "pong", Text.default_size, Colors.WHITE));
         pong_text.set_align(Text.Align.Close, Text.Align.Center);
 
         auto score = create_entity("score", Vector2(Core.window.width - padding, Core.window.height / 2));
-        auto score_text = score.add_component(new Text(Text.default_font, string.init, Text.default_size, raylib.WHITE));
+        auto score_text = score.add_component(new Text(Text.default_font, string.init, Text.default_size, Colors.WHITE));
         score_text.set_align(Text.Align.Far, Text.Align.Center);
         score.add_component!Scoreboard();
     }
