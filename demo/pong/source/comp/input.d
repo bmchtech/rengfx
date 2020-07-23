@@ -1,4 +1,4 @@
-module input;
+module comp.input;
 
 import re.ecs;
 import re.input;

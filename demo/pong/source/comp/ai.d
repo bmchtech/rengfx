@@ -1,7 +1,7 @@
 module comp.ai;
 
 import re;
-import input;
+import comp.input;
 import comp.ball;
 
 class AiPlayer : Component, Updatable {
