@@ -3,7 +3,6 @@ module re.content;
 static import raylib;
 import std.string;
 import re.util.cache;
-import optional;
 
 /// manages external content loading
 class ContentManager
@@ -28,14 +27,14 @@ class ContentManager
     {
         raylib.Image image;
         auto cached = _image_cache.get(path);
-        if (cached.empty)
+        if (cached.isNull)
         {
             image = raylib.LoadImage(get_path(path));
             _image_cache.put(path, image);
         }
         else
         {
-            image = cached.front;
+            image = cached.get;
         }
 
         // copy image to VRAM
