@@ -6,15 +6,22 @@ import re.ng.debugger;
 import std.string;
 static import raylib;
 
+/// renderable text
 class Text : Component, Renderable {
+    /// text string
     public string text;
+    /// text font
     public raylib.Font font;
+    /// font size
     public int size;
+    /// text color
     public raylib.Color color;
     private Vector2 _text_size;
     private Vector2 _origin;
+    /// default font size
     public enum default_size = 10;
-
+    
+    /// create a new text
     this(raylib.Font font, string text, int size, raylib.Color color) {
         this.text = text;
         this.font = font;
@@ -32,6 +39,7 @@ class Text : Component, Renderable {
         return size / default_size;
     }
 
+    /// default font (builtin to raylib)
     @property public static raylib.Font default_font() {
         return raylib.GetFontDefault();
     }
