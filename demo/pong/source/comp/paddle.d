@@ -1,4 +1,4 @@
-module paddle;
+module comp.paddle;
 
 import re;
 import re.math;
