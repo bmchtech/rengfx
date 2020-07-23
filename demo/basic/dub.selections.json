@@ -1,0 +1,14 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"colorize": "1.0.5",
+		"datefmt": "1.0.4",
+		"ddmp": "0.0.1-0.dev.3",
+		"fluent-asserts": "0.13.3",
+		"jar": "0.1.0",
+		"libdparse": "0.14.0",
+		"raylib-d": {"path":"../../lib/raylib-d"},
+		"reng": {"path":"../../src"},
+		"stdx-allocator": "2.77.5"
+	}
+}
