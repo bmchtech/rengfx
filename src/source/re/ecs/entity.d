@@ -6,6 +6,7 @@ import std.algorithm.iteration;
 import std.algorithm.searching;
 import re.ecs.manager;
 import re.ecs.component;
+import re.ecs.storage;
 import re.math;
 
 class Entity {
@@ -22,10 +23,12 @@ class Entity {
 
     public void initialize() {
         alive = true;
+        components = [];
     }
 
     public void destroy() {
         alive = false;
+        manager.storage.destroy_all(this);
     }
 
     public T add_component(T)(T component) {
