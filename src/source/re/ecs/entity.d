@@ -79,7 +79,7 @@ class Entity {
         return transform.position2 = value;
     }
 
-    @property ref Vector3 position() {
+    @property Vector3 position() {
         return transform.position;
     }
 
