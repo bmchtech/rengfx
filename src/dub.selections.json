@@ -1,12 +1,15 @@
 {
 	"fileVersion": 1,
 	"versions": {
+		"bolts": "1.3.1",
 		"colorize": "1.0.5",
 		"datefmt": "1.0.4",
 		"ddmp": "0.0.1-0.dev.3",
 		"fluent-asserts": "0.13.3",
 		"libdparse": "0.14.0",
+		"optional": "1.0.0",
 		"raylib-d": {"path":"../lib/raylib-d"},
-		"stdx-allocator": "2.77.5"
+		"stdx-allocator": "2.77.5",
+		"vibe-d": "0.8.6"
 	}
 }

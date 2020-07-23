@@ -1,6 +1,6 @@
 module re.util.cache;
 
-import std.typecons;
+import optional;
 
 /// represents a cache that associates string keys with items
 struct KeyedCache(T) {
@@ -12,11 +12,11 @@ struct KeyedCache(T) {
     }
 
     /// check if an item is cached
-    Nullable!T get(string key) {
+    Optional!T get(string key) {
         if (key in _cache) {
-            return Nullable!T(_cache[key]);
+            return some(_cache[key]);
         }
-        return Nullable!T.init;
+        return no!T;
     }
 
     /// clear cache
@@ -33,11 +33,11 @@ unittest {
     num_cache.put("apple", VAL_APPLE);
 
     immutable auto i1 = num_cache.get("apple");
-    assert(!i1.isNull);
+    assert(!i1.empty);
     assert(i1 == VAL_APPLE);
 
     num_cache.drop();
 
     immutable auto i2 = num_cache.get("apple");
-    assert(i2.isNull);
+    assert(i2.empty);
 }
