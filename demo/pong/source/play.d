@@ -7,6 +7,7 @@ static import raylib;
 import input;
 import comp.paddle;
 import comp.ball;
+import comp.score;
 
 class PlayScene : Scene {
     override void on_start() {
@@ -33,8 +34,13 @@ class PlayScene : Scene {
         ball.add_component(new SpriteRenderer(new Sprite(ball_tex)));
         ball.add_component!Ball();
 
-        auto pong = create_entity("pong", Vector2(padding, (Core.window.height / 2) - padding));
+        auto pong = create_entity("pong", Vector2(padding, Core.window.height / 2));
         auto pong_text = pong.add_component(new Text(Text.default_font, "pong", Text.default_size, raylib.WHITE));
         pong_text.set_align(Text.Align.Close, Text.Align.Center);
+
+        auto score = create_entity("score", Vector2(Core.window.width - padding, Core.window.height / 2));
+        auto score_text = score.add_component(new Text(Text.default_font, string.init, Text.default_size, raylib.WHITE));
+        score_text.set_align(Text.Align.Far, Text.Align.Center);
+        score.add_component!Scoreboard();
     }
 }
