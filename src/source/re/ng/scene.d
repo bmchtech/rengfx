@@ -14,11 +14,22 @@ abstract class Scene {
     protected EntityManager ecs;
     /// the render target
     public raylib.RenderTexture2D render_texture;
-    /// the render resolution. initialized to Core.default_resolution
-    public Vector2 resolution;
+    private Vector2 _resolution;
 
     /// creates a new scene
     this() {
+    }
+
+    /// gets the render resolution. initialized to Core.default_resolution
+    @property Vector2 resolution() {
+        return _resolution;
+    }
+
+    /// sets the render resolution and updates the render target
+    @property Vector2 resolution(Vector2 value) {
+        _resolution = value;
+        update_render_target();
+        return value;
     }
 
     /// called at the start of the scene
@@ -61,20 +72,22 @@ abstract class Scene {
         raylib.EndTextureMode();
     }
 
+    private void update_render_target() {
+        if (Core.headless)
+            return;
+        // create render target
+        // TODO: use scene resolution instead of window resolution
+        render_texture = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
+        // texture scale filter
+        raylib.SetTextureFilter(render_texture.texture, raylib.TextureFilterMode.FILTER_BILINEAR);
+    }
+
     /// called internally on scene creation
     public void begin() {
         // set up ecs
         ecs = new EntityManager;
 
         resolution = Core.default_resolution;
-        if (!Core.headless) {
-            // create render target
-            // TODO: use scene resolution instead of window resolution
-            render_texture = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
-            // texture scale filter
-            raylib.SetTextureFilter(render_texture.texture,
-                    raylib.TextureFilterMode.FILTER_BILINEAR);
-        }
 
         on_start();
     }
