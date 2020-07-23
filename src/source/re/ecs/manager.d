@@ -2,6 +2,7 @@ module re.ecs.manager;
 
 import re.ecs.entity;
 import re.ecs.component;
+import re.ecs.storage;
 import std.algorithm;
 import std.array;
 
