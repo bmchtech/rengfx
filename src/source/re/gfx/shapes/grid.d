@@ -7,7 +7,9 @@ static import raylib;
 
 /// represents a 3d grid at the origin
 class Grid3D : Component, Renderable3D {
+    /// grid slices
     public int slices;
+    /// grid line spacing
     public float spacing;
 
     this(int slices, float spacing) {

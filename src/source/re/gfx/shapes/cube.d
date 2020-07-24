@@ -7,7 +7,9 @@ static import raylib;
 
 /// represents a 3d rectangular prism (we abbreviate as cube)
 class Cube : Component, Renderable3D {
+    /// rectangular prism dimensions
     public Vector3 size;
+    /// color
     public Color color;
 
     this(Vector3 size, Color color) {
