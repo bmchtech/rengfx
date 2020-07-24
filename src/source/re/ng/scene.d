@@ -142,7 +142,7 @@ abstract class Scene {
 }
 
 unittest {
-    class TestScene : Scene {
+    class TestScene : Scene2D {
         override void on_start() {
             auto apple = create_entity("apple");
             assert(get_entity("apple") == apple, "could not get entity by name");
@@ -157,7 +157,7 @@ unittest {
 }
 
 unittest {
-    class TestScene : Scene {
+    class TestScene : Scene2D {
     }
 
     Core.headless = true;
