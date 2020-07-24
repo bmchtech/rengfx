@@ -2,9 +2,10 @@ module play;
 
 import re;
 import re.gfx;
+import re.gfx.shapes.cube;
+import re.gfx.shapes.grid;
 import re.math;
 static import raylib;
-import things;
 
 class PlayScene : Scene3D {
     override void on_start() {
@@ -19,9 +20,9 @@ class PlayScene : Scene3D {
         raylib.SetCameraMode(camera, raylib.CameraMode.CAMERA_ORBITAL);
 
         auto block = create_entity("block", Vector3(0, 0, 0));
-        block.add_component!Cube();
+        block.add_component(new Cube(Vector3(2, 2, 2), Colors.PURPLE));
 
         auto grid = create_entity("grid");
-        grid.add_component!Grid();
+        grid.add_component(new Grid3D(10, 1));
     }
 }
