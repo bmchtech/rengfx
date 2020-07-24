@@ -15,13 +15,13 @@ class PhysicsBody2d : Component {
 }
 
 class KinBody2d : PhysicsBody2d, Updatable {
-    public Vector2 maxVelocity;
-    public Vector2 accel;
-    public Vector2 drag;
-    public float max_angular;
-    public float angular_velocity;
-    public float angular_accel;
-    public float angular_drag;
+    public Vector2 max_velocity = Vector2Zero;
+    public Vector2 accel = Vector2Zero;
+    public Vector2 drag = Vector2Zero;
+    public float max_angular = 0;
+    public float angular_velocity = 0;
+    public float angular_accel = 0;
+    public float angular_drag = 0;
 
     // - transform
 
@@ -56,7 +56,7 @@ class KinBody2d : PhysicsBody2d, Updatable {
         auto dt = Time.delta_time;
 
         auto vls = velocity.LengthSquared();
-        auto mvls = maxVelocity.LengthSquared();
+        auto mvls = max_velocity.LengthSquared();
         if (mvls > double.epsilon && vls > mvls) {
             // convert to unit and rescale
             auto unit_vel = velocity.Normalize();
@@ -66,29 +66,35 @@ class KinBody2d : PhysicsBody2d, Updatable {
             velocity = velocity * reduction_fac;
         }
 
+        // new velocity components
+        auto nvel_x = 0.0;
+        auto nvel_y = 0.0;
+
         if (velocity.x > drag.x * dt) {
-            velocity.x -= drag.x * dt;
+            nvel_x = velocity.x - drag.x * dt;
         }
 
         if (velocity.x < -drag.x * dt) {
-            velocity.x += drag.x * dt;
+            nvel_x = velocity.x + drag.x * dt;
         }
 
-        if (abs(velocity.x) < drag.x * dt) {
-            velocity.x = 0;
+        if (abs(nvel_x) < drag.x * dt) {
+            nvel_x = 0;
         }
 
         if (velocity.y > drag.y * dt) {
-            velocity.y -= drag.y * dt;
+            nvel_y = velocity.y - drag.y * dt;
         }
 
         if (velocity.y < -drag.y * dt) {
-            velocity.y += drag.y * dt;
+            nvel_y = velocity.y + drag.y * dt;
         }
 
-        if (abs(velocity.y) < drag.y * dt) {
-            velocity.y = 0;
+        if (abs(nvel_y) < drag.y * dt) {
+            nvel_y = 0;
         }
+
+        velocity = Vector2(nvel_x, nvel_y);
 
         apply_motion(velocity * dt);
 
@@ -111,7 +117,7 @@ class KinBody2d : PhysicsBody2d, Updatable {
             angular_velocity += angular_drag * dt;
         }
 
-        angle = angle + (angular_velocity * dt);
+        transform.rotation = transform.rotation + (angular_velocity * dt);
     }
 
     protected void apply_motion(Vector2 pos_delta) {
