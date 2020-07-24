@@ -22,6 +22,6 @@ class Cube : Component, Renderable3D {
     }
 
     public void debug_render() {
-        raylib.DrawCubeWiresV(entity.position, size, Colors.RED);
+        Debugger.default_debug_render(this);
     }
 }

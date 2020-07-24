@@ -28,5 +28,6 @@ class ColorRect : Component, Renderable2D {
     }
 
     void debug_render() {
+        Debugger.default_debug_render(this);
     }
 }
