@@ -89,19 +89,27 @@ class Inspector {
                      * ((cast(int) comp.fields.length) + 1)); // number of fields
         }
         // total height
-        auto panel_bounds_height = pad + component_section_heights.sum() + (title_height + title_padding);
+        auto panel_bounds_height = pad + component_section_heights.sum() + (
+                title_height + title_padding);
 
         // bounds of the entire panel
         auto panel_content_bounds = Rectangle(0, 0, width - pad, panel_bounds_height);
 
         auto view = raygui.GuiScrollPanel(panel_bounds, panel_content_bounds, &_panel_scroll);
+
+        // start scissor
         raylib.BeginScissorMode(cast(int) view.x, cast(int) view.y,
                 cast(int) view.width, cast(int) view.height);
+        // end scissor on scope exit
+        scope (exit)
+            raylib.EndScissorMode();
+
         // close button
         enum btn_close_sz = 12;
         if (raygui.GuiButton(Rectangle(panel_bounds.x + panel_content_bounds.width - pad,
                 panel_bounds.y + pad, btn_close_sz, btn_close_sz), cast(char*) btn_close)) {
             close();
+            return; // when closed, cancel this render
         }
 
         // the corner of the inside of the panel (pre-padded)
@@ -148,7 +156,6 @@ class Inspector {
         }
         // raygui.GuiGrid(Rectangle(panel_bounds.x + _panel_scroll.x, panel_bounds.y + _panel_scroll.y,
         //         panel_content_bounds.width, panel_content_bounds.height), 16, 4);
-        raylib.EndScissorMode();
     }
 
     /// attach the inspector to an object
