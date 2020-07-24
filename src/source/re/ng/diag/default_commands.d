@@ -10,13 +10,14 @@ static class DefaultCommands {
     alias log = Core.log;
     alias scene = Core.scene;
     alias dbg = Core.debugger;
+    alias con = dbg.console;
 
     static void c_help(string[] args) {
         auto sb = appender!string();
         sb ~= "available commmands:\n";
-        auto command_names = dbg.commands.keys.sort();
+        auto command_names = con.commands.keys.sort();
         foreach (command_name; command_names) {
-            auto command = dbg.commands[command_name];
+            auto command = con.commands[command_name];
             sb ~= format("%s - %s\n", command.name, command.help);
         }
         log.info(sb.data);
