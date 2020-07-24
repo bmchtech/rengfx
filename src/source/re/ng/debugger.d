@@ -71,7 +71,12 @@ class Debugger {
                 log.err("usage: inspect <entity> <component>");
                 return;
             }
-            auto entity = scene.get_entity(args[0]);
+            auto nt_name = args[0];
+            if (!scene.ecs.has_entity(nt_name)) {
+                log.err(format("entity '%s' not found", nt_name));
+                return;
+            }
+            auto entity = scene.get_entity(nt_name);
             auto comp_search = args[1].toLower;
             // find matching component
             auto matches = entity.get_all_components()

@@ -37,6 +37,10 @@ class EntityManager {
         return list[0];
     }
 
+    public bool has_entity(string name) {
+        return entities.any!(x => x.name == name);
+    }
+
     /// remove an entity
     public void remove_entity(Entity entity) {
         entities.remove!(x => x == entity);
