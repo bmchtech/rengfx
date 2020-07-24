@@ -130,9 +130,7 @@ abstract class Core {
                     Vector2(0, 0), 0, raylib.Colors.WHITE);
         }
         debug {
-            if (debug_render) {
-                debugger.render();
-            }
+            debugger.render();
         }
         raylib.EndDrawing();
 
