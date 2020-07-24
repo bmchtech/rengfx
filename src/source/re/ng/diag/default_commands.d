@@ -38,7 +38,7 @@ static class DefaultCommands {
 
     private static bool pick_component(string[] args, out Component comp) {
         if (args.length < 2) {
-            log.err("usage: inspect <entity> <component>");
+            log.err("usage: <entity> <component>");
             return false;
         }
         auto nt_name = args[0];
@@ -61,7 +61,8 @@ static class DefaultCommands {
 
     static void c_dump(string[] args) {
         Component comp;
-        if (!pick_component(args, comp)) return;
+        if (!pick_component(args, comp))
+            return;
         // dump this component
         auto sb = appender!(string);
         auto comp_class = comp.getMetaType;
@@ -70,5 +71,18 @@ static class DefaultCommands {
             sb ~= format("%s = %s\n", field.getName, field.get(comp));
         }
         log.info(sb.data);
+    }
+
+    static void c_inspect(string[] args) {
+        if (args.length == 0 && dbg.inspector.open) {
+            // close inspector when run without args
+            dbg.inspector.close();
+            return;
+        }
+        Component comp;
+        if (!pick_component(args, comp))
+            return;
+        // attach the inspector to this component
+        dbg.inspector.inspect(comp);
     }
 }
