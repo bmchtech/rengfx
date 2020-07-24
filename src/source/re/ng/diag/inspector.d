@@ -7,6 +7,7 @@ import re.gfx;
 import std.conv;
 import std.array;
 import std.algorithm;
+import std.typecons;
 import std.string;
 import re.util.interop;
 import witchcraft;
@@ -21,6 +22,7 @@ class Inspector {
     public bool open = false;
     private Vector2 _panel_scroll;
     private InspectedComponent[] _components;
+    private NullableRef!Entity entity;
 
     private class InspectedComponent {
         public Component obj;
@@ -47,6 +49,7 @@ class Inspector {
 
     private void reset() {
         _components = [];
+        entity.nullify();
     }
 
     public void update() {
@@ -58,28 +61,36 @@ class Inspector {
 
     public void render() {
         alias pad = Core.debugger.screen_padding;
+
+        // this is the (clipped) scrollable panel bounds
         auto panel_bounds = Rectangle(pad, pad, width, Core.window.height - pad * 2);
         // draw indicator of panel bounds
         // raylib.DrawRectangleRec(panel_bounds, Colors.GRAY);
 
-        // calculate panel content size
-        enum field_height = 16;
+        // - layout vars
+        enum field_height = 16; // for each field
         enum field_padding = 2;
-        enum header = field_height;
+        enum field_label_width = 120;
+        enum field_value_width = 240;
+        enum header_height = field_height; // for each component
         enum header_padding = 4;
+        enum header_line_margin = 4;
+        enum title_height = field_height; // for each entity
+        enum title_padding = 4;
 
         // calculate panel bounds
         // this is going to calculate the space required for each component
         int[] component_section_heights;
 
         foreach (comp; _components) {
-            component_section_heights ~= (header + header_padding) // header
+            component_section_heights ~= (header_padding + header_padding) // header
              + ((field_height + field_padding) // field and padding
                      * ((cast(int) comp.fields.length) + 1)); // number of fields
         }
         // total height
-        auto panel_bounds_height = component_section_heights.sum();
+        auto panel_bounds_height = component_section_heights.sum() + (title_height + title_padding);
 
+        // bounds of the entire panel
         auto panel_content_bounds = Rectangle(0, 0, width - pad, panel_bounds_height);
 
         auto view = raygui.GuiScrollPanel(panel_bounds, panel_content_bounds, &_panel_scroll);
@@ -92,30 +103,40 @@ class Inspector {
                 panel_bounds.y + pad, btn_close_sz, btn_close_sz), &btn_close)) {
             close();
         }
+
+        // the corner of the inside of the panel (pre-padded)
+        auto panel_corner = Vector2(panel_bounds.x + pad, panel_bounds.y + pad);
+
+        // entity title
+        assert(!entity.isNull);
+        auto entity_name = format("Entity %s", entity.get.name);
+        raygui.GuiLabel(Rectangle(panel_corner.x, panel_corner.y,
+                field_label_width, title_height), entity_name.c_str());
+        // title underline
+        raylib.DrawRectangleLinesEx(Rectangle(panel_corner.x,
+                panel_corner.y + title_height, panel_bounds.width - pad * 2, 1), 1, Colors.GRAY);
+
         // - now draw each component section
         auto panel_y_offset = 0; // the offset from the y start of the panel (this is based on component index)
         foreach (i, comp; _components) {
-            // layout vars
             auto field_names = comp.fields.keys.sort();
             auto field_index = 0;
-            enum field_label_width = 120;
-            enum field_value_width = 240;
 
             // corner for the start of this section
-            auto section_corner = Vector2(panel_bounds.x + pad, panel_bounds.y + pad
-                    + panel_y_offset);
+            auto section_corner = Vector2(panel_corner.x, panel_corner.y + panel_y_offset);
             // header
             raygui.GuiLabel(Rectangle(section_corner.x, section_corner.y,
-                    field_label_width, header), comp.obj_class.getName.c_str());
+                    field_label_width, header_height), comp.obj_class.getName.c_str());
             // header underline
-            raylib.DrawRectangleLinesEx(Rectangle(section_corner.x,
-                    section_corner.y + header, panel_bounds.width - pad * 2, 1), 1, Colors.GRAY);
+            raylib.DrawRectangleLinesEx(Rectangle(section_corner.x + header_line_margin,
+                    section_corner.y + header_height, panel_bounds.width - header_line_margin * 2,
+                    1), 1, Colors.GRAY);
             // list of fields
             foreach (field_name; field_names) {
                 auto field_val = comp.fields[field_name];
                 // calculate field corner
                 auto corner = Vector2(section_corner.x,
-                        section_corner.y + (header + header_padding) + field_index * (
+                        section_corner.y + (header_height + header_padding) + field_index * (
                             field_padding + field_height));
                 raygui.GuiLabel(Rectangle(corner.x, corner.y,
                         field_label_width, field_height), field_name.c_str());
@@ -135,6 +156,7 @@ class Inspector {
     public void inspect(Entity nt) {
         assert(_components.length == 0, "only one inspector may be open at a time");
         open = true;
+        this.entity = nullableRef(&nt);
         // add components
         _components ~= nt.get_all_components.map!(x => new InspectedComponent(x)).array;
     }
