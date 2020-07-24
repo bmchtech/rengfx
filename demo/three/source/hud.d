@@ -6,6 +6,9 @@ import re.math;
 
 class HUDScene : Scene2D {
     override void on_start() {
+        // set the tint of this scene's composite
+        composite_mode.color = Color(255, 255, 255, 160);
+
         enum pad = 4;
 
         auto msg = create_entity("msg", Vector2(pad, resolution.y - pad));

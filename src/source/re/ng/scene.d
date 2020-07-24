@@ -21,6 +21,14 @@ abstract class Scene {
     /// the render target
     public raylib.RenderTexture2D render_texture;
     private Vector2 _resolution;
+    /// the mode of compositing
+    public CompositeMode composite_mode;
+
+    /// the mode for compositing a scene onto the display buffer
+    public struct CompositeMode {
+        /// the texture render tint color
+        raylib.Color color = raylib.Colors.WHITE;
+    }
 
     /// creates a new scene
     this() {
