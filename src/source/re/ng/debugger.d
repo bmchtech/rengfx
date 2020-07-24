@@ -35,7 +35,9 @@ class Debugger {
 
     /// create a debugger
     this() {
-        console_text = "".toUTFz!(char*)();
+        // 64 chars
+        console_text = "\0                                                                ".toUTFz!(
+                char*)();
 
         // add default commands
         alias log = Core.log;
@@ -57,15 +59,35 @@ class Debugger {
             sb ~= "entities:\n";
             foreach (entity; scene.ecs.entities) {
                 // get list of components
-                auto component_types = entity.get_all_components().map!(x => typeid(x).name);
+                auto component_types = entity.get_all_components().map!(x => x.classinfo.name);
                 sb ~= format("%s: components[%d] {%s}\n", entity.name,
                         entity.components.length, component_types);
             }
             log.info(sb.data);
         }
 
+        void c_inspect(string[] args) {
+            if (args.length < 2) {
+                log.err("usage: inspect <entity> <component>");
+                return;
+            }
+            auto entity = scene.get_entity(args[0]);
+            auto comp_search = args[1].toLower;
+            // find matching component
+            auto matches = entity.get_all_components()
+                .find!(x => x.classinfo.name.toLower.indexOf(comp_search) > 0);
+            if (matches.length == 0) {
+                log.err(format("no matching component for '%s'", comp_search));
+                return;
+            }
+            auto comp = matches.front;
+            log.info(format("inspecting: %s", comp.classinfo.name));
+            // TODO: dump this component
+        }
+
         add_command(ConsoleCommand("help", &c_help, "lists available commands"));
         add_command(ConsoleCommand("entities", &c_entities, "lists scene entities"));
+        add_command(ConsoleCommand("inspect", &c_inspect, "inspect a component"));
     }
 
     private void add_command(ConsoleCommand command) {
@@ -121,7 +143,7 @@ class Debugger {
         auto console_bounds = Rectangle(console_bg_bounds.x + bg_padding, console_bg_bounds.y + bg_padding,
                 console_bg_bounds.width - bg_padding * 2, console_bg_bounds.height - bg_padding * 2);
         // console text
-        if (raygui.GuiTextBox(console_bounds, console_text, 12, true)) {
+        if (raygui.GuiTextBox(console_bounds, console_text, 64, true)) {
             auto raw_command = to!string(console_text).split(' ');
             console_command(raw_command.front, raw_command.drop(1));
             // pass command
