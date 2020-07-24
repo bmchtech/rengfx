@@ -7,7 +7,9 @@ lightweight, expressive, extensible game engine
 ## features
 + only dependency is [`raylib`](https://github.com/xdrie/raylib)
 + Scene-Entity-Component architecture
++ real time runtime debug console and inspector
 + 2d and 3d graphics support
++ multi scene layering and compositing
 + highly extensible
 
 ## hacking
