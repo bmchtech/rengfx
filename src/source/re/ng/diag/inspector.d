@@ -89,7 +89,7 @@ class Inspector {
                      * ((cast(int) comp.fields.length) + 1)); // number of fields
         }
         // total height
-        auto panel_bounds_height = component_section_heights.sum() + (title_height + title_padding);
+        auto panel_bounds_height = pad + component_section_heights.sum() + (title_height + title_padding);
 
         // bounds of the entire panel
         auto panel_content_bounds = Rectangle(0, 0, width - pad, panel_bounds_height);
