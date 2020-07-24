@@ -2,7 +2,7 @@ module re.gfx.text;
 
 import re.ecs;
 import re.math;
-import re.ng.debugger;
+import re.ng.diag;
 import std.string;
 static import raylib;
 
