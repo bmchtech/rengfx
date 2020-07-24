@@ -1,7 +1,7 @@
 module re.ng.diag.default_commands;
 
 import re.core;
-import re.ecs.component;
+import re.ecs;
 import std.range;
 import std.array;
 import std.algorithm;
@@ -36,17 +36,23 @@ static class DefaultCommands {
         log.info(sb.data);
     }
 
+    private static bool pick_entity(string name, out Entity entity) {
+        if (!scene.ecs.has_entity(name)) {
+            log.err(format("entity '%s' not found", name));
+            return false;
+        }
+        entity = scene.get_entity(name);
+        return true;
+    }
+
     private static bool pick_component(string[] args, out Component comp) {
         if (args.length < 2) {
             log.err("usage: <entity> <component>");
             return false;
         }
-        auto nt_name = args[0];
-        if (!scene.ecs.has_entity(nt_name)) {
-            log.err(format("entity '%s' not found", nt_name));
+        Entity entity;
+        if (!pick_entity(args[0], entity))
             return false;
-        }
-        auto entity = scene.get_entity(nt_name);
         auto comp_search = args[1].toLower;
         // find matching component
         auto matches = entity.get_all_components()
@@ -79,14 +85,14 @@ static class DefaultCommands {
             dbg.inspector.close();
             return;
         }
-        Component comp;
-        if (!pick_component(args, comp))
+        Entity entity;
+        if (!pick_entity(args[0], entity))
             return;
         if (dbg.inspector.open) {
             log.err("inspector is already open");
             return;
         }
-        // attach the inspector to this component
-        dbg.inspector.inspect(comp);
+        // attach the inspector to this entity
+        dbg.inspector.inspect(entity);
     }
 }
