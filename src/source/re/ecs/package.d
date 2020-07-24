@@ -1,10 +1,12 @@
 module re.ecs;
 
-// main
-public import re.ecs.manager;
-public import re.ecs.entity;
-public import re.ecs.component;
+public {
+    // main
+    import re.ecs.manager;
+    import re.ecs.entity;
+    import re.ecs.component;
 
-// types
-public import re.ecs.renderable;
-public import re.ecs.updatable;
+    // types
+    import re.ecs.renderable;
+    import re.ecs.updatable;
+}
