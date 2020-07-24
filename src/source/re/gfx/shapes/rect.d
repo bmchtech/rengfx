@@ -3,6 +3,7 @@ module re.gfx.shapes.rect;
 import re.ecs;
 import re.gfx;
 import re.math;
+import re.ng.diag;
 static import raylib;
 
 /// a color-filled rectangle

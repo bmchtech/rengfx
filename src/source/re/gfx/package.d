@@ -11,4 +11,5 @@ public {
 
     // raylib
     import raylib : Color, Colors, Image, Texture2D;
+    import raylib : Mesh, Model;
 }
