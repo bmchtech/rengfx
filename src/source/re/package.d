@@ -1,12 +1,14 @@
 module re;
 
-// core engine
-public import re.core;
-public import re.ng.scene;
+public {
+    // core engine
+    import re.core;
+    import re.ng.scene;
 
-// ecs
-public import re.ecs;
+    // ecs
+    import re.ecs;
 
-// util
-public import re.util.logger;
-public import re.util.rng;
+    // util
+    import re.util.logger;
+    import re.util.rng;
+}
