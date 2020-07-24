@@ -7,7 +7,7 @@
 		"fluent-asserts": "0.13.3",
 		"jar": "0.1.0",
 		"libdparse": "0.14.0",
-		"re-raylib-d": "3.0.4",
+		"re-raylib-d": "3.0.5",
 		"reng": {"path":"../../src"},
 		"stdx-allocator": "2.77.5"
 	}
