@@ -15,6 +15,7 @@ class PhysicsBody2d : Component {
 }
 
 class KinBody2d : PhysicsBody2d, Updatable {
+    mixin Reflect;
     public Vector2 max_velocity = Vector2Zero;
     public Vector2 accel = Vector2Zero;
     public Vector2 drag = Vector2Zero;
