@@ -11,7 +11,8 @@ import re.math;
 abstract class Scene {
     /// the cleared background color
     public raylib.Color clear_color;
-    protected EntityManager ecs;
+    /// the entity manager
+    public EntityManager ecs;
     /// the render target
     public raylib.RenderTexture2D render_texture;
     private Vector2 _resolution;

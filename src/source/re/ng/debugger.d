@@ -4,10 +4,14 @@ import re.core;
 import re.ecs.renderable;
 import re.input.input;
 import re.gfx;
+import re.ng.command;
 import re.math;
 import std.string;
 import std.utf;
+import std.range;
+import std.array;
 import std.conv;
+import std.algorithm;
 
 // import core.stdc.string;
 static import raylib;
@@ -19,6 +23,8 @@ class Debugger {
     /// the character representation of the console key
     public char console_key_char = '`';
 
+    public ConsoleCommand[string] commands;
+
     private enum screen_padding = 12;
     private enum bg_col = Color(180, 180, 180, 180);
     private enum console_height = 30;
@@ -27,6 +33,38 @@ class Debugger {
 
     this() {
         console_text = "".toUTFz!(char*)();
+
+        // add default commands
+        alias log = Core.log;
+        alias scene = Core.scene;
+
+        void c_help(string[] args) {
+            auto sb = appender!string();
+            sb ~= "available commmands:\n";
+            auto command_names = commands.keys.sort();
+            foreach (command_name; command_names) {
+                auto command = commands[command_name];
+                sb ~= format("%s - %s\n", command.name, command.help);
+            }
+            log.info(sb.data);
+        }
+        void c_entities(string[] args) {
+            auto sb = appender!string();
+            sb ~= "entities:\n";
+            foreach (entity; scene.ecs.entities) {
+                // get list of components
+                // auto component_types = entity.
+                sb ~= format("%s: components[%d] {%s}\n", entity.name, entity.components.length, ["stub"]);
+            }
+            log.info(sb.data);
+        }
+
+        add_command(ConsoleCommand("help", &c_help, "lists available commands"));
+        add_command(ConsoleCommand("entities", &c_entities, "lists scene entities"));
+    }
+
+    private void add_command(ConsoleCommand command) {
+        commands[command.name] = command;
     }
 
     public void update() {
@@ -56,8 +94,12 @@ class Debugger {
     }
 
     /// process a command in the console
-    public void console_command(string cmd) {
-        Core.log.info(format("got command: %s", cmd));
+    public void console_command(string cmd, string[] args) {
+        if (cmd in commands) {
+            commands[cmd].action(args);
+        } else {
+            Core.log.err(format("unrecognized command: %s", cmd));
+        }
     }
 
     public void render() {
@@ -75,7 +117,8 @@ class Debugger {
                 console_bg_bounds.width - bg_padding * 2, console_bg_bounds.height - bg_padding * 2);
         // console text
         if (raygui.GuiTextBox(console_bounds, console_text, 12, true)) {
-            console_command(to!string(console_text));
+            auto raw_command = to!string(console_text).split(' ');
+            console_command(raw_command.front, raw_command.drop(1));
             // pass command
             console_text[0] = '\0'; // clear text
         }
