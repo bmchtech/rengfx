@@ -10,6 +10,7 @@ import re.ng.render_ext;
 import re.math;
 import re.util.logger;
 import re.util.tween.tween_manager;
+import std.array;
 import jar;
 static import raylib;
 
@@ -26,8 +27,8 @@ abstract class Core {
     /// content manager
     public static ContentManager content;
 
-    /// the current scene
-    private static Scene _scene;
+    /// the current scenes
+    private static Scene[] _scenes;
 
     /// type registration container
     public static Jar jar;
@@ -106,7 +107,7 @@ abstract class Core {
             manager.update();
         }
         Input.update();
-        if (scene !is null) {
+        foreach (scene; _scenes) {
             scene.update();
         }
         debug {
@@ -121,7 +122,7 @@ abstract class Core {
             return; // suppress draw
         }
         raylib.BeginDrawing();
-        if (scene !is null) {
+        foreach (scene; _scenes) {
             scene.draw();
             // composite screen render to window
             // TODO: support better compositing
@@ -136,26 +137,37 @@ abstract class Core {
     }
 
     public static T get_scene(T)() {
-        // TODO: support the multi scene
-        // for now, just return a casted scene
-        return cast(T) scene;
+        import std.algorithm.searching: find;
+
+        // find a scene matching the type
+        auto scenes = _scenes.find!(x => (cast(T) x) !is null);
+        assert(scenes.length > 0, "no matching scene was found");
+        return cast(T) scenes.front;
     }
 
-    /// gets the current scene
-    static @property Scene scene() {
-        return _scene;
+    @property public static Scene[] scenes() {
+        return scenes;
     }
 
-    /// sets the current scene
-    static @property Scene scene(Scene value) {
-        if (_scene !is null) {
-            // end old scene
-            _scene.end();
-            _scene = null;
+    @property public static Scene primary_scene() {
+        return scenes.front;
+    }
+
+    /// sets the current scenes
+    static void load_scenes(Scene[] new_scenes) {
+        foreach (scene; _scenes) {
+            // end old scenes
+            scene.end();
+            scene = null;
         }
-        // begin new one
-        value.begin();
-        return _scene = value;
+        // clear scenes list
+        _scenes = [];
+
+        _scenes ~= new_scenes;
+        // begin new scenes
+        foreach (scene; _scenes) {
+            scene.begin();
+        }
     }
 
     /// releases all resources and cleans up
