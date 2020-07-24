@@ -6,6 +6,7 @@ import re.gfx.window;
 import re.ng.scene;
 import re.ng.diag;
 import re.ng.manager;
+import re.ng.render_ext;
 import re.math;
 import re.util.logger;
 import re.util.tween.tween_manager;
@@ -124,10 +125,8 @@ abstract class Core {
             scene.draw();
             // composite screen render to window
             // TODO: support better compositing
-            auto tex = scene.render_texture.texture;
-            raylib.DrawTexturePro(tex, Rectangle(0, 0, tex.width,
-                    -tex.height), Rectangle(0, 0, window.width, window.height),
-                    Vector2(0, 0), 0, raylib.Colors.WHITE);
+            RenderExt.draw_render_target(scene.render_texture, Rectangle(0, 0,
+                    window.width, window.height), raylib.Colors.WHITE);
         }
         debug {
             debugger.render();
@@ -161,6 +160,9 @@ abstract class Core {
 
     /// releases all resources and cleans up
     public void destroy() {
+        debug {
+            debugger.destroy();
+        }
         content.destroy();
         if (!Core.headless) {
             window.destroy();
