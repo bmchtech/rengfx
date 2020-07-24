@@ -4,7 +4,7 @@ import re.ecs;
 import re.math;
 static import raylib;
 
-class Square : Component, Renderable {
+class Square : Component, Renderable2D {
     public Vector2 size;
     public raylib.Color color;
 
