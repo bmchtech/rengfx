@@ -5,10 +5,10 @@ import re.core;
 import re.math;
 import re.gfx;
 import re.ng.diag.default_commands;
+import re.util.interop;
 import std.conv;
 import std.string;
 import std.range;
-import std.utf;
 static import raygui;
 
 /// overlay debug console
@@ -35,15 +35,14 @@ class Console {
     /// create a debug console
     this() {
         // 64 chars
-        console_text = "\0                                                                ".toUTFz!(
-                char*)();
+        console_text = "\0                                                                ".c_str();
 
         // add default commands
         add_command(Command("help", &DefaultCommands.c_help, "lists available commands"));
-        add_command(Command("entities", &DefaultCommands.c_entities,
-                "lists scene entities"));
+        add_command(Command("entities", &DefaultCommands.c_entities, "lists scene entities"));
         add_command(Command("dump", &DefaultCommands.c_dump, "dump a component"));
-        add_command(Command("inspect", &DefaultCommands.c_inspect, "open the inspector on a component"));
+        add_command(Command("inspect", &DefaultCommands.c_inspect,
+                "open the inspector on a component"));
     }
 
     private void add_command(Command command) {
@@ -77,10 +76,13 @@ class Console {
                 console_bg_bounds.width - bg_padding * 2, console_bg_bounds.height - bg_padding * 2);
         // console text
         if (raygui.GuiTextBox(console_bounds, console_text, 64, true)) {
-            auto raw_command = to!string(console_text).split(' ');
-            process_command(raw_command.front, raw_command.drop(1));
-            // pass command
-            console_text[0] = '\0'; // clear text
+            auto console_text_str = to!string(console_text);
+            if (console_text_str.length > 0) {
+                auto raw_command = console_text_str.split(' ');
+                process_command(raw_command.front, raw_command.drop(1));
+                // pass command
+                console_text[0] = '\0'; // clear text
+            }
         }
     }
 
