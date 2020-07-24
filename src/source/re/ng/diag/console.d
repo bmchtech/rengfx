@@ -70,7 +70,7 @@ class Console {
 
         void load_history_entry() {
             // load a history entry
-            auto entry = _history.data[$ - _history_depth--];
+            auto entry = _history.data[$ - _history_depth];
             console_text = entry.c_str();
         }
 
