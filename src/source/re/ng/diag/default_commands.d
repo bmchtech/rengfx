@@ -55,6 +55,12 @@ static class DefaultCommands {
         }
         auto comp = matches.front;
         log.info(format("inspecting: %s", comp.classinfo.name));
-        // TODO: dump this component
+        auto sb = appender!(string);
+        // dump this component
+        auto comp_class = comp.metaof;
+        foreach (field; comp_class.getFields) {
+            sb ~= format("%s = %s", field.getName, field.get(comp));
+        }
+        log.info(sb.data);
     }
 }
