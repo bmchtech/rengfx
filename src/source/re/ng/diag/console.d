@@ -8,6 +8,7 @@ import re.ng.diag.default_commands;
 import re.util.interop;
 import std.conv;
 import std.string;
+import std.array;
 import std.range;
 static import raygui;
 
@@ -19,11 +20,15 @@ class Console {
     public char key_char = '`';
     /// whether the console is open
     public bool open = false;
+    /// 64 chars of space
+    private enum blank = "\0                                                                ";
 
     /// console commands
     public Command[string] commands;
     private enum height = 30;
     private char* console_text;
+    private Appender!(string[]) _history;
+    private int _history_depth = 0;
 
     /// represents a command for the debug console
     struct Command {
@@ -34,8 +39,7 @@ class Console {
 
     /// create a debug console
     this() {
-        // 64 chars
-        console_text = "\0                                                                ".c_str();
+        console_text = blank.c_str();
 
         // add default commands
         add_command(Command("help", &DefaultCommands.c_help, "lists available commands"));
@@ -63,6 +67,27 @@ class Console {
 
         // remove console key from textbox
         sstrip(console_text, '`');
+
+        void load_history_entry() {
+            // load a history entry
+            auto entry = _history.data[$ - _history_depth--];
+            console_text = entry.c_str();
+        }
+
+        // arrows can scroll through history
+        if (Input.is_key_pressed(Keys.KEY_UP)) {
+            if (_history_depth < _history.data.length) {
+                _history_depth++;
+                load_history_entry();
+            }
+        } else if (Input.is_key_pressed(Keys.KEY_DOWN)) {
+            if (_history_depth > 0) {
+                _history_depth--;
+                load_history_entry();
+            } else {
+                console_text = blank.c_str();
+            }
+        }
     }
 
     public void render() {
@@ -78,6 +103,8 @@ class Console {
         if (raygui.GuiTextBox(console_bounds, console_text, 64, true)) {
             auto console_text_str = to!string(console_text);
             if (console_text_str.length > 0) {
+                _history_depth = 0; // we just executed a command, no longer in history
+                _history ~= console_text_str; // add to history
                 auto raw_command = console_text_str.split(' ');
                 process_command(raw_command.front, raw_command.drop(1));
                 // pass command
