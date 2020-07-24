@@ -22,7 +22,7 @@ class Inspector {
     private Vector2 _panel_scroll;
     private InspectedComponent[] _components;
 
-    private struct InspectedComponent {
+    private class InspectedComponent {
         public Component obj;
         public Class obj_class;
         public string[string] fields;
@@ -34,7 +34,9 @@ class Inspector {
 
         private void update_fields() {
             foreach (field; obj_class.getFields) {
-                fields[field.getName] = to!string(field.get(obj));
+                string field_name = field.getName;
+                string field_value = to!string(field.get(obj));
+                this.fields[field_name] = field_value;
             }
         }
     }
@@ -98,6 +100,8 @@ class Inspector {
             auto field_index = 0;
             enum field_label_width = 120;
             enum field_value_width = 240;
+
+            // corner for the start of this section
             auto section_corner = Vector2(panel_bounds.x + pad, panel_bounds.y + pad
                     + panel_y_offset);
             // header
@@ -132,7 +136,7 @@ class Inspector {
         assert(_components.length == 0, "only one inspector may be open at a time");
         open = true;
         // add components
-        _components ~= nt.get_all_components.map!(x => InspectedComponent(x)).array;
+        _components ~= nt.get_all_components.map!(x => new InspectedComponent(x)).array;
     }
 
     /// close the inspector
