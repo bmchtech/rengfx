@@ -9,6 +9,8 @@ import comp.paddle;
 import std.math;
 
 class Ball : Component, Updatable {
+    mixin Reflect;
+    
     private enum base_speed = 160;
     private float speed = base_speed;
     private float speed_up = 20;

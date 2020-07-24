@@ -2,13 +2,18 @@ module re.ecs.component;
 
 import re.ecs.entity;
 import re.math.transform;
-import witchcraft;
+
+mixin template Reflect() {
+    debug {
+        import witchcraft;
+
+        mixin Witchcraft; /// in debug mode, enable reflection
+    }
+}
 
 /// the composable unit of functionality
 abstract class Component {
-    debug {
-        mixin Witchcraft; /// in debug mode, enable reflection
-    }
+    mixin Reflect;
 
     /// owner entity
     public Entity entity;
