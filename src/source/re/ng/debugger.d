@@ -8,10 +8,8 @@ import re.ng.command;
 import re.math;
 import std.string;
 import std.utf;
-import std.range;
-import std.array;
 import std.conv;
-import std.algorithm;
+import std.range;
 
 // import core.stdc.string;
 static import raylib;
@@ -40,59 +38,9 @@ class Debugger {
                 char*)();
 
         // add default commands
-        alias log = Core.log;
-        alias scene = Core.scene;
-
-        void c_help(string[] args) {
-            auto sb = appender!string();
-            sb ~= "available commmands:\n";
-            auto command_names = commands.keys.sort();
-            foreach (command_name; command_names) {
-                auto command = commands[command_name];
-                sb ~= format("%s - %s\n", command.name, command.help);
-            }
-            log.info(sb.data);
-        }
-
-        void c_entities(string[] args) {
-            auto sb = appender!string();
-            sb ~= "entities:\n";
-            foreach (entity; scene.ecs.entities) {
-                // get list of components
-                auto component_types = entity.get_all_components().map!(x => x.classinfo.name);
-                sb ~= format("%s: components[%d] {%s}\n", entity.name,
-                        entity.components.length, component_types);
-            }
-            log.info(sb.data);
-        }
-
-        void c_inspect(string[] args) {
-            if (args.length < 2) {
-                log.err("usage: inspect <entity> <component>");
-                return;
-            }
-            auto nt_name = args[0];
-            if (!scene.ecs.has_entity(nt_name)) {
-                log.err(format("entity '%s' not found", nt_name));
-                return;
-            }
-            auto entity = scene.get_entity(nt_name);
-            auto comp_search = args[1].toLower;
-            // find matching component
-            auto matches = entity.get_all_components()
-                .find!(x => x.classinfo.name.toLower.indexOf(comp_search) > 0);
-            if (matches.length == 0) {
-                log.err(format("no matching component for '%s'", comp_search));
-                return;
-            }
-            auto comp = matches.front;
-            log.info(format("inspecting: %s", comp.classinfo.name));
-            // TODO: dump this component
-        }
-
-        add_command(ConsoleCommand("help", &c_help, "lists available commands"));
-        add_command(ConsoleCommand("entities", &c_entities, "lists scene entities"));
-        add_command(ConsoleCommand("inspect", &c_inspect, "inspect a component"));
+        add_command(ConsoleCommand("help", &DefaultCommands.c_help, "lists available commands"));
+        add_command(ConsoleCommand("entities", &DefaultCommands.c_entities, "lists scene entities"));
+        add_command(ConsoleCommand("inspect", &DefaultCommands.c_inspect, "inspect a component"));
     }
 
     private void add_command(ConsoleCommand command) {
