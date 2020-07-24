@@ -15,16 +15,16 @@ class Debugger {
     public enum screen_padding = 12;
     private enum bg_col = Color(180, 180, 180, 180);
 
-    /// debug console
-    public static Console console;
-
     /// inspector panel
     public static Inspector inspector;
 
+    /// debug console
+    public static Console console;
+
     /// sets up debugger
     this() {
-        console = new Console();
         inspector = new Inspector();
+        console = new Console();
     }
 
     public void update() {
@@ -33,17 +33,17 @@ class Debugger {
             console.open = !console.open;
         }
 
-        if (console.open)
-            console.update();
         if (inspector.open)
             inspector.update();
+        if (console.open)
+            console.update();
     }
 
     public void render() {
-        if (console.open)
-            console.render();
         if (inspector.open)
             inspector.render();
+        if (console.open)
+            console.render();
     }
 
     public static void default_debug_render(Renderable renderable) {
