@@ -22,7 +22,8 @@ class Inspector {
     public bool open = false;
     private Vector2 _panel_scroll;
     private InspectedComponent[] _components;
-    private NullableRef!Entity entity;
+    private Entity entity;
+    private enum btn_close = ['x', '\0'];
 
     private class InspectedComponent {
         public Component obj;
@@ -49,7 +50,7 @@ class Inspector {
 
     private void reset() {
         _components = [];
-        entity.nullify();
+        entity = null;
     }
 
     public void update() {
@@ -76,7 +77,7 @@ class Inspector {
         enum header_padding = 4;
         enum header_line_margin = 4;
         enum title_height = field_height; // for each entity
-        enum title_padding = 4;
+        enum title_padding = 8;
 
         // calculate panel bounds
         // this is going to calculate the space required for each component
@@ -97,10 +98,9 @@ class Inspector {
         raylib.BeginScissorMode(cast(int) view.x, cast(int) view.y,
                 cast(int) view.width, cast(int) view.height);
         // close button
-        auto btn_close = 'x';
         enum btn_close_sz = 12;
         if (raygui.GuiButton(Rectangle(panel_bounds.x + panel_content_bounds.width - pad,
-                panel_bounds.y + pad, btn_close_sz, btn_close_sz), &btn_close)) {
+                panel_bounds.y + pad, btn_close_sz, btn_close_sz), cast(char*) btn_close)) {
             close();
         }
 
@@ -108,16 +108,15 @@ class Inspector {
         auto panel_corner = Vector2(panel_bounds.x + pad, panel_bounds.y + pad);
 
         // entity title
-        assert(!entity.isNull);
-        auto entity_name = format("Entity %s", entity.get.name);
+        auto entity_title = format("Entity %s", entity.name);
         raygui.GuiLabel(Rectangle(panel_corner.x, panel_corner.y,
-                field_label_width, title_height), entity_name.c_str());
+                field_label_width, title_height), entity_title.c_str());
         // title underline
         raylib.DrawRectangleLinesEx(Rectangle(panel_corner.x,
-                panel_corner.y + title_height, panel_bounds.width - pad * 2, 1), 1, Colors.GRAY);
+                panel_corner.y + title_height, panel_bounds.width - pad * 2, 4), 1, Colors.GRAY);
 
         // - now draw each component section
-        auto panel_y_offset = 0; // the offset from the y start of the panel (this is based on component index)
+        auto panel_y_offset = (title_height + title_padding); // the offset from the y start of the panel (this is based on component index)
         foreach (i, comp; _components) {
             auto field_names = comp.fields.keys.sort();
             auto field_index = 0;
@@ -156,7 +155,7 @@ class Inspector {
     public void inspect(Entity nt) {
         assert(_components.length == 0, "only one inspector may be open at a time");
         open = true;
-        this.entity = nullableRef(&nt);
+        this.entity = nt;
         // add components
         _components ~= nt.get_all_components.map!(x => new InspectedComponent(x)).array;
     }
