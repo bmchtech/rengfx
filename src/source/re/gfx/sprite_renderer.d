@@ -6,7 +6,7 @@ import re.math;
 import re.ng.diag;
 static import raylib;
 
-class SpriteRenderer : Component, Renderable {
+class SpriteRenderer : Component, Renderable2D {
     /// the sprite
     public Sprite sprite;
     /// color tint

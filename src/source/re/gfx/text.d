@@ -7,7 +7,7 @@ import std.string;
 static import raylib;
 
 /// renderable text
-class Text : Component, Renderable {
+class Text : Component, Renderable2D {
     private string _text;
     /// text font
     public raylib.Font font;
