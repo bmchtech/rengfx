@@ -1,17 +1,10 @@
-module re.ng.command;
+module re.ng.diag.default_commands;
 
 import re.core;
 import std.range;
 import std.array;
 import std.algorithm;
 import std.string;
-
-/// console commands
-struct ConsoleCommand {
-    string name;
-    void function(string[]) action;
-    string help;
-}
 
 static class DefaultCommands {
     alias log = Core.log;

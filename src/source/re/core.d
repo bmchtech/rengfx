@@ -4,7 +4,7 @@ import re.input;
 import re.content;
 import re.gfx.window;
 import re.ng.scene;
-import re.ng.debugger;
+import re.ng.diag;
 import re.ng.manager;
 import re.math;
 import re.util.logger;

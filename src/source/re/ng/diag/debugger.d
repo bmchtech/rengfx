@@ -1,11 +1,12 @@
-module re.ng.debugger;
+module re.ng.diag.debugger;
 
 import re.core;
 import re.ecs.renderable;
 import re.input.input;
-import re.gfx;
-import re.ng.command;
 import re.math;
+import re.gfx;
+import re.ng.diag.command;
+import re.ng.diag.default_commands;
 import std.string;
 import std.utf;
 import std.conv;
@@ -39,7 +40,8 @@ class Debugger {
 
         // add default commands
         add_command(ConsoleCommand("help", &DefaultCommands.c_help, "lists available commands"));
-        add_command(ConsoleCommand("entities", &DefaultCommands.c_entities, "lists scene entities"));
+        add_command(ConsoleCommand("entities", &DefaultCommands.c_entities,
+                "lists scene entities"));
         add_command(ConsoleCommand("inspect", &DefaultCommands.c_inspect, "inspect a component"));
     }
 
