@@ -6,7 +6,7 @@ import re.math;
 import std.math;
 import re.time;
 
-class PhysicsBody2d : Component {
+class PhysicsBody2D : Component {
     mixin Reflect;
     public float mass = 1.0f;
     public Vector2 velocity = Vector2Zero;
@@ -15,7 +15,7 @@ class PhysicsBody2d : Component {
     }
 }
 
-class KinBody2d : PhysicsBody2d, Updatable {
+class KinBody2D : PhysicsBody2D, Updatable {
     mixin Reflect;
     public Vector2 max_velocity = Vector2Zero;
     public Vector2 accel = Vector2Zero;
