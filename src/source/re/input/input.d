@@ -20,7 +20,7 @@ public static class Input {
 
     public static void update() {
         debug {
-            if (Core.debugger.console_open) {
+            if (Core.debugger.console.open) {
                 // suppress input if console open
                 return;
             }
