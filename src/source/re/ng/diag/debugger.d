@@ -6,6 +6,7 @@ import re.input.input;
 import re.math;
 import re.gfx;
 import re.ng.diag.console;
+import re.ng.diag.inspector;
 static import raylib;
 static import raygui;
 
@@ -17,9 +18,13 @@ class Debugger {
     /// debug console
     public static Console console;
 
+    /// inspector panel
+    public static Inspector inspector;
+
     /// sets up debugger
     this() {
         console = new Console();
+        inspector = new Inspector();
     }
 
     public void update() {
@@ -30,11 +35,15 @@ class Debugger {
 
         if (console.open)
             console.update();
+        if (inspector.open)
+            inspector.update();
     }
 
     public void render() {
         if (console.open)
             console.render();
+        if (inspector.open)
+            inspector.render();
     }
 
     public static void default_debug_render(Renderable renderable) {

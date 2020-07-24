@@ -43,6 +43,7 @@ class Console {
         add_command(Command("entities", &DefaultCommands.c_entities,
                 "lists scene entities"));
         add_command(Command("dump", &DefaultCommands.c_dump, "dump a component"));
+        add_command(Command("inspect", &DefaultCommands.c_inspect, "open the inspector on a component"));
     }
 
     private void add_command(Command command) {
