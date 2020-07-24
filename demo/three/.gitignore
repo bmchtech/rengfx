@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/three
+three.so
+three.dylib
+three.dll
+three.a
+three.lib
+three-test-*
+*.exe
+*.o
+*.obj
+*.lst
