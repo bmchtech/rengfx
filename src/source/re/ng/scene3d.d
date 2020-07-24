@@ -33,4 +33,10 @@ abstract class Scene3D : Scene {
 
         raylib.EndMode3D();
     }
+
+    override void update() {
+        super.update();
+
+        raylib.UpdateCamera(&camera);
+    }
 }
