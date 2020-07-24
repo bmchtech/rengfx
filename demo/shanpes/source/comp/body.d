@@ -3,8 +3,9 @@ module comp.body;
 import re;
 import re.math;
 import comp.input;
+import re.phys.kin_body;
 
-class ShapeBody : Component, Updatable {
+class ShapeBody : KinBody2d {
     /// movement speed
     enum move_speed = 40;
     /// turn speed
@@ -13,12 +14,15 @@ class ShapeBody : Component, Updatable {
 
     override void setup() {
         controller = entity.get_component!InputController();
+
+        drag = Vector2(move_speed / 4, move_speed / 4);
+        max_velocity = Vector2(move_speed, move_speed);
     }
 
-    void update() {
-        entity.position2 = entity.position2 + (controller.move.value * move_speed * Time.delta_time);
+    override void update() {
+        super.update();
 
-        entity.transform.rotation = entity.transform.rotation + (
-                controller.turn.value * turn_speed * Time.delta_time);
+        velocity = velocity + (controller.move.value * move_speed * Time.delta_time);
+        angular_velocity = angular_velocity + (controller.turn.value * turn_speed * Time.delta_time);
     }
 }
