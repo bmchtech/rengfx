@@ -46,8 +46,9 @@ class Inspector {
         // raylib.DrawRectangleRec(panel_bounds, Colors.GRAY);
 
         // calculate panel content size
-        enum field_spacing = 16;
-        auto panel_content_bounds = Rectangle(0, 0, width - pad, field_spacing * (_fields.length + 1));
+        enum field_height = 16;
+        enum field_padding = 2;
+        auto panel_content_bounds = Rectangle(0, 0, width - pad, (field_height + field_padding) * (_fields.length + 1));
 
         auto view = raygui.GuiScrollPanel(panel_bounds, panel_content_bounds, &_panel_scroll);
         raylib.BeginScissorMode(cast(int) view.x, cast(int) view.y,
@@ -59,11 +60,11 @@ class Inspector {
         foreach (field_name; field_names) {
             auto field_val = _fields[field_name];
             auto corner = Vector2(panel_bounds.x + pad,
-                    panel_bounds.y + pad + field_index * field_spacing);
+                    panel_bounds.y + pad + field_index * (field_padding + field_height));
             raygui.GuiLabel(Rectangle(corner.x, corner.y, field_label_width,
-                    field_spacing), field_name.c_str());
+                    field_height), field_name.c_str());
             raygui.GuiTextBox(Rectangle(corner.x + field_label_width, corner.y,
-                    field_value_width, field_spacing), field_val.c_str(),
+                    field_value_width, field_height), field_val.c_str(),
                     field_value_width, false);
             field_index++;
         }
