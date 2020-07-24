@@ -140,17 +140,17 @@ abstract class Core {
         import std.algorithm.searching: find;
 
         // find a scene matching the type
-        auto scenes = _scenes.find!(x => (cast(T) x) !is null);
-        assert(scenes.length > 0, "no matching scene was found");
-        return cast(T) scenes.front;
+        auto matches = _scenes.find!(x => (cast(T) x) !is null);
+        assert(matches.length > 0, "no matching scene was found");
+        return cast(T) matches.front;
     }
 
     @property public static Scene[] scenes() {
-        return scenes;
+        return _scenes;
     }
 
     @property public static Scene primary_scene() {
-        return scenes.front;
+        return _scenes.front;
     }
 
     /// sets the current scenes
