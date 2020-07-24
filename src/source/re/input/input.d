@@ -1,5 +1,6 @@
 module re.input.input;
 
+import re.core;
 import re.math;
 import re.input;
 static import raylib;
@@ -18,6 +19,12 @@ public static class Input {
     }
 
     public static void update() {
+        debug {
+            if (Core.debugger.console_open) {
+                // suppress input if console open
+                return;
+            }
+        }
         foreach (input; virtual_inputs) {
             input.update();
         }
