@@ -13,7 +13,7 @@ class VirtualJoystick : VirtualInput {
 
     /// logic-controllable joystick
     static class LogicJoystick : Node {
-        public Vector2 logic_value;
+        public Vector2 logic_value = Vector2Zero;
 
         @property public override Vector2 value() {
             return logic_value;
