@@ -17,7 +17,7 @@ abstract class Component {
     }
 
     /// forward to entity.transform
-    @property public Transform transform() {
+    @property public ref Transform transform() {
         return entity.transform;
     }
 }
