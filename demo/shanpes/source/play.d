@@ -9,7 +9,7 @@ import comp.body;
 import comp.ai;
 static import raylib;
 
-class PlayScene : Scene {
+class PlayScene : Scene2D {
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 

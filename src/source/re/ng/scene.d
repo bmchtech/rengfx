@@ -1,11 +1,16 @@
 module re.ng.scene;
 
-public import re.time;
-static import raylib;
 import re;
 import std.string;
 import re.ecs;
 import re.math;
+static import raylib;
+
+public {
+    import re.time;
+    import re.ng.scene2d;
+    import re.ng.scene3d;
+}
 
 /// represents a collection of entities that draw to a texture
 abstract class Scene {
@@ -33,6 +38,7 @@ abstract class Scene {
         return value;
     }
 
+    /// sets the texture filtering mode for the scene render target
     @property raylib.TextureFilterMode filter_mode(raylib.TextureFilterMode value) {
         // texture scale filter
         raylib.SetTextureFilter(render_texture.texture, value);
@@ -51,8 +57,6 @@ abstract class Scene {
 
     /// called internally to update ecs
     public void update() {
-        auto dt = Time.delta_time;
-
         // update ecs
         ecs.update();
 
@@ -68,16 +72,12 @@ abstract class Scene {
         raylib.BeginTextureMode(render_texture);
         raylib.ClearBackground(clear_color);
 
-        // render components
-        foreach (component; ecs.storage.renderable_components) {
-            auto renderable = cast(Renderable) component;
-            renderable.render();
-            if (Core.debug_render) {
-                renderable.debug_render();
-            }
-        }
+        render_scene();
+
         raylib.EndTextureMode();
     }
+
+    protected abstract void render_scene();
 
     private void update_render_target() {
         if (Core.headless)
