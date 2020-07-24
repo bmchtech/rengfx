@@ -1,7 +1,7 @@
 module re.ng.scene3d;
 
-public import re.time;
 static import raylib;
+public import raylib : Camera3D, CameraMode, CameraType;
 import re;
 import std.string;
 import re.ecs;
@@ -9,12 +9,12 @@ import re.math;
 
 abstract class Scene3D : Scene {
     /// the 3d scene camera
-    public raylib.Camera3D camera;
+    public Camera3D camera;
 
     override void begin() {
         super.begin();
 
-        camera = raylib.Camera3D();
+        camera = Camera3D();
     }
 
     override void render_scene() {
