@@ -12,8 +12,8 @@ abstract class Scene3D : Scene {
     /// the 3d scene camera
     public Camera3D camera;
 
-    override void begin() {
-        super.begin();
+    override void setup() {
+        super.setup();
 
         camera = Camera3D();
     }

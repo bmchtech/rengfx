@@ -93,12 +93,17 @@ abstract class Scene {
 
     /// called internally on scene creation
     public void begin() {
+        setup();
+
+        on_start();
+    }
+
+    /// setup that happens after begin, but before the child scene starts
+    protected void setup() {
         // set up ecs
         ecs = new EntityManager;
 
         resolution = Core.default_resolution;
-
-        on_start();
     }
 
     /// called internally on scene destruction
