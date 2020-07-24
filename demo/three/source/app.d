@@ -6,6 +6,7 @@ import re;
 import re.math;
 import std.stdio;
 import play;
+import hud;
 
 class Game : Core {
 	enum WIDTH = 640;
@@ -19,7 +20,7 @@ class Game : Core {
 		default_resolution = Vector2(WIDTH / 4, HEIGHT / 4);
 		content.paths ~= "../content/";
 
-		load_scenes([new PlayScene()]);
+		load_scenes([new PlayScene(), new HUDScene()]);
 	}
 }
 
