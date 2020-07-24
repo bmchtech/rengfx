@@ -168,6 +168,6 @@ unittest {
     Core.headless = true;
 
     auto scene = new TestScene();
-    Core.scene = scene;
+    Core.load_scenes([scene]);
     assert(Core.get_scene!TestScene == scene);
 }

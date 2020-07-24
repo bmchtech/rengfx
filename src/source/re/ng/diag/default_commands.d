@@ -9,7 +9,7 @@ import std.string;
 
 static class DefaultCommands {
     alias log = Core.log;
-    alias scene = Core.scene;
+    alias scene = Core.primary_scene;
     alias dbg = Core.debugger;
     alias con = dbg.console;
 
