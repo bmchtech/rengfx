@@ -5,7 +5,7 @@ import re.math;
 import comp.input;
 import re.phys.kin_body;
 
-class ShapeBody : KinBody2d {
+class ShapeBody : KinBody2D {
     /// movement speed
     enum move_speed = 40;
     /// turn speed
