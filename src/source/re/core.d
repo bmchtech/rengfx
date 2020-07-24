@@ -127,7 +127,7 @@ abstract class Core {
             // composite screen render to window
             // TODO: support better compositing
             RenderExt.draw_render_target(scene.render_texture, Rectangle(0, 0,
-                    window.width, window.height), raylib.Colors.WHITE);
+                    window.width, window.height), scene.composite_mode.color);
         }
         debug {
             debugger.render();
