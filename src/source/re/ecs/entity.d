@@ -111,4 +111,10 @@ class Entity {
     @property Vector3 position(Vector3 value) {
         return transform.position = value;
     }
+
+    public override string toString() const {
+        import std.string : format;
+
+        return format("Entity[%d, %s]", id, name);
+    }
 }
