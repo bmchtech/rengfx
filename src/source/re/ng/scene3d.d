@@ -1,7 +1,7 @@
 module re.ng.scene3d;
 
 static import raylib;
-public import raylib : Camera3D, CameraMode, CameraType;
+public import raylib : Camera3D, CameraType;
 import re;
 import std.string;
 import re.ecs;
