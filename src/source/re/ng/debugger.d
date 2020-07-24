@@ -17,20 +17,23 @@ import std.algorithm;
 static import raylib;
 static import raygui;
 
+/// a robust overlay debugging tool
 class Debugger {
     /// the key that opens the console
     public Keys console_key = Keys.KEY_GRAVE;
     /// the character representation of the console key
     public char console_key_char = '`';
-
+    /// console commands
     public ConsoleCommand[string] commands;
+    /// whether the console is open
+    public bool console_open = false;
 
     private enum screen_padding = 12;
     private enum bg_col = Color(180, 180, 180, 180);
     private enum console_height = 30;
-    private bool console_open = false;
     private char* console_text;
 
+    /// create a debugger
     this() {
         console_text = "".toUTFz!(char*)();
 
@@ -48,13 +51,15 @@ class Debugger {
             }
             log.info(sb.data);
         }
+
         void c_entities(string[] args) {
             auto sb = appender!string();
             sb ~= "entities:\n";
             foreach (entity; scene.ecs.entities) {
                 // get list of components
-                // auto component_types = entity.
-                sb ~= format("%s: components[%d] {%s}\n", entity.name, entity.components.length, ["stub"]);
+                auto component_types = entity.get_all_components().map!(x => typeid(x).name);
+                sb ~= format("%s: components[%d] {%s}\n", entity.name,
+                        entity.components.length, component_types);
             }
             log.info(sb.data);
         }
