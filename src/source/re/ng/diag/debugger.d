@@ -45,7 +45,7 @@ class Debugger {
 
     public void render() {
         raylib.BeginTextureMode(_render_target);
-        raylib.ClearBackground(Color(0, 0, 0, 0));
+        raylib.ClearBackground(Colors.BLANK);
         if (inspector.open)
             inspector.render();
         if (console.open)
