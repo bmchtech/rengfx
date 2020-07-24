@@ -82,6 +82,10 @@ static class DefaultCommands {
         Component comp;
         if (!pick_component(args, comp))
             return;
+        if (dbg.inspector.open) {
+            log.err("inspector is already open");
+            return;
+        }
         // attach the inspector to this component
         dbg.inspector.inspect(comp);
     }
