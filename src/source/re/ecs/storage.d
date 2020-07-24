@@ -88,7 +88,7 @@ class ComponentStorage {
     /// get all components in an entity matching a type
     public T[] get_all(T)(Entity entity) {
         // check all referenced components, return all matches
-        auto matches = Appender!(T[]);
+        auto matches = appender!(T[]);
         foreach (id; entity.components) {
             auto component = get(id);
             if (auto match = cast(T) component) {
@@ -96,6 +96,15 @@ class ComponentStorage {
             }
         }
         return matches.data;
+    }
+
+    /// get all components in an entity
+    public Component[] get_all(Entity entity) {
+        auto list = appender!(Component[]);
+        foreach (id; entity.components) {
+            list ~= get(id);
+        }
+        return list.data;
     }
 
     /// removes a component from its owner entity

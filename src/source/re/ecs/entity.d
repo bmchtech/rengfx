@@ -85,6 +85,11 @@ class Entity {
         return manager.storage.get_all!T(this);
     }
 
+    /// gets all components attached to this entity
+    public Component[] get_all_components() {
+        return manager.storage.get_all(this);
+    }
+
     // - transform
 
     /// forwards to transform
