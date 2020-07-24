@@ -12,7 +12,7 @@ class VirtualAxis : VirtualInput {
 
     /// logic-controllable axis
     static class LogicAxis : Node {
-        public float logic_value;
+        public float logic_value = 0;
 
         @property public override float value() {
             return logic_value;

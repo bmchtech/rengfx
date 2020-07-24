@@ -15,7 +15,7 @@ class VirtualButton : VirtualInput {
 
     /// logic-controllable button
     static class LogicButton : Node {
-        public bool logic_pressed;
+        public bool logic_pressed = false;
         
         @property public override bool is_down() { return logic_pressed; }
         @property public override bool is_up() { return !logic_pressed; }
