@@ -7,6 +7,7 @@ import std.math;
 import re.time;
 
 class PhysicsBody2d : Component {
+    mixin Reflect;
     public float mass = 1.0f;
     public Vector2 velocity = Vector2Zero;
     @property public Vector2 momentum() {
