@@ -48,19 +48,3 @@ static class RectangleExt {
         }
     }
 }
-
-/// integer rectangle
-struct RectangleInt {
-    int x;
-    int y;
-    int w;
-    int h;
-
-    /// creates an int rectangle
-    this(int x, int y, int w, int h) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-    }
-}
