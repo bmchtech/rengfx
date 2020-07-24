@@ -15,7 +15,7 @@ class PlayScene : Scene3D {
         cam.position = Vector3(0, 10, 10);
         camera.target = Vector3(0, 0, 0);
         camera.up = Vector3(0, 1, 0);
-        camera.fovy = 45;
+        camera.fovy = (C_PI_4) * C_RAD2DEG; // 45 deg
         camera.type = CameraType.CAMERA_PERSPECTIVE;
         raylib.SetCameraMode(camera, raylib.CameraMode.CAMERA_ORBITAL);
 
