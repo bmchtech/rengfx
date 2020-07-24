@@ -1,6 +1,7 @@
 module re.ng.diag.default_commands;
 
 import re.core;
+import re.ecs.component;
 import std.range;
 import std.array;
 import std.algorithm;
@@ -35,15 +36,15 @@ static class DefaultCommands {
         log.info(sb.data);
     }
 
-    static void c_inspect(string[] args) {
+    private static bool pick_component(string[] args, out Component comp) {
         if (args.length < 2) {
             log.err("usage: inspect <entity> <component>");
-            return;
+            return false;
         }
         auto nt_name = args[0];
         if (!scene.ecs.has_entity(nt_name)) {
             log.err(format("entity '%s' not found", nt_name));
-            return;
+            return false;
         }
         auto entity = scene.get_entity(nt_name);
         auto comp_search = args[1].toLower;
@@ -52,13 +53,19 @@ static class DefaultCommands {
             .find!(x => x.classinfo.name.toLower.indexOf(comp_search) > 0);
         if (matches.length == 0) {
             log.err(format("no matching component for '%s'", comp_search));
-            return;
+            return false;
         }
-        auto comp = matches.front;
-        auto sb = appender!(string);
+        comp = matches.front;
+        return true;
+    }
+
+    static void c_dump(string[] args) {
+        Component comp;
+        if (!pick_component(args, comp)) return;
         // dump this component
+        auto sb = appender!(string);
         auto comp_class = comp.getMetaType;
-        log.info(format("inspecting: %s", comp_class.getName));
+        log.info(format("dumping: %s", comp_class.getName));
         foreach (field; comp_class.getFields) {
             sb ~= format("%s = %s\n", field.getName, field.get(comp));
         }
