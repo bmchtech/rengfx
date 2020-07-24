@@ -4,7 +4,14 @@ import re.math;
 
 /// a component that can be rendered (drawn)
 interface Renderable {
-    @property Rectangle bounds();
     void render();
     void debug_render();
+}
+
+interface Renderable2D : Renderable {
+    @property Rectangle bounds();
+}
+
+interface Renderable3D : Renderable {
+
 }
