@@ -1,12 +1,12 @@
 module re.ng.scene2d;
 
-public import re.time;
 static import raylib;
 import re;
 import std.string;
 import re.ecs;
 import re.math;
 
+/// represents a scene rendered in 2d
 abstract class Scene2D : Scene {
     override void render_scene() {
         // render 2d components

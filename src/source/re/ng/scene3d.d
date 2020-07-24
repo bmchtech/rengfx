@@ -7,6 +7,7 @@ import std.string;
 import re.ecs;
 import re.math;
 
+/// represents a scene rendered in 3d
 abstract class Scene3D : Scene {
     /// the 3d scene camera
     public Camera3D camera;
