@@ -48,7 +48,10 @@ class Inspector {
         // calculate panel content size
         enum field_height = 16;
         enum field_padding = 2;
-        auto panel_content_bounds = Rectangle(0, 0, width - pad, (field_height + field_padding) * (_fields.length + 1));
+        enum header = field_height;
+        enum header_padding = 4;
+        auto panel_content_bounds = Rectangle(0, 0, width - pad,
+                (header + header_padding) + (field_height + field_padding) * (_fields.length + 1));
 
         auto view = raygui.GuiScrollPanel(panel_bounds, panel_content_bounds, &_panel_scroll);
         raylib.BeginScissorMode(cast(int) view.x, cast(int) view.y,
@@ -57,15 +60,21 @@ class Inspector {
         auto field_index = 0;
         enum field_label_width = 120;
         enum field_value_width = 240;
+        auto panel_corner = Vector2(panel_bounds.x + pad, panel_bounds.y + pad);
+        raygui.GuiLabel(Rectangle(panel_corner.x, panel_corner.y,
+                field_label_width, header), _obj_class.getName.c_str());
+        raylib.DrawRectangleLinesEx(Rectangle(panel_corner.x,
+                panel_corner.y + header, panel_bounds.width - pad * 2, 1), 1, Colors.GRAY);
         foreach (field_name; field_names) {
             auto field_val = _fields[field_name];
-            auto corner = Vector2(panel_bounds.x + pad,
-                    panel_bounds.y + pad + field_index * (field_padding + field_height));
+            // calculate field corner
+            auto corner = Vector2(panel_corner.x,
+                    panel_corner.y + (header + header_padding) + field_index * (
+                        field_padding + field_height));
             raygui.GuiLabel(Rectangle(corner.x, corner.y, field_label_width,
                     field_height), field_name.c_str());
             raygui.GuiTextBox(Rectangle(corner.x + field_label_width, corner.y,
-                    field_value_width, field_height), field_val.c_str(),
-                    field_value_width, false);
+                    field_value_width, field_height), field_val.c_str(), field_value_width, false);
             field_index++;
         }
         // raygui.GuiGrid(Rectangle(panel_bounds.x + _panel_scroll.x, panel_bounds.y + _panel_scroll.y,
