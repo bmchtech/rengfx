@@ -61,6 +61,10 @@ class Debugger {
         raylib.DrawRectangleLinesEx(renderable.bounds, 1, raylib.Colors.RED);
     }
 
+    public static void default_debug_render(Renderable3D renderable) {
+        raylib.DrawBoundingBox(renderable.bounds, raylib.Colors.RED);
+    }
+
     /// clean up
     public void destroy() {
         if (inspector.open) {

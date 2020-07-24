@@ -13,5 +13,5 @@ interface Renderable2D : Renderable {
 }
 
 interface Renderable3D : Renderable {
-
+    @property BoundingBox bounds();
 }

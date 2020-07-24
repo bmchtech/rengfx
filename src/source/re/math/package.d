@@ -20,4 +20,5 @@ public {
     static import raymath;
     import raylib : Vector2, Vector3, Matrix4;
     import raylib : Rectangle;
+    import raylib : BoundingBox;
 }
