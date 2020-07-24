@@ -63,7 +63,9 @@ class Debugger {
 
     /// clean up
     public void destroy() {
-        inspector.close();
+        if (inspector.open) {
+            inspector.close();
+        }
         raylib.UnloadRenderTexture(_render_target);
     }
 }
