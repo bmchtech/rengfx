@@ -57,7 +57,7 @@ class Debugger {
                 Core.window.width, Core.window.height), _render_col);
     }
 
-    public static void default_debug_render(Renderable renderable) {
+    public static void default_debug_render(Renderable2D renderable) {
         raylib.DrawRectangleLinesEx(renderable.bounds, 1, raylib.Colors.RED);
     }
 
