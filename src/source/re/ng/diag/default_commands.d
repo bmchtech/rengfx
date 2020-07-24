@@ -10,6 +10,7 @@ import std.string;
 static class DefaultCommands {
     alias log = Core.log;
     alias scene = Core.primary_scene;
+    alias scenes = Core.scenes;
     alias dbg = Core.debugger;
     alias con = dbg.console;
 
@@ -26,23 +27,33 @@ static class DefaultCommands {
 
     static void c_entities(string[] args) {
         auto sb = appender!string();
-        sb ~= "entities:\n";
-        foreach (entity; scene.ecs.entities) {
-            // get list of components
-            auto component_types = entity.get_all_components().map!(x => x.classinfo.name);
-            sb ~= format("%s: components[%d] {%s}\n", entity.name,
-                    entity.components.length, component_types);
+        sb ~= "ENTITY LIST:\n";
+        foreach (i, scene; scenes) {
+            // print scene header
+            sb ~= format("-- Scene[%d]: %s --\n", i, typeid(scene).name);
+            foreach (entity; scene.ecs.entities) {
+                // get list of components
+                auto component_types = entity.get_all_components().map!(x => x.classinfo.name);
+                sb ~= format("  %s: components[%d] {%s}\n", entity.name,
+                        entity.components.length, component_types);
+            }
         }
         log.info(sb.data);
     }
 
     private static bool pick_entity(string name, out Entity entity) {
-        if (!scene.ecs.has_entity(name)) {
-            log.err(format("entity '%s' not found", name));
-            return false;
+        // find entities in all scenes
+        foreach (scene; scenes) {
+            if (scene.ecs.has_entity(name)) {
+                entity = scene.get_entity(name);
+                log.info(format("selected entity '%s' in scene %s",
+                        entity.name, typeid(scene).name));
+                return true;
+            }
         }
-        entity = scene.get_entity(name);
-        return true;
+
+        log.err(format("entity '%s' not found", name));
+        return false;
     }
 
     private static bool pick_component(string[] args, out Component comp) {
