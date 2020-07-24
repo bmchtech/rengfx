@@ -1,14 +1,18 @@
-module comp.square;
+module re.gfx.shapes.rect;
 
 import re.ecs;
+import re.gfx;
 import re.math;
 static import raylib;
 
-class Square : Component, Renderable2D {
+/// a color-filled rectangle
+class ColorRect : Component, Renderable2D {
+    /// rectangle dimensions
     public Vector2 size;
-    public raylib.Color color;
+    /// fill color
+    public Color color;
 
-    this(Vector2 size, raylib.Color color) {
+    this(Vector2 size, raylib.Color color, bool fill = true) {
         this.size = size;
         this.color = color;
     }
