@@ -56,15 +56,26 @@ class Inspector {
         auto view = raygui.GuiScrollPanel(panel_bounds, panel_content_bounds, &_panel_scroll);
         raylib.BeginScissorMode(cast(int) view.x, cast(int) view.y,
                 cast(int) view.width, cast(int) view.height);
+        // close button
+        auto btn_close = 'x';
+        enum btn_close_sz = 12;
+        if (raygui.GuiButton(Rectangle(panel_bounds.x + panel_content_bounds.width - pad,
+                panel_bounds.y + pad, btn_close_sz, btn_close_sz), &btn_close)) {
+            close();
+        }
+        // layout vars
         auto field_names = _fields.keys.sort();
         auto field_index = 0;
         enum field_label_width = 120;
         enum field_value_width = 240;
         auto panel_corner = Vector2(panel_bounds.x + pad, panel_bounds.y + pad);
+        // header
         raygui.GuiLabel(Rectangle(panel_corner.x, panel_corner.y,
                 field_label_width, header), _obj_class.getName.c_str());
+        // header underline
         raylib.DrawRectangleLinesEx(Rectangle(panel_corner.x,
                 panel_corner.y + header, panel_bounds.width - pad * 2, 1), 1, Colors.GRAY);
+        // list of fields
         foreach (field_name; field_names) {
             auto field_val = _fields[field_name];
             // calculate field corner
