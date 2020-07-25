@@ -5,6 +5,9 @@ public {
     import re.core;
     import re.ng.scene;
 
+    // input
+    import re.input;
+
     // ecs
     import re.ecs;
 
