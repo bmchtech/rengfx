@@ -8,17 +8,25 @@ static import raylib;
 
 /// represents a 3d mesh
 abstract class RenderableMesh : Component, Renderable3D {
-    /// color
-    public Color color;
+    /// effect
+    protected Effect _effect;
     protected Mesh _mesh;
     protected Model _model;
 
-    this(Color color) {
-        this.color = color;
-    }
-
     @property BoundingBox bounds() {
         return raylib.MeshBoundingBox(_mesh);
+    }
+
+    /// gets the effect
+    @property ref Effect effect() {
+        return _effect;
+    }
+
+    /// sets the effect
+    @property Effect effect(Effect value) {
+        _effect = value;
+        _model.materials[0].shader = _effect.shader;
+        return value;
     }
 
     /// gets the model
@@ -34,7 +42,7 @@ abstract class RenderableMesh : Component, Renderable3D {
     }
 
     public void render() {
-        raylib.DrawModel(_model, entity.position, 1, color);
+        raylib.DrawModel(_model, entity.position, 1, effect.color);
     }
 
     public void debug_render() {

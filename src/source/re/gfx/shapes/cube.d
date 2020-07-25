@@ -8,8 +8,8 @@ static import raylib;
 /// represents a 3d rectangular prism (we abbreviate as cube)
 class Cube : RenderableMesh {
     private Vector3 _size;
-    this(Vector3 size, Color color) {
-        super(color);
+    this(Vector3 size, Color color = Colors.WHITE) {
+        effect.color = color;
         this.size = size;
     }
 
