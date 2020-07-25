@@ -181,12 +181,12 @@ abstract class Scene {
     }
 }
 
+@("scene-lifecycle")
 unittest {
     class TestScene : Scene2D {
         override void on_start() {
-            auto apostprocessorsle = create_entity("apostprocessorsle");
-            assert(get_entity("apostprocessorsle") == apostprocessorsle,
-                    "could not get entity by name");
+            auto apple = create_entity("apple");
+            assert(get_entity("apple") == apple, "could not get entity by name");
         }
     }
 
@@ -197,6 +197,7 @@ unittest {
     scene.end();
 }
 
+@("scene-load")
 unittest {
     class TestScene : Scene2D {
     }

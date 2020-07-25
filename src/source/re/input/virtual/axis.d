@@ -81,6 +81,7 @@ class VirtualAxis : VirtualInput {
     }
 }
 
+@("input-axis")
 unittest {
     auto the_axis = new VirtualAxis();
     the_axis.nodes ~= new VirtualAxis.KeyboardKeys(Keys.KEY_LEFT, Keys.KEY_RIGHT);

@@ -42,6 +42,7 @@ struct KeyedCache(T) {
     }
 }
 
+@("cache-basic")
 unittest {
     auto num_cache = KeyedCache!int();
 
@@ -60,6 +61,7 @@ unittest {
     assert(i2.isNull);
 }
 
+@("cache-cleanup")
 unittest {
     auto resources_used = 0;
     auto res_cache = KeyedCache!int((x) { resources_used += x; });

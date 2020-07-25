@@ -71,6 +71,7 @@ class EntityManager {
     }
 }
 
+@("ecs-basic")
 unittest {
     class Food : Component {
         public bool tasty = true;
@@ -88,6 +89,7 @@ unittest {
     assert(!nt.alive);
 }
 
+@("ecs-destroy")
 unittest {
     static class Thing1 : Component {
     }
@@ -104,6 +106,7 @@ unittest {
     ecs.destroy();
 }
 
+@("ecs-test1")
 unittest {
     class Butter : Component {
         public bool tasty = true;
