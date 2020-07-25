@@ -17,15 +17,14 @@ static class RectangleExt {
         } else {
             auto tmp1 = Matrix4.init;
 
-            auto transform_mat = raymath.MatrixIdentity();
-            // // set the reference point to world reference taking origin into account
-            // auto transform_mat = raymath.MatrixTranslate(-position.x - origin.x, -position.y - origin.y, 0);
-            // tmp1 = raymath.MatrixScale(scale.x, scale.y, 1); // scale ->
-            // transform_mat = raymath.MatrixMultiply(transform_mat, tmp1);
-            // tmp1 = raymath.MatrixRotateZ(rotation); // rotate ->
-            // transform_mat = raymath.MatrixMultiply(transform_mat, tmp1);
-            // tmp1 = raymath.MatrixTranslate(position.x, position.y, 0); // translate back
-            // transform_mat = raymath.MatrixMultiply(transform_mat, tmp1);
+            // set the reference point to world reference taking origin into account
+            auto transform_mat = raymath.MatrixTranslate(-position.x - origin.x, -position.y - origin.y, 0);
+            tmp1 = raymath.MatrixScale(scale.x, scale.y, 1); // scale ->
+            transform_mat = raymath.MatrixMultiply(transform_mat, tmp1);
+            tmp1 = raymath.MatrixRotateZ(rotation); // rotate ->
+            transform_mat = raymath.MatrixMultiply(transform_mat, tmp1);
+            tmp1 = raymath.MatrixTranslate(position.x, position.y, 0); // translate back
+            transform_mat = raymath.MatrixMultiply(transform_mat, tmp1);
 
             // get all four corners in world space
             auto top_left_w = Vector3(position.x, position.y, 0);
