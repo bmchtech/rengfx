@@ -8,17 +8,17 @@ import re.math;
 static import raylib;
 
 class PlayScene : Scene3D {
-    private PostProcessor grayscale_postproc;
+    private PostProcessor cool_postproc;
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
-        // load the grayscale effect and add it as a postprocessor
-        auto grayscale_effect = Effect(Core.content.load_shader(null,
-                "grayscale.frag"), color_alpha_white(0.8));
-        grayscale_postproc = new PostProcessor(resolution, grayscale_effect);
-        grayscale_postproc.enabled = false;
-        postprocessors ~= grayscale_postproc;
+        // load the effect and add it as a postprocessor
+        auto chrm_abr = Effect(Core.content.load_shader(null,
+                "chromatic_aberration.frag"), color_alpha_white(0.8));
+        cool_postproc = new PostProcessor(resolution, chrm_abr);
+        cool_postproc.enabled = false;
+        postprocessors ~= cool_postproc;
 
         auto cam = &camera;
         cam.position = Vector3(0, 10, 10);
@@ -35,7 +35,8 @@ class PlayScene : Scene3D {
         auto cross_stitch = Core.content.load_shader(null, "cross_stitch.frag");
         auto mix_loc = raylib.GetShaderLocation(cross_stitch, "mixAmt");
         float mix_val = 0.05;
-        raylib.SetShaderValue(cross_stitch, mix_loc, &mix_val, raylib.ShaderUniformDataType.UNIFORM_FLOAT);
+        raylib.SetShaderValue(cross_stitch, mix_loc, &mix_val,
+                raylib.ShaderUniformDataType.UNIFORM_FLOAT);
         cube.model.materials[0].shader = cross_stitch;
 
         auto grid = create_entity("grid");
@@ -46,7 +47,7 @@ class PlayScene : Scene3D {
         super.update();
 
         if (Input.is_key_pressed(Keys.KEY_SPACE)) {
-            grayscale_postproc.enabled = !grayscale_postproc.enabled;
+            cool_postproc.enabled = !cool_postproc.enabled;
         }
     }
 }
