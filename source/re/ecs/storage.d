@@ -142,7 +142,8 @@ class ComponentStorage {
         if (storage.length > 1) { // check if we need to swap
             auto last_slot = cast(size_t) storage.length - 1;
             auto tmp = storage[last_slot];
-            assert(tmp.entity);
+            assert(tmp, "storage tail slot is null");
+            assert(tmp.entity, "entity in tail slot is null");
             storage[last_slot] = storage[id.index];
             storage[id.index] = tmp;
             // find out who owns tmp, and tell them that their component has moved
