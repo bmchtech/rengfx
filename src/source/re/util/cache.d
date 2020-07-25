@@ -6,6 +6,11 @@ import std.typecons;
 /// represents a cache that associates string keys with items
 struct KeyedCache(T) {
     private T[string] _cache;
+    void delegate(T) _free;
+
+    this(void delegate(T) on_free) {
+        _free = on_free;
+    }
 
     /// cache an item
     public void put(string key, T value) {
@@ -27,6 +32,12 @@ struct KeyedCache(T) {
 
     /// clear cache
     public void drop() {
+        // run free on each item
+        if (_free !is null) {
+            foreach (item; get_all()) {
+                _free(item);
+            }
+        }
         _cache.clear();
     }
 }
@@ -47,4 +58,17 @@ unittest {
 
     immutable auto i2 = num_cache.get("apple");
     assert(i2.isNull);
+}
+
+unittest {
+    auto resources_used = 0;
+    auto res_cache = KeyedCache!int((x) { resources_used += x; });
+
+    enum handle = 3;
+    res_cache.put("handle", handle);
+
+    res_cache.drop();
+    assert(res_cache.get_all.length == 0);
+
+    assert(resources_used > 0, "free was not called");
 }
