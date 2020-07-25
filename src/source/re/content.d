@@ -3,6 +3,7 @@ module re.content;
 import re.util.cache;
 import std.string;
 import std.file;
+import std.conv;
 import std.path;
 static import raylib;
 
@@ -12,6 +13,8 @@ class ContentManager {
     private TexCache _tex_cache;
     alias ModelCache = KeyedCache!(raylib.Model);
     private ModelCache _mdl_cache;
+    alias ShaderCache = KeyedCache!(raylib.Shader);
+    private ShaderCache _shd_cache;
 
     /// search paths for content
     public string[] paths;
@@ -21,6 +24,7 @@ class ContentManager {
         // setup
         _tex_cache = TexCache((tex) { raylib.UnloadTexture(tex); });
         _mdl_cache = ModelCache((mdl) { raylib.UnloadModel(mdl); });
+        _shd_cache = ShaderCache((shd) { raylib.UnloadShader(shd); });
     }
 
     private char* get_path(string path) {
@@ -67,11 +71,30 @@ class ContentManager {
         return mdl;
     }
 
+    /// loads a shader from disk
+    public raylib.Shader load_shader(string vs_path, string fs_path) {
+        raylib.Shader shd;
+        import std.digest.sha: sha1Of, toHexString;
+        auto path_hash = to!string(sha1Of(vs_path ~ fs_path).toHexString);
+        auto cached = _shd_cache.get(path_hash);
+        if (cached.isNull) {
+            auto vs = vs_path.length > 0 ? get_path(vs_path) : null;
+            auto fs = fs_path.length > 0 ? get_path(fs_path) : null;
+            shd = raylib.LoadShader(vs, fs);
+            _shd_cache.put(path_hash, shd);
+        } else {
+            shd = cached.get;
+        }
+        return shd;
+    }
+
     /// releases all resources
     public void destroy() {
         // delete textures
         _tex_cache.drop();
         // delete models
         _mdl_cache.drop();
+        // delete shaders
+        _shd_cache.drop();
     }
 }
