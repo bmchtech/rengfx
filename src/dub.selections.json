@@ -8,6 +8,7 @@
 		"fluent-asserts": "0.13.3",
 		"jar": "0.1.0",
 		"libdparse": "0.14.0",
+		"silly": "1.0.2",
 		"stdx-allocator": "2.77.5",
 		"witchcraft": "0.1.9"
 	}
