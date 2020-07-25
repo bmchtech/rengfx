@@ -17,7 +17,7 @@ class Game : Core {
 		default_resolution = Vector2(WIDTH / 4, HEIGHT / 4);
 		content.paths ~= "../content/";
 
-		scene = new PlayScene();
+		load_scenes([new PlayScene()]);
 	}
 }
 
