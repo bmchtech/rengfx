@@ -9,6 +9,9 @@ public {
     import re.gfx.sprite_renderer;
     import re.gfx.text;
 
+    // color
+    import re.gfx.color_ext;
+
     // shaders
     import re.gfx.effect;
 
