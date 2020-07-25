@@ -14,8 +14,7 @@ static class RenderExt {
 
     /// draws a render target on another with an effect
     public static void draw_render_target_from(RenderTarget source, RenderTarget dest, Effect effect) {
-        auto dest_rect = Rectangle(0, 0,
-                dest.texture.width, dest.texture.height);
+        auto dest_rect = Rectangle(0, 0, dest.texture.width, dest.texture.height);
         // start drawing on dest
         raylib.BeginTextureMode(dest);
         // with shader
@@ -23,6 +22,16 @@ static class RenderExt {
         // blit our render target
         draw_render_target(source, dest_rect, effect.color);
         raylib.EndShaderMode();
+        raylib.EndTextureMode();
+    }
+
+    /// draws a render target on another with an effect
+    public static void draw_render_target_from(RenderTarget source, RenderTarget dest) {
+        auto dest_rect = Rectangle(0, 0, dest.texture.width, dest.texture.height);
+        // start drawing on dest
+        raylib.BeginTextureMode(dest);
+        // blit our render target
+        draw_render_target(source, dest_rect, Colors.WHITE);
         raylib.EndTextureMode();
     }
 }

@@ -129,7 +129,7 @@ abstract class Core {
             scene.post_render();
             // composite screen render to window
             // TODO: support better compositing
-            RenderExt.draw_render_target(scene.render_texture, Rectangle(0, 0,
+            RenderExt.draw_render_target(scene.render_target, Rectangle(0, 0,
                     window.width, window.height), scene.composite_mode.color);
         }
         debug {

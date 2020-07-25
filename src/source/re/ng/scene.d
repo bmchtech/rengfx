@@ -20,7 +20,7 @@ abstract class Scene {
     /// the entity manager
     public EntityManager ecs;
     /// the render target
-    public raylib.RenderTexture2D render_texture;
+    public RenderTarget render_target;
     private Vector2 _resolution;
     /// the mode of compositing
     public CompositeMode composite_mode;
@@ -52,7 +52,7 @@ abstract class Scene {
     /// sets the texture filtering mode for the scene render target
     @property raylib.TextureFilterMode filter_mode(raylib.TextureFilterMode value) {
         // texture scale filter
-        raylib.SetTextureFilter(render_texture.texture, value);
+        raylib.SetTextureFilter(render_target.texture, value);
         return value;
     }
 
@@ -80,7 +80,7 @@ abstract class Scene {
 
     /// called internally to render ecs
     public void render() {
-        raylib.BeginTextureMode(render_texture);
+        raylib.BeginTextureMode(render_target);
         raylib.ClearBackground(clear_color);
 
         render_scene();
@@ -90,9 +90,18 @@ abstract class Scene {
 
     /// run postprocessors
     public void post_render() {
-        foreach (pp; postprocessors) {
-            pp.process(render_texture, render_texture);
+        // skip if no postprocessors
+        if (postprocessors.length == 0) return;
+        
+        postprocessors[0].process(render_target);
+        auto last_buf = postprocessors[0].buffer;
+        for (auto i = 1; i < postprocessors.length; i++) {
+            auto postprocessor = postprocessors[i];
+            postprocessor.process(last_buf);
+            last_buf = postprocessor.buffer;
         }
+        // draw the last buf in the chain to the main texture
+        RenderExt.draw_render_target_from(last_buf, render_target);
     }
 
     protected abstract void render_scene();
@@ -101,12 +110,12 @@ abstract class Scene {
         if (Core.headless)
             return;
         // free any old render target
-        if (render_texture == raylib.RenderTexture2D.init) {
-            raylib.UnloadRenderTexture(render_texture);
+        if (render_target == raylib.RenderTexture2D.init) {
+            raylib.UnloadRenderTexture(render_target);
         }
         // create render target
         // TODO: use scene resolution instead of window resolution
-        render_texture = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
+        render_target = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
     }
 
     /// called internally on scene creation
@@ -116,7 +125,7 @@ abstract class Scene {
         on_start();
     }
 
-    /// setup that happens after begin, but before the child scene starts
+    /// setup that hapostprocessorsens after begin, but before the child scene starts
     protected void setup() {
         // set up ecs
         ecs = new EntityManager;
@@ -132,7 +141,7 @@ abstract class Scene {
 
         if (!Core.headless) {
             // free render target
-            raylib.UnloadRenderTexture(render_texture);
+            raylib.UnloadRenderTexture(render_target);
         }
     }
 
@@ -167,8 +176,8 @@ abstract class Scene {
 unittest {
     class TestScene : Scene2D {
         override void on_start() {
-            auto apple = create_entity("apple");
-            assert(get_entity("apple") == apple, "could not get entity by name");
+            auto apostprocessorsle = create_entity("apostprocessorsle");
+            assert(get_entity("apostprocessorsle") == apostprocessorsle, "could not get entity by name");
         }
     }
 
