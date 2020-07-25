@@ -73,7 +73,8 @@ class ContentManager {
         return mdl;
     }
 
-    /// loads a shader from disk
+    /// loads a shader from disk (vertex shader, fragment shader).
+    /// pass null to either arg to use the default
     public raylib.Shader load_shader(string vs_path, string fs_path) {
         raylib.Shader shd;
         import std.digest.sha : sha1Of, toHexString;
