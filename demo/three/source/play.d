@@ -8,7 +8,8 @@ import re.math;
 static import raylib;
 
 class PlayScene : Scene3D {
-    private PostProcessor cool_postproc;
+    private PostProcessor glitch_postproc;
+    private float[2] aberrationOffset = [0.01, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
@@ -16,11 +17,9 @@ class PlayScene : Scene3D {
         // load the effect and add it as a postprocessor
         auto chrm_abr = Effect(Core.content.load_shader(null,
                 "chromatic_aberration.frag"), color_alpha_white(0.8));
-        float[2] aberrationOffset = [0.01, 0];
-        chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
-        cool_postproc = new PostProcessor(resolution, chrm_abr);
-        cool_postproc.enabled = false;
-        postprocessors ~= cool_postproc;
+        glitch_postproc = new PostProcessor(resolution, chrm_abr);
+        glitch_postproc.enabled = false;
+        postprocessors ~= glitch_postproc;
 
         auto cam = &camera;
         cam.position = Vector3(0, 10, 10);
@@ -48,7 +47,17 @@ class PlayScene : Scene3D {
         super.update();
 
         if (Input.is_key_pressed(Keys.KEY_SPACE)) {
-            cool_postproc.enabled = !cool_postproc.enabled;
+            glitch_postproc.enabled = !glitch_postproc.enabled;
         }
+
+        // make our postprocess effect fluctuate
+        import std.math : sin;
+
+        aberrationOffset[0] = 0.010 + 0.005 * sin(Time.total_time / 2);
+        glitch_postproc.effect.set_shader_var("aberrationOffset", aberrationOffset);
+    }
+
+    override void render() {
+        super.render();
     }
 }
