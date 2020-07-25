@@ -17,6 +17,8 @@ class Ball : Component, Updatable {
     private SpriteRenderer spr_ren;
     private Paddle[] paddles;
 
+    alias res = Core.default_resolution;
+
     override void setup() {
         spr_ren = entity.get_component!SpriteRenderer;
         respawn();
@@ -28,7 +30,7 @@ class Ball : Component, Updatable {
         direction = Vector2(x_dir, y_dir);
         speed = base_speed;
 
-        entity.position2 = Vector2(Core.window.width / 2, Core.window.height / 2);
+        entity.position2 = Vector2(res.x / 2, res.y / 2);
     }
 
     void bounce_on(Paddle paddle) {
@@ -37,7 +39,7 @@ class Ball : Component, Updatable {
 
     void update() {
         // update direction
-        if (entity.position2.x + spr_ren.bounds.width / 2 >= Core.window.width) {
+        if (entity.position2.x + spr_ren.bounds.width / 2 >= res.x) {
             direction = Vector2(-1, direction.y);
         }
 
@@ -55,15 +57,15 @@ class Ball : Component, Updatable {
             }
         }
 
-        if (entity.position2.y + spr_ren.bounds.height / 2 >= Core.window.height) {
+        if (entity.position2.y + spr_ren.bounds.height / 2 >= res.y) {
             // hit the bottom, ENEMY SCORE
-            Core.scene.get_entity("score").get_component!Scoreboard().add_point_enemy();
+            Core.primary_scene.get_entity("score").get_component!Scoreboard().add_point_enemy();
             respawn();
         }
 
         if (entity.position2.y - spr_ren.bounds.height / 2 <= 0) {
             // hit the top, PLAYER SCORE
-            Core.scene.get_entity("score").get_component!Scoreboard().add_point_player();
+            Core.primary_scene.get_entity("score").get_component!Scoreboard().add_point_player();
             respawn();
         }
 
