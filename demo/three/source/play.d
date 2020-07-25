@@ -8,11 +8,17 @@ import re.math;
 static import raylib;
 
 class PlayScene : Scene3D {
+    private PostProcessor grayscale_postproc;
+
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
-        auto grayscale_effect = Effect(Core.content.load_shader(null, "grayscale.frag"), color_alpha_white(0.8));
-        postprocessors ~= new PostProcessor(resolution, grayscale_effect);
+        // load the grayscale effect and add it as a postprocessor
+        auto grayscale_effect = Effect(Core.content.load_shader(null,
+                "grayscale.frag"), color_alpha_white(0.8));
+        grayscale_postproc = new PostProcessor(resolution, grayscale_effect);
+        grayscale_postproc.enabled = false;
+        postprocessors ~= grayscale_postproc;
 
         auto cam = &camera;
         cam.position = Vector3(0, 10, 10);
@@ -23,9 +29,20 @@ class PlayScene : Scene3D {
         raylib.SetCameraMode(camera, raylib.CameraMode.CAMERA_ORBITAL);
 
         auto block = create_entity("block", Vector3(0, 0, 0));
-        block.add_component(new Cube(Vector3(2, 2, 2), Colors.PURPLE));
+        auto cube = block.add_component(new Cube(Vector3(2, 2, 2), Colors.PURPLE));
+
+        // enable grayscale shader on cube
+        // cube.model.materials[0].shader = grayscale_effect.shader;
 
         auto grid = create_entity("grid");
         grid.add_component(new Grid3D(10, 1));
+    }
+
+    override void update() {
+        super.update();
+
+        if (Input.is_key_pressed(Keys.KEY_SPACE)) {
+            grayscale_postproc.enabled = !grayscale_postproc.enabled;
+        }
     }
 }
