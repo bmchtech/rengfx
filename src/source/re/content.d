@@ -8,7 +8,7 @@ import re.util.cache;
 
 /// manages external content loading
 class ContentManager {
-    private KeyedCache!(raylib.Image) _image_cache;
+    private KeyedCache!(raylib.Texture2D) _tex_cache;
     /// search paths for content
     public string[] paths;
 
@@ -33,21 +33,26 @@ class ContentManager {
 
     /// loads a texture from disk
     public raylib.Texture2D load_texture2d(string path) {
-        raylib.Image image;
-        auto cached = _image_cache.get(path);
+        raylib.Texture2D tex;
+        immutable auto cached = _tex_cache.get(path);
         if (cached.isNull) {
-            image = raylib.LoadImage(get_path(path));
-            _image_cache.put(path, image);
+            auto image = raylib.LoadImage(get_path(path));
+            tex = raylib.LoadTextureFromImage(image);
+            raylib.UnloadImage(image);
+            _tex_cache.put(path, tex);
         } else {
-            image = cached.get;
+            tex = cached.get;
         }
 
         // copy image to VRAM
-        return raylib.LoadTextureFromImage(image);
+        return tex;
     }
 
     /// releases all resources
     public void destroy() {
-        _image_cache.drop();
+        foreach (texture; _tex_cache.get_all) {
+            raylib.UnloadTexture(texture);
+        }
+        _tex_cache.drop();
     }
 }
