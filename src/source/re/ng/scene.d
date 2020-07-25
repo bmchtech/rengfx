@@ -24,8 +24,8 @@ abstract class Scene {
     private Vector2 _resolution;
     /// the mode of compositing
     public CompositeMode composite_mode;
-    /// postprocessing effects
-    public Effect effects;
+    /// postprocessors effects
+    public PostProcessor[] postprocessors;
 
     /// the mode for compositing a scene onto the display buffer
     public struct CompositeMode {
@@ -79,13 +79,20 @@ abstract class Scene {
     }
 
     /// called internally to render ecs
-    public void draw() {
+    public void render() {
         raylib.BeginTextureMode(render_texture);
         raylib.ClearBackground(clear_color);
 
         render_scene();
 
         raylib.EndTextureMode();
+    }
+
+    /// run postprocessors
+    public void post_render() {
+        foreach (pp; postprocessors) {
+            pp.process(render_texture, render_texture);
+        }
     }
 
     protected abstract void render_scene();
