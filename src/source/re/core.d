@@ -2,6 +2,7 @@ module re.core;
 
 import re.input;
 import re.content;
+import re.time;
 import re.gfx.window;
 import re.ng.scene;
 import re.ng.diag;
@@ -79,6 +80,10 @@ abstract class Core {
         initialize();
     }
 
+    @property public static int fps() {
+        return raylib.GetFPS();
+    }
+
     /// sets up the game
     abstract void initialize();
 
@@ -103,6 +108,7 @@ abstract class Core {
         if (pause_on_focus_lost && raylib.IsWindowMinimized()) {
             return; // pause
         }
+        Time.update(raylib.GetFrameTime());
         foreach (manager; managers) {
             manager.update();
         }
