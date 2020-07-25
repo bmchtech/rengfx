@@ -12,7 +12,7 @@ class PlayScene : Scene3D {
         clear_color = Colors.LIGHTGRAY;
 
         auto grayscale_effect = Effect(Core.content.load_shader(null, "grayscale.frag"), Colors.WHITE);
-        // postprocessors ~= new PostProcessor(grayscale_effect);
+        postprocessors ~= new PostProcessor(resolution, grayscale_effect);
 
         auto cam = &camera;
         cam.position = Vector3(0, 10, 10);
