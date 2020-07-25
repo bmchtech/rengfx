@@ -20,7 +20,7 @@ public {
 
     // raylib
     static import raymath;
-    import raylib : Vector2, Vector3, Matrix4;
+    import raylib : Vector2, Vector3, Vector4, Matrix4;
     import raylib : Rectangle;
     import raylib : BoundingBox;
 }
