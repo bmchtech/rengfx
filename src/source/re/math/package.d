@@ -2,7 +2,7 @@ module re.math;
 
 public {
     import re.math.transform;
-    import re.math.rect;
+    import re.math.rect_ext;
     import re.math.vector_ext;
 
     import std.math;
