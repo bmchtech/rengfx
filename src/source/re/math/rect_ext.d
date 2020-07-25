@@ -1,4 +1,4 @@
-module re.math.rect;
+module re.math.rect_ext;
 
 import std.algorithm.comparison;
 static import raymath;
