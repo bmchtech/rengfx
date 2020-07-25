@@ -30,12 +30,13 @@ class PlayScene : Scene3D {
         raylib.SetCameraMode(camera, raylib.CameraMode.CAMERA_ORBITAL);
 
         auto block = create_entity("block", Vector3(0, 0, 0));
-        auto cube = block.add_component(new Cube(Vector3(2, 2, 2), Colors.PURPLE));
+        auto cube = block.add_component(new Cube(Vector3(2, 2, 2)));
 
         // enable an example shader on cube
-        auto cross_stitch = Effect(Core.content.load_shader(null, "cross_stitch.frag"));
+        auto cross_stitch = Effect(Core.content.load_shader(null,
+                "cross_stitch.frag"), Colors.PURPLE);
         cross_stitch.set_shader_var("mixAmt", 0.05f);
-        cube.model.materials[0].shader = cross_stitch.shader;
+        cube.effect = cross_stitch;
 
         auto grid = create_entity("grid");
         grid.add_component(new Grid3D(10, 1));
