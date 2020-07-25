@@ -1,20 +1,22 @@
 module re.content;
 
-static import raylib;
+import re.util.cache;
 import std.string;
 import std.file;
 import std.path;
-import re.util.cache;
+static import raylib;
 
 /// manages external content loading
 class ContentManager {
-    private KeyedCache!(raylib.Texture2D) _tex_cache;
+    alias TexCache = KeyedCache!(raylib.Texture2D);
+    private TexCache _tex_cache;
     /// search paths for content
     public string[] paths;
 
     /// initializes the content manager
     this() {
         // setup
+        _tex_cache = TexCache((tex) { raylib.UnloadTexture(tex); });
     }
 
     private char* get_path(string path) {
@@ -50,9 +52,7 @@ class ContentManager {
 
     /// releases all resources
     public void destroy() {
-        foreach (texture; _tex_cache.get_all) {
-            raylib.UnloadTexture(texture);
-        }
+        // delete textures
         _tex_cache.drop();
     }
 }
