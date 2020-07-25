@@ -31,8 +31,12 @@ class PlayScene : Scene3D {
         auto block = create_entity("block", Vector3(0, 0, 0));
         auto cube = block.add_component(new Cube(Vector3(2, 2, 2), Colors.PURPLE));
 
-        // enable grayscale shader on cube
-        // cube.model.materials[0].shader = grayscale_effect.shader;
+        // enable an example shader on cube
+        auto cross_stitch = Core.content.load_shader(null, "cross_stitch.frag");
+        auto mix_loc = raylib.GetShaderLocation(cross_stitch, "mixAmt");
+        float mix_val = 0.05;
+        raylib.SetShaderValue(cross_stitch, mix_loc, &mix_val, raylib.ShaderUniformDataType.UNIFORM_FLOAT);
+        cube.model.materials[0].shader = cross_stitch;
 
         auto grid = create_entity("grid");
         grid.add_component(new Grid3D(10, 1));
