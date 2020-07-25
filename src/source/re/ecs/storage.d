@@ -6,16 +6,17 @@ import re.ecs.manager;
 import re.ecs.renderable;
 import re.ecs.updatable;
 import std.array;
+import std.container.array;
 import std.algorithm;
 
 /// helper class for storing components in an optimized way
 class ComponentStorage {
     /// basic component storage
-    public Component[] components;
+    public Array!Component components;
     /// components that implement Updatable
-    public Component[] updatable_components;
+    public Array!Component updatable_components;
     /// components that implement Renderable
-    public Component[] renderable_components;
+    public Array!Component renderable_components;
     /// the entity manager
     public EntityManager manager;
 
@@ -53,7 +54,7 @@ class ComponentStorage {
     }
 
     /// get the internal buffer based on the referenced component type
-    private ref Component[] get_storage(ComponentId id) {
+    private ref Array!Component get_storage(ComponentId id) {
         switch (id.type) {
         case ComponentType.Base:
             return components;
@@ -141,9 +142,9 @@ class ComponentStorage {
             // find the id that points to the old place
             auto other_id_pos = other.components.countUntil!(x => x.index == last_slot);
             other.components[other_id_pos].index = id.index; // point to the new place
-            // shrink the array
-            storage.length--;
         }
+        // pop the last element off the array
+        storage.removeBack();
     }
 
     /// destroy all components attached to an entity
