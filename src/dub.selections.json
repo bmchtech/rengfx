@@ -4,10 +4,10 @@
 		"colorize": "1.0.5",
 		"datefmt": "1.0.4",
 		"ddmp": "0.0.1-0.dev.3",
+		"dray": "3.0.0-patch1",
 		"fluent-asserts": "0.13.3",
 		"jar": "0.1.0",
 		"libdparse": "0.14.0",
-		"re-raylib-d": "3.0.6",
 		"stdx-allocator": "2.77.5",
 		"witchcraft": "0.1.9"
 	}
