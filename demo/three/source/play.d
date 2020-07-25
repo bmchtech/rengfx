@@ -11,7 +11,7 @@ class PlayScene : Scene3D {
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
-        auto grayscale_effect = Effect(Core.content.load_shader("base.vert", "grayscale.frag"), Colors.WHITE);
+        auto grayscale_effect = Effect(Core.content.load_shader(null, "grayscale.frag"), Colors.WHITE);
         // postprocessors ~= new PostProcessor(grayscale_effect);
 
         auto cam = &camera;
