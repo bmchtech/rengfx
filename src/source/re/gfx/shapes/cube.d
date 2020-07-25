@@ -35,6 +35,11 @@ class Cube : Component, Renderable3D {
         return raylib.MeshBoundingBox(_mesh);
     }
 
+    /// gets the model
+    @property Model model() {
+        return _model;
+    }
+
     private void gen_mesh() {
         _mesh = raylib.GenMeshCube(_size.x, _size.y, _size.z);
         _model = raylib.LoadModelFromMesh(_mesh);
