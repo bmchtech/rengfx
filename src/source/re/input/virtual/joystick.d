@@ -118,6 +118,7 @@ class VirtualJoystick : VirtualInput {
     }
 }
 
+@("input-joystick")
 unittest {
     auto the_joy = new VirtualJoystick();
     the_joy.nodes ~= new VirtualJoystick.KeyboardKeys(Keys.KEY_LEFT,

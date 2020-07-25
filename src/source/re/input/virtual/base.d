@@ -39,6 +39,7 @@ abstract class VirtualInput {
     }
 }
 
+@("input-base")
 unittest {
     import re.ecs;
     import std.algorithm;

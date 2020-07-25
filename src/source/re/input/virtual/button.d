@@ -67,6 +67,7 @@ class VirtualButton : VirtualInput {
     }
 }
 
+@("input-button")
 unittest {
     auto the_button = new VirtualButton();
     the_button.nodes ~= new VirtualButton.KeyboardKey(Keys.KEY_E);
