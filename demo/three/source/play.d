@@ -16,6 +16,7 @@ class PlayScene : Scene3D {
         // load the effect and add it as a postprocessor
         auto chrm_abr = Effect(Core.content.load_shader(null,
                 "chromatic_aberration.frag"), color_alpha_white(0.8));
+        chrm_abr.set_shader_var("aberrationOffset", Vector2(0.01, 0));
         cool_postproc = new PostProcessor(resolution, chrm_abr);
         cool_postproc.enabled = false;
         postprocessors ~= cool_postproc;

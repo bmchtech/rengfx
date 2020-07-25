@@ -11,7 +11,7 @@ uniform vec4 colDiffuse;
 out vec4 finalColor;
 
 // NOTE: Add here your custom variables
-uniform vec2 aberrationOffset = vec2(0.01, 0);
+uniform vec2 aberrationOffset;
 
 vec4 sample(vec2 offset) {
     return texture(texture0, fragTexCoord.xy - offset) * fragColor;

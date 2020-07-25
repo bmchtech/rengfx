@@ -54,7 +54,7 @@ class Cube : Component, Renderable3D {
     }
 
     override void destroy() {
-        raylib.UnloadMesh(&_mesh);
+        // freeing the model also frees the mesh
         raylib.UnloadModel(_model);
     }
 }
