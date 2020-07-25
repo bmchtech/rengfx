@@ -126,6 +126,7 @@ class ComponentStorage {
 
     private void remove(Entity entity, ComponentId id) {
         // import std.stdio : writefln;
+
         // writefln("entity (%s) components(before): %s", entity.name, entity.components);
 
         // delete the component id from the entity
@@ -133,14 +134,20 @@ class ComponentStorage {
 
         // - update storage
         auto storage = get_storage(id);
-        // writefln("REMOVING component_type: %s, storage len: %s", to!string(id.type), storage.length);
+        // writefln("REMOVING component_type: %s", to!string(id.type));
+        // writefln("storage[%d]: %s", storage.length, storage.array);
         // empty the slot, and swap it to the end
         assert(id.index < storage.length,
                 format("id points to invalid position in (%s) storage", to!string(id.type)));
         storage[id.index].destroy(); // cleanup
         storage[id.index] = null; // dereference
-        if (storage.length > 1) { // check if we need to swap
-            auto last_slot = cast(size_t) storage.length - 1;
+        auto last_slot = cast(size_t) storage.length - 1;
+        // our goal now is to make sure the last slot is null, so we can pop it off the storage
+        // check if we need to swap the slot we just nulled with the last s lot
+        // if the array is length 1, we don't need to swap: our null space is already at the end
+        // also check if the index we're removing is the last slot, in which case we've already nulled it.
+        if (storage.length > 1 && id.index != last_slot) {
+            // handle swapping our nulled slot with the last slot
             auto tmp = storage[last_slot];
             assert(tmp, "storage tail slot is null");
             assert(tmp.entity, "entity in tail slot is null");
