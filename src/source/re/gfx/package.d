@@ -9,7 +9,13 @@ public {
     import re.gfx.sprite_renderer;
     import re.gfx.text;
 
+    // shaders
+    import re.gfx.effect;
+
+    // rendering
+    import re.gfx.postprocessor;
+    import re.gfx.render_ext;
+
     // raylib
-    import raylib : Color, Colors, Image, Texture2D;
-    import raylib : Mesh, Model;
+    import re.gfx.raytypes;
 }

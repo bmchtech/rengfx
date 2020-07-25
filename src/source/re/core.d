@@ -6,7 +6,7 @@ import re.gfx.window;
 import re.ng.scene;
 import re.ng.diag;
 import re.ng.manager;
-import re.ng.render_ext;
+import re.gfx.render_ext;
 import re.math;
 import re.util.logger;
 import re.util.tween.tween_manager;

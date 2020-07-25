@@ -5,7 +5,7 @@ import re.ecs.renderable;
 import re.input.input;
 import re.math;
 import re.gfx;
-import re.ng.render_ext;
+import re.gfx.render_ext;
 import re.ng.diag.console;
 import re.ng.diag.inspector;
 static import raylib;

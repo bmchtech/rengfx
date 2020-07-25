@@ -3,6 +3,7 @@ module re.ng.scene;
 import re;
 import std.string;
 import re.ecs;
+import re.gfx;
 import re.math;
 static import raylib;
 
@@ -23,6 +24,8 @@ abstract class Scene {
     private Vector2 _resolution;
     /// the mode of compositing
     public CompositeMode composite_mode;
+    /// postprocessing effects
+    public Effect effects;
 
     /// the mode for compositing a scene onto the display buffer
     public struct CompositeMode {
