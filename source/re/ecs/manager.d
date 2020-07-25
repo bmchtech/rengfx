@@ -140,4 +140,47 @@ unittest {
     assert(sandwich1.has_component!Jelly, msg);
     assert(sandwich2.has_component!Butter, msg);
     assert(sandwich3.has_component!Jelly, msg);
+
+    ecs.destroy();
+}
+
+@("ecs-test2")
+unittest {
+    import re.ecs: Renderable, Updatable;
+
+    static class Brush : Component, Renderable {
+        void render() {
+        }
+
+        void debug_render() {
+        }
+    }
+
+    static class Control : Component {
+    }
+
+    static class Paint : Component, Updatable {
+        void update() {
+        }
+    }
+
+    static class Painter : Component, Updatable {
+        void update() {
+        }
+    }
+
+    auto ecs = new EntityManager();
+
+    auto a1 = ecs.create_entity();
+    a1.add_component!Brush();
+    a1.add_component!Control();
+    a1.add_component!Paint();
+
+    auto a2 = ecs.create_entity();
+    a2.add_component!Brush();
+    a2.add_component!Control();
+    a2.add_component!Paint();
+    a2.add_component!Painter();
+
+    ecs.destroy();
 }
