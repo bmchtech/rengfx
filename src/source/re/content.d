@@ -81,12 +81,15 @@ class ContentManager {
         auto path_hash = to!string(sha1Of(vs_path ~ fs_path).toHexString);
         auto cached = _shd_cache.get(path_hash);
         if (cached.isNull) {
-            // since LoadShader seems to be broken, we'll do it ourselves
-            auto vs = to!string(get_path(vs_path));
-            auto fs = to!string(get_path(fs_path));
-            auto vs_code = readText(vs);
-            auto fs_code = readText(fs);
-            shd = raylib.LoadShaderCode(vs_code.c_str(), fs_code.c_str());
+            // auto vs = vs_path.length > 0 ? get_path(vs_path) : null;
+            // auto fs = fs_path.length > 0 ? get_path(fs_path) : null;
+            auto vs = get_path(vs_path);
+            auto fs = get_path(fs_path);
+            writeln(to!string(vs));
+            writeln(to!string(fs));
+            assert(raylib.FileExists(vs));
+            assert(raylib.FileExists(fs));
+            shd = raylib.LoadShader(vs, fs);
             _shd_cache.put(path_hash, shd);
         } else {
             shd = cached.get;
