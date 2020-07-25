@@ -24,4 +24,9 @@ class PostProcessor {
     public void process(RenderTarget source) {
         RenderExt.draw_render_target_from(source, buffer, effect);
     }
+
+    /// release resources
+    public void destroy() {
+        raylib.UnloadRenderTexture(buffer);
+    }
 }

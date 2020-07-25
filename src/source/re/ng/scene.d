@@ -143,6 +143,9 @@ abstract class Scene {
         unload();
 
         ecs.destroy();
+        foreach (postprocessor; postprocessors) {
+            postprocessor.destroy();
+        }
 
         if (!Core.headless) {
             // free render target
