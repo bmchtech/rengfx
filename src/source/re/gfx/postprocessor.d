@@ -12,6 +12,6 @@ class PostProcessor {
 
     public void process(RenderTarget source, RenderTarget dest) {
         // TODO: draw src to dest
-        // RenderExt.draw_render_target(source, dest);
+        RenderExt.draw_render_target_from(source, dest, effect);
     }
 }
