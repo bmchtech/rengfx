@@ -1,5 +1,6 @@
 module re.util.cache;
 
+import std.array;
 import std.typecons;
 
 /// represents a cache that associates string keys with items
@@ -7,20 +8,25 @@ struct KeyedCache(T) {
     private T[string] _cache;
 
     /// cache an item
-    void put(string key, T value) {
+    public void put(string key, T value) {
         _cache[key] = value;
     }
 
     /// check if an item is cached
-    Nullable!T get(string key) {
+    public Nullable!T get(string key) {
         if (key in _cache) {
             return Nullable!T(_cache[key]);
         }
         return Nullable!T.init;
     }
 
+    /// get all items
+    public T[] get_all() {
+        return _cache.byValue().array;
+    }
+
     /// clear cache
-    void drop() {
+    public void drop() {
         _cache.clear();
     }
 }
@@ -35,6 +41,7 @@ unittest {
     immutable auto i1 = num_cache.get("apple");
     assert(!i1.isNull);
     assert(i1.get == VAL_APPLE);
+    assert(num_cache.get_all.length == 1);
 
     num_cache.drop();
 
