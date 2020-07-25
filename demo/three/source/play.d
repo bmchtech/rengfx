@@ -16,7 +16,8 @@ class PlayScene : Scene3D {
         // load the effect and add it as a postprocessor
         auto chrm_abr = Effect(Core.content.load_shader(null,
                 "chromatic_aberration.frag"), color_alpha_white(0.8));
-        chrm_abr.set_shader_var("aberrationOffset", Vector2(0.01, 0));
+        float[2] aberrationOffset = [0.01, 0];
+        chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
         cool_postproc = new PostProcessor(resolution, chrm_abr);
         cool_postproc.enabled = false;
         postprocessors ~= cool_postproc;
@@ -35,7 +36,8 @@ class PlayScene : Scene3D {
         // enable an example shader on cube
         auto cross_stitch = Effect(Core.content.load_shader(null,
                 "cross_stitch.frag"), Colors.PURPLE);
-        cross_stitch.set_shader_var("mixAmt", 0.05f);
+        auto mixAmt = 0.05f;
+        cross_stitch.set_shader_var("mixAmt", mixAmt);
         cube.effect = cross_stitch;
 
         auto grid = create_entity("grid");
