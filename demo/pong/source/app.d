@@ -13,7 +13,7 @@ class Game : Core {
 		content.paths ~= "../content/";
 		content.paths ~= "content/";
 
-		scene = new PlayScene();
+		load_scenes([new PlayScene()]);
 	}
 }
 

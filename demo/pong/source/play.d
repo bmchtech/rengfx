@@ -3,14 +3,13 @@ module play;
 import re;
 import re.gfx;
 import re.math;
-static import raylib;
 import comp.input;
 import comp.paddle;
 import comp.ball;
 import comp.score;
 import comp.ai;
 
-class PlayScene : Scene {
+class PlayScene : Scene2D {
     override void on_start() {
         clear_color = Colors.BLACK;
 
