@@ -106,47 +106,47 @@ unittest {
     ecs.destroy();
 }
 
-@("ecs-test1")
-unittest {
-    class Butter : Component {
-        public bool tasty = true;
-    }
+// @("ecs-test1")
+// unittest {
+//     class Butter : Component {
+//         public bool tasty = true;
+//     }
 
-    class Jelly : Component {
-        public int rank = 4;
-    }
+//     class Jelly : Component {
+//         public int rank = 4;
+//     }
 
-    auto ecs = new EntityManager();
-    auto sandwich1 = ecs.create_entity();
-    auto sandwich2 = ecs.create_entity();
-    auto sandwich3 = ecs.create_entity();
+//     auto ecs = new EntityManager();
+//     auto sandwich1 = ecs.create_entity();
+//     auto sandwich2 = ecs.create_entity();
+//     auto sandwich3 = ecs.create_entity();
 
-    sandwich1.add_component(new Butter());
-    sandwich1.add_component(new Jelly());
-    assert(sandwich1.has_component!Butter);
-    assert(sandwich1.has_component!Jelly);
+//     sandwich1.add_component(new Butter());
+//     sandwich1.add_component(new Jelly());
+//     assert(sandwich1.has_component!Butter);
+//     assert(sandwich1.has_component!Jelly);
 
-    sandwich2.add_component(new Butter());
-    assert(sandwich2.has_component!Butter);
+//     sandwich2.add_component(new Butter());
+//     assert(sandwich2.has_component!Butter);
 
-    sandwich3.add_component(new Jelly());
-    assert(sandwich3.has_component!Jelly);
+//     sandwich3.add_component(new Jelly());
+//     assert(sandwich3.has_component!Jelly);
 
-    sandwich1.remove_component!Butter;
+//     sandwich1.remove_component!Butter;
 
-    // make sure everything else is still good
-    enum msg = "component storage is unstable";
-    assert(!sandwich1.has_component!Butter, msg);
-    assert(sandwich1.has_component!Jelly, msg);
-    assert(sandwich2.has_component!Butter, msg);
-    assert(sandwich3.has_component!Jelly, msg);
+//     // make sure everything else is still good
+//     enum msg = "component storage is unstable";
+//     assert(!sandwich1.has_component!Butter, msg);
+//     assert(sandwich1.has_component!Jelly, msg);
+//     assert(sandwich2.has_component!Butter, msg);
+//     assert(sandwich3.has_component!Jelly, msg);
 
-    ecs.destroy();
-}
+//     ecs.destroy();
+// }
 
 @("ecs-test2")
 unittest {
-    import re.ecs: Renderable, Updatable;
+    import re.ecs : Renderable, Updatable;
 
     static class Brush : Component, Renderable {
         void render() {
@@ -164,23 +164,12 @@ unittest {
         }
     }
 
-    static class Painter : Component, Updatable {
-        void update() {
-        }
-    }
-
     auto ecs = new EntityManager();
 
     auto a1 = ecs.create_entity();
-    a1.add_component!Brush();
-    a1.add_component!Control();
-    a1.add_component!Paint();
-
-    auto a2 = ecs.create_entity();
-    a2.add_component!Brush();
-    a2.add_component!Control();
-    a2.add_component!Paint();
-    a2.add_component!Painter();
+    a1.add_component!Brush(); // R
+    a1.add_component!Control(); // B
+    a1.add_component!Paint(); // U
 
     ecs.destroy();
 }

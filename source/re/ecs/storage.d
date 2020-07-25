@@ -6,6 +6,8 @@ import re.ecs.manager;
 import re.ecs.renderable;
 import re.ecs.updatable;
 import std.array;
+import std.conv : to;
+import std.string : format;
 import std.container.array;
 import std.algorithm;
 
@@ -123,12 +125,18 @@ class ComponentStorage {
     }
 
     private void remove(Entity entity, ComponentId id) {
+        // import std.stdio : writefln;
+        // writefln("entity (%s) components(before): %s", entity.name, entity.components);
+
         // delete the component id from the entity
         entity.components = entity.components.remove!(x => x == id);
 
         // - update storage
         auto storage = get_storage(id);
+        // writefln("REMOVING component_type: %s, storage len: %s", to!string(id.type), storage.length);
         // empty the slot, and swap it to the end
+        assert(id.index < storage.length,
+                format("id points to invalid position in (%s) storage", to!string(id.type)));
         storage[id.index].destroy(); // cleanup
         storage[id.index] = null; // dereference
         if (storage.length > 1) { // check if we need to swap
@@ -149,7 +157,8 @@ class ComponentStorage {
 
     /// destroy all components attached to an entity
     public void destroy_all(Entity entity) {
-        foreach (id; entity.components) {
+        auto components_to_remove = entity.components.dup;
+        foreach (id; components_to_remove) {
             remove(entity, id);
         }
     }
