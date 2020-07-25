@@ -1,19 +1,18 @@
-module bounce;
+module play;
 
 import re;
 import re.input;
 import re.gfx;
-static import raylib;
 import re.math;
 
-class BounceScene : Scene {
+class PlayScene : Scene2D {
     /// ball bounce direction
     private Vector2 direction = Vector2(1, 1);
-    private float speed = 240;
+    private float speed = 120;
     private Entity ball;
 
     override void on_start() {
-        clear_color = Colors.BLACK;
+        clear_color = Colors.LIGHTGRAY;
 
         // add ball
         ball = create_entity("ball", Vector2(20, 40));
@@ -21,7 +20,7 @@ class BounceScene : Scene {
         ball.add_component(new SpriteRenderer(ball_spr));
 
         // add text
-        auto hello = create_entity("hello", Vector2(20, Core.window.height - 20));
+        auto hello = create_entity("hello", Vector2(20, resolution.y - 20));
         hello.add_component(new Text(Text.default_font, "hello, world!", Text.default_size, Colors.WHITE));
     }
 
@@ -29,7 +28,7 @@ class BounceScene : Scene {
         Core.debug_render = Input.is_key_down(Keys.KEY_TAB);
 
         // update direction
-        if (ball.position2.x >= Core.window.width) {
+        if (ball.position2.x >= resolution.x) {
             direction = Vector2(-1, direction.y);
         }
 
@@ -37,7 +36,7 @@ class BounceScene : Scene {
             direction = Vector2(1, direction.y);
         }
 
-        if (ball.position2.y >= Core.window.height) {
+        if (ball.position2.y >= resolution.y) {
             direction = Vector2(direction.x, -1);
         }
 

@@ -1,21 +1,24 @@
 import std.stdio;
 
 import re;
+import re.math;
 import std.stdio;
-import bounce;
+import play;
 
 /// the game for the basic demo
 class Game : Core {
-	/// sets up the game
+	enum WIDTH = 640;
+	enum HEIGHT = 480;
+
 	this() {
-		super(540, 360, "basic demo");
+		super(WIDTH, HEIGHT, "shanpes");
 	}
 
 	override void initialize() {
-		log.info("hello, basic game!");
+		default_resolution = Vector2(WIDTH / 4, HEIGHT / 4);
 		content.paths ~= "../content/";
 
-		scene = new BounceScene();
+		load_scenes([new PlayScene()]);
 	}
 }
 
