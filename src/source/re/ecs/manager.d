@@ -89,6 +89,22 @@ unittest {
 }
 
 unittest {
+    static class Thing1 : Component {
+    }
+
+    static class Thing2 : Component {
+    }
+
+    auto ecs = new EntityManager();
+    auto nt1 = ecs.create_entity();
+    nt1.add_component!Thing1();
+    auto nt2 = ecs.create_entity();
+    nt2.add_component!Thing2();
+
+    ecs.destroy();
+}
+
+unittest {
     class Butter : Component {
         public bool tasty = true;
     }
