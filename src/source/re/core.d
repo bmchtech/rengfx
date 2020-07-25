@@ -140,7 +140,7 @@ abstract class Core {
     }
 
     public static T get_scene(T)() {
-        import std.algorithm.searching: find;
+        import std.algorithm.searching : find;
 
         // find a scene matching the type
         auto matches = _scenes.find!(x => (cast(T) x) !is null);
@@ -179,6 +179,7 @@ abstract class Core {
             debugger.destroy();
         }
         content.destroy();
+        load_scenes([]); // end scenes
         if (!Core.headless) {
             window.destroy();
         }
