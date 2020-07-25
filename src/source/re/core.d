@@ -123,7 +123,10 @@ abstract class Core {
         }
         raylib.BeginDrawing();
         foreach (scene; _scenes) {
-            scene.draw();
+            // render scene
+            scene.render();
+            // post-render
+            scene.post_render();
             // composite screen render to window
             // TODO: support better compositing
             RenderExt.draw_render_target(scene.render_texture, Rectangle(0, 0,
