@@ -90,13 +90,18 @@ abstract class Scene {
 
     /// run postprocessors
     public void post_render() {
+        import std.algorithm : filter;
+        import std.array : array;
+
+        auto pipeline = postprocessors.filter!(x => x.enabled).array;
         // skip if no postprocessors
-        if (postprocessors.length == 0) return;
-        
-        postprocessors[0].process(render_target);
-        auto last_buf = postprocessors[0].buffer;
-        for (auto i = 1; i < postprocessors.length; i++) {
-            auto postprocessor = postprocessors[i];
+        if (pipeline.length == 0)
+            return;
+
+        pipeline[0].process(render_target);
+        auto last_buf = pipeline[0].buffer;
+        for (auto i = 1; i < pipeline.length; i++) {
+            auto postprocessor = pipeline[i];
             postprocessor.process(last_buf);
             last_buf = postprocessor.buffer;
         }
@@ -177,7 +182,8 @@ unittest {
     class TestScene : Scene2D {
         override void on_start() {
             auto apostprocessorsle = create_entity("apostprocessorsle");
-            assert(get_entity("apostprocessorsle") == apostprocessorsle, "could not get entity by name");
+            assert(get_entity("apostprocessorsle") == apostprocessorsle,
+                    "could not get entity by name");
         }
     }
 
