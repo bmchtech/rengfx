@@ -1,3 +1,22 @@
+
+.dub
+docs.json
+__dummy.html
+docs/
+/reng
+reng.so
+reng.dylib
+reng.dll
+reng.a
+reng.lib
+reng-test-*
+*.exe
+*.o
+*.obj
+*.lst
+
+# lol
+
 .vscode
 
 # ---> D
@@ -124,4 +143,3 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-
