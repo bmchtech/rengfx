@@ -1,4 +1,4 @@
-module re.ng.render_ext;
+module re.gfx.render_ext;
 
 import re.math;
 import re.gfx;
