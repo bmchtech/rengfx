@@ -7,12 +7,13 @@ static import raylib;
 
 /// represents a 3d model
 class Model3D : RenderableMesh {
+    private Model _mdl;
     this(Model model) {
-        _model = model;
+        _mdl = model;
         gen_mesh();
     }
 
-    protected override void gen_mesh() {
-        _mesh = model.meshes[0];
+    protected override Mesh gen_mesh() {
+        return model.meshes[0];
     }
 }
