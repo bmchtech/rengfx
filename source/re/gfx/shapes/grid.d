@@ -28,6 +28,6 @@ class Grid3D : Component, Renderable3D {
     }
 
     public void debug_render() {
-        Debugger.default_debug_render(this);
+        DebugRender.default_debug_render(this);
     }
 }

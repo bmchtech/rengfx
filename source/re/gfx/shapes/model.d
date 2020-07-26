@@ -39,6 +39,6 @@ class Model3D : Component, Renderable3D {
     }
 
     public void debug_render() {
-        Debugger.default_debug_render(this, model);
+        DebugRender.default_debug_render(this, model);
     }
 }
