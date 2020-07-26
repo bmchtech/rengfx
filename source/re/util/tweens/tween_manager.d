@@ -8,16 +8,16 @@ import std.algorithm;
 /// manages and updates tweens
 class TweenManager : Manager {
     /// the tweens being managed (internal)
-    private Tween[] _tweens;
+    private ITween[] _tweens;
 
     override void update() {
         super.update();
 
         // update tweens
-        Tween[] done;
+        ITween[] done;
         foreach (tw; _tweens) {
             tw.update(Time.delta_time);
-            if (tw.state == Tween.State.Complete) {
+            if (tw.state == TweenState.Complete) {
                 done ~= tw;
             }
         }
@@ -26,7 +26,7 @@ class TweenManager : Manager {
         }
     }
 
-    public void register(Tween tw) {
+    public void register(ITween tw) {
         _tweens ~= tw;
     }
 }
