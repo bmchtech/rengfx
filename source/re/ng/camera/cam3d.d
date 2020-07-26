@@ -173,34 +173,38 @@ class CameraThirdPerson : CameraFollow3D {
         //         IsKeyDown(CAMERA.moveControl[MOVE_UP]), IsKeyDown(CAMERA.moveControl[MOVE_DOWN])
         // };
         // bool[6] direction = [false, false, false, false, false, false];
-        bool[6] direction = [
-            Input.is_key_down(Keys.KEY_W), Input.is_key_down(Keys.KEY_S),
-            Input.is_key_down(Keys.KEY_D), Input.is_key_down(Keys.KEY_A),
-            Input.is_key_down(Keys.KEY_E), Input.is_key_down(Keys.KEY_Q)
-        ];
-        enum MOVE_FRONT = 0;
-        enum MOVE_BACK = 1;
-        enum MOVE_RIGHT = 2;
-        enum MOVE_LEFT = 3;
-        enum MOVE_UP = 4;
-        enum MOVE_DOWN = 5;
+        // bool[6] direction = [
+        //     Input.is_key_down(Keys.KEY_W), Input.is_key_down(Keys.KEY_S),
+        //     Input.is_key_down(Keys.KEY_D), Input.is_key_down(Keys.KEY_A),
+        //     Input.is_key_down(Keys.KEY_E), Input.is_key_down(Keys.KEY_Q)
+        // ];
+        // enum MOVE_FRONT = 0;
+        // enum MOVE_BACK = 1;
+        // enum MOVE_RIGHT = 2;
+        // enum MOVE_LEFT = 3;
+        // enum MOVE_UP = 4;
+        // enum MOVE_DOWN = 5;
 
-        auto dpos_x = (sin(_angle.x) * direction[MOVE_BACK] - sin(
-                _angle.x) * direction[MOVE_FRONT] - cos(
-                _angle.x) * direction[MOVE_LEFT] + cos(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
-        auto npos_x = transform.position.x + dpos_x;
+        // auto dpos_x = (sin(_angle.x) * direction[MOVE_BACK] - sin(
+        //         _angle.x) * direction[MOVE_FRONT] - cos(
+        //         _angle.x) * direction[MOVE_LEFT] + cos(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
+        // auto npos_x = transform.position.x + dpos_x;
 
-        auto dpos_y = (sin(_angle.y) * direction[MOVE_FRONT] - sin(
-                _angle.y) * direction[MOVE_BACK] + 1.0f * direction[MOVE_UP]
-                - 1.0f * direction[MOVE_DOWN]) / move_sensitivity;
-        auto npos_y = transform.position.y + dpos_y;
+        // auto dpos_y = (sin(_angle.y) * direction[MOVE_FRONT] - sin(
+        //         _angle.y) * direction[MOVE_BACK] + 1.0f * direction[MOVE_UP]
+        //         - 1.0f * direction[MOVE_DOWN]) / move_sensitivity;
+        // auto npos_y = transform.position.y + dpos_y;
 
-        auto dpos_z = (cos(_angle.x) * direction[MOVE_BACK] - cos(
-                _angle.x) * direction[MOVE_FRONT] + sin(
-                _angle.x) * direction[MOVE_LEFT] - sin(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
-        auto npos_z = transform.position.z + dpos_z;
+        // auto dpos_z = (cos(_angle.x) * direction[MOVE_BACK] - cos(
+        //         _angle.x) * direction[MOVE_FRONT] + sin(
+        //         _angle.x) * direction[MOVE_LEFT] - sin(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
+        // auto npos_z = transform.position.z + dpos_z;
 
-        transform.position = Vector3(npos_x, npos_y, npos_z);
+        // transform.position = Vector3(npos_x, npos_y, npos_z);
+
+        auto npos_x = transform.position.x;
+        auto npos_y = transform.position.y;
+        auto npos_z = transform.position.z;
 
         // CAMDATA orientation calculation
         _angle.x = _angle.x + (Input.mouse_delta.x * -look_sensitivity);
