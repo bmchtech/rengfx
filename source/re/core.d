@@ -35,7 +35,7 @@ abstract class Core {
     public static Jar jar;
 
     /// global managers
-    public Manager[] managers;
+    public static Manager[] managers;
 
     /// whether to draw debug information
     public static bool debug_render;
@@ -151,6 +151,15 @@ abstract class Core {
         // find a scene matching the type
         auto matches = _scenes.find!(x => (cast(T) x) !is null);
         assert(matches.length > 0, "no matching scene was found");
+        return cast(T) matches.front;
+    }
+
+    public static T get_manager(T)() {
+        import std.algorithm.searching : find;
+
+        // find a scene matching the type
+        auto matches = managers.find!(x => (cast(T) x) !is null);
+        assert(matches.length > 0, "no matching manager was found");
         return cast(T) matches.front;
     }
 
