@@ -9,9 +9,13 @@ static import raylib;
 /// represents a 3d mesh
 abstract class RenderableMesh : Component, Renderable3D {
     /// effect
-    protected Effect _effect;
-    protected Mesh _mesh;
-    protected Model _model;
+    private Effect _effect;
+    private Mesh _mesh;
+    private Model _model;
+
+    override void setup() {
+        gen_model();
+    }
 
     @property BoundingBox bounds() {
         return raylib.MeshBoundingBox(_mesh);
@@ -34,10 +38,12 @@ abstract class RenderableMesh : Component, Renderable3D {
         return _model;
     }
 
-    protected abstract void gen_mesh();
+    /// create the mesh
+    protected abstract Mesh gen_mesh();
 
+    /// generate the model (from the mesh)
     protected void gen_model() {
-        gen_mesh();
+        _mesh = gen_mesh();
         _model = raylib.LoadModelFromMesh(_mesh);
     }
 
