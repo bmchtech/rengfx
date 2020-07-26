@@ -88,13 +88,20 @@ public static class Input {
         return raylib.GetMousePosition();
     }
 
+    private static bool _cursor_locked = false;
+    @property public static bool is_cursor_locked() {
+        return _cursor_locked;
+    }
+
     /// lock the cursor
     public static void lock_cursor() {
         raylib.DisableCursor();
+        _cursor_locked = true;
     }
 
     /// unlock the cursor
     public static void unlock_cursor() {
         raylib.EnableCursor();
+        _cursor_locked = false;
     }
 }
