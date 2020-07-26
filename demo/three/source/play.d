@@ -18,7 +18,7 @@ class PlayScene : Scene3D {
 
         // load a shader effect and add it as a postprocessor
         auto chrm_abr = Effect(Core.content.load_shader(null,
-                "chromatic_aberration.frag"), color_alpha_white(0.8));
+                "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
         glitch_postproc = new PostProcessor(resolution, chrm_abr);
         glitch_postproc.enabled = false;
         postprocessors ~= glitch_postproc;
@@ -35,7 +35,7 @@ class PlayScene : Scene3D {
 
         // enable an example shader on cube
         auto cross_stitch = Effect(Core.content.load_shader(null,
-                "cross_stitch.frag"), Colors.PURPLE);
+                "shader/cross_stitch.frag"), Colors.PURPLE);
         auto mixAmt = 0.05f;
         cross_stitch.set_shader_var("mixAmt", mixAmt);
         cube.effect = cross_stitch;
