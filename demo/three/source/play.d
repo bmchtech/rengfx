@@ -61,8 +61,4 @@ class PlayScene : Scene3D {
             glitch_postproc.effect.set_shader_var("aberrationOffset", aberrationOffset);
         }
     }
-
-    override void render() {
-        super.render();
-    }
 }
