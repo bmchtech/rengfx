@@ -91,6 +91,11 @@ class SceneCamera3D : SceneCamera {
     public void look_at(Vector3 target) {
         _camera.target = target;
     }
+
+    /// orient the camera in the direction of an entity
+    public void look_at(Entity entity) {
+        look_at(entity.position);
+    }
 }
 
 /// controls a camera by making it orbit an entity
