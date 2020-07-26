@@ -34,10 +34,21 @@ class PlayScene : Scene3D {
         cam.look_at(fox);
         // cam.entity.add_component(new CameraOrbit(fox, 0.2));
         cam.entity.add_component(new CameraThirdPerson(fox));
-        // Input.lock_cursor();
 
         // draw a grid at the origin
         auto grid = create_entity("grid");
         grid.add_component(new Grid3D(20, 1));
+    }
+
+    override void update() {
+        super.update();
+        
+        if (Input.is_mouse_pressed(MouseButton.MOUSE_LEFT_BUTTON)) {
+            if (Input.is_cursor_locked) {
+                Input.unlock_cursor();
+            } else {
+                Input.lock_cursor();
+            }
+        }
     }
 }
