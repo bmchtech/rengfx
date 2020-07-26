@@ -23,10 +23,7 @@ class PlayScene : Scene3D {
         postprocessors ~= glitch_postproc;
 
         cam.entity.position = Vector3(0, 10, 10);
-        cam.camera.target = Vector3(0, 0, 0);
-        cam.camera.up = Vector3(0, 1, 0);
-        cam.camera.fovy = (C_PI_4) * C_RAD2DEG; // 45 deg
-        cam.camera.type = CameraType.CAMERA_PERSPECTIVE;
+        cam.look_at(Vector3(0, 0, 0));
 
         auto block = create_entity("block", Vector3(0, 0, 0));
         auto cube = block.add_component(new Cube(Vector3(2, 2, 2)));
