@@ -18,7 +18,7 @@ class PlayScene : Scene3D {
 
         // load a shader effect and add it as a postprocessor
         auto chrm_abr = Effect(Core.content.load_shader(null,
-                "chromatic_aberration.frag"), color_alpha_white(0.8));
+                "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
         chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
         glitch_postproc = new PostProcessor(resolution, chrm_abr);
         postprocessors ~= glitch_postproc;
