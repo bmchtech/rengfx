@@ -32,7 +32,9 @@ class PlayScene : Scene3D {
 
         // point the camera at the block, then orbit it
         cam.look_at(fox);
-        cam.entity.add_component(new CameraOrbit(fox, 0.2));
+        // cam.entity.add_component(new CameraOrbit(fox, 0.2));
+        cam.entity.add_component(new CameraThirdPerson(fox));
+        // Input.lock_cursor();
 
         // draw a grid at the origin
         auto grid = create_entity("grid");

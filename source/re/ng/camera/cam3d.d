@@ -185,17 +185,20 @@ class CameraThirdPerson : CameraFollow3D {
         enum MOVE_UP = 4;
         enum MOVE_DOWN = 5;
 
-        auto npos_x = transform.position.x + (sin(_angle.x) * direction[MOVE_BACK] - sin(
+        auto dpos_x = (sin(_angle.x) * direction[MOVE_BACK] - sin(
                 _angle.x) * direction[MOVE_FRONT] - cos(
                 _angle.x) * direction[MOVE_LEFT] + cos(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
+        auto npos_x = transform.position.x + dpos_x;
 
-        auto npos_y = transform.position.y + (sin(_angle.y) * direction[MOVE_FRONT] - sin(
+        auto dpos_y = (sin(_angle.y) * direction[MOVE_FRONT] - sin(
                 _angle.y) * direction[MOVE_BACK] + 1.0f * direction[MOVE_UP]
                 - 1.0f * direction[MOVE_DOWN]) / move_sensitivity;
+        auto npos_y = transform.position.y + dpos_y;
 
-        auto npos_z = transform.position.z + (cos(_angle.x) * direction[MOVE_BACK] - cos(
+        auto dpos_z = (cos(_angle.x) * direction[MOVE_BACK] - cos(
                 _angle.x) * direction[MOVE_FRONT] + sin(
                 _angle.x) * direction[MOVE_LEFT] - sin(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
+        auto npos_z = transform.position.z + dpos_z;
 
         // CAMDATA orientation calculation
         _angle.x = _angle.x + (Input.mouse_delta.x * -look_sensitivity);
@@ -223,5 +226,7 @@ class CameraThirdPerson : CameraFollow3D {
             npos_y = -sin(_angle.y) * _target_dist * sin(_angle.y) + target.transform.position.y;
 
         npos_z = cos(_angle.x) * _target_dist * cos(_angle.y) + target.transform.position.z;
+
+        transform.position = Vector3(npos_x, npos_y, npos_z);
     }
 }
