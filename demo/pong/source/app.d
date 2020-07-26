@@ -10,8 +10,7 @@ class Game : Core {
 	}
 
 	override void initialize() {
-		content.paths ~= "../content/";
-		content.paths ~= "content/";
+		content.paths ~= ["../content/", "content/"];
 
 		load_scenes([new PlayScene()]);
 	}
