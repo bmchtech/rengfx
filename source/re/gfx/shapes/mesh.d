@@ -6,7 +6,7 @@ import re.math;
 import re.ng.diag;
 static import raylib;
 
-/// represents a 3d mesh
+/// renders a model given a mesh. should only be used for procedural meshes; use Model3D for models instead
 abstract class RenderableMesh : Component, Renderable3D {
     /// effect
     private Effect _effect;
