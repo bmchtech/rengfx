@@ -14,6 +14,8 @@ interface ITween {
     @property TweenState state();
     void update(float dt);
     void start(bool attach = true);
+    void add_chain(ITween[] tw...);
+    @property ITween[] get_chain();
 }
 
 /// represents a tween, to be used for easings/interpolation
@@ -25,6 +27,7 @@ class Tween(T) : ITween {
     public const(float) duration;
     public const(float) delay;
     public const(EaseFunction) ease;
+    private ITween[] _chain;
     private float elapsed = 0;
     private TweenState _state;
 
@@ -42,6 +45,10 @@ class Tween(T) : ITween {
 
     @property TweenState state() {
         return _state;
+    }
+
+    @property ITween[] get_chain() {
+        return _chain;
     }
 
     public void update(float dt) {
@@ -88,13 +95,17 @@ class Tween(T) : ITween {
             Core.get_manager!TweenManager.register(this);
         }
     }
+
+    public void add_chain(ITween[] tw...) {
+        _chain ~= tw;
+    }
 }
 
 /// utility class for starting tweens
 class Tweener {
     public static ITween tween(T)(ref T data, T from, T to, float duration,
             EaseFunction ease, float delay = 0) {
-        import re.core : Core;
+        import re.math;
 
         ITween res;
         static if (is(T == float)) {
@@ -105,6 +116,10 @@ class Tweener {
             res = new Tween!ubyte([&data.r, &data.g, &data.b, &data.a],
                     [from.r, from.g, from.b, from.a], [to.r, to.g, to.b, to.a],
                     duration, ease, delay);
+        } else static if (is(T == Vector3)) {
+            res = new Tween!float([&data.x, &data.y, &data.z], [
+                    from.x, from.y, from.z
+                    ], [to.x, to.y, to.z], duration, ease, delay);
         } else {
             assert(0, "tweening this type is not supported");
         }
