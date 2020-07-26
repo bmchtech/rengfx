@@ -6,6 +6,7 @@ import re.math;
 
 class HUDScene : Scene2D {
     override void on_start() {
+        clear_color = Colors.BLANK;
         // set the tint of this scene's composite
         composite_mode.color = Color(255, 255, 255, 160);
 
