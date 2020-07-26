@@ -19,8 +19,5 @@ public {
     enum C_DEG2RAD = cast(float)(PI / 180.0);
 
     // raylib
-    static import raymath;
-    import raylib : Vector2, Vector3, Vector4, Matrix4;
-    import raylib : Rectangle;
-    import raylib : BoundingBox;
+    import re.math.raytypes;
 }

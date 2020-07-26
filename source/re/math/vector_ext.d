@@ -1,6 +1,6 @@
 module re.math.vector_ext;
 
-import re.math;
+import re.math.raytypes;
 
 // - raylib aliases
 alias Normalize = raymath.Vector2Normalize;
