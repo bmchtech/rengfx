@@ -10,6 +10,7 @@ static import raylib;
 
 /// represents a camera for a 3D scene
 class SceneCamera3D : SceneCamera {
+    mixin Reflect;
     private raylib.Camera3D _camera;
     private ProjectionType _projection;
 
@@ -94,6 +95,7 @@ class SceneCamera3D : SceneCamera {
 
 /// controls a camera by making it orbit an entity
 class CameraOrbit : Component, Updatable {
+    mixin Reflect;
     private SceneCamera3D cam;
     /// the target entity to orbit
     public Entity target;
