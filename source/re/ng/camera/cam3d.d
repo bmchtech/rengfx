@@ -96,7 +96,7 @@ class SceneCamera3D : SceneCamera {
 /// controls a camera by making it orbit an entity
 class CameraOrbit : Component, Updatable {
     mixin Reflect;
-    private SceneCamera3D cam;
+    // private SceneCamera3D cam;
     /// the target entity to orbit
     public Entity target;
     /// the orbit speed, in radians per second
@@ -111,7 +111,7 @@ class CameraOrbit : Component, Updatable {
     }
 
     override void setup() {
-        cam = entity.get_component!SceneCamera3D();
+        // cam = entity.get_component!SceneCamera3D();
         auto to_target = target.position - entity.position;
 
         _target_dist = raymath.Vector3Length(to_target);
