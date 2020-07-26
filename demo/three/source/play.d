@@ -53,11 +53,13 @@ class PlayScene : Scene3D {
             glitch_postproc.enabled = !glitch_postproc.enabled;
         }
 
-        // make our postprocess effect fluctuate with time
-        import std.math : sin;
+        if (glitch_postproc.enabled) {
+            // make our postprocess effect fluctuate with time
+            import std.math : sin;
 
-        aberrationOffset[0] = 0.010 + 0.005 * sin(Time.total_time / 2);
-        glitch_postproc.effect.set_shader_var("aberrationOffset", aberrationOffset);
+            aberrationOffset[0] = 0.010 + 0.005 * sin(Time.total_time / 2);
+            glitch_postproc.effect.set_shader_var("aberrationOffset", aberrationOffset);
+        }
     }
 
     override void render() {
