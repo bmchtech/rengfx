@@ -11,7 +11,7 @@ class PostProcessor {
     /// the render target buffer of this postprocessor
     public RenderTarget buffer;
     /// whether to enable this postprocessor
-    public bool enabled;
+    public bool enabled = true;
 
     this(Vector2 resolution, Effect effect) {
         this.effect = effect;
