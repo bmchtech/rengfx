@@ -200,6 +200,8 @@ class CameraThirdPerson : CameraFollow3D {
                 _angle.x) * direction[MOVE_LEFT] - sin(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
         auto npos_z = transform.position.z + dpos_z;
 
+        transform.position = Vector3(npos_x, npos_y, npos_z);
+
         // CAMDATA orientation calculation
         _angle.x = _angle.x + (Input.mouse_delta.x * -look_sensitivity);
         _angle.y = _angle.y + (Input.mouse_delta.y * -look_sensitivity);
