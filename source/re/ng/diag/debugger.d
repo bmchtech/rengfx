@@ -14,7 +14,6 @@ static import raygui;
 /// a robust overlay debugging tool
 class Debugger {
     public enum screen_padding = 12;
-    public static Color debug_color = Colors.RED;
     private enum bg_col = Color(180, 180, 180, 180);
     private raylib.RenderTexture2D _render_target;
     private enum _render_col = Color(255, 255, 255, 160);
@@ -56,21 +55,6 @@ class Debugger {
         // draw render target
         RenderExt.draw_render_target(_render_target, Rectangle(0, 0,
                 Core.window.width, Core.window.height), _render_col);
-    }
-
-    public static void default_debug_render(Renderable2D renderable) {
-        raylib.DrawRectangleLinesEx(renderable.bounds, 1, debug_color);
-    }
-
-    public static void default_debug_render(Renderable3D renderable) {
-        raylib.DrawBoundingBox(renderable.bounds, debug_color);
-    }
-
-    public static void default_debug_render(Renderable3D renderable, raylib.Model model) {
-        default_debug_render(renderable);
-        auto comp = cast(Component) renderable;
-        raylib.DrawModelWires(model, comp.entity.position,
-                comp.entity.transform.scale.x, debug_color);
     }
 
     /// clean up
