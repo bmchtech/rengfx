@@ -1,19 +1,43 @@
 module re.gfx.shapes.model;
 
+import re.ecs;
 import re.gfx;
-import re.gfx.shapes.mesh;
+import re.math;
+import re.ng.diag;
 import re.math;
 static import raylib;
 
 /// represents a 3d model
-class Model3D : RenderableMesh {
-    private Model _mdl;
+class Model3D : Component, Renderable3D {
+    /// the model
+    public Model model;
+    private Effect _effect;
+
     this(Model model) {
-        _mdl = model;
-        gen_mesh();
+        this.model = model;
     }
 
-    protected override Mesh gen_mesh() {
-        return model.meshes[0];
+    /// gets the effect
+    @property ref Effect effect() {
+        return _effect;
+    }
+
+    /// sets the effect
+    @property Effect effect(Effect value) {
+        _effect = value;
+        model.materials[0].shader = _effect.shader;
+        return value;
+    }
+
+    @property BoundingBox bounds() {
+        return raylib.MeshBoundingBox(model.meshes[0]);
+    }
+
+    public void render() {
+        raylib.DrawModel(model, entity.position, 1, effect.color);
+    }
+
+    public void debug_render() {
+        Debugger.default_debug_render(this, model);
     }
 }
