@@ -16,7 +16,7 @@ public {
 /// represents a collection of entities that draw to a texture
 abstract class Scene {
     /// the cleared background color
-    public raylib.Color clear_color;
+    public raylib.Color clear_color = Colors.WHITE;
     /// the entity manager
     public EntityManager ecs;
     /// the render target
