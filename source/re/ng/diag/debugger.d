@@ -12,7 +12,7 @@ static import raylib;
 static import raygui;
 
 /// a robust overlay debugging tool
-class Debugger {
+debug class Debugger {
     public enum screen_padding = 12;
     private enum bg_col = Color(180, 180, 180, 180);
     private raylib.RenderTexture2D _render_target;

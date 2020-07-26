@@ -13,7 +13,7 @@ import std.range;
 static import raygui;
 
 /// overlay debug console
-class Console {
+debug class Console {
     /// the key that opens the console
     public Keys key = Keys.KEY_GRAVE;
     /// the character representation of the console key
