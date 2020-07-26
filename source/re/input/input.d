@@ -88,6 +88,11 @@ public static class Input {
         return raylib.GetMousePosition();
     }
 
+    /// the mouse scroll wheel delta
+    @property public static int scroll_delta() {
+        return raylib.GetMouseWheelMove();
+    }
+
     private static bool _cursor_locked = false;
     @property public static bool is_cursor_locked() {
         return _cursor_locked;
