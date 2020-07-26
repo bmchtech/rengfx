@@ -7,7 +7,7 @@ import std.array;
 import std.algorithm;
 import std.string;
 
-static class DefaultCommands {
+debug static class DefaultCommands {
     alias log = Core.log;
     alias scenes = Core.scenes;
     alias dbg = Core.debugger;
