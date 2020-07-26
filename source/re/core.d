@@ -50,7 +50,7 @@ abstract class Core {
     public static bool headless = false;
 
     /// whether to pause when unfocused
-    public static bool pause_on_focus_lost = false;
+    public static bool pause_on_focus_lost = true;
 
     /// the default render resolution for all scenes
     public static Vector2 default_resolution;
