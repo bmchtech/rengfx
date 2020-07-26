@@ -2,6 +2,7 @@ module re.ng.scene3d;
 
 static import raylib;
 public import raylib : Camera3D, CameraType;
+import re.ng.camera;
 import re;
 import std.string;
 import re.ecs;
@@ -10,16 +11,20 @@ import re.math;
 /// represents a scene rendered in 3d
 abstract class Scene3D : Scene {
     /// the 3d scene camera
-    public Camera3D camera;
+    public SceneCamera3D cam;
+    /// the camera entity
+    public Entity camera_nt;
 
     override void setup() {
         super.setup();
 
-        camera = Camera3D();
+        // create a camera entity
+        camera_nt = create_entity("camera");
+        cam = camera_nt.add_component(new SceneCamera3D());
     }
 
     override void render_scene() {
-        raylib.BeginMode3D(camera);
+        raylib.BeginMode3D(cam.camera);
 
         // render 3d components
         foreach (component; ecs.storage.renderable_components) {
@@ -37,6 +42,6 @@ abstract class Scene3D : Scene {
     override void update() {
         super.update();
 
-        raylib.UpdateCamera(&camera);
+        cam.update();
     }
 }
