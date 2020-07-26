@@ -22,7 +22,10 @@ class TweenManager : Manager {
             }
         }
         foreach (tw; done) {
+            // remove from our tween list
             _tweens = _tweens.remove!(x => x == tw);
+            // add chains to our list
+            _tweens ~= tw.get_chain;
         }
     }
 
