@@ -19,12 +19,21 @@ class SceneCamera2D : SceneCamera {
 
     override void setup() {
         // defaults
-        _camera.offset = Vector2(entity.scene.resolution.x / 2, entity.scene.resolution.y / 2);
         _camera.zoom = 1;
     }
 
     @property ref raylib.Camera2D camera() return  {
         return _camera;
+    }
+
+    /// gets the camera offset (displacement from target)
+    @property Vector2 offset() {
+        return _camera.offset;
+    }
+
+    /// sets the camera offset (displacement from target)
+    @property Vector2 offset(Vector2 value) {
+        return _camera.offset = value;
     }
 
     override void update() {
@@ -39,6 +48,7 @@ class SceneCamera2D : SceneCamera {
 
 class CameraFollow2D : Component, Updatable {
     mixin Reflect;
+    // private SceneCamera2D cam;
     /// the target entity to follow
     public Entity target;
     public float lerp;
@@ -46,6 +56,12 @@ class CameraFollow2D : Component, Updatable {
     this(Entity target, float lerp) {
         this.target = target;
         this.lerp = lerp;
+    }
+
+    override void setup() {
+        auto cam = entity.get_component!SceneCamera2D();
+        // set offset to half-resolution (so that our target is centered)
+        cam.offset = Vector2(entity.scene.resolution.x / 2, entity.scene.resolution.y / 2);
     }
 
     void update() {
