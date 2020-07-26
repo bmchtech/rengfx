@@ -157,7 +157,6 @@ class CameraThirdPerson : CameraFollow3D {
     import re.input : Keys, Input;
 
     mixin Reflect;
-    private Vector2 _angle; // xz plane camera angle
     public float move_sensitivity = 20;
     public float look_sensitivity = 0.003;
     protected enum third_person_min_clamp = 5;
@@ -244,7 +243,6 @@ class CameraFreeLook : CameraFollow3D {
     import re.input : Keys, MouseButton, Input;
 
     mixin Reflect;
-    private Vector2 _angle; // xz plane camera angle
     // public float move_sensitivity = ;
     public float look_sensitivity = 0.01;
     public float zoom_sensitivity = 1.5;
