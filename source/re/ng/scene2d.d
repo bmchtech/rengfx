@@ -36,4 +36,10 @@ abstract class Scene2D : Scene {
 
         raylib.EndMode2D();
     }
+
+    override void update() {
+        super.update();
+
+        cam.update();
+    }
 }
