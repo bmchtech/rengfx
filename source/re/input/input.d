@@ -87,4 +87,14 @@ public static class Input {
     @property public static Vector2 mouse_position() {
         return raylib.GetMousePosition();
     }
+
+    /// lock the cursor
+    public static void lock_cursor() {
+        raylib.DisableCursor();
+    }
+
+    /// unlock the cursor
+    public static void unlock_cursor() {
+        raylib.EnableCursor();
+    }
 }
