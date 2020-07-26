@@ -8,6 +8,7 @@ static import raylib;
 
 /// a color-filled rectangle
 class ColorRect : Component, Renderable2D {
+    mixin Reflect;
     /// rectangle dimensions
     public Vector2 size;
     /// fill color
