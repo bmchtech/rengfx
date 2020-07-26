@@ -39,7 +39,7 @@ struct Transform {
     // main sub-transforms
 
     /// gets 3d position
-    @property Vector3 position() {
+    @property ref Vector3 position() {
         update_transform();
         return _position;
     }

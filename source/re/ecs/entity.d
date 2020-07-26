@@ -103,7 +103,7 @@ class Entity {
     }
 
     /// forwards to transform
-    @property Vector3 position() {
+    @property ref Vector3 position() {
         return transform.position;
     }
 
