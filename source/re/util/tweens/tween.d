@@ -13,23 +13,28 @@ public enum TweenState {
 interface ITween {
     @property TweenState state();
     void update(float dt);
+    void start(bool attach = true);
 }
 
 /// represents a tween, to be used for easings/interpolation
 class Tween(T) : ITween {
-    private T* _data;
-    public const(float) from;
-    public const(float) to;
+    alias TRef = T*;
+    private TRef[] _datas;
+    public const(float[]) from;
+    public const(float[]) to;
     public const(float) duration;
     public const(float) delay;
     public const(EaseFunction) ease;
     private float elapsed = 0;
     private TweenState _state;
 
-    this(T* data, T from, T to, float duration, EaseFunction ease, float delay = 0) {
-        this._data = data;
-        this.from = cast(float) from;
-        this.to = cast(float) to;
+    this(TRef[] data, T[] from, T[] to, float duration, EaseFunction ease, float delay = 0) {
+        import std.algorithm : map;
+        import std.array : array;
+
+        this._datas = data;
+        this.from = from.map!(x => cast(float) x).array;
+        this.to = to.map!(x => cast(float) x).array;
         this.duration = duration;
         this.ease = ease;
         this.delay = delay;
@@ -55,48 +60,53 @@ class Tween(T) : ITween {
 
         // clamp the elapsed time (t) value
         auto t = clamp(run_time, 0, duration);
-        // get value from function
-        immutable auto v = ease(t, from, to - from, duration);
 
-        // set the value of our data pointer
-        *_data = cast(T) v;
+        // - update values
+        foreach (i, data; _datas) {
+            // get value from function
+            immutable auto v = ease(t, from[i], to[i] - from[i], duration);
+            // set the value of our data pointer
+            *data = cast(T) v;
+
+        }
+
         if (run_time >= duration) {
             _state = TweenState.Complete;
         }
+
         // import std.stdio : writefln;
 
         // writefln("F: %s, T: %s, E: %s, V: %s", from, to, run_time, v);
+    }
+
+    public void start(bool attach) {
+        _state = TweenState.Running;
+        if (attach) {
+            import re.core : Core;
+
+            // add tween to global manager
+            Core.get_manager!TweenManager.register(this);
+        }
     }
 }
 
 /// utility class for starting tweens
 class Tweener {
-    public static ITween[] tween(T)(ref T data, T from, T to, float duration,
-            EaseFunction ease, float delay = 0, bool attach = true) {
+    public static ITween tween(T)(ref T data, T from, T to, float duration,
+            EaseFunction ease, float delay = 0) {
         import re.core : Core;
 
-        ITween[] res;
+        ITween res;
         static if (is(T == float)) {
-            res ~= [new Tween!float(&data, from, to, duration, ease, delay)];
+            res = new Tween!float([&data], [from], [to], duration, ease, delay);
         } else static if (is(T == int)) {
-            res ~= [new Tween!int(&data, from, to, duration, ease, delay)];
+            res = new Tween!int([&data], [from], [to], duration, ease, delay);
         } else static if (is(T == Color)) {
-            res ~= [
-                new Tween!ubyte(&data.r, from.r, to.r, duration, ease, delay),
-                new Tween!ubyte(&data.g, from.g, to.g, duration, ease,
-                        delay),
-                new Tween!ubyte(&data.b, from.b, to.b, duration, ease,
-                        delay),
-                new Tween!ubyte(&data.a, from.a, to.a, duration, ease, delay),
-            ];
+            res = new Tween!ubyte([&data.r, &data.g, &data.b, &data.a],
+                    [from.r, from.g, from.b, from.a], [to.r, to.g, to.b, to.a],
+                    duration, ease, delay);
         } else {
             assert(0, "tweening this type is not supported");
-        }
-        if (attach) {
-            // add tweens to global manager
-            foreach (tw; res) {
-                Core.get_manager!TweenManager.register(tw);
-            }
         }
         return res;
     }
@@ -111,7 +121,7 @@ unittest {
     float data = start;
     float goal = 1;
     float duration = 1;
-    auto tw = new Tween!float(&data, start, goal, duration, &Ease.LinearNone);
+    auto tw = new Tween!float([&data], [start], [goal], duration, &Ease.LinearNone);
     assert(abs(data - start) < float.epsilon, "tween did not match start");
     tw.update(duration);
     assert(abs(data - goal) < float.epsilon, format("tween did not match goal (was %f)", data));
@@ -126,7 +136,8 @@ unittest {
     int data = start;
     int goal = 100;
     float duration = 1;
-    auto tw = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, 0, false)[0];
+    auto tw = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, 0);
+    tw.start(false); // start, but do not attach
     assert(data == start, "tween did not match start");
     tw.update(duration);
     assert(data == goal, format("tween did not match goal (was %f)", data));
@@ -140,16 +151,15 @@ unittest {
     Color data = start;
     Color goal = Colors.RAYWHITE;
     float duration = 1;
-    auto tweens = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, 0, false);
+    auto tw = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, 0);
+    tw.start(false); // start, but do not attach
     // auto tw_r = new Tween!ubyte(&data.r, start.r, goal.r, duration, &Ease.LinearNone);
     // auto tw_g = new Tween!ubyte(&data.g, start.g, goal.g, duration, &Ease.LinearNone);
     // auto tw_b = new Tween!ubyte(&data.b, start.b, goal.b, duration, &Ease.LinearNone);
     // auto tw_a = new Tween!ubyte(&data.a, start.a, goal.a, duration, &Ease.LinearNone);
     assert(data.r == start.r && data.g == start.g && data.b == start.b
             && data.a == start.a, "tween did not match start");
-    foreach (tw; tweens) {
-        tw.update(duration);
-    }
+    tw.update(duration);
     // tw_r.update(duration);
     // tw_g.update(duration);
     // tw_b.update(duration);
