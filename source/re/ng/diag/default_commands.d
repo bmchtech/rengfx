@@ -98,10 +98,9 @@ static class DefaultCommands {
         Entity entity;
         if (!pick_entity(args[0], entity))
             return;
-        if (dbg.inspector.open) {
-            log.err("inspector is already open");
-            return;
-        }
+        if (dbg.inspector.open)
+            dbg.inspector.close(); // close the existing inspector
+
         // attach the inspector to this entity
         dbg.inspector.inspect(entity);
     }
