@@ -14,6 +14,8 @@ alias Axes = raylib.GamepadAxis;
 public static class Input {
     /// global virtual input list
     public static VirtualInput[] virtual_inputs;
+    private static Vector2 last_mouse_position;
+    public static Vector2 mouse_delta;
 
     static this() {
     }
@@ -28,6 +30,10 @@ public static class Input {
         foreach (input; virtual_inputs) {
             input.update();
         }
+        // update input pipeline
+        immutable auto current_mouse_pos = mouse_position();
+        mouse_delta = current_mouse_pos - last_mouse_position;
+        last_mouse_position = current_mouse_pos;
     }
 
     // - keyboard
