@@ -1,7 +1,0 @@
-name "basic_01"
-description "basic example 01"
-authors "xdrie"
-copyright "Copyright © 2020, xdrie"
-license "proprietary"
-dependency "reng" path="../.."
-lflags "-rpath=$$ORIGIN"
