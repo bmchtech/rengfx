@@ -28,7 +28,7 @@ class PlayScene : Scene3D {
         auto block = create_entity("block", Vector3(0, 0, 0));
         auto cube = block.add_component(new Cube(Vector3(2, 2, 2)));
 
-        camera_nt.add_component(new CameraOrbit(block, 0.5));
+        cam.entity.add_component(new CameraOrbit(block, 0.5));
 
         // enable an example shader on cube
         auto cross_stitch = Effect(Core.content.load_shader(null,
