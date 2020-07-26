@@ -92,7 +92,7 @@ unittest {
     float data = start;
     float goal = 1;
     float duration = 1;
-    auto tw = new Tween!float(&data, start, goal, duration, &Ease.EaseLinearNone);
+    auto tw = new Tween!float(&data, start, goal, duration, &Ease.LinearNone);
     assert(abs(data - start) < float.epsilon, "tween did not match start");
     tw.update(duration);
     assert(abs(data - goal) < float.epsilon, format("tween did not match goal (was %f)", data));
@@ -107,7 +107,7 @@ unittest {
     int data = start;
     int goal = 100;
     float duration = 1;
-    auto tw = Tweener.tween(data, start, goal, duration, &Ease.EaseLinearNone, false)[0];
+    auto tw = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, false)[0];
     assert(data == start, "tween did not match start");
     tw.update(duration);
     assert(data == goal, format("tween did not match goal (was %f)", data));
@@ -121,11 +121,11 @@ unittest {
     Color data = start;
     Color goal = Colors.RAYWHITE;
     float duration = 1;
-    auto tweens = Tweener.tween(data, start, goal, duration, &Ease.EaseLinearNone, false);
-    // auto tw_r = new Tween!ubyte(&data.r, start.r, goal.r, duration, &Ease.EaseLinearNone);
-    // auto tw_g = new Tween!ubyte(&data.g, start.g, goal.g, duration, &Ease.EaseLinearNone);
-    // auto tw_b = new Tween!ubyte(&data.b, start.b, goal.b, duration, &Ease.EaseLinearNone);
-    // auto tw_a = new Tween!ubyte(&data.a, start.a, goal.a, duration, &Ease.EaseLinearNone);
+    auto tweens = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, false);
+    // auto tw_r = new Tween!ubyte(&data.r, start.r, goal.r, duration, &Ease.LinearNone);
+    // auto tw_g = new Tween!ubyte(&data.g, start.g, goal.g, duration, &Ease.LinearNone);
+    // auto tw_b = new Tween!ubyte(&data.b, start.b, goal.b, duration, &Ease.LinearNone);
+    // auto tw_a = new Tween!ubyte(&data.a, start.a, goal.a, duration, &Ease.LinearNone);
     assert(data.r == start.r && data.g == start.g && data.b == start.b
             && data.a == start.a, "tween did not match start");
     foreach (tw; tweens) {
