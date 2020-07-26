@@ -159,6 +159,7 @@ abstract class Scene {
     public Entity create_entity(string name) {
         auto nt = ecs.create_entity();
         nt.name = name;
+        nt.scene = this;
         return nt;
     }
 

@@ -4,6 +4,7 @@ import std.array;
 import std.conv;
 import std.algorithm.iteration;
 import std.algorithm.searching;
+import re.ng.scene;
 import re.ecs.manager;
 import re.ecs.component;
 import re.ecs.storage;
@@ -15,6 +16,8 @@ class Entity {
     public size_t id;
     /// whether this entity is alive
     public bool alive;
+    /// the scene that this entity is part of
+    public Scene scene;
     /// world transform of entity
     public Transform transform;
     /// friendly name

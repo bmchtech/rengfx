@@ -3,6 +3,7 @@ module play;
 import re;
 import re.gfx;
 import re.gfx.shapes.rect;
+import re.ng.camera;
 import re.math;
 import comp.input;
 import comp.body;
@@ -19,6 +20,9 @@ class PlayScene : Scene2D {
         player.add_component(new ColorRect(Vector2(8, 8), Colors.BLUE));
         player.add_component!PlayerController();
         player.add_component!ShapeBody();
+
+        // follow the player
+        cam.entity.add_component(new CameraFollow2D(player, 0.05));
 
         auto turret = create_entity("turret", Vector2(80, 80));
         turret.add_component(new ColorRect(Vector2(8, 8), Colors.DARKGRAY));
