@@ -10,7 +10,7 @@ import re.ng.manager;
 import re.gfx.render_ext;
 import re.math;
 import re.util.logger;
-import re.util.tween.tween_manager;
+import re.util.tweens.tween_manager;
 import std.array;
 import jar;
 static import raylib;
