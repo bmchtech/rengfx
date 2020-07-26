@@ -126,19 +126,19 @@ class ComponentStorage {
 
     private void remove(Entity entity, ComponentId id) {
         // import std.stdio : writefln;
-
-        // writefln("entity (%s) components(before): %s", entity.name, entity.components);
+        // writefln("\nentity (%s) components(before): %s (removing %s)", entity.name, entity.components, id);
 
         // delete the component id from the entity
         entity.components = entity.components.remove!(x => x == id);
 
         // - update storage
         auto storage = get_storage(id);
-        // writefln("REMOVING component_type: %s", to!string(id.type));
+        // writefln("REMOVING component_type: %s AT %d", to!string(id.type), id.index);
         // writefln("storage[%d]: %s", storage.length, storage.array);
+
         // empty the slot, and swap it to the end
         assert(id.index < storage.length,
-                format("id points to invalid position in (%s) storage", to!string(id.type)));
+                format("id points to invalid position (%d) in %s storage", id.index, to!string(id.type)));
         storage[id.index].destroy(); // cleanup
         storage[id.index] = null; // dereference
         auto last_slot = cast(size_t) storage.length - 1;
@@ -153,10 +153,13 @@ class ComponentStorage {
             assert(tmp.entity, "entity in tail slot is null");
             storage[last_slot] = storage[id.index];
             storage[id.index] = tmp;
+            // writefln("swapped SLOT (%d) with TAIL (%d)", id.index, last_slot);
             // find out who owns tmp, and tell them that their component has moved
             auto other = tmp.entity;
             // find the id that points to the old place
             auto other_id_pos = other.components.countUntil!(x => x.index == last_slot);
+            // writefln("working with OTHER, components %s", other.components);
+            // writefln("(%s) updating COMPREF from OLDSLOT (%d) to NEWSLOT (%d)", other.name, other.components[other_id_pos].index, id.index);
             other.components[other_id_pos].index = id.index; // point to the new place
         }
         // pop the last element off the array
@@ -165,9 +168,8 @@ class ComponentStorage {
 
     /// destroy all components attached to an entity
     public void destroy_all(Entity entity) {
-        auto components_to_remove = entity.components.dup;
-        foreach (id; components_to_remove) {
-            remove(entity, id);
+        while (entity.components.length > 0) {
+            remove(entity, entity.components.front);
         }
     }
 }
