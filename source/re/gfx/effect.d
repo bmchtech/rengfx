@@ -8,7 +8,7 @@ struct Effect {
     /// the shader program for the effect
     Shader shader;
     /// the tint color
-    Color color;
+    Color color = Colors.WHITE;
 
     public void set_shader_var(T)(string name, ref T value) {
         import std.string : toStringz;
