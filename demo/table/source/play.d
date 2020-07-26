@@ -24,13 +24,14 @@ class PlayScene : Scene3D {
         postprocessors ~= glitch_postproc;
 
         // set the camera position
-        cam.entity.position = Vector3(0, 10, 10);
+        cam.entity.position = Vector3(10, 10, 10);
 
         auto fox = create_entity("fox", Vector3(0, 0, 0));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
 
         // add a camera to look at the fox
+        // cam.entity.add_component(new CameraOrbit(fox, 0.2));
         cam.entity.add_component(new CameraFreeLook(fox));
 
         // draw a grid at the origin
