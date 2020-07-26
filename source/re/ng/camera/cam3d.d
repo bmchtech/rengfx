@@ -184,7 +184,6 @@ class CameraThirdPerson : CameraFollow3D {
         enum MOVE_LEFT = 3;
         enum MOVE_UP = 4;
         enum MOVE_DOWN = 5;
-        Vector2 mouse_delta = Vector2(0, 0);
 
         auto npos_x = transform.position.x + (sin(_angle.x) * direction[MOVE_BACK] - sin(
                 _angle.x) * direction[MOVE_FRONT] - cos(
@@ -199,8 +198,8 @@ class CameraThirdPerson : CameraFollow3D {
                 _angle.x) * direction[MOVE_LEFT] - sin(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
 
         // CAMDATA orientation calculation
-        _angle.x = _angle.x + (mouse_delta.x * -look_sensitivity);
-        _angle.y = _angle.y + (mouse_delta.y * -look_sensitivity);
+        _angle.x = _angle.x + (Input.mouse_delta.x * -look_sensitivity);
+        _angle.y = _angle.y + (Input.mouse_delta.y * -look_sensitivity);
 
         // Angle clamp
         if (_angle.y > third_person_min_clamp * C_DEG2RAD)
