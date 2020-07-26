@@ -11,7 +11,7 @@ static import raylib;
 
 class PlayScene : Scene2D {
     override void on_start() {
-        clear_color = Colors.LIGHTGRAY;
+        Tweener.tween(clear_color, Colors.DARKGRAY, Colors.LIGHTGRAY, 2, &Ease.QuadIn);
 
         auto player = create_entity("player", Vector2(20, 20));
         player.add_component(new ColorRect(Vector2(8, 8), Colors.BLUE));
@@ -23,5 +23,7 @@ class PlayScene : Scene2D {
         turret.add_component!LogicController();
         turret.add_component!ShapeBody();
         turret.add_component!AiPlayer();
+
+        Tweener.tween(turret.position.x, 80, 20, 4, &Ease.QuadIn, 2);
     }
 }
