@@ -4,6 +4,7 @@ import re;
 import re.gfx;
 import re.gfx.shapes.cube;
 import re.gfx.shapes.grid;
+import re.ng.camera;
 import re.math;
 static import raylib;
 
@@ -21,16 +22,16 @@ class PlayScene : Scene3D {
         glitch_postproc.enabled = false;
         postprocessors ~= glitch_postproc;
 
-        auto cam = &camera;
-        cam.position = Vector3(0, 10, 10);
-        camera.target = Vector3(0, 0, 0);
-        camera.up = Vector3(0, 1, 0);
-        camera.fovy = (C_PI_4) * C_RAD2DEG; // 45 deg
-        camera.type = CameraType.CAMERA_PERSPECTIVE;
-        raylib.SetCameraMode(camera, raylib.CameraMode.CAMERA_ORBITAL);
+        cam.entity.position = Vector3(0, 10, 10);
+        cam.camera.target = Vector3(0, 0, 0);
+        cam.camera.up = Vector3(0, 1, 0);
+        cam.camera.fovy = (C_PI_4) * C_RAD2DEG; // 45 deg
+        cam.camera.type = CameraType.CAMERA_PERSPECTIVE;
 
         auto block = create_entity("block", Vector3(0, 0, 0));
         auto cube = block.add_component(new Cube(Vector3(2, 2, 2)));
+
+        camera_nt.add_component(new CameraOrbit(block, 0.5));
 
         // enable an example shader on cube
         auto cross_stitch = Effect(Core.content.load_shader(null,
