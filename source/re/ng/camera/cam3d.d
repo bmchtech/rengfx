@@ -113,6 +113,7 @@ abstract class CameraFollow3D : Component, Updatable {
 
     override void setup() {
         cam = entity.get_component!SceneCamera3D();
+        cam.look_at(target); // start by looking at the target
 
         auto to_target = target.position - entity.position;
 
@@ -151,8 +152,9 @@ class CameraOrbit : CameraFollow3D {
     }
 }
 
+/// third person look camera
 class CameraThirdPerson : CameraFollow3D {
-    import re.input : Keys, Input, VirtualButton;
+    import re.input : Keys, Input;
 
     mixin Reflect;
     private Vector2 _angle; // xz plane camera angle
@@ -217,7 +219,7 @@ class CameraThirdPerson : CameraFollow3D {
             _angle.y = third_person_max_clamp * C_DEG2RAD;
 
         // CAMDATA zoom
-        // _target_dist -= (mouseWheelMove * CAMERA_MOUSE_SCROLL_SENSITIVITY);
+        // _target_dist -= (wheel_delta * CAMERA_MOUSE_SCROLL_SENSITIVITY);
 
         // CAMDATA distance clamp
         if (_target_dist < third_person_dist)
@@ -234,5 +236,122 @@ class CameraThirdPerson : CameraFollow3D {
         npos_z = cos(_angle.x) * _target_dist * cos(_angle.y) + target.transform.position.z;
 
         transform.position = Vector3(npos_x, npos_y, npos_z);
+    }
+}
+
+/// free-look camera
+class CameraFreeLook : CameraFollow3D {
+    import re.input : Keys, MouseButton, Input;
+
+    mixin Reflect;
+    private Vector2 _angle; // xz plane camera angle
+    // public float move_sensitivity = ;
+    public float look_sensitivity = 0.01;
+    public float zoom_sensitivity = 1.5;
+    public float smooth_zoom_sensitivity = 0.05;
+    protected enum free_min_clamp = 85;
+    protected enum free_max_clamp = -85;
+    protected enum free_dist_min_clamp = 0.3;
+    protected enum free_dist_max_clamp = 120;
+    protected enum free_pan_divider = 5.1;
+
+    this(Entity target) {
+        super(target);
+    }
+
+    // based on https://github.com/raysan5/raylib/blob/6fa6757a8bf90d4b2fd0ce82dace7c7223635efa/src/camera.h#L314
+    void update() {
+        auto npos_x = transform.position.x;
+        auto npos_y = transform.position.y;
+        auto npos_z = transform.position.z;
+
+        auto wheel_delta = Input.scroll_delta();
+        auto mouse_delta = Input.mouse_delta;
+
+        auto key_pan = Input.is_mouse_down(MouseButton.MOUSE_RIGHT_BUTTON);
+        auto key_alternate = !Input.is_key_down(Keys.KEY_LEFT_SHIFT);
+        auto key_smooth = Input.is_key_down(Keys.KEY_LEFT_CONTROL);
+
+        auto tpos_x = cam.camera.target.x;
+        auto tpos_y = cam.camera.target.y;
+        auto tpos_z = cam.camera.target.z;
+
+        // Camera zoom
+        if ((_target_dist < free_dist_max_clamp) && (wheel_delta < 0)) {
+            _target_dist -= (wheel_delta * zoom_sensitivity);
+            if (_target_dist > free_dist_max_clamp)
+                _target_dist = free_dist_max_clamp;
+        }  // Camera looking down
+        else if ((entity.position.y > tpos_y) && (_target_dist == free_dist_max_clamp)
+                && (wheel_delta < 0)) {
+            tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
+            tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
+            tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
+        } else if ((entity.position.y > tpos_y) && (tpos_y >= 0)) {
+            tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
+            tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
+            tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
+
+            // if (tpos_y < 0) tpos_y = -0.001;
+        } else if ((entity.position.y > tpos_y) && (tpos_y < 0) && (wheel_delta > 0)) {
+            _target_dist -= (wheel_delta * zoom_sensitivity);
+            if (_target_dist < free_dist_min_clamp)
+                _target_dist = free_dist_min_clamp;
+        }  // Camera looking up
+        else if ((entity.position.y < tpos_y) && (_target_dist == free_dist_max_clamp)
+                && (wheel_delta < 0)) {
+            tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
+            tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
+            tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
+        } else if ((entity.position.y < tpos_y) && (tpos_y <= 0)) {
+            tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
+            tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
+            tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
+
+            // if (tpos_y > 0) tpos_y = 0.001;
+        } else if ((entity.position.y < tpos_y) && (tpos_y > 0) && (wheel_delta > 0)) {
+            _target_dist -= (wheel_delta * zoom_sensitivity);
+            if (_target_dist < free_dist_min_clamp)
+                _target_dist = free_dist_min_clamp;
+        }
+
+        // Input keys checks
+        if (key_pan) {
+            if (key_alternate) // Alternative key behaviour
+            {
+                if (key_smooth) {
+                    // Camera smooth zoom
+                    _target_dist += (mouse_delta.y * smooth_zoom_sensitivity);
+                } else {
+                    // Camera rotation
+                    _angle.x += mouse_delta.x * -look_sensitivity;
+                    _angle.y += mouse_delta.y * -look_sensitivity;
+
+                    // Angle clamp
+                    if (_angle.y > free_min_clamp * C_DEG2RAD)
+                        _angle.y = free_min_clamp * C_DEG2RAD;
+                    else if (_angle.y < free_max_clamp * C_DEG2RAD)
+                        _angle.y = free_max_clamp * C_DEG2RAD;
+                }
+            } else {
+                // Camera panning
+                tpos_x += ((mouse_delta.x * look_sensitivity) * cos(_angle.x) + (
+                        mouse_delta.y * look_sensitivity) * sin(_angle.x) * sin(_angle.y)) * (
+                        _target_dist / free_pan_divider);
+                tpos_y += ((mouse_delta.y * look_sensitivity) * cos(_angle.y)) * (
+                        _target_dist / free_pan_divider);
+                tpos_z += ((mouse_delta.x * -look_sensitivity) * sin(_angle.x) + (
+                        mouse_delta.y * look_sensitivity) * cos(_angle.x) * sin(_angle.y)) * (
+                        _target_dist / free_pan_divider);
+            }
+        }
+
+        // Update camera position with changes
+        npos_x = -sin(_angle.x) * _target_dist * cos(_angle.y) + tpos_x;
+        npos_y = -sin(_angle.y) * _target_dist + tpos_y;
+        npos_z = -cos(_angle.x) * _target_dist * cos(_angle.y) + tpos_z;
+
+        transform.position = Vector3(npos_x, npos_y, npos_z);
+        cam.camera.target = Vector3(tpos_x, tpos_y, tpos_z);
     }
 }
