@@ -14,4 +14,8 @@ public {
     // util
     import re.util.logger;
     import re.util.rng;
+
+    // tweens
+    import re.util.tweens.ease;
+    import re.util.tweens.tween;
 }
