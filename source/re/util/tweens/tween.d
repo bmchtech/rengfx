@@ -21,16 +21,18 @@ class Tween(T) : ITween {
     public const(float) from;
     public const(float) to;
     public const(float) duration;
+    public const(float) delay;
     public const(EaseFunction) ease;
     private float elapsed = 0;
     private TweenState _state;
 
-    this(T* data, T from, T to, float duration, EaseFunction ease) {
+    this(T* data, T from, T to, float duration, EaseFunction ease, float delay = 0) {
         this._data = data;
         this.from = cast(float) from;
         this.to = cast(float) to;
         this.duration = duration;
         this.ease = ease;
+        this.delay = delay;
     }
 
     @property TweenState state() {
@@ -41,34 +43,51 @@ class Tween(T) : ITween {
         if (_state == TweenState.Paused)
             return;
 
+        import std.algorithm.comparison : clamp;
+
         elapsed += dt;
+
+        // check delay
+        if (elapsed < delay)
+            return;
+
+        auto run_time = elapsed - delay;
+
+        // clamp the elapsed time (t) value
+        auto t = clamp(run_time, 0, duration);
         // get value from function
-        immutable auto v = ease(elapsed, from, to - from, duration);
+        immutable auto v = ease(t, from, to - from, duration);
+
         // set the value of our data pointer
         *_data = cast(T) v;
-        if (elapsed >= duration) {
+        if (run_time >= duration) {
             _state = TweenState.Complete;
         }
+        // import std.stdio : writefln;
+
+        // writefln("F: %s, T: %s, E: %s, V: %s", from, to, run_time, v);
     }
 }
 
 /// utility class for starting tweens
 class Tweener {
     public static ITween[] tween(T)(ref T data, T from, T to, float duration,
-            EaseFunction ease, bool attach = true) {
+            EaseFunction ease, float delay = 0, bool attach = true) {
         import re.core : Core;
 
         ITween[] res;
         static if (is(T == float)) {
-            res ~= [new Tween!float(&data, from, to, duration, ease)];
+            res ~= [new Tween!float(&data, from, to, duration, ease, delay)];
         } else static if (is(T == int)) {
-            res ~= [new Tween!int(&data, from, to, duration, ease)];
+            res ~= [new Tween!int(&data, from, to, duration, ease, delay)];
         } else static if (is(T == Color)) {
             res ~= [
-                new Tween!ubyte(&data.r, from.r, to.r, duration, ease),
-                new Tween!ubyte(&data.g, from.g, to.g, duration, ease),
-                new Tween!ubyte(&data.b, from.b, to.b, duration, ease),
-                new Tween!ubyte(&data.a, from.a, to.a, duration, ease),
+                new Tween!ubyte(&data.r, from.r, to.r, duration, ease, delay),
+                new Tween!ubyte(&data.g, from.g, to.g, duration, ease,
+                        delay),
+                new Tween!ubyte(&data.b, from.b, to.b, duration, ease,
+                        delay),
+                new Tween!ubyte(&data.a, from.a, to.a, duration, ease, delay),
             ];
         } else {
             assert(0, "tweening this type is not supported");
@@ -107,7 +126,7 @@ unittest {
     int data = start;
     int goal = 100;
     float duration = 1;
-    auto tw = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, false)[0];
+    auto tw = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, 0, false)[0];
     assert(data == start, "tween did not match start");
     tw.update(duration);
     assert(data == goal, format("tween did not match goal (was %f)", data));
@@ -121,7 +140,7 @@ unittest {
     Color data = start;
     Color goal = Colors.RAYWHITE;
     float duration = 1;
-    auto tweens = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, false);
+    auto tweens = Tweener.tween(data, start, goal, duration, &Ease.LinearNone, 0, false);
     // auto tw_r = new Tween!ubyte(&data.r, start.r, goal.r, duration, &Ease.LinearNone);
     // auto tw_g = new Tween!ubyte(&data.g, start.g, goal.g, duration, &Ease.LinearNone);
     // auto tw_b = new Tween!ubyte(&data.b, start.b, goal.b, duration, &Ease.LinearNone);
