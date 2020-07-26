@@ -10,6 +10,7 @@ static import raylib;
 
 /// represents a camera for a 2D scene
 class SceneCamera2D : SceneCamera {
+    mixin Reflect;
     private raylib.Camera2D _camera;
 
     this() {
@@ -37,6 +38,7 @@ class SceneCamera2D : SceneCamera {
 }
 
 class CameraFollow2D : Component, Updatable {
+    mixin Reflect;
     /// the target entity to follow
     public Entity target;
     public float lerp;
