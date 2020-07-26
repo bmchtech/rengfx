@@ -98,31 +98,40 @@ class SceneCamera3D : SceneCamera {
     }
 }
 
-/// controls a camera by making it orbit an entity
-class CameraOrbit : Component, Updatable {
+abstract class CameraFollow3D : Component, Updatable {
     mixin Reflect;
-    // private SceneCamera3D cam;
-    /// the target entity to orbit
+    protected SceneCamera3D cam;
+    /// the target entity
     public Entity target;
-    /// the orbit speed, in radians per second
-    public float speed;
-    private Vector2 _angle; // xz plane camera angle
-    private float _target_dist;
-    private enum third_person_dist = 1.2f;
+    protected enum third_person_dist = 1.2f;
+    protected Vector2 _angle; // xz plane camera angle
+    protected float _target_dist;
 
-    this(Entity target, float speed) {
+    this(Entity target) {
         this.target = target;
-        this.speed = speed;
     }
 
     override void setup() {
-        // cam = entity.get_component!SceneCamera3D();
+        cam = entity.get_component!SceneCamera3D();
+
         auto to_target = target.position - entity.position;
 
         _target_dist = raymath.Vector3Length(to_target);
         _angle = Vector2(atan2(to_target.x, to_target.z), // Camera angle in plane XZ (0 aligned with Z, move positive CCW)
                 atan2(to_target.y,
                     sqrt(to_target.x * to_target.x + to_target.z * to_target.z))); // // Camera angle in plane XY (0 aligned with X, move positive CW)
+    }
+}
+
+/// controls a camera by making it orbit an entity
+class CameraOrbit : CameraFollow3D {
+    mixin Reflect;
+    /// the orbit speed, in radians per second
+    public float speed;
+
+    this(Entity target, float speed) {
+        super(target);
+        this.speed = speed;
     }
 
     /// based on https://github.com/raysan5/raylib/blob/6fa6757a8bf90d4b2fd0ce82dace7c7223635efa/src/camera.h#L400
@@ -139,5 +148,81 @@ class CameraOrbit : Component, Updatable {
                 _angle.y) * _target_dist * sin(_angle.y) + target.position.y;
         auto npos_z = cos(_angle.x) * _target_dist * cos(_angle.y) + target.position.z;
         entity.position = Vector3(npos_x, npos_y, npos_z);
+    }
+}
+
+class CameraThirdPerson : CameraFollow3D {
+    import re.input : Keys, Input, VirtualButton;
+
+    mixin Reflect;
+    private Vector2 _angle; // xz plane camera angle
+    public float move_sensitivity = 20;
+    public float look_sensitivity = 0.003;
+    protected enum third_person_min_clamp = 5;
+    protected enum third_person_max_clamp = -85;
+
+    this(Entity target) {
+        super(target);
+    }
+
+    // based on https://github.com/raysan5/raylib/blob/6fa6757a8bf90d4b2fd0ce82dace7c7223635efa/src/camera.h#L458
+    void update() {
+        // bool direction[6] = {
+        //     IsKeyDown(CAMERA.moveControl[MOVE_FRONT]), IsKeyDown(CAMERA.moveControl[MOVE_BACK]),
+        //         IsKeyDown(CAMERA.moveControl[MOVE_RIGHT]), IsKeyDown(CAMERA.moveControl[MOVE_LEFT]),
+        //         IsKeyDown(CAMERA.moveControl[MOVE_UP]), IsKeyDown(CAMERA.moveControl[MOVE_DOWN])
+        // };
+        // bool[6] direction = [false, false, false, false, false, false];
+        bool[6] direction = [
+            Input.is_key_down(Keys.KEY_W), Input.is_key_down(Keys.KEY_S),
+            Input.is_key_down(Keys.KEY_D), Input.is_key_down(Keys.KEY_A),
+            Input.is_key_down(Keys.KEY_E), Input.is_key_down(Keys.KEY_Q)
+        ];
+        enum MOVE_FRONT = 0;
+        enum MOVE_BACK = 1;
+        enum MOVE_RIGHT = 2;
+        enum MOVE_LEFT = 3;
+        enum MOVE_UP = 4;
+        enum MOVE_DOWN = 5;
+        Vector2 mouse_delta = Vector2(0, 0);
+
+        auto npos_x = transform.position.x + (sin(_angle.x) * direction[MOVE_BACK] - sin(
+                _angle.x) * direction[MOVE_FRONT] - cos(
+                _angle.x) * direction[MOVE_LEFT] + cos(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
+
+        auto npos_y = transform.position.y + (sin(_angle.y) * direction[MOVE_FRONT] - sin(
+                _angle.y) * direction[MOVE_BACK] + 1.0f * direction[MOVE_UP]
+                - 1.0f * direction[MOVE_DOWN]) / move_sensitivity;
+
+        auto npos_z = transform.position.z + (cos(_angle.x) * direction[MOVE_BACK] - cos(
+                _angle.x) * direction[MOVE_FRONT] + sin(
+                _angle.x) * direction[MOVE_LEFT] - sin(_angle.x) * direction[MOVE_RIGHT]) / move_sensitivity;
+
+        // CAMDATA orientation calculation
+        _angle.x = _angle.x + (mouse_delta.x * -look_sensitivity);
+        _angle.y = _angle.y + (mouse_delta.y * -look_sensitivity);
+
+        // Angle clamp
+        if (_angle.y > third_person_min_clamp * C_DEG2RAD)
+            _angle.y = third_person_min_clamp * C_DEG2RAD;
+        else if (_angle.y < third_person_max_clamp * C_DEG2RAD)
+            _angle.y = third_person_max_clamp * C_DEG2RAD;
+
+        // CAMDATA zoom
+        // _target_dist -= (mouseWheelMove * CAMERA_MOUSE_SCROLL_SENSITIVITY);
+
+        // CAMDATA distance clamp
+        if (_target_dist < third_person_dist)
+            _target_dist = third_person_dist;
+
+        // TODO: It seems CAMDATA.position is not correctly updated or some rounding issue makes the CAMDATA move straight to target.transform.position...
+        npos_x = sin(_angle.x) * _target_dist * cos(_angle.y) + target.transform.position.x;
+
+        if (_angle.y <= 0.0f)
+            npos_y = sin(_angle.y) * _target_dist * sin(_angle.y) + target.transform.position.y;
+        else
+            npos_y = -sin(_angle.y) * _target_dist * sin(_angle.y) + target.transform.position.y;
+
+        npos_z = cos(_angle.x) * _target_dist * cos(_angle.y) + target.transform.position.z;
     }
 }
