@@ -9,6 +9,7 @@ static import raylib;
 
 /// represents a 3d model
 class Model3D : Component, Renderable3D {
+    mixin Reflect;
     /// the model
     public Model model;
     private Effect _effect;

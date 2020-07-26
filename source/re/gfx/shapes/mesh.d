@@ -8,6 +8,7 @@ static import raylib;
 
 /// renders a model given a mesh. should only be used for procedural meshes; use Model3D for models instead
 abstract class RenderableMesh : Component, Renderable3D {
+    mixin Reflect;
     /// effect
     private Effect _effect;
     private Mesh _mesh;
