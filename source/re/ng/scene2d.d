@@ -12,14 +12,12 @@ import re.math;
 abstract class Scene2D : Scene {
     /// the 2d scene camera
     public SceneCamera2D cam;
-    /// the camera entity
-    public Entity camera_nt;
 
     override void setup() {
         super.setup();
 
         // create a camera entity
-        camera_nt = create_entity("camera");
+        auto camera_nt = create_entity("camera");
         cam = camera_nt.add_component(new SceneCamera2D());
     }
 
