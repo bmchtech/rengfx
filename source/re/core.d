@@ -48,7 +48,7 @@ abstract class Core {
 
     version (unittest) {
         /// the frame limit (used for testing)
-        public static int frame_limit;
+        public static int frame_limit = 60;
     }
 
     /// whether graphics should be disabled
@@ -217,6 +217,7 @@ abstract class Core {
 unittest {
     class Game : Core {
         this() {
+            headless = true;
             super(1280, 720, string.init);
         }
 
@@ -225,8 +226,6 @@ unittest {
         }
     }
 
-    Core.headless = true;
-    Core.frame_limit = 60;
     auto game = new Game();
     game.run();
     game.exit();
