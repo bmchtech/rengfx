@@ -4,10 +4,16 @@ authors "xdrie"
 copyright "Copyright © 2020, xdrie"
 license "proprietary"
 dependency "datefmt" version="~>1.0.4"
-dependency "silly" version="~>1.0.2"
 dependency "dray" version=">=3.0.0-patch4"
 dependency "jar" version="~>0.1.0"
 dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
-targetType "library"
 libs "raylib"
+
+configuration "library" {
+    targetType "library"
+}
+
+configuration "unittest" {
+    dependency "silly" version="~>1.0.2"
+}
