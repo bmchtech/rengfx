@@ -209,3 +209,34 @@ unittest {
     Core.load_scenes([scene]);
     assert(Core.get_scene!TestScene == scene);
 }
+
+/// create a test game, with a test scene, and update it
+@("scene-full")
+unittest {
+    static class TestScene : Scene2D {
+        class Seed : Component {
+        }
+
+        override void on_start() {
+            // create a basic entity
+            auto nt = create_entity("apple");
+            // add a basic component
+            nt.add_component(new Seed());
+        }
+    }
+
+    static class Game : Core {
+        this() {
+            headless = true;
+            super(1280, 720, string.init);
+        }
+
+        override void initialize() {
+            load_scenes([new TestScene()]);
+        }
+    }
+
+    auto game = new Game();
+    game.run();
+    game.exit();
+}
