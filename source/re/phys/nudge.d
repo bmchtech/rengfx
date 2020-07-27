@@ -14,9 +14,10 @@ class NudgeManager : Manager {
     /// whether this manager is currently enabled
     public static bool installed = false;
 
-    private static const uint max_body_count = 2048;
-    private static const uint max_box_count = 2048;
-    private static const uint max_sphere_count = 2048;
+    private enum body_limit = 2048;
+    private static const uint max_body_count = body_limit;
+    private static const uint max_box_count = body_limit;
+    private static const uint max_sphere_count = body_limit;
 
     private static const nudge.Transform identity_transform = nudge.Transform([
             0, 0, 0
@@ -33,48 +34,58 @@ class NudgeManager : Manager {
     public static void install() {
         import core.stdc.stdlib : malloc;
 
+        auto bytes_alloced = 0;
+
+        void* alloc_mem(size_t size) {
+            bytes_alloced += size;
+            return malloc(size);
+        }
+
         // allocate stuff
+        // TODO: support dynamic reallocation: start with a small body count and then increase
+
         // Allocate memory for simulation arena.
         arena.size = 64 * 1024 * 1024;
-        arena.data = malloc(arena.size);
+        arena.data = alloc_mem(arena.size);
 
         // Allocate memory for bodies, colliders, and contacts.
         active_bodies.capacity = max_box_count;
-        active_bodies.indices = cast(ushort*)(malloc(ushort.sizeof * max_body_count));
+        active_bodies.indices = cast(ushort*)(alloc_mem(ushort.sizeof * max_body_count));
 
-        bodies.idle_counters = cast(ubyte*)(malloc(ubyte.sizeof * max_body_count));
-        bodies.transforms = cast(nudge.Transform*)(malloc(nudge.Transform.sizeof * max_body_count));
+        bodies.idle_counters = cast(ubyte*)(alloc_mem(ubyte.sizeof * max_body_count));
+        bodies.transforms = cast(nudge.Transform*)(
+                alloc_mem(nudge.Transform.sizeof * max_body_count));
         bodies.momentum = cast(nudge.BodyMomentum*)(
-                malloc(nudge.BodyMomentum.sizeof * max_body_count));
+                alloc_mem(nudge.BodyMomentum.sizeof * max_body_count));
         bodies.properties = cast(nudge.BodyProperties*)(
-                malloc(nudge.BodyProperties.sizeof * max_body_count));
+                alloc_mem(nudge.BodyProperties.sizeof * max_body_count));
 
         colliders.boxes.data = cast(nudge.BoxCollider*)(
-                malloc(nudge.BoxCollider.sizeof * max_box_count));
-        colliders.boxes.tags = cast(uint*)(malloc(ushort.sizeof * max_box_count));
+                alloc_mem(nudge.BoxCollider.sizeof * max_box_count));
+        colliders.boxes.tags = cast(uint*)(alloc_mem(ushort.sizeof * max_box_count));
         colliders.boxes.transforms = cast(nudge.Transform*)(
-                malloc(nudge.Transform.sizeof * max_box_count));
+                alloc_mem(nudge.Transform.sizeof * max_box_count));
 
         colliders.spheres.data = cast(nudge.SphereCollider*)(
-                malloc(nudge.SphereCollider.sizeof * max_sphere_count));
-        colliders.spheres.tags = cast(uint*)(malloc(ushort.sizeof * max_sphere_count));
+                alloc_mem(nudge.SphereCollider.sizeof * max_sphere_count));
+        colliders.spheres.tags = cast(uint*)(alloc_mem(ushort.sizeof * max_sphere_count));
         colliders.spheres.transforms = cast(nudge.Transform*)(
-                malloc(nudge.Transform.sizeof * max_sphere_count));
+                alloc_mem(nudge.Transform.sizeof * max_sphere_count));
 
         contact_data.capacity = max_body_count * 64;
         contact_data.bodies = cast(nudge.BodyPair*)(
-                malloc(nudge.BodyPair.sizeof * contact_data.capacity));
+                alloc_mem(nudge.BodyPair.sizeof * contact_data.capacity));
         contact_data.data = cast(nudge.Contact*)(
-                malloc(nudge.Contact.sizeof * contact_data.capacity));
-        contact_data.tags = cast(ulong*)(malloc(ulong.sizeof * contact_data.capacity));
-        contact_data.sleeping_pairs = cast(uint*)(malloc(uint.sizeof * contact_data.capacity));
+                alloc_mem(nudge.Contact.sizeof * contact_data.capacity));
+        contact_data.tags = cast(ulong*)(alloc_mem(ulong.sizeof * contact_data.capacity));
+        contact_data.sleeping_pairs = cast(uint*)(alloc_mem(uint.sizeof * contact_data.capacity));
 
         contact_cache.capacity = max_body_count * 64;
         contact_cache.data = cast(nudge.CachedContactImpulse*)(
-                malloc(nudge.CachedContactImpulse.sizeof * contact_cache.capacity));
-        contact_cache.tags = cast(ulong*)(malloc(ulong.sizeof * contact_cache.capacity));
+                alloc_mem(nudge.CachedContactImpulse.sizeof * contact_cache.capacity));
+        contact_cache.tags = cast(ulong*)(alloc_mem(ulong.sizeof * contact_cache.capacity));
 
-        Core.log.info(format("allocating %s bytes of memory for NUDGE physics", "??"));
+        Core.log.info(format("allocating %s bytes of memory for NUDGE physics", bytes_alloced));
 
         Core.managers ~= new NudgeManager();
     }
