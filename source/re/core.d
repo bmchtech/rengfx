@@ -225,5 +225,7 @@ unittest {
 
     auto game = new Game();
     game.run();
-    game.exit();
+    game.destroy(); // clean up
+
+    assert(game.scenes.length == 0, "scenes were not removed after Game cleanup");
 }
