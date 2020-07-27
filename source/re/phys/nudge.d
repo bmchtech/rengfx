@@ -30,7 +30,9 @@ class NudgeManager : Manager {
 
     /// enable a nudge manager in a scene
     public static void install(Scene scene) {
-        scene.managers ~= new NudgeManager();
+        auto manager = new NudgeManager();
+        manager.allocate();
+        scene.managers ~= manager;
     }
 
     /// allocate resources to run physics
