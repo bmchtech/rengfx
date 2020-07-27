@@ -213,6 +213,8 @@ unittest {
 /// create a test game, with a test scene, and update it
 @("scene-full")
 unittest {
+    import re.util.test : TestGame;
+
     static class TestScene : Scene2D {
         class Seed : Component {
         }
@@ -225,12 +227,7 @@ unittest {
         }
     }
 
-    static class Game : Core {
-        this() {
-            headless = true;
-            super(1280, 720, string.init);
-        }
-
+    class Game : TestGame {
         override void initialize() {
             load_scenes([new TestScene()]);
         }
