@@ -1,6 +1,13 @@
+dist: focal
 language: d
 d:
  - dmd-2.093.0
+
+addons:
+  apt:
+    packages:
+    - xorg-dev # X11 dev
+    - xvfb # virtual framebuffer
 
 install:
   - git clone --recursive https://github.com/xdrie/raylib.git # get raylib
