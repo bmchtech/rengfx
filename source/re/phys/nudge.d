@@ -91,7 +91,7 @@ version (physics) {
         }
     }
 
-    @("physics-nudge-basic")
+    @("phys-nudge-basic")
     unittest {
         auto mgr = new NudgeManager();
 
@@ -102,8 +102,24 @@ version (physics) {
         mgr.destroy();
     }
 
-    @("physics-nudge-scene")
+    @("phys-nudge-scene")
     unittest {
+        import re.ng.scene;
+        import re.util.test : test_scene;
 
+        class TestScene : Scene2D {
+            override void on_start() {
+                auto nt = create_entity("block");
+                // add nudge physics
+                nt.add_component(new NudgeBody());
+            }
+        }
+
+        auto test = test_scene(new TestScene());
+        test.game.run();
+
+        // check conditions
+
+        test.game.destroy();
     }
 }

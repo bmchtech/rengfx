@@ -125,3 +125,27 @@ class KinBody2D : Component, Updatable {
         transform.position2 = transform.position2 + pos_delta;
     }
 }
+
+@("phys-kin2d")
+unittest {
+    import re.ng.scene;
+    import re.util.test : test_scene;
+
+    class TestScene : Scene2D {
+        override void on_start() {
+            auto nt = create_entity("block", Vector2(0, 0));
+            // add kin body
+            auto bod = new KinBody2D();
+            bod.accel = Vector2(0, 9.8);
+            nt.add_component(bod);
+        }
+    }
+
+    auto test = test_scene(new TestScene());
+    test.game.run();
+
+    // check conditions
+    assert(test.scene.get_entity("block").get_component!KinBody2D().pos.y > 0, "KinBody2D did not move");
+
+    test.game.destroy();
+}
