@@ -215,12 +215,9 @@ abstract class Core {
 
 @("core-basic")
 unittest {
-    class Game : Core {
-        this() {
-            headless = true;
-            super(1280, 720, string.init);
-        }
+    import re.util.test : TestGame;
 
+    class Game : TestGame {
         override void initialize() {
             // nothing much
         }
