@@ -6,6 +6,8 @@ import re.ecs;
 import re.gfx;
 import re.math;
 import re.ng.manager;
+import std.typecons;
+import std.range;
 static import raylib;
 
 public {
@@ -159,13 +161,15 @@ abstract class Scene {
         }
     }
 
-    public static T get_manager(T)() {
+    public Nullable!T get_manager(T)() {
         import std.algorithm.searching : find;
 
-        // find a scene matching the type
+        // find a manager matching the type
         auto matches = managers.find!(x => (cast(T) x) !is null);
-        assert(matches.length > 0, "no matching manager was found");
-        return cast(T) matches.front;
+        if (matches.length > 0) {
+            return Nullable!T(cast(T) matches.front);
+        }
+        return Nullable!T.init;
     }
 
     // - ecs
