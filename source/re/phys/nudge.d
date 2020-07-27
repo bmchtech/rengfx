@@ -4,8 +4,10 @@ import re.ecs.component;
 import re.ecs.updatable;
 import re.math;
 import re.time;
+import re.core;
 import re.ng.manager;
 import std.math;
+import std.string : format;
 static import nudge;
 
 class NudgeManager : Manager {
@@ -29,7 +31,6 @@ class NudgeManager : Manager {
 
     /// enable this manager
     public static void install() {
-        import re.core : Core;
         import core.stdc.stdlib : malloc;
 
         // allocate stuff
@@ -72,6 +73,8 @@ class NudgeManager : Manager {
         contact_cache.data = cast(nudge.CachedContactImpulse*)(
                 malloc(nudge.CachedContactImpulse.sizeof * contact_cache.capacity));
         contact_cache.tags = cast(ulong*)(malloc(ulong.sizeof * contact_cache.capacity));
+
+        Core.log.info(format("allocating %s bytes of memory for NUDGE physics", "??"));
 
         Core.managers ~= new NudgeManager();
     }
