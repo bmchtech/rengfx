@@ -23,7 +23,7 @@ install:
   - pushd raylib/src && make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc) && sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE && popd
   - pip3 install --user codecov
 script:
-  - dub test -b unittest-cov --compiler=${DC}
+  - dub test --coverage -b unittest-cov --compiler=${DC}
 after_success:
   - ls # make sure coverage is generated
   - bash <(curl -s https://codecov.io/bash)
