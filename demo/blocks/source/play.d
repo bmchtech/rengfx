@@ -13,7 +13,7 @@ class PlayScene : Scene3D {
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
-
+// create a block, and assign it a physics object
 
         // draw a grid at the origin
         auto grid = create_entity("grid");
