@@ -47,6 +47,11 @@ abstract class Core {
     /// whether the game is running
     public static bool running;
 
+    version (unittest) {
+        /// the frame limit (used for testing)
+        public static int frame_limit = 60;
+    }
+
     /// whether graphics should be disabled
     public static bool headless = false;
 
@@ -93,10 +98,18 @@ abstract class Core {
         running = true;
         // start the game loop
         while (running) {
-            running = !raylib.WindowShouldClose();
+            if (!headless) {
+                running = !raylib.WindowShouldClose();
+            }
 
             update();
             draw();
+
+            version (unittest) {
+                if (Time.frame_count >= frame_limit) {
+                    running = false;
+                }
+            }
         }
     }
 
@@ -143,7 +156,6 @@ abstract class Core {
             debugger.render();
         }
         raylib.EndDrawing();
-
     }
 
     public static T get_scene(T)() {
@@ -205,4 +217,21 @@ abstract class Core {
             window.destroy();
         }
     }
+}
+
+@("core-basic")
+unittest {
+    import re.util.test : TestGame;
+
+    class Game : TestGame {
+        override void initialize() {
+            // nothing much
+        }
+    }
+
+    auto game = new Game();
+    game.run();
+    game.destroy(); // clean up
+
+    assert(game.scenes.length == 0, "scenes were not removed after Game cleanup");
 }
