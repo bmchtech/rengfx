@@ -65,6 +65,7 @@ version (physics) {
         }
     }
 
+    /// represents a physics body that uses the nudge physics system
     class NudgeBody : Component, Updatable {
         public uint nudge_body_id;
         private NudgeManager mgr;
@@ -104,7 +105,7 @@ version (physics) {
 
     @("phys-nudge-scene")
     unittest {
-        import re.ng.scene;
+        import re.ng.scene : Scene2D;
         import re.util.test : test_scene;
 
         class TestScene : Scene2D {
