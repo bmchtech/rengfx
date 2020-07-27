@@ -2,6 +2,8 @@
 
 RE ENGINE FX
 
+[![Build Status](https://travis-ci.org/xdrie/rengfx.svg?branch=master)](https://travis-ci.org/xdrie/rengfx)
+
 lightweight, expressive, extensible game engine 
 
 ## features
