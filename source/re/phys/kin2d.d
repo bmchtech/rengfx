@@ -137,7 +137,7 @@ class KinBody2D : Component, Updatable {
 
 @("phys-kin2d")
 unittest {
-    import re.ng.scene;
+    import re.ng.scene : Scene2D;
     import re.util.test : test_scene;
 
     class TestScene : Scene2D {
