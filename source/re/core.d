@@ -122,7 +122,11 @@ abstract class Core {
         if (pause_on_focus_lost && raylib.IsWindowMinimized()) {
             return; // pause
         }
-        Time.update(raylib.GetFrameTime());
+        version (unittest) {
+            Time.update(1f / 60f); // 60 fps
+        } else {
+            Time.update(raylib.GetFrameTime());
+        }
         foreach (manager; managers) {
             manager.update();
         }
