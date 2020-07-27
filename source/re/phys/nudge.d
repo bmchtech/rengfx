@@ -14,14 +14,13 @@ class NudgeManager : Manager {
     /// whether this manager is currently enabled
     public static bool installed = false;
 
-    private enum body_limit = 2048;
-    private static const uint max_body_count = body_limit;
-    private static const uint max_box_count = body_limit;
-    private static const uint max_sphere_count = body_limit;
+    private enum uint body_limit = 2048;
+    private enum uint max_body_count = body_limit;
+    private enum uint max_box_count = body_limit;
+    private enum uint max_sphere_count = body_limit;
 
-    private static const nudge.Transform identity_transform = nudge.Transform([
-            0, 0, 0
-            ], 0, [0.0f, 0.0f, 0.0f, 1.0f]);
+    private enum nudge.Transform identity_transform = nudge.Transform([0, 0, 0],
+                0, [0.0f, 0.0f, 0.0f, 1.0f]);
 
     private static nudge.Arena arena;
     private static nudge.BodyData bodies;
@@ -30,8 +29,19 @@ class NudgeManager : Manager {
     private static nudge.ContactCache contact_cache;
     private static nudge.ActiveBodies active_bodies;
 
+    public static uint body_count;
+
+    // map from body id to component
+    private static NudgeBody[uint] _component_map;
+
     /// enable this manager
     public static void install() {
+        Core.managers ~= new NudgeManager();
+
+    }
+
+    /// allocate resources to run physics
+    public static void allocate() {
         import core.stdc.stdlib : malloc;
 
         auto bytes_alloced = 0;
@@ -85,14 +95,15 @@ class NudgeManager : Manager {
                 alloc_mem(nudge.CachedContactImpulse.sizeof * contact_cache.capacity));
         contact_cache.tags = cast(ulong*)(alloc_mem(ulong.sizeof * contact_cache.capacity));
 
-        Core.log.info(format("allocated %s bytes of memory for NUDGE physics", bytes_alloced));
-
-        Core.managers ~= new NudgeManager();
+        version (unittest) {
+        } else {
+            Core.log.info(format("allocated %s bytes of memory for NUDGE physics", bytes_alloced));
+        }
     }
 
     private void simulate() {
-        static const uint steps = 2;
-        static const uint iterations = 20;
+        enum uint steps = 2;
+        enum uint iterations = 20;
 
         float time_step = 1.0f / (60.0f * cast(float) steps);
 
@@ -153,18 +164,59 @@ class NudgeManager : Manager {
         // TODO: update nudge
         simulate();
     }
+
+    /// register a body, and return the id
+    public static void register_body(NudgeBody new_body) {
+        // get a free ID
+        auto id = body_count;
+        new_body.nudge_body_id = id;
+
+        // store in hash table
+        _component_map[id] = new_body;
+
+        body_count++;
+    }
+
+    public static void unregister_body(NudgeBody rm_body) {
+        auto id = rm_body.nudge_body_id;
+        // empty our slot
+        // TODO: actually handle this
+        // swap to tail
+        auto tail_pos = body_count - 1;
+        if (body_count > 1 && id != tail_pos) {
+
+        }
+    }
 }
 
-class NudgeBody : Component, Updatable {
+abstract class NudgeBody : Component, Updatable {
+    public uint nudge_body_id;
+
     override void setup() {
         // ensure the nudge system is installed
         if (!NudgeManager.installed) {
+            NudgeManager.allocate();
             NudgeManager.install();
         }
+
+        // register with nudge
+        NudgeManager.register_body(this);
     }
 
     void update() {
         // copy data from nudge system
         // we use our body ID to access the nudge system
     }
+
+    override void destroy() {
+        NudgeManager.unregister_body(this);
+    }
+}
+
+@("physics-nudge")
+unittest {
+    // set up mem
+    NudgeManager.allocate();
+
+    // auto bod1 = 
 }
