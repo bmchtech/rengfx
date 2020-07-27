@@ -55,6 +55,7 @@ class KinBody2D : Component, Updatable {
     void update() {
         auto dt = Time.delta_time;
 
+        // apply max velocity
         auto vls = velocity.LengthSquared();
         auto mvls = max_velocity.LengthSquared();
         if (mvls > double.epsilon && vls > mvls) {
@@ -67,27 +68,31 @@ class KinBody2D : Component, Updatable {
         }
 
         // new velocity components
-        auto nvel_x = 0.0;
-        auto nvel_y = 0.0;
+        auto nvel_x = velocity.x;
+        auto nvel_y = velocity.y;
 
-        if (velocity.x > drag.x * dt) {
-            nvel_x = velocity.x - drag.x * dt;
+        // apply acceleration
+        nvel_x += accel.x * dt;
+        nvel_y += accel.y * dt;
+
+        if (nvel_x > drag.x * dt) {
+            nvel_x = nvel_x - drag.x * dt;
         }
 
-        if (velocity.x < -drag.x * dt) {
-            nvel_x = velocity.x + drag.x * dt;
+        if (nvel_x < -drag.x * dt) {
+            nvel_x = nvel_x + drag.x * dt;
         }
 
         if (abs(nvel_x) < drag.x * dt) {
             nvel_x = 0;
         }
 
-        if (velocity.y > drag.y * dt) {
-            nvel_y = velocity.y - drag.y * dt;
+        if (nvel_y > drag.y * dt) {
+            nvel_y = nvel_y - drag.y * dt;
         }
 
-        if (velocity.y < -drag.y * dt) {
-            nvel_y = velocity.y + drag.y * dt;
+        if (nvel_y < -drag.y * dt) {
+            nvel_y = nvel_y + drag.y * dt;
         }
 
         if (abs(nvel_y) < drag.y * dt) {
@@ -98,7 +103,7 @@ class KinBody2D : Component, Updatable {
 
         apply_motion(velocity * dt);
 
-        angular_velocity += angular_accel * dt;
+        // apply max angular
         if (max_angular > 0) {
             if (angular_velocity > max_angular) {
                 angular_velocity = max_angular;
@@ -109,6 +114,10 @@ class KinBody2D : Component, Updatable {
             }
         }
 
+        // apply angular accel
+        angular_velocity += angular_accel * dt;
+
+        // apply angular drag
         if (angular_velocity > angular_drag * dt) {
             angular_velocity -= angular_drag * dt;
         }
@@ -145,7 +154,8 @@ unittest {
     test.game.run();
 
     // check conditions
-    assert(test.scene.get_entity("block").get_component!KinBody2D().pos.y > 0, "KinBody2D did not move");
+    assert(test.scene.get_entity("block").get_component!KinBody2D().pos.y > 0,
+            "KinBody2D did not move");
 
     test.game.destroy();
 }
