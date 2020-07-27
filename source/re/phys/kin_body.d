@@ -6,17 +6,10 @@ import re.math;
 import std.math;
 import re.time;
 
-class PhysicsBody2D : Component {
+class KinBody2D : Component, Updatable {
     mixin Reflect;
     public float mass = 1.0f;
     public Vector2 velocity = Vector2Zero;
-    @property public Vector2 momentum() {
-        return mass * velocity;
-    }
-}
-
-class KinBody2D : PhysicsBody2D, Updatable {
-    mixin Reflect;
     public Vector2 max_velocity = Vector2Zero;
     public Vector2 accel = Vector2Zero;
     public Vector2 drag = Vector2Zero;
@@ -49,6 +42,11 @@ class KinBody2D : PhysicsBody2D, Updatable {
 
     @property public float stdAngle(float value) {
         return angle = -(value - std.math.PI / 2);
+    }
+
+    // misc. getters
+    @property public Vector2 momentum() {
+        return mass * velocity;
     }
 
     override void setup() {
