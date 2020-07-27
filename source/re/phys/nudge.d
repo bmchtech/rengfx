@@ -85,9 +85,73 @@ class NudgeManager : Manager {
                 alloc_mem(nudge.CachedContactImpulse.sizeof * contact_cache.capacity));
         contact_cache.tags = cast(ulong*)(alloc_mem(ulong.sizeof * contact_cache.capacity));
 
-        Core.log.info(format("allocating %s bytes of memory for NUDGE physics", bytes_alloced));
+        Core.log.info(format("allocated %s bytes of memory for NUDGE physics", bytes_alloced));
 
         Core.managers ~= new NudgeManager();
+    }
+
+    private void simulate() {
+        static const uint steps = 2;
+        static const uint iterations = 20;
+
+        float time_step = 1.0f / (60.0f * cast(float) steps);
+
+        for (uint n = 0; n < steps; ++n) {
+            // Setup a temporary memory arena. The same temporary memory is reused each iteration.
+            nudge.Arena temporary = arena;
+
+            // Find contacts.
+            nudge.BodyConnections connections = {}; // NOTE: Custom constraints should be added as body connections.
+            nudge.collide(&active_bodies, &contact_data, bodies, colliders,
+                    connections, temporary);
+
+            // NOTE: Custom contacts can be added here, e.g., against the static environment.
+
+            // Apply gravity and damping.
+            float damping = 1.0f - time_step * 0.25f;
+
+            for (uint i = 0; i < active_bodies.count; ++i) {
+                uint index = active_bodies.indices[i];
+
+                bodies.momentum[index].velocity[1] -= 9.82f * time_step;
+
+                bodies.momentum[index].velocity[0] *= damping;
+                bodies.momentum[index].velocity[1] *= damping;
+                bodies.momentum[index].velocity[2] *= damping;
+
+                bodies.momentum[index].angular_velocity[0] *= damping;
+                bodies.momentum[index].angular_velocity[1] *= damping;
+                bodies.momentum[index].angular_velocity[2] *= damping;
+            }
+
+            // Read previous impulses from contact cache.
+            nudge.ContactImpulseData* contact_impulses = nudge.read_cached_impulses(contact_cache,
+                    contact_data, &temporary);
+
+            // Setup contact constraints and apply the initial impulses.
+            nudge.ContactConstraintData* contact_constraints = nudge.setup_contact_constraints(active_bodies,
+                    contact_data, bodies, contact_impulses, &temporary);
+
+            // Apply contact impulses. Increasing the number of iterations will improve stability.
+            for (uint i = 0; i < iterations; ++i) {
+                nudge.apply_impulses(contact_constraints, bodies);
+                // NOTE: Custom constraint impulses should be applied here.
+            }
+
+            // Update contact impulses.
+            nudge.update_cached_impulses(contact_constraints, contact_impulses);
+
+            // Write the updated contact impulses to the cache.
+            nudge.write_cached_impulses(&contact_cache, contact_data, contact_impulses);
+
+            // Move active bodies.
+            nudge.advance(active_bodies, bodies, time_step);
+        }
+    }
+
+    override void update() {
+        // TODO: update nudge
+        simulate();
     }
 }
 
@@ -100,6 +164,7 @@ class NudgeBody : Component, Updatable {
     }
 
     void update() {
-
+        // copy data from nudge system
+        // we use our body ID to access the nudge system
     }
 }
