@@ -14,6 +14,7 @@ libs "raylib"
 configuration "lib-standard" {
     targetType "library"
     dependency "nudge-d" version=">=0.1.1"
+    versions "physics"
 }
 
 # minimal library, no extra libs
@@ -22,5 +23,12 @@ configuration "lib-minimal" {
 }
 
 configuration "unittest" {
+    # test runner
     dependency "silly" version="~>1.0.2"
+
+    # - test additional features
+
+    # physics
+    versions "physics"
+    dependency "nudge-d" version=">=0.1.1"
 }
