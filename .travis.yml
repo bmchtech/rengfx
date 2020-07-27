@@ -11,7 +11,7 @@ addons:
 
 install:
   - git clone --recursive https://github.com/xdrie/raylib.git # get raylib
-  - pushd raylib && git checkout 3.0.0_patch && popd # get the patched branch
+  - pushd raylib && git checkout 3.0.0_patch && cp -rv raygui/src/*.h src && popd # get the patched branch, and raygui
   - pushd raylib/src && make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc) && sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE && popd
 script:
  - dub test -b unittest-cov --compiler=${DC}
