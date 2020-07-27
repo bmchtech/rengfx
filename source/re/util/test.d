@@ -11,7 +11,7 @@ version (unittest) {
         }
 
         override void initialize() {
-
+            // nothing to do here
         }
     }
 
