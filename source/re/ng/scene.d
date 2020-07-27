@@ -5,6 +5,7 @@ import std.string;
 import re.ecs;
 import re.gfx;
 import re.math;
+import re.ng.manager;
 static import raylib;
 
 public {
@@ -26,6 +27,8 @@ abstract class Scene {
     public CompositeMode composite_mode;
     /// postprocessors effects
     public PostProcessor[] postprocessors;
+    /// updatable managers
+    public Manager[] managers;
 
     /// the mode for compositing a scene onto the display buffer
     public struct CompositeMode {
@@ -146,11 +149,23 @@ abstract class Scene {
         foreach (postprocessor; postprocessors) {
             postprocessor.destroy();
         }
+        foreach (manager; managers) {
+            manager.destroy();
+        }
 
         if (!Core.headless) {
             // free render target
             raylib.UnloadRenderTexture(render_target);
         }
+    }
+
+    public static T get_manager(T)() {
+        import std.algorithm.searching : find;
+
+        // find a scene matching the type
+        auto matches = managers.find!(x => (cast(T) x) !is null);
+        assert(matches.length > 0, "no matching manager was found");
+        return cast(T) matches.front;
     }
 
     // - ecs

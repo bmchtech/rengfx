@@ -5,4 +5,8 @@ abstract class Manager {
     /// updates this manager
     void update() {
     }
+
+    /// frees resources used by this manager
+    void destroy() {
+    }
 }

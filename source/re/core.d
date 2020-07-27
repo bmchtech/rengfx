@@ -195,6 +195,9 @@ abstract class Core {
         }
         content.destroy();
         load_scenes([]); // end scenes
+        foreach (manager; managers) {
+            manager.destroy();
+        }
         if (!Core.headless) {
             window.destroy();
         }
