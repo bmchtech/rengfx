@@ -148,9 +148,13 @@ abstract class Scene {
         unload();
 
         ecs.destroy();
+        ecs = null;
+
         foreach (postprocessor; postprocessors) {
             postprocessor.destroy();
         }
+        postprocessors = [];
+        
         foreach (manager; managers) {
             manager.destroy();
         }
@@ -227,4 +231,49 @@ unittest {
     auto scene = new TestScene();
     Core.load_scenes([scene]);
     assert(Core.get_scene!TestScene == scene);
+}
+
+/// create a test game, with a test scene, and update it
+@("scene-full")
+unittest {
+    import re.util.test : TestGame;
+
+    static class TestScene : Scene2D {
+        class Plant : Component, Updatable {
+            public int height = 0;
+
+            void update() {
+                height++;
+            }
+        }
+
+        override void on_start() {
+            // create a basic entity
+            auto nt = create_entity("apple");
+            // add a basic component
+            nt.add_component(new Plant());
+        }
+    }
+
+    auto my_scene = new TestScene();
+
+    class Game : TestGame {
+        override void initialize() {
+            load_scenes([my_scene]);
+        }
+    }
+
+    auto game = new Game();
+    game.run();
+
+    // make sure scene is accessible
+    assert(game.primary_scene == my_scene, "primary scene does not match loaded scene");
+
+    // make sure components worked
+    assert(my_scene.get_entity("apple").get_component!(TestScene.Plant)().height > 0, "test Updatable was not updated");
+
+    game.destroy(); // clean up
+
+    // make sure scene is cleaned up
+    assert(my_scene.ecs is null, "scene was not cleaned up");
 }

@@ -28,7 +28,9 @@ debug class Debugger {
     this() {
         inspector = new Inspector();
         console = new Console();
-        _render_target = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
+        if (!Core.headless) {
+            _render_target = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
+        }
     }
 
     public void update() {
