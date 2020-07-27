@@ -92,7 +92,9 @@ class Tween(T) : ITween {
             import re.core : Core;
 
             // add tween to global manager
-            Core.get_manager!TweenManager.register(this);
+            auto tween_mgr = Core.get_manager!TweenManager;
+            assert(!tween_mgr.isNull, "global tween manager not available");
+            tween_mgr.get.register(this);
         }
     }
 
