@@ -1,4 +1,4 @@
-module re.phys.kin_body;
+module re.phys.kin2d;
 
 import re.ecs.component;
 import re.ecs.updatable;

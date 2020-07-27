@@ -3,7 +3,7 @@ module comp.body;
 import re;
 import re.math;
 import comp.input;
-import re.phys.kin_body;
+import re.phys.kin2d;
 
 class ShapeBody : KinBody2D {
     /// movement speed
