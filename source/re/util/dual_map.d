@@ -1,4 +1,4 @@
-module source.re.util.dual_map;
+module re.util.dual_map;
 
 class DualMap(T1, T2) {
     public T2[T1] map1;
