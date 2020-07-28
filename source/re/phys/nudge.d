@@ -135,6 +135,21 @@ version (physics) {
 
         override void update() {
             simulate();
+
+            // copy data to bodies
+            for (int i = 0; i < realm.bodies.count; i++) {
+                auto body_comp = _body_map.get(i);
+
+                // copy linear velocity
+                auto momentum = &realm.bodies.momentum[i];
+                auto vel = Vector3(momentum.velocity[0], momentum.velocity[1], momentum.velocity[2]);
+                auto npos_x = body_comp.entity.position.x + vel.x;
+                auto npos_y = body_comp.entity.position.y + vel.y;
+                auto npos_z = body_comp.entity.position.z + vel.z;
+                body_comp.entity.position = Vector3(npos_x, npos_y, npos_z);
+
+                // TODO: support angular velocity
+            }
         }
 
         /// register all colliders in this body
@@ -221,6 +236,11 @@ version (physics) {
                     inertia_inverse, inertia_inverse, inertia_inverse
                     ], 1 / body_comp.mass);
 
+            if (body_comp.is_static) {
+                properties.mass_inverse = 0;
+                properties.inertia_inverse = 0;
+            }
+
             // request a body from nudge
             immutable auto body_id = realm.append_body(NudgeRealm.identity_transform,
                     properties, NudgeRealm.zero_momentum);
@@ -281,14 +301,20 @@ version (physics) {
         /// used to sync a body's properties with the physics system when they change
         public void refresh(NudgeBody body_comp) {
             auto body_id = body_comp.nudge_body_id;
-            // update mass
-            realm.bodies.properties[body_id].mass_inverse = (1 / body_comp.mass);
 
-            // update inertia
-            auto inertia_inverse = 1 / body_comp.inertia;
-            realm.bodies.properties[body_id].inertia_inverse = [
-                inertia_inverse, inertia_inverse, inertia_inverse
-            ];
+            if (body_comp.is_static) {
+                realm.bodies.properties[body_id].mass_inverse = 0;
+                realm.bodies.properties[body_id].inertia_inverse = 0;
+            } else {
+                // update mass
+                realm.bodies.properties[body_id].mass_inverse = (1 / body_comp.mass);
+
+                // update inertia
+                auto inertia_inverse = 1 / body_comp.inertia;
+                realm.bodies.properties[body_id].inertia_inverse = [
+                    inertia_inverse, inertia_inverse, inertia_inverse
+                ];
+            }
 
             // update colliders
             // this means, remove all existing colliders we own, and (re)add colliders
@@ -298,7 +324,7 @@ version (physics) {
     }
 
     /// represents a physics body that uses the nudge physics system
-    class NudgeBody : Component, Updatable {
+    class NudgeBody : Component {
         /// reference to the body id inside the nudge realm (used internally by the nudge manager)
         private uint nudge_body_id;
 
@@ -307,8 +333,9 @@ version (physics) {
 
         private NudgeManager mgr;
 
-        private float _mass;
-        private float _inertia;
+        private float _mass = 1;
+        private float _inertia = 1;
+        private bool _static_body = false;
 
         override void setup() {
             // ensure the nudge system is installed
@@ -320,6 +347,18 @@ version (physics) {
 
             // register with nudge
             mgr.register(this);
+        }
+
+        /// gets whether the body is static
+        @property public bool is_static() {
+            return _static_body;
+        }
+
+        /// sets whether the body is static
+        @property public bool is_static(bool value) {
+            _static_body = value;
+            mgr.refresh(this);
+            return value;
         }
 
         /// gets the body's mass
@@ -344,11 +383,6 @@ version (physics) {
             _inertia = value;
             mgr.refresh(this);
             return _inertia;
-        }
-
-        void update() {
-            // TODO: copy data from nudge system?
-            // this could also be handled by the manager
         }
 
         /// used to notify the physics engine to update colliders if they have changed
