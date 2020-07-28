@@ -22,7 +22,7 @@ addons:
 
 install:
   # update pip
-  - pip install --upgrade pip
+  - sudo pip3 install --upgrade pip
   # install meson
   - pip3 install meson
   # install ninja
