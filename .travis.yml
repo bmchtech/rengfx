@@ -1,4 +1,4 @@
-dist: focal
+dist: xenial
 language: d
 d:
   - dmd-2.093.0
@@ -16,21 +16,25 @@ addons:
       - libgl1-mesa-dev
       - libglu1-mesa-dev
       - xvfb # virtual framebuffer
-      - ninja-build
       - python3-pip
       - python3-setuptools
       - python3-wheel
 
 install:
+  # install meson
+  - pip3 install meson
+  # install ninja
+  - curl -L https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-linux.zip -o .tmp/ninja-linux.zip
+  - unzip .tmp/ninja-linux.zip -d .tmp
   # install raylib
   - git clone https://github.com/xdrie/raylib.git
   - pushd raylib && git checkout 3.0.0_patch && git submodule update --init --recursive && popd # get the patched branch, and raygui
   - pushd raylib/src && make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc) && sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE && popd
   # install nudge
   - git clone https://github.com/xdrie/nudge-d.git
-  - pip3 install meson
-  - meson --version
   - pushd nudge-d/lib/nudge && ./build.sh && sudo ninja install && popd
+before_script:
+  - export PATH=$PATH:$PWD/.tmp
 script:
   - dub test --coverage -b unittest-cov --compiler=${DC}
 after_success:
