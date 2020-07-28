@@ -7,12 +7,21 @@ RE ENGINE FX
 lightweight, expressive, extensible game engine 
 
 ## features
+
+### core
 + only dependency is [`raylib`](https://github.com/xdrie/raylib)
-+ Scene-Entity-Component architecture
++ modular, data-driven Scene-Entity-Component architecture
++ full headless execution support, making unit tests simple
 + real time runtime debug console and inspector
 + 2d and 3d graphics support
 + multi scene layering and compositing
 + highly extensible
+
+### physics
++ optimized SSE/AVX2 physics provided by [`nudge`](https://github.com/xdrie/nudge-d)
+
+### audio
++ wip
 
 ## hacking
 
