@@ -40,6 +40,10 @@ version (physics) {
             scene.managers ~= manager;
         }
 
+        @property public size_t body_count() {
+            return _body_map.count;
+        }
+
         /// allocate resources to run physics
         public void allocate() {
             realm = new NudgeRealm(item_limit, item_limit, item_limit);
@@ -85,15 +89,40 @@ version (physics) {
         public void unregister(NudgeBody body_comp) {
             auto body_id = body_comp.nudge_body_id;
 
+            // remove from map
+            _body_map.remove(body_id);
+
             // - reorganize the bodies array so it is packed again
-            // TODO: reorganize
+
+            // 1. clear the body we are disposing
+            realm.clear_body(body_id);
+            // 2. check if it needs to be swapped
+            auto cleared_slot = body_id;
+            auto tail_index = realm.bodies.count - 1;
+            if (realm.bodies.count > 1 && body_id < tail_index) {
+                // 3. it needs to be swapped: move our now cleared slot to the end
+                // and move the body there back
+                // then update our references to them
+                realm.swap_bodies(body_id, tail_index);
+                // specifically, the body that previously pointed to tail
+                // should now point to the leftward slot, which we just cleared
+
+                // a. get the component's body
+                auto swap_comp = _body_map.get(tail_index);
+                // b. drop the map entry
+                _body_map.remove(swap_comp, tail_index);
+                // c. set the body index
+                swap_comp.nudge_body_id = cleared_slot;
+                // d. update the map
+                _body_map.set(swap_comp, cleared_slot);
+
+            }
+            // 4. our removed body is at the end, we can safely pop
+            realm.pop_last_body();
 
             // mark body as unsynced
             body_comp.nudge_body_id = 0;
             body_comp.physics_synced = false;
-
-            // remove from map
-            _body_map.remove(body_id);
         }
 
         /// used to sync a body's properties with the physics system when they change
@@ -112,6 +141,7 @@ version (physics) {
 
     /// represents a physics body that uses the nudge physics system
     class NudgeBody : Component, Updatable {
+        /// reference to the body id inside the nudge realm (used internally by the nudge manager)
         public uint nudge_body_id;
 
         /// whether this body is currently in sync with the physics system
@@ -168,19 +198,7 @@ version (physics) {
         }
     }
 
-    @("phys-nudge-basic")
-    unittest {
-        auto mgr = new NudgeManager();
-
-        mgr.allocate();
-
-        // TODO: test some stuff in a headless scene
-
-        mgr.destroy();
-    }
-
-    @("phys-nudge-scene")
-    unittest {
+    @("phys-nudge-basic") unittest {
         import re.ng.scene : Scene2D;
         import re.util.test : test_scene;
 
@@ -196,6 +214,42 @@ version (physics) {
         test.game.run();
 
         // check conditions
+
+        test.game.destroy();
+    }
+
+    @("phys-nudge-lifecycle") unittest {
+        import re.ng.scene : Scene2D;
+        import re.util.test : test_scene;
+        import re.ecs.entity : Entity;
+
+        class TestScene : Scene2D {
+            private Entity nt1;
+
+            override void on_start() {
+                nt1 = create_entity("one");
+                nt1.add_component(new NudgeBody());
+                auto nt2 = create_entity("two");
+                nt2.add_component(new NudgeBody());
+                auto nt3 = create_entity("three");
+                nt3.add_component(new NudgeBody());
+            }
+
+            public void kill_one() {
+                nt1.destroy();
+            }
+        }
+
+        auto test = test_scene(new TestScene());
+        test.game.run();
+
+        // check conditions
+        auto mgr = test.scene.get_manager!NudgeManager;
+        assert(!mgr.isNull);
+        assert(mgr.get.body_count == 3, "physics body count does not match");
+
+        (cast(TestScene) test.scene).kill_one();
+        assert(mgr.get.body_count == 2, "physics body was not unregistered on component destroy");
 
         test.game.destroy();
     }
