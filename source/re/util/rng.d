@@ -8,8 +8,14 @@ static class Rng {
     static this() {
     }
 
+    public static float next_float() {
+        return (cast(float) next() / cast(float) uint.max);
+    }
+
     public static uint next() {
-        return rng.front;
+        auto val = rng.front;
+        rng.popFront();
+        return val;
     }
 
     public static int next_int() {
