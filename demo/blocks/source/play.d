@@ -16,7 +16,7 @@ class PlayScene : Scene3D {
         clear_color = Colors.LIGHTGRAY;
 
         // set the camera position
-        cam.entity.position = Vector3(0, 20, 20);
+        cam.entity.position = Vector3(0, 30, 20);
 
         // draw a grid at the origin
         auto grid = create_entity("grid");
@@ -29,10 +29,11 @@ class PlayScene : Scene3D {
         floor_body.is_static = true;
 
         // create a block, and assign it a physics object
-        auto block = create_entity("block", Vector3(0, 10, 0));
+        auto block = create_entity("block", Vector3(0, 20, 0));
         block.add_component(new Cube(Vector3(2, 2, 2), Colors.BLUE));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
-        block.add_component(new NudgeBody());
+        auto block_body = block.add_component(new NudgeBody());
+        block_body.is_static = true;
 
         // point the camera at the block, then orbit it
         cam.look_at(block);
