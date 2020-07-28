@@ -76,6 +76,11 @@ abstract class Scene {
         // update ecs
         ecs.update();
 
+        // update managers
+        foreach (manager; managers) {
+            manager.update();
+        }
+
         // update components
         foreach (component; ecs.storage.updatable_components) {
             auto updatable = cast(Updatable) component;
@@ -154,7 +159,7 @@ abstract class Scene {
             postprocessor.destroy();
         }
         postprocessors = [];
-        
+
         foreach (manager; managers) {
             manager.destroy();
         }
@@ -270,7 +275,8 @@ unittest {
     assert(game.primary_scene == my_scene, "primary scene does not match loaded scene");
 
     // make sure components worked
-    assert(my_scene.get_entity("apple").get_component!(TestScene.Plant)().height > 0, "test Updatable was not updated");
+    assert(my_scene.get_entity("apple").get_component!(TestScene.Plant)()
+            .height > 0, "test Updatable was not updated");
 
     game.destroy(); // clean up
 
