@@ -396,7 +396,10 @@ version (physics) {
         assert(mgr._box_collider_map.has(bod), "missing box collider registration entry for body");
         auto bod_reg1 = mgr._box_collider_map.get(bod);
         assert(bod_reg1.indices.length > 0, "registration entry exists, but no index for collider");
-        // auto collider1_ix = bod_reg1.indices[0];
+        auto collider1_ix = bod_reg1.indices[0];
+        immutable auto collider1_size_x = mgr.realm.colliders.boxes.data[collider1_ix].size[0];
+        assert(collider1_size_x == 1,
+                "collider #1 size from physics engine does not match provided collider size");
 
         // sync the colliders, then ensure that the registration is different
         scn.reload_colliders();
@@ -408,10 +411,10 @@ version (physics) {
         scn.replace_colliders();
         auto bod_reg3 = mgr._box_collider_map.get(bod);
         assert(bod_reg3.indices.length > 0, "registration entry for new collider missing");
-        auto collider_ix = bod_reg3.indices[0];
-        immutable auto collider_size_x = mgr.realm.colliders.boxes.data[collider_ix].size[0];
-        assert(collider_size_x == 2,
-                "collider size from physics engine does not match replaced collider sizeF");
+        auto collider3_ix = bod_reg3.indices[0];
+        immutable auto collider3_size_x = mgr.realm.colliders.boxes.data[collider3_ix].size[0];
+        assert(collider3_size_x == 2,
+                "collider #3 size from physics engine does not match replaced collider size");
 
         test.game.destroy();
     }
