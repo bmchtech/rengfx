@@ -73,6 +73,64 @@ version (physics) {
         private void simulate() {
             // TODO: update the stuff in the nudge realm
             // TODO: consider refactoring into nudge_ext when finished
+
+            static const uint steps = 2;
+            static const uint iterations = 20;
+
+            float time_step = Time.delta_time / (cast(float) steps);
+
+            for (uint n = 0; n < steps; ++n) {
+                // Setup a temporary memory arena. The same temporary memory is reused each iteration.
+                nudge.Arena temporary = realm.arena;
+
+                // Find contacts.
+                nudge.BodyConnections connections = {}; // NOTE: Custom constraints should be added as body connections.
+                nudge.collide(&realm.active_bodies, &realm.contact_data,
+                        realm.bodies, realm.colliders, connections, temporary);
+
+                // NOTE: Custom contacts can be added here, e.g., against the static environment.
+
+                // Apply gravity and damping.
+                float damping = 1.0f - time_step * 0.25f;
+
+                for (uint i = 0; i < realm.active_bodies.count; ++i) {
+                    uint index = realm.active_bodies.indices[i];
+
+                    realm.bodies.momentum[index].velocity[1] -= 9.82f * time_step;
+
+                    realm.bodies.momentum[index].velocity[0] *= damping;
+                    realm.bodies.momentum[index].velocity[1] *= damping;
+                    realm.bodies.momentum[index].velocity[2] *= damping;
+
+                    realm.bodies.momentum[index].angular_velocity[0] *= damping;
+                    realm.bodies.momentum[index].angular_velocity[1] *= damping;
+                    realm.bodies.momentum[index].angular_velocity[2] *= damping;
+                }
+
+                // Read previous impulses from contact cache.
+                nudge.ContactImpulseData* contact_impulses = nudge.read_cached_impulses(realm.contact_cache,
+                        realm.contact_data, &temporary);
+
+                // Setup contact constraints and apply the initial impulses.
+                nudge.ContactConstraintData* contact_constraints = nudge.setup_contact_constraints(realm.active_bodies,
+                        realm.contact_data, realm.bodies, contact_impulses, &temporary);
+
+                // Apply contact impulses. Increasing the number of iterations will improve stability.
+                for (uint i = 0; i < iterations; ++i) {
+                    nudge.apply_impulses(contact_constraints, realm.bodies);
+                    // NOTE: Custom constraint impulses should be applied here.
+                }
+
+                // Update contact impulses.
+                nudge.update_cached_impulses(contact_constraints, contact_impulses);
+
+                // Write the updated contact impulses to the cache.
+                nudge.write_cached_impulses(&realm.contact_cache,
+                        realm.contact_data, contact_impulses);
+
+                // Move active bodies.
+                nudge.advance(realm.active_bodies, realm.bodies, time_step);
+            }
         }
 
         override void update() {
