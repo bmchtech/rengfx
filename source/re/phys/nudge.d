@@ -23,13 +23,15 @@ version (physics) {
         /// dual map from NudgeBody to physics body index
         private DualMap!(NudgeBody, uint) _body_map;
 
-        class ColliderIndices {
+        /// holds the list of indices that point to colliders owned by a certain body
+        class ColliderRefs {
+            /// the list of collider indices
             uint[] indices;
         }
 
         // map from body component to colliders
-        private DualMap!(NudgeBody, ColliderIndices) _box_collider_map;
-        // private DualMap!(NudgeBody, ColliderIndices) _sphr_collider_map;
+        private DualMap!(NudgeBody, ColliderRefs) _box_collider_map;
+        // private DualMap!(NudgeBody, ColliderRefs) _sphr_collider_map;
 
         /// checks whether this scene has a nudge manager installed
         public static bool is_installed(Scene scene) {
@@ -58,7 +60,7 @@ version (physics) {
             realm = new NudgeRealm(item_limit, item_limit, item_limit);
             realm.allocate();
             _body_map = new DualMap!(NudgeBody, uint);
-            _box_collider_map = new DualMap!(NudgeBody, ColliderIndices);
+            _box_collider_map = new DualMap!(NudgeBody, ColliderRefs);
         }
 
         override void destroy() {
@@ -92,7 +94,7 @@ version (physics) {
             auto box_colliders = body_comp.entity.get_components!BoxCollider();
             // auto sphere_colliders = body_comp.entity.get_components!SphereCollider();
 
-            _box_collider_map.set(body_comp, new ColliderIndices());
+            _box_collider_map.set(body_comp, new ColliderRefs());
 
             // add to the realm, and populate our internal registration list
             foreach (box; box_colliders) {
