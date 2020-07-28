@@ -43,5 +43,4 @@ install:
 script:
   - dub test --coverage -b unittest-cov --compiler=${DC}
 after_success:
-  - ls # make sure coverage is generated
-  - bash <(curl -s https://codecov.io/bash)
+  - ls
