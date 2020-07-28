@@ -25,7 +25,8 @@ class PlayScene : Scene3D {
         auto floor = create_entity("floor", Vector3(0, -10, 0));
         floor.add_component(new Cube(Vector3(40, 10, 40), Colors.GRAY));
         floor.add_component(new BoxCollider(Vector3(400, 10, 400), Vector3(0, -10, 0)));
-        floor.add_component(new NudgeBody());
+        auto floor_body = floor.add_component(new NudgeBody());
+        floor_body.is_static = true;
 
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 0, 0));
