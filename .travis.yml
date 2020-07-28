@@ -16,8 +16,8 @@ addons:
       - libgl1-mesa-dev
       - libglu1-mesa-dev
       - xvfb # virtual framebuffer
-      - meson
       - ninja-build
+      - python3-pip
 
 install:
   # install raylib
@@ -26,6 +26,8 @@ install:
   - pushd raylib/src && make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc) && sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE && popd
   # install nudge
   - git clone https://github.com/xdrie/nudge-d.git
+  - pip3 install meson
+  - meson --version
   - pushd nudge-d/lib/nudge && ./build.sh && sudo ninja install && popd
 script:
   - dub test --coverage -b unittest-cov --compiler=${DC}
