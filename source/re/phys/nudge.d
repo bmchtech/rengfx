@@ -294,4 +294,28 @@ version (physics) {
 
         test.game.destroy();
     }
+
+    @("phys-nudge-colliders") unittest {
+        import re.ng.scene : Scene2D;
+        import re.util.test : test_scene;
+
+        class TestScene : Scene2D {
+            override void on_start() {
+                auto nt = create_entity("one");
+                nt.add_component(new BoxCollider(Vector3(1, 1, 1), Vector3Zero));
+                nt.add_component(new NudgeBody());
+            }
+        }
+
+        auto test = test_scene(new TestScene());
+        test.game.run();
+
+        // check conditions
+        auto mgr = test.scene.get_manager!NudgeManager.get;
+
+        // check that colliders are registered
+        // TODO: ensure colliders are registered
+
+        test.game.destroy();
+    }
 }
