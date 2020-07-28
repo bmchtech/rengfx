@@ -8,6 +8,7 @@ version (physics) {
     import re.core;
     import re.ng.manager;
     import re.ng.scene;
+    import re.phys.collider;
     import re.util.dual_map;
     import std.math;
     import std.string : format;
@@ -169,7 +170,7 @@ version (physics) {
     /// represents a physics body that uses the nudge physics system
     class NudgeBody : Component, Updatable {
         /// reference to the body id inside the nudge realm (used internally by the nudge manager)
-        public uint nudge_body_id;
+        private uint nudge_body_id;
 
         /// whether this body is currently in sync with the physics system
         public bool physics_synced = false;
@@ -216,8 +217,13 @@ version (physics) {
         }
 
         void update() {
-            // copy data from nudge system
-            // we use our body ID to access the nudge system
+            // TODO: copy data from nudge system?
+            // this could also be handled by the manager
+        }
+
+        /// used to notify the physics engine to update colliders if they have changed
+        public void sync_colliders() {
+            mgr.refresh(this);
         }
 
         override void destroy() {
