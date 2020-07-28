@@ -1,3 +1,9 @@
+/**
+    The main package of RE ENGINE FX.
+    
+    Includes Core, Scene, Input, ECS, Tweens, Logger, and some utilities.
+*/
+
 module re;
 
 public {
