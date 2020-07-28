@@ -36,6 +36,7 @@ class PlayScene : Scene3D {
 
         // point the camera at the block, then orbit it
         cam.look_at(block);
-        cam.entity.add_component(new CameraOrbit(block, 0.15));
+        // cam.entity.add_component(new CameraOrbit(block, 0.15));
+        cam.entity.add_component(new CameraFreeLook(block));
     }
 }
