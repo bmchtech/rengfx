@@ -73,6 +73,14 @@ version (physics) {
             // TODO: implement
             // we need to use the body's collider list to populate our internal collider registration list
             // then add the colliders to the realm
+
+            // get the collider list
+            auto box_colliders = body_comp.entity.get_components!BoxCollider();
+            auto sphere_colliders = body_comp.entity.get_components!SphereCollider();
+
+            // add to the realm, and populate our internal registration list
+
+            // TODO: add colliders to realm
         }
 
         /// unregister all colliders in this body
