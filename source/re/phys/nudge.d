@@ -23,6 +23,14 @@ version (physics) {
         /// dual map from NudgeBody to physics body index
         private DualMap!(NudgeBody, uint) _body_map;
 
+        class ColliderIndices {
+            uint[] indices;
+        }
+
+        // map from body component to colliders
+        private DualMap!(NudgeBody, ColliderIndices) _box_collider_map;
+        // private DualMap!(NudgeBody, ColliderIndices) _sphr_collider_map;
+
         /// checks whether this scene has a nudge manager installed
         public static bool is_installed(Scene scene) {
             auto existing = scene.get_manager!NudgeManager();
@@ -50,6 +58,7 @@ version (physics) {
             realm = new NudgeRealm(item_limit, item_limit, item_limit);
             realm.allocate();
             _body_map = new DualMap!(NudgeBody, uint);
+            _box_collider_map = new DualMap!(NudgeBody, ColliderIndices);
         }
 
         override void destroy() {
@@ -70,26 +79,76 @@ version (physics) {
 
         /// register all colliders in this body
         private void register_colliders(NudgeBody body_comp) {
-            // TODO: implement
             // we need to use the body's collider list to populate our internal collider registration list
             // then add the colliders to the realm
 
+            auto body_id = body_comp.nudge_body_id;
+
+            // ensure that nothing is already registered
+            assert(!_box_collider_map.has(body_comp),
+                    "a collider registration list already exists for this body. call unregister first.");
+
             // get the collider list
             auto box_colliders = body_comp.entity.get_components!BoxCollider();
-            auto sphere_colliders = body_comp.entity.get_components!SphereCollider();
+            // auto sphere_colliders = body_comp.entity.get_components!SphereCollider();
+
+            _box_collider_map.set(body_comp, new ColliderIndices());
 
             // add to the realm, and populate our internal registration list
+            foreach (box; box_colliders) {
+                // add collider to realm
+                auto box_index = realm.append_box_collider(body_id,
+                        nudge.BoxCollider([box.size.x, box.size.y, box.size.z],
+                            0), nudge.Transform([
+                                box.offset.x, box.offset.y, box.offset.z
+                            ], 0, [0, 0, 0, 0]));
 
-            // TODO: add colliders to realm
+                // add to registration list
+                _box_collider_map.get(body_comp).indices ~= box_index;
+            }
         }
 
         /// unregister all colliders in this body
         private void unregister_colliders(NudgeBody body_comp) {
-            // TODO: implement
+            import std.range : front;
+            import std.algorithm.searching : countUntil;
+
             // for this, we need to use our internal map of a body's colliders, since its own list may have changed
             // we need to remove from the realm each collider that we internally have registered to that body
             // then clear our internal collider list
             // we don't touch the body's collider list
+
+            auto body_id = body_comp.nudge_body_id;
+
+            // get the registration maps
+            auto box_regs = _box_collider_map.get(body_comp);
+
+            // go through and remove each one from the realm
+            while (box_regs.indices.length > 0) {
+                auto box_ix = box_regs.indices.front;
+                // zero the box
+                realm.clear_box_collider(box_ix);
+                auto tail_index = realm.colliders.boxes.count - 1;
+                if (realm.colliders.boxes.count > 1 && box_ix < tail_index) {
+                    realm.swap_box_colliders(box_ix, tail_index);
+
+                    // update anything pointing to that (used to be in tail, now is in box_ix)
+                    // a. find out what body owns that collider
+                    auto owner_body = realm.colliders.boxes.transforms[box_ix].body;
+                    // b. get the component
+                    auto owner_comp = _body_map.get(owner_body);
+                    // c. get the collider list registration for that component
+                    auto owner_regs = _box_collider_map.get(owner_comp);
+                    // d. replace the box index
+                    auto index_of_ref = owner_regs.indices.countUntil(tail_index);
+                    owner_regs.indices[index_of_ref] = box_ix;
+                }
+                // pop the tail box
+                realm.pop_last_box_collider();
+            }
+
+            // clear box registrations
+            _box_collider_map.remove(body_comp, box_regs);
         }
 
         /// registers a body
