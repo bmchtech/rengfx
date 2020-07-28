@@ -8,6 +8,7 @@ version (physics) {
     import re.core;
     import re.ng.manager;
     import re.ng.scene;
+    import re.util.dual_map;
     import std.math;
     import std.string : format;
     static import nudge;
@@ -18,9 +19,8 @@ version (physics) {
         private NudgeRealm realm;
         private uint item_limit = 1024;
 
-        /// map from NudgeBody to physics body index
-        private uint[NudgeBody] _body_map;
-        private NudgeBody[uint] _body_map_reverse;
+        /// dual map from NudgeBody to physics body index
+        private DualMap!(NudgeBody, uint) _body_map;
 
         /// checks whether this scene has a nudge manager installed
         public static bool is_installed(Scene scene) {
@@ -44,11 +44,14 @@ version (physics) {
         public void allocate() {
             realm = new NudgeRealm(item_limit, item_limit, item_limit);
             realm.allocate();
+            _body_map = new DualMap!(NudgeBody, uint);
         }
 
         override void destroy() {
             realm.destroy();
             realm = null;
+            _body_map.clear();
+            _body_map = null;
         }
 
         private void simulate() {
@@ -75,19 +78,22 @@ version (physics) {
             body_comp.physics_synced = true;
 
             // store in map
-            _body_map[body_comp] = body_id;
+            _body_map.set(body_comp, body_id);
         }
 
         /// unregisters a body
         public void unregister(NudgeBody body_comp) {
             auto body_id = body_comp.nudge_body_id;
 
-            // swap indices in realm
-
+            // - reorganize the bodies array so it is packed again
+            // TODO: reorganize
 
             // mark body as unsynced
             body_comp.nudge_body_id = 0;
             body_comp.physics_synced = false;
+
+            // remove from map
+            _body_map.remove(body_id);
         }
 
         /// used to sync a body's properties with the physics system when they change
