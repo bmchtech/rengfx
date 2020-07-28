@@ -357,12 +357,27 @@ version (physics) {
     @("phys-nudge-colliders") unittest {
         import re.ng.scene : Scene2D;
         import re.util.test : test_scene;
+        import re.ecs.entity : Entity;
 
         class TestScene : Scene2D {
+            private Entity nt1;
+
             override void on_start() {
-                auto nt = create_entity("one");
-                nt.add_component(new BoxCollider(Vector3(1, 1, 1), Vector3Zero));
-                nt.add_component(new NudgeBody());
+                nt1 = create_entity("block");
+                nt1.add_component(new BoxCollider(Vector3(1, 1, 1), Vector3Zero));
+                nt1.add_component(new NudgeBody());
+            }
+
+            /// inform the physics body that the colliders need to be synced
+            public void reload_colliders() {
+                nt1.get_component!NudgeBody().sync_colliders();
+            }
+
+            /// remove the existing box collider, and replace with a new one, then reload
+            public void replace_colliders() {
+                nt1.remove_component!BoxCollider();
+                nt1.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
+                reload_colliders();
             }
         }
 
@@ -370,10 +385,29 @@ version (physics) {
         test.game.run();
 
         // check conditions
+        auto scn = cast(TestScene) test.scene;
         auto mgr = test.scene.get_manager!NudgeManager.get;
+        auto bod = test.scene.get_entity("block").get_component!NudgeBody();
 
         // check that colliders are registered
-        // TODO: ensure colliders are registered
+        assert(mgr._box_collider_map.has(bod), "missing box collider registration entry for body");
+        auto bod_reg1 = mgr._box_collider_map.get(bod);
+        assert(bod_reg1.indices.length > 0, "registration entry exists, but no index for collider");
+        // auto collider1_ix = bod_reg1.indices[0];
+
+        // sync the colliders, then ensure that the registration is different
+        scn.reload_colliders();
+        auto bod_reg2 = mgr._box_collider_map.get(bod);
+        assert(bod_reg1 != bod_reg2,
+                "colliders were synced, which was supposed to reset collider registration, but entry was not changed");
+
+        // replace the colliders
+        scn.replace_colliders();
+        auto bod_reg3 = mgr._box_collider_map.get(bod);
+        assert(bod_reg3.indices.length > 0, "registration entry for new collider missing");
+        auto collider_ix = bod_reg3.indices[0];
+        immutable auto collider_size_x = mgr.realm.colliders.boxes.data[collider_ix].size[0];
+        assert(collider_size_x == 2, "collider size from physics engine does not match replaced collider sizeF");
 
         test.game.destroy();
     }
