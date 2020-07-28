@@ -17,7 +17,7 @@ addons:
       - libglu1-mesa-dev
       - xvfb # virtual framebuffer
       - meson
-      - ninja
+      - ninja-build
 
 install:
   # install raylib
