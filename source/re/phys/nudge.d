@@ -67,6 +67,22 @@ version (physics) {
             simulate();
         }
 
+        /// register all colliders in this body
+        private void register_colliders(NudgeBody body_comp) {
+            // TODO: implement
+            // we need to use the body's collider list to populate our internal collider registration list
+            // then add the colliders to the realm
+        }
+
+        /// unregister all colliders in this body
+        private void unregister_colliders(NudgeBody body_comp) {
+            // TODO: implement
+            // for this, we need to use our internal map of a body's colliders, since its own list may have changed
+            // we need to remove from the realm each collider that we internally have registered to that body
+            // then clear our internal collider list
+            // we don't touch the body's collider list
+        }
+
         /// registers a body
         public void register(NudgeBody body_comp) {
             auto inertia_inverse = 1 / body_comp.inertia;
@@ -83,11 +99,17 @@ version (physics) {
 
             // store in map
             _body_map.set(body_comp, body_id);
+
+            // add colliders
+            register_colliders(body_comp);
         }
 
         /// unregisters a body
         public void unregister(NudgeBody body_comp) {
             auto body_id = body_comp.nudge_body_id;
+
+            // remove colliders
+            unregister_colliders(body_comp);
 
             // remove from map
             _body_map.remove(body_id);
@@ -136,6 +158,11 @@ version (physics) {
             realm.bodies.properties[body_id].inertia_inverse = [
                 inertia_inverse, inertia_inverse, inertia_inverse
             ];
+
+            // update colliders
+            // this means, remove all existing colliders we own, and (re)add colliders
+            unregister_colliders(body_comp);
+            register_colliders(body_comp);
         }
     }
 
