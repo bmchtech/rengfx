@@ -1,6 +1,7 @@
 module re.phys.collider;
 
 import re.ecs.component;
+import re.math;
 
 /// a data class that represents a collider
 abstract class Collider : Component {
