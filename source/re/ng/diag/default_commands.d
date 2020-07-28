@@ -33,8 +33,8 @@ debug static class DefaultCommands {
             foreach (entity; scene.ecs.entities) {
                 // get list of components
                 auto component_types = entity.get_all_components().map!(x => x.classinfo.name);
-                sb ~= format("  %s: components[%d] {%s}\n", entity.name,
-                        entity.components.length, component_types);
+                sb ~= format("  %s: pos(%s) components[%d] {%s}\n", entity.name,
+                        entity.position, entity.components.length, component_types);
             }
         }
         log.info(sb.data);
