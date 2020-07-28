@@ -39,7 +39,7 @@ install:
   - pushd raylib/src && make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc) && sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE && popd
   # install nudge
   - git clone https://github.com/xdrie/nudge-d.git
-  - pushd nudge-d/lib/nudge && ./build.sh && sudo ninja install && popd
+  - pushd nudge-d/lib/nudge && ./build.sh && pushd build && sudo ninja install && popd && popd
 script:
   - dub test --coverage -b unittest-cov --compiler=${DC}
 after_success:
