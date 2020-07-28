@@ -235,6 +235,10 @@ unittest {
 
     auto game = new Game();
     game.run();
+
+    // ensure time has passed
+    assert(Time.total_time > 0);
+
     game.destroy(); // clean up
 
     assert(game.scenes.length == 0, "scenes were not removed after Game cleanup");
