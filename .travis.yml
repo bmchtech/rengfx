@@ -30,6 +30,9 @@ install:
   - curl -L https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-linux.zip -o .tmp/ninja-linux.zip
   - unzip .tmp/ninja-linux.zip -d .tmp
   - sudo ln -rs .tmp/ninja /usr/bin/ninja
+  # list tools
+  - meson --version
+  - ninja --version
   # install raylib
   - git clone https://github.com/xdrie/raylib.git
   - pushd raylib && git checkout 3.0.0_patch && git submodule update --init --recursive && popd # get the patched branch, and raygui
