@@ -16,7 +16,6 @@ x:ddoxFilterArgs "--min-protection=Protected"
 # standard build (includes: physics)
 configuration "lib-standard" {
     targetType "library"
-    dependency "nudge-d" version=">=0.1.1"
     versions "physics"
 }
 
@@ -33,5 +32,4 @@ configuration "unittest" {
 
     # physics
     versions "physics"
-    dependency "nudge-d" version=">=0.1.1"
 }
