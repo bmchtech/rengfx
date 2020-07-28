@@ -143,9 +143,9 @@ version (physics) {
                 // copy linear velocity
                 auto momentum = &realm.bodies.momentum[i];
                 auto vel = Vector3(momentum.velocity[0], momentum.velocity[1], momentum.velocity[2]);
-                auto npos_x = body_comp.entity.position.x + vel.x;
-                auto npos_y = body_comp.entity.position.y + vel.y;
-                auto npos_z = body_comp.entity.position.z + vel.z;
+                auto npos_x = body_comp.entity.position.x + vel.x * Time.delta_time;
+                auto npos_y = body_comp.entity.position.y + vel.y * Time.delta_time;
+                auto npos_z = body_comp.entity.position.z + vel.z * Time.delta_time;
                 body_comp.entity.position = Vector3(npos_x, npos_y, npos_z);
 
                 // TODO: support angular velocity
