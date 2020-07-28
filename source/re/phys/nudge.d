@@ -179,6 +179,9 @@ version (physics) {
                                 box.offset.x, box.offset.y, box.offset.z
                             ], 0, [0, 0, 0, 0]));
 
+                // update tag
+                realm.colliders.boxes.tags[box_index] = box_index;
+
                 // add to registration list
                 _box_collider_map.get(body_comp).indices ~= box_index;
             }
