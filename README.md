@@ -50,6 +50,6 @@ dub build # build library
 
 run demo:
 ```sh
-cd ../demo/basic
+cd ../demo/<name>
 dub run # run demo
 ```
