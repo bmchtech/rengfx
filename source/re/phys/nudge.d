@@ -111,7 +111,7 @@ version (physics) {
         /// unregister all colliders in this body
         private void unregister_colliders(NudgeBody body_comp) {
             import std.range : front;
-            import std.algorithm.searching : countUntil;
+            import std.algorithm : countUntil, remove;
 
             // for this, we need to use our internal map of a body's colliders, since its own list may have changed
             // we need to remove from the realm each collider that we internally have registered to that body
@@ -145,6 +145,9 @@ version (physics) {
                 }
                 // pop the tail box
                 realm.pop_last_box_collider();
+
+                // remove the index from the box regs
+                box_regs.indices = box_regs.indices.remove!(x => x == box_ix);
             }
 
             // clear box registrations
@@ -407,7 +410,8 @@ version (physics) {
         assert(bod_reg3.indices.length > 0, "registration entry for new collider missing");
         auto collider_ix = bod_reg3.indices[0];
         immutable auto collider_size_x = mgr.realm.colliders.boxes.data[collider_ix].size[0];
-        assert(collider_size_x == 2, "collider size from physics engine does not match replaced collider sizeF");
+        assert(collider_size_x == 2,
+                "collider size from physics engine does not match replaced collider sizeF");
 
         test.game.destroy();
     }
