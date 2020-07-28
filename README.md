@@ -53,3 +53,11 @@ run demo:
 cd ../demo/basic
 dub run # run demo
 ```
+
+## license
+
+licensed under LGPL v2.1
+
+libraries:
++ [raylib](https://github.com/raysan5/raylib), Zlib license
++ [nudge](https://github.com/rasmusbarr/nudge/)
