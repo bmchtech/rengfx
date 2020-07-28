@@ -143,9 +143,10 @@ version (physics) {
                 // copy linear velocity
                 auto momentum = &realm.bodies.momentum[i];
                 auto vel = Vector3(momentum.velocity[0], momentum.velocity[1], momentum.velocity[2]);
-                auto npos_x = body_comp.entity.position.x + vel.x * Time.delta_time;
-                auto npos_y = body_comp.entity.position.y + vel.y * Time.delta_time;
-                auto npos_z = body_comp.entity.position.z + vel.z * Time.delta_time;
+                auto trf = &realm.bodies.transforms[i];
+                auto npos_x = trf.position[0];
+                auto npos_y = trf.position[1];
+                auto npos_z = trf.position[2];
                 body_comp.entity.position = Vector3(npos_x, npos_y, npos_z);
 
                 // TODO: support angular velocity
@@ -242,8 +243,11 @@ version (physics) {
             }
 
             // request a body from nudge
-            immutable auto body_id = realm.append_body(NudgeRealm.identity_transform,
-                    properties, NudgeRealm.zero_momentum);
+            // TODO: eventually add support for rotation
+            immutable auto body_id = realm.append_body(nudge.Transform([
+                        body_comp.entity.position.x, body_comp.entity.position.y,
+                        body_comp.entity.position.z
+                    ], 0, [0, 0, 0, 0]), properties, NudgeRealm.zero_momentum);
 
             body_comp.nudge_body_id = body_id;
             body_comp.physics_synced = true;
