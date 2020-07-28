@@ -10,6 +10,9 @@ dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
 libs "raylib"
 
+# documentation
+x:ddoxFilterArgs "--min-protection=Protected"
+
 # standard build (includes: physics)
 configuration "lib-standard" {
     targetType "library"
