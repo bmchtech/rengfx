@@ -8,3 +8,11 @@ public {
     import raylib : BoundingBox;
     static import raymath;
 }
+
+/// represents an angle around a specified axis
+struct AxisAngle {
+    /// the axis of rotation
+    Vector3 axis;
+    /// the angle around the axis of rotation
+    float angle;
+}

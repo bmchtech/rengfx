@@ -39,6 +39,7 @@ struct Transform {
     private Vector3 _scale = Vector3(1, 1, 1);
     private float _rotation_z = 0;
     private Quaternion _rotation_quat = raymath.QuaternionIdentity();
+    private AxisAngle _rotation_axis_angle = AxisAngle(Vector3(0, 0, 1), 0);
 
     /// transform matrix for local scale
     private Matrix4 _scl_mat;
@@ -130,6 +131,11 @@ struct Transform {
         return value;
     }
 
+    /// gets orientation as an axis angle
+    @property AxisAngle axis_angle() {
+        return _rotation_axis_angle;
+    }
+
     /// gets local-to-world transform
     @property Matrix4 local_to_world_transform() {
         update_transform();
@@ -166,6 +172,11 @@ struct Transform {
                 immutable auto euler_angles = raymath.QuaternionToEuler(_rotation_quat);
                 _rotation_z = euler_angles.z;
             }
+            // sync rotation quaternion to axis angle
+            raymath.QuaternionToAxisAngle(_rotation_quat,
+                    &_rotation_axis_angle.axis, &_rotation_axis_angle.angle);
+
+            // rotation is up to date
             _dirty_rotation = false;
         }
         if (_dirty_scale) {
