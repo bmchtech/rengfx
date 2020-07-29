@@ -164,6 +164,8 @@ version (physics) {
                 assert(0);
             }
 
+            bod.orientation = convert_quat(body_comp.transform.orientation);
+
             // update registration
             body_comp._phys_body = bod;
             _bodies.append(body_comp);
