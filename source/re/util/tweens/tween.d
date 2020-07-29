@@ -201,6 +201,7 @@ unittest {
     import re.ng.scene : Scene2D;
     import re.util.test : test_scene;
     import re.math : raymath, Vector2, Vector3;
+    import std.string : format;
 
     auto dest_pos = Vector3(60, 60);
     auto callback_called = false;
@@ -221,7 +222,8 @@ unittest {
     // check conditions
     auto nt = test.scene.get_entity("square");
     assert(raymath.Vector3Length(dest_pos - nt.transform.position) <= float.epsilon,
-            "entity did not move to target position");
+            format("entity did not move to target position (expected %s, but was %s)",
+                dest_pos, nt.transform.position));
     assert(callback_called, "callback was not caled");
 
     test.game.destroy();
