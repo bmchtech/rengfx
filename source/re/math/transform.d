@@ -71,7 +71,8 @@ struct Transform {
     /// sets Z-axis rotation
     @property float rotation_z(float radians) {
         _dirty = true;
-        return _rotation_z = radians;
+        _rotation_z = radians % C_2_PI;
+        return radians;
     }
 
     /// gets local-to-world transform
