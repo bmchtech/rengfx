@@ -54,7 +54,7 @@ abstract class RenderableMesh : Component, Renderable3D {
     }
 
     public void debug_render() {
-        DebugRender.default_debug_render(this);
+        DebugRender.default_debug_render(this, _model);
     }
 
     override void destroy() {

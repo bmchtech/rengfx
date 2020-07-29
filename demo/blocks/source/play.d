@@ -54,7 +54,7 @@ class PlayScene : Scene3D {
 
         //     auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
         //     nt.transform.orientation = raymath.QuaternionFromEuler(x_ang, y_ang, z_ang);
-        //     nt.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
+        //     nt.add_component(new Cube(Vector3(1, 1, 1), Colors.ORANGE));
         //     nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
         //     auto thing_body = nt.add_component(new DynamicBody());
         // }

@@ -13,7 +13,7 @@ abstract class Collider : Component {
 
 /// a rectangular prism collider
 class BoxCollider : Collider {
-    /// the x,y,z dimensions of the collision box
+    /// the half-size x,y,z dimensions of the collision box
     public const(Vector3) size;
 
     this(Vector3 size, Vector3 offset) {
