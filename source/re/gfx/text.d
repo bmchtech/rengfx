@@ -34,11 +34,15 @@ class Text : Component, Renderable2D {
 
     /// create a new text
     this(raylib.Font font, string text, int size, raylib.Color color) {
+        import re.core : Core;
+
         this._text = text;
         this.font = font;
         this.size = size;
         this.color = color;
         update_dimens();
+
+        raylib.SetTextureFilter(font.texture, Core.default_filter_mode);
     }
 
     /// gets text string
