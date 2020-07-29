@@ -83,9 +83,10 @@ version (physics) {
                 rb.RigidBody bod = comp._phys_body;
 
                 // sync properties -> physics engine
-
-                bod.mass = comp.mass;
-                bod.invMass = 1f / comp.mass;
+                if (abs(bod.mass - comp.mass) > float.epsilon) {
+                    bod.mass = comp.mass;
+                    bod.invMass = 1f / comp.mass;
+                }
                 // TODO: sync inertia
 
                 // sync physics engine -> components
