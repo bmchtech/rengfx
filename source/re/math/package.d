@@ -9,6 +9,7 @@ public {
 
     /// the mathematical constant pi
     enum C_PI = cast(float) std.math.PI;
+    enum C_2_PI = cast(float) std.math.PI * 2;
     enum C_PI_2 = cast(float) std.math.PI / 2;
     enum C_PI_4 = cast(float) std.math.PI / 4;
 
