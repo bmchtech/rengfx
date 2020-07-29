@@ -33,3 +33,8 @@ configuration "unittest" {
     # physics
     versions "physics"
 }
+
+configuration "ddox" {
+    # physics
+    versions "physics"
+}
