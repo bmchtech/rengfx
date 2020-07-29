@@ -62,7 +62,8 @@ abstract class Core {
     public static Vector2 default_resolution;
 
     /// the default texture filtering mode for render targets
-    public static raylib.TextureFilterMode default_filter_mode = raylib.TextureFilterMode.FILTER_POINT;
+    public static raylib.TextureFilterMode default_filter_mode
+        = raylib.TextureFilterMode.FILTER_POINT;
 
     /// sets up a game core
     this(int width, int height, string title) {
@@ -90,7 +91,11 @@ abstract class Core {
     }
 
     @property public static int fps() {
-        return raylib.GetFPS();
+        version (unittest) {
+            return 60;
+        } else {
+            return raylib.GetFPS();
+        }
     }
 
     /// sets up the game
@@ -126,7 +131,7 @@ abstract class Core {
             return; // pause
         }
         version (unittest) {
-            Time.update(1f / 60f); // 60 fps
+            Time.update(1f / fps); // 60 fps
         } else {
             Time.update(raylib.GetFrameTime());
         }
@@ -229,6 +234,7 @@ abstract class Core {
 @("core-basic")
 unittest {
     import re.util.test : TestGame;
+    import std.string: format;
 
     class Game : TestGame {
         override void initialize() {
@@ -240,7 +246,8 @@ unittest {
     game.run();
 
     // ensure time has passed
-    assert(Time.total_time > 0);
+    auto target_time = Core.frame_limit / Core.fps;
+    assert((Time.total_time - target_time) < 0.0001, format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
 
     game.destroy(); // clean up
 
