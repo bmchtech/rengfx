@@ -20,7 +20,7 @@ configuration "lib-standard" {
     # physics
     versions "physics"
     dependency "dmech" version="~>0.4.0"
-    dependency "dlib" version="~>0.19.1"
+    dependency "dlib" version="~>0.16.0"
 }
 
 # minimal library, no extra libs
@@ -37,7 +37,7 @@ configuration "unittest" {
     # physics
     versions "physics"
     dependency "dmech" version="~>0.4.0"
-    dependency "dlib" version="~>0.19.1"
+    dependency "dlib" version="~>0.16.0"
 }
 
 configuration "ddox" {
