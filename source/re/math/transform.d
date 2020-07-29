@@ -171,7 +171,7 @@ struct Transform {
                 _dirty_rotation_quat = false;
                 // sync quaternion to Z-rotation
                 immutable auto euler_angles = raymath.QuaternionToEuler(_rotation_quat);
-                _rotation_z = euler_angles.z;
+                _rotation_z = euler_angles.z * C_DEG2RAD;
             }
             // sync rotation quaternion to axis angle
             raymath.QuaternionToAxisAngle(_rotation_quat,
