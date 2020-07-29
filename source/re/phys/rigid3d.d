@@ -13,21 +13,17 @@ version (physics) {
     import std.math;
     import std.string : format;
 
-    // import dmech = dmech.geometry;
-    // import dmech = dmech.rigidbody;
+    import geom = dmech.geometry;
+    import rb = dmech.rigidbody;
     import mech = dmech.world;
+    import shape = dmech.shape;
+    import dl_vec = dlib.math.vector;
+    import dl_mat = dlib.math.matrix;
 
-    // import dl = dlib.math.vector;
-    // import dl = dlib.math.matrix;
-
-    /// represents a manager for bodies in a NudgeRealm
+    /// represents a manager for physics bodies
     class PhysicsManager : Manager {
+        private enum _max_collisions = 1024;
         private mech.PhysicsWorld world;
-        // private NudgeRealm realm;
-        // private uint item_limit = 1024;
-
-        /// dual map from RigidBody to physics body
-        private DualMap!(PhysicsBody, uint) _body_map;
 
         /// checks whether this scene has a nudge manager installed
         public static bool is_installed(Scene scene) {
@@ -47,41 +43,63 @@ version (physics) {
             scene.managers ~= manager;
         }
 
+        @property public size_t dynamic_body_count() {
+            return world.dynamicBodies.length;
+        }
+
+        @property public size_t static_body_count() {
+            return world.staticBodies.length;
+        }
+
         @property public size_t body_count() {
-            return _body_map.count;
+            return dynamic_body_count + static_body_count;
         }
 
         /// allocate resources to run physics
         public void allocate() {
             import dlib.core.memory : New;
 
-            // TODO: optionally set max collisions?
-            world = New!(mech.PhysicsWorld)(null);
-            _body_map = new DualMap!(PhysicsBody, uint);
+            world = New!(mech.PhysicsWorld)(null, _max_collisions);
         }
 
         override void destroy() {
             import dlib.core.memory : Delete;
 
             Delete(world);
-            _body_map.clear();
-            _body_map = null;
         }
 
         override void update() {
             // step the simulation
             world.update(Time.delta_time);
 
-            // copy data to bodies
             // TODO: copy data to bodies
+        }
+
+        pragma(inline, true) {
+            private dl_vec.Vector3f convert_vec3(const(Vector3) vec) {
+                return dl_vec.Vector3f(vec.x, vec.y, vec.z);
+            }
+
+            private Vector3 convert_vec3(const(dl_vec.Vector3f) vec) {
+                return Vector3(vec.x, vec.y, vec.z);
+            }
         }
 
         /// register all colliders in this body
         private void register_colliders(PhysicsBody body_comp) {
-            // we need to use the body's collider list to populate our internal collider registration list
-            // then add the colliders to the realm
+            // add colliders to the physics world
+            import dlib.core.memory : New;
 
-            // TODO
+            auto bod = body_comp._phys_body;
+
+            auto box_colliders = body_comp.entity.get_components!BoxCollider();
+
+            foreach (box; box_colliders) {
+                auto box_geom = New!(geom.GeomBox)(world, convert_vec3(box.size));
+                auto shape = world.addShapeComponent(bod, box_geom,
+                        convert_vec3(box.offset), bod.mass);
+                body_comp._phys_shapes ~= shape;
+            }
         }
 
         /// unregister all colliders in this body
@@ -89,24 +107,63 @@ version (physics) {
             import std.range : front;
             import std.algorithm : countUntil, remove;
 
-            // for this, we need to use our internal map of a body's colliders, since its own list may have changed
-            // we need to remove from the realm each collider that we internally have registered to that body
-            // then clear our internal collider list
-            // we don't touch the body's collider list
+            // we need to remove from the world each collider that we internally have registered to that body
+            foreach (shape; body_comp._phys_shapes) {
+                world.shapeComponents.removeFirst(shape);
+            }
 
-            // TODO
+            // then clear our internal collider list
+            body_comp._phys_shapes = [];
         }
 
         /// registers a body
         public void register(PhysicsBody body_comp) {
-            // TODO
+            rb.RigidBody bod;
+            switch (body_comp._body_type) {
+            case PhysicsBody.BodyType.Static:
+                bod = world.addStaticBody(convert_vec3(body_comp.transform.position));
+                break;
+            case PhysicsBody.BodyType.Dynamic:
+                bod = world.addDynamicBody(convert_vec3(body_comp.transform.position));
+                break;
+            default:
+                assert(0);
+            }
 
-            // _body_map[body_comp]
+            // update registration
+            body_comp._phys_body = bod;
+
+            // add colliders
+            register_colliders(body_comp);
+
+            // mark as synced
+            body_comp.physics_synced = true;
         }
 
         /// unregisters a body
         public void unregister(PhysicsBody body_comp) {
-            // TODO
+            // remove colliders
+            unregister_colliders(body_comp);
+
+            auto bod = body_comp._phys_body;
+
+            // remove body
+            switch (body_comp._body_type) {
+            case PhysicsBody.BodyType.Static:
+                world.staticBodies.removeFirst(bod);
+                break;
+            case PhysicsBody.BodyType.Dynamic:
+                world.dynamicBodies.removeFirst(bod);
+                break;
+            default:
+                assert(0);
+            }
+
+            // mark as unsynced
+            body_comp.physics_synced = false;
+
+            // clear registration
+            body_comp._phys_body = null;
         }
 
         /// used to sync a body's properties with the physics system when they change
@@ -117,11 +174,11 @@ version (physics) {
 
     /// represents a physics body
     abstract class PhysicsBody : Component {
-        // /// reference to the body id inside the nudge realm (used internally by the nudge manager)
-        // private uint nudge_body_id;
-
         /// whether this body is currently in sync with the physics system
         public bool physics_synced = false;
+
+        private rb.RigidBody _phys_body;
+        private shape.ShapeComponent[] _phys_shapes;
 
         private float _mass = 1;
         private float _inertia = 1;
@@ -184,7 +241,7 @@ version (physics) {
         }
     }
 
-    public class RigidBody : PhysicsBody {
+    public class DynamicBody : PhysicsBody {
         this() {
             super(PhysicsBody.BodyType.Dynamic);
         }
@@ -204,7 +261,7 @@ version (physics) {
             override void on_start() {
                 auto nt = create_entity("block");
                 // add nudge physics
-                nt.add_component(new RigidBody());
+                nt.add_component(new DynamicBody());
             }
         }
 
@@ -226,11 +283,11 @@ version (physics) {
 
     //         override void on_start() {
     //             nt1 = create_entity("one");
-    //             nt1.add_component(new RigidBody());
+    //             nt1.add_component(new DynamicBody());
     //             auto nt2 = create_entity("two");
-    //             nt2.add_component(new RigidBody());
+    //             nt2.add_component(new DynamicBody());
     //             auto nt3 = create_entity("three");
-    //             nt3.add_component(new RigidBody());
+    //             nt3.add_component(new DynamicBody());
     //         }
 
     //         public void kill_one() {
