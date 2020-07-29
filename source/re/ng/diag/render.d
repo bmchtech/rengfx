@@ -15,8 +15,23 @@ static class DebugRender {
         raylib.DrawRectangleLinesEx(renderable.bounds, 1, debug_color);
     }
 
+    private static void draw_bounding_box(BoundingBox box, ref Transform transform, Color color) {
+        import std.math : abs;
+
+        auto size = Vector3(abs(box.max.x - box.min.x),
+                abs(box.max.y - box.min.y), abs(box.max.z - box.min.z));
+
+        auto center = Vector3(box.min.x + size.x / 2.0f, box.min.y + size.y / 2.0f,
+                box.min.z + size.z / 2.0f);
+
+        // TODO: we want something that supports transforms
+
+        raylib.DrawCubeWires(center, size.x, size.y, size.z, color);
+    }
+
     public static void default_debug_render(Renderable3D renderable) {
-        raylib.DrawBoundingBox(renderable.bounds, debug_color);
+        auto comp = cast(Component) renderable;
+        draw_bounding_box(renderable.bounds, comp.transform, debug_color);
     }
 
     public static void default_debug_render(Renderable3D renderable, Model model) {
@@ -36,10 +51,11 @@ static class DebugRender {
                     // max
                     Vector3(box.size.x + box.offset.x, box.size.y + box.offset.y,
                         box.size.z + box.offset.z));
-            // transform by entity transform
-            auto bounds = Bounds.calculate(raw_bounds, comp.entity.transform);
-            // draw transformed bounding box
-            raylib.DrawBoundingBox(bounds, debug_color_collider);
+            draw_bounding_box(raw_bounds, comp.entity.transform, debug_color_collider);
+            // // transform by entity transform
+            // auto bounds = Bounds.calculate(raw_bounds, comp.entity.transform);
+            // // draw transformed bounding box
+            // raylib.DrawBoundingBox(bounds, debug_color_collider);
         }
     }
 }
