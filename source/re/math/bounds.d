@@ -9,8 +9,11 @@ static class Bounds {
     calculate bounds for an object in 2d space taking into account its transform
     https://github.com/prime31/Nez/blob/0e97e68bd9df191fb3b893eb69e54238c30fcc80/Nez.Portable/Utils/Extensions/Bounds.cs#L184
     */
-    public static Rectangle calculate_bounds_2d(Vector2 position, Vector2 origin,
-            Vector2 scale, float rotation, float width, float height) {
+    public static Rectangle calculate(ref Transform transform, Vector2 origin,
+            float width, float height) {
+        auto rotation = transform.rotation_z;
+        auto position = transform.position2;
+        auto scale = transform.scale2;
         if (rotation == 0) {
             return Rectangle(cast(int)(position.x - (origin.x * scale.x)),
                     cast(int)(position.y - (origin.y * scale.y)),
@@ -51,7 +54,7 @@ static class Bounds {
     }
 
     /// calculate the new bounding box by applying the transform to the raw bounding box
-    public static BoundingBox calculate_bounds(BoundingBox bounds, ref Transform transform) {
+    public static BoundingBox calculate(BoundingBox bounds, ref Transform transform) {
         auto t_min = raymath.Vector3Transform(bounds.min, transform.local_to_world_transform);
         auto t_max = raymath.Vector3Transform(bounds.max, transform.local_to_world_transform);
 

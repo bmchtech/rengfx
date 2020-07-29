@@ -17,9 +17,7 @@ class SpriteRenderer : Component, Renderable2D {
     }
 
     @property Rectangle bounds() {
-        return Bounds.calculate_bounds_2d(entity.position2, sprite.origin,
-                entity.transform.scale2, entity.transform.rotation_z,
-                sprite.src_rect.width, sprite.src_rect.height);
+        return Bounds.calculate(entity.transform, sprite.origin, sprite.src_rect.width, sprite.src_rect.height);
     }
 
     public void render() {
