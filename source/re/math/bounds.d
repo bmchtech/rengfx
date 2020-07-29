@@ -55,23 +55,23 @@ static class Bounds {
 
     /// calculate the new bounding box by applying the transform to the raw bounding box
     public static BoundingBox calculate(BoundingBox bounds, ref Transform transform) {
-        // this should work, but...
-        // auto t_min = raymath.Vector3Transform(bounds.min, transform.local_to_world_transform);
-        // auto t_max = raymath.Vector3Transform(bounds.max, transform.local_to_world_transform);
+        auto t_min = raymath.Vector3Transform(bounds.min, transform.local_to_world_transform);
+        auto t_max = raymath.Vector3Transform(bounds.max, transform.local_to_world_transform);
+        return BoundingBox(bounds.min, bounds.max);
 
-        // TODO: this is a crappy workaround
-        import re.util.dlib;
+        // this is a crappy workaround, using dlib
+        // import re.util.dlib;
 
         // auto rot_quat = transform.orientation;
         // auto dl_rot_quat = convert_quat(rot_quat);
         // auto dl_rot_mat = dl_rot_quat.toMatrix4x4();
         // auto t_min = convert_vec3(bounds.min) * dl_rot_mat;
         // auto t_max = convert_vec3(bounds.max) * dl_rot_mat;
-        auto dl_tf = convert_mat(transform.local_to_world_transform);
-        auto t_min = convert_vec3(bounds.min) * dl_tf;
-        auto t_max = convert_vec3(bounds.max) * dl_tf;
+        // auto dl_tf = convert_mat(transform.local_to_world_transform);
+        // auto t_min = convert_vec3(bounds.min) * dl_tf;
+        // auto t_max = convert_vec3(bounds.max) * dl_tf;
 
-        return BoundingBox(convert_vec3(t_min), convert_vec3(t_max));
+        // return BoundingBox(convert_vec3(t_min), convert_vec3(t_max));
         // return BoundingBox(bounds.min * 1.1f, bounds.max * 1.1f);
     }
 }
