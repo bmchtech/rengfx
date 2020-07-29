@@ -54,13 +54,6 @@ abstract class Scene {
         return value;
     }
 
-    /// sets the texture filtering mode for the scene render target
-    @property raylib.TextureFilterMode filter_mode(raylib.TextureFilterMode value) {
-        // texture scale filter
-        raylib.SetTextureFilter(render_target.texture, value);
-        return value;
-    }
-
     /// called at the start of the scene
     protected void on_start() {
 
@@ -131,6 +124,8 @@ abstract class Scene {
         // create render target
         // TODO: use scene resolution instead of window resolution
         render_target = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
+        // apply texture filter
+        raylib.SetTextureFilter(render_target.texture, Core.default_filter_mode);
     }
 
     /// called internally on scene creation

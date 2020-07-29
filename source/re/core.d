@@ -61,6 +61,9 @@ abstract class Core {
     /// the default render resolution for all scenes
     public static Vector2 default_resolution;
 
+    /// the default texture filtering mode for render targets
+    public static raylib.TextureFilterMode default_filter_mode = raylib.TextureFilterMode.FILTER_POINT;
+
     /// sets up a game core
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
