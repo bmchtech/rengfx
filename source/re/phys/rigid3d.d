@@ -87,7 +87,7 @@ version (physics) {
                     bod.mass = comp.mass;
                     bod.invMass = 1f / comp.mass;
                 }
-                // TODO: sync inertia
+                // TODO: sync inertia? right now it's automatically set from mass
 
                 // sync physics engine -> components
 
@@ -213,7 +213,7 @@ version (physics) {
         private shape.ShapeComponent[] _phys_shapes;
 
         public float mass = 1;
-        public float inertia = 1;
+        // public float inertia = 1;
 
         private PhysicsManager mgr;
         private BodyType _body_type;
