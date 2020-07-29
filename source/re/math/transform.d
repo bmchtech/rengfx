@@ -3,11 +3,28 @@ module re.math.transform;
 import re.math;
 
 struct Transform {
+    /// whether anything is dirty
     private bool _dirty;
+    /// whether scale is dirty
+    private bool _dirty_scale;
+    /// whether position is dirty
+    private bool _dirty_position;
+    /// whether rotation is dirty
+    private bool _dirty_rotation;
+
     private Vector3 _position = Vector3(0, 0, 0);
     private Vector3 _scale = Vector3(1, 1, 1);
     private float _rotation_z = 0;
+
+    /// transform matrix for local scale
+    private Matrix4 _local_scl_transform;
+    /// transform matrix for local position
+    private Matrix4 _local_pos_transform;
+    /// transform matrix for local rotation
+    private Matrix4 _local_rot_transform;
+    /// transform matrix from local to world
     private Matrix4 _localToWorldTransform;
+    /// transform matrix from world to local
     private Matrix4 _worldToLocalTransform;
 
     // 2d wrappers
@@ -39,14 +56,14 @@ struct Transform {
     // main sub-transforms
 
     /// gets 3d position
-    @property ref Vector3 position() return {
+    @property ref Vector3 position() return  {
         update_transform();
         return _position;
     }
 
     /// sets 3d position
     @property Vector3 position(Vector3 value) {
-        _dirty = true;
+        _dirty = _dirty_position = true;
         return _position = value;
     }
 
@@ -58,7 +75,7 @@ struct Transform {
 
     /// sets 3d scale
     @property Vector3 scale(Vector3 value) {
-        _dirty = true;
+        _dirty = _dirty_scale = true;
         return _scale = value;
     }
 
@@ -70,7 +87,7 @@ struct Transform {
 
     /// sets Z-axis rotation
     @property float rotation_z(float radians) {
-        _dirty = true;
+        _dirty = _dirty_rotation = true;
         _rotation_z = radians % C_2_PI;
         return radians;
     }
