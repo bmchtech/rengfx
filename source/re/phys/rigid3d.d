@@ -72,7 +72,10 @@ version (physics) {
             // step the simulation
             world.update(Time.delta_time);
 
-            // TODO: copy data to bodies
+            // sync FROM bodies: physical properties (mass, inertia)
+            // sync TO bodies: transforms, momentum
+
+            // TODO: handle synchronization
         }
 
         pragma(inline, true) {
@@ -166,9 +169,12 @@ version (physics) {
             body_comp._phys_body = null;
         }
 
-        /// used to sync a body's properties with the physics system when they change
+        /// reset a body's registration in the physics engine, necessary when shapes change
         public void refresh(PhysicsBody body_comp) {
-            // TODO
+            // update colliders
+            // this means, remove all existing colliders we own, and (re)add colliders
+            unregister_colliders(body_comp);
+            register_colliders(body_comp);
         }
     }
 
@@ -180,8 +186,8 @@ version (physics) {
         private rb.RigidBody _phys_body;
         private shape.ShapeComponent[] _phys_shapes;
 
-        private float _mass = 1;
-        private float _inertia = 1;
+        public float mass = 1;
+        public float inertia = 1;
 
         private PhysicsManager mgr;
         private BodyType _body_type;
@@ -205,30 +211,6 @@ version (physics) {
 
             // register with nudge
             mgr.register(this);
-        }
-
-        /// gets the body's mass
-        @property public float mass() {
-            return _mass;
-        }
-
-        /// sets the body's mass
-        @property public float mass(float value) {
-            _mass = value;
-            mgr.refresh(this);
-            return value;
-        }
-
-        /// gets the body's moment of inertia
-        @property public float inertia() {
-            return _inertia;
-        }
-
-        /// sets the body's moment of inertia
-        @property public float inertia(float value) {
-            _inertia = value;
-            mgr.refresh(this);
-            return _inertia;
         }
 
         /// used to notify the physics engine to update colliders if they have changed
@@ -305,6 +287,66 @@ version (physics) {
 
         (cast(TestScene) test.scene).kill_one();
         assert(mgr.get.body_count == 2, "physics body was not unregistered on component destroy");
+
+        test.game.destroy();
+    }
+
+    @("phys-rigid3d-colliders") unittest {
+        import re.ng.scene : Scene2D;
+        import re.util.test : test_scene;
+        import re.ecs.entity : Entity;
+        import std.algorithm : canFind;
+
+        class TestScene : Scene2D {
+            private Entity nt1;
+
+            override void on_start() {
+                nt1 = create_entity("block");
+                nt1.add_component(new BoxCollider(Vector3(1, 1, 1), Vector3Zero));
+                nt1.add_component(new DynamicBody());
+            }
+
+            /// inform the physics body that the colliders need to be synced
+            public void reload_colliders() {
+                nt1.get_component!DynamicBody().sync_colliders();
+            }
+
+            /// remove the existing box collider, and replace with a new one, then reload
+            public void replace_colliders() {
+                nt1.remove_component!BoxCollider();
+                nt1.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
+                reload_colliders();
+            }
+        }
+
+        auto test = test_scene(new TestScene());
+        test.game.run();
+
+        // check conditions
+        auto scn = cast(TestScene) test.scene;
+        auto mgr = test.scene.get_manager!PhysicsManager.get;
+        auto bod = test.scene.get_entity("block").get_component!DynamicBody();
+
+        // check that colliders are registered
+        assert(mgr.world.dynamicBodies.data.canFind(bod._phys_body));
+        auto shape1 = bod._phys_shapes[0];
+        immutable auto collider1_size_x = (cast(geom.GeomBox)(shape1.geometry)).halfSize.x;
+        assert(collider1_size_x == 1,
+                "collider #1 size from physics engine does not match provided collider size");
+
+        // sync the colliders, then ensure that the registration is different
+        scn.reload_colliders();
+        auto shape2 = bod._phys_shapes[0];
+        assert(shape1 != shape2,
+                "colliders were synced, which was supposed to reset collider registration, but entry was not changed");
+
+        // replace the colliders
+        scn.replace_colliders();
+        assert(bod._phys_shapes.length > 0, "registration entry for new collider missing");
+        auto shape3 = bod._phys_shapes[0];
+        immutable auto collider3_size_x = (cast(geom.GeomBox)(shape3.geometry)).halfSize.x;
+        assert(collider3_size_x == 2,
+                "collider #3 size from physics engine does not match replaced collider size");
 
         test.game.destroy();
     }
