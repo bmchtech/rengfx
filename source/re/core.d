@@ -52,6 +52,9 @@ abstract class Core {
         public static int frame_limit = 60;
     }
 
+    /// target frames per second
+    public static int target_fps = 60;
+
     /// whether graphics should be disabled
     public static bool headless = false;
 
@@ -91,11 +94,7 @@ abstract class Core {
     }
 
     @property public static int fps() {
-        version (unittest) {
-            return 60;
-        } else {
-            return raylib.GetFPS();
-        }
+        return raylib.GetFPS();
     }
 
     /// sets up the game
@@ -247,7 +246,7 @@ unittest {
     game.run();
 
     // ensure time has passed
-    auto target_time = Core.frame_limit / Core.fps;
+    auto target_time = Core.frame_limit / Core.target_fps;
     assert(approxEqual(Time.total_time, target_time),
             format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
 
