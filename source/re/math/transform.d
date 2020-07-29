@@ -68,7 +68,7 @@ struct Transform {
     }
 
     /// gets 3d scale
-    @property ref Vector3 scale() {
+    @property ref Vector3 scale() return {
         update_transform();
         return _scale;
     }
