@@ -25,15 +25,13 @@ class PlayScene : Scene3D {
         auto floor = create_entity("floor", Vector3(0, -10, 0));
         floor.add_component(new Cube(Vector3(40, 4, 40), Colors.GRAY));
         floor.add_component(new BoxCollider(Vector3(400, 10, 400), Vector3(0, -10, 0)));
-        auto floor_body = floor.add_component(new RigidBody());
-        floor_body.is_static = true;
+        auto floor_body = floor.add_component(new StaticBody());
 
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 20, 0));
         block.add_component(new Cube(Vector3(2, 2, 2), Colors.BLUE));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
-        auto block_body = block.add_component(new RigidBody());
-        block_body.is_static = true;
+        auto block_body = block.add_component(new DynamicBody());
 
         // // make small blocks
         // for (int i = 0; i < 20; i++) {
@@ -43,7 +41,7 @@ class PlayScene : Scene3D {
         //     auto nt = create_entity("thing", Vector3(x_off, 40, z_off));
         //     nt.add_component(new Cube(Vector3(0.5, 0.5, 0.5), Colors.GREEN));
         //     nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
-        //     auto thing_body = nt.add_component(new RigidBody());
+        //     auto thing_body = nt.add_component(new DynamicBody());
         // }
 
         // point the camera at the block, then orbit it
