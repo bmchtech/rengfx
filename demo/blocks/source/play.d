@@ -34,18 +34,18 @@ class PlayScene : Scene3D {
         auto block_body = block.add_component(new DynamicBody());
 
         // make small blocks
-        enum small_block_count = 200;
-        enum small_block_spread = 10;
-        for (int i = 0; i < small_block_count; i++) {
-            auto x_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
-            auto y_off = Rng.next_float() * small_block_spread * 4;
-            auto z_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
+        // enum small_block_count = 200;
+        // enum small_block_spread = 10;
+        // for (int i = 0; i < small_block_count; i++) {
+        //     auto x_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
+        //     auto y_off = Rng.next_float() * small_block_spread * 4;
+        //     auto z_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
 
-            auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
-            nt.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
-            nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
-            auto thing_body = nt.add_component(new DynamicBody());
-        }
+        //     auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
+        //     nt.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
+        //     nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
+        //     auto thing_body = nt.add_component(new DynamicBody());
+        // }
 
         // point the camera at the block, then orbit it
         cam.look_at(block);
