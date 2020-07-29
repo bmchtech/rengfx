@@ -42,16 +42,16 @@ struct Transform {
     private AxisAngle _rotation_axis_angle = AxisAngle(Vector3(0, 0, 1), 0);
 
     /// transform matrix for local scale
-    private Matrix4 _scl_mat;
+    private Matrix4 _scl_mat = raymath.MatrixIdentity();
     /// transform matrix for local position
-    private Matrix4 _pos_mat;
+    private Matrix4 _pos_mat = raymath.MatrixIdentity();
     /// transform matrix for local rotation
-    private Matrix4 _rot_mat;
+    private Matrix4 _rot_mat = raymath.MatrixIdentity();
 
     /// transform matrix from local to world
-    private Matrix4 _localToWorldTransform;
+    private Matrix4 _localToWorldTransform = raymath.MatrixIdentity();
     /// transform matrix from world to local
-    private Matrix4 _worldToLocalTransform;
+    private Matrix4 _worldToLocalTransform = raymath.MatrixIdentity();
 
     // 2d wrappers
 
