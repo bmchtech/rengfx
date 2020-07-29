@@ -23,8 +23,8 @@ static class DebugRender {
 
         default_debug_render(renderable);
         auto comp = cast(Component) renderable;
-        raylib.DrawModelWires(model, comp.entity.position,
-                comp.entity.transform.scale.x, debug_color);
+        raylib.DrawModelWiresEx(model, comp.transform.position, comp.transform.axis_angle.axis,
+                comp.transform.axis_angle.angle * C_RAD2DEG, comp.transform.scale, debug_color);
 
         // check if renderable has colliders
         auto box_colls = comp.entity.get_components!BoxCollider;
