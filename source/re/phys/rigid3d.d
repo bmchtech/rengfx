@@ -92,6 +92,10 @@ version (physics) {
                     if (abs(bod.mass - comp.mass) > float.epsilon) {
                         bod.mass = comp.mass;
                         bod.invMass = 1f / comp.mass;
+                        // TODO: update mass contribtion of shapes?
+                        // foreach (shape; body_comp._phys_shapes) {
+                            
+                        // }
                     }
                     // TODO: sync inertia? right now it's automatically set from mass
 
