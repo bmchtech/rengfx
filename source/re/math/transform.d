@@ -155,11 +155,16 @@ struct Transform {
             if (_dirty_rotation_z) {
                 _rot_mat = raymath.MatrixRotateZ(_rotation_z);
                 _dirty_rotation_z = false;
+                // sync Z-rotation to quaternion
+                _rotation_quat = raymath.QuaternionFromMatrix(_rot_mat);
             }
             if (_dirty_rotation_quat) {
                 // recompute rotation matrix from quaternion
                 _rot_mat = raymath.QuaternionToMatrix(_rotation_quat);
                 _dirty_rotation_quat = false;
+                // sync quaternion to Z-rotation
+                immutable auto euler_angles = raymath.QuaternionToEuler(_rotation_quat);
+                _rotation_z = euler_angles.z;
             }
             _dirty_rotation = false;
         }
