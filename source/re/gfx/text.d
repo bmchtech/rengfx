@@ -59,7 +59,7 @@ class Text : Component, Renderable2D {
 
     @property Rectangle bounds() {
         return Bounds.calculate_bounds_2d(entity.position2, _origin,
-                entity.transform.scale2, entity.transform.rotation, _text_size.x, _text_size.y);
+                entity.transform.scale2, entity.transform.rotation_z, _text_size.x, _text_size.y);
     }
 
     @property private int spacing() {
