@@ -209,7 +209,7 @@ unittest {
         override void on_start() {
             auto nt = create_entity("square", Vector2(20, 20));
             auto tw = Tweener.tween(nt.transform.position,
-                    nt.transform.position, dest_pos, 0.5f, &Ease.LinearInOut);
+                    nt.transform.position, dest_pos, 0.1f, &Ease.LinearInOut);
             tw.set_callback((tw) { callback_called = true; });
             tw.start();
         }
