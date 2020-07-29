@@ -27,6 +27,16 @@ pragma(inline) {
     public Color color_hsv(float h, float s, float v) {
         return raylib.ColorFromHSV(Vector3(h, s, v));
     }
+
+    /// gets a color from rgb
+    public Color color_rgb(float r, float g, float b, float a = 1.0) {
+        return raylib.ColorFromNormalized(Vector4(r, g, b, a));
+    }
+
+    /// gets a color from rgb
+    public Color color_rgb(ubyte r, ubyte g, ubyte b, ubyte a = 255) {
+        return Color(r, g, b, 255);
+    }
 }
 
 /// color blending algorithm - from https://stackoverflow.com/a/39924008/13240621

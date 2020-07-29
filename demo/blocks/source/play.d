@@ -25,14 +25,14 @@ class PlayScene : Scene3D {
         PhysicsManager.max_collisions = 4096;
 
         auto floor = create_entity("floor", Vector3(0, -5, 0));
-        floor.add_component(new Cube(Vector3(40, 10, 40), Colors.GRAY));
+        floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(82, 80, 68)));
         floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
         floor.add_component(new StaticBody());
 
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 5, 0));
         block.transform.orientation = raymath.QuaternionFromEuler(0, C_PI_4, C_PI_4);
-        block.add_component(new Cube(Vector3(4, 4, 4), Colors.BLUE));
+        block.add_component(new Cube(Vector3(4, 4, 4), color_rgb(141, 113, 176)));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
         auto block_body = block.add_component(new DynamicBody());
         block_body.mass = 64;
@@ -55,7 +55,7 @@ class PlayScene : Scene3D {
 
             auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
             nt.transform.orientation = raymath.QuaternionFromEuler(x_ang, y_ang, z_ang);
-            nt.add_component(new Cube(Vector3(1, 1, 1), Colors.ORANGE));
+            nt.add_component(new Cube(Vector3(1, 1, 1), color_rgb(209, 153, 56)));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto thing_body = nt.add_component(new DynamicBody());
             thing_body.mass = 2;
