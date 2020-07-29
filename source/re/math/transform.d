@@ -9,19 +9,26 @@ struct Transform {
     private bool _dirty_scale;
     /// whether position is dirty
     private bool _dirty_position;
+
     /// whether rotation is dirty
     private bool _dirty_rotation;
+    /// whether the dirty rotation is the Z-rotation
+    private bool _dirty_rotation_z;
+    /// whether the dirty rotation is the quaternion
+    private bool _dirty_rotation_quat;
 
     private Vector3 _position = Vector3(0, 0, 0);
     private Vector3 _scale = Vector3(1, 1, 1);
     private float _rotation_z = 0;
+    private Quaternion _rotation_quat = raymath.QuaternionIdentity();
 
     /// transform matrix for local scale
-    private Matrix4 _local_scl_transform;
+    private Matrix4 _scl_mat;
     /// transform matrix for local position
-    private Matrix4 _local_pos_transform;
+    private Matrix4 _pos_mat;
     /// transform matrix for local rotation
-    private Matrix4 _local_rot_transform;
+    private Matrix4 _rot_mat;
+
     /// transform matrix from local to world
     private Matrix4 _localToWorldTransform;
     /// transform matrix from world to local
@@ -68,7 +75,7 @@ struct Transform {
     }
 
     /// gets 3d scale
-    @property ref Vector3 scale() return {
+    @property ref Vector3 scale() return  {
         update_transform();
         return _scale;
     }
@@ -87,9 +94,22 @@ struct Transform {
 
     /// sets Z-axis rotation
     @property float rotation_z(float radians) {
-        _dirty = _dirty_rotation = true;
+        _dirty = _dirty_rotation = _dirty_rotation_z = true;
         _rotation_z = radians % C_2_PI;
         return radians;
+    }
+
+    /// gets orientation quaternion
+    @property Quaternion orientation() {
+        update_transform();
+        return _rotation_quat;
+    }
+
+    /// sets orientation quaternion
+    @property Quaternion rotation_z(Quaternion value) {
+        _dirty = _dirty_rotation = _dirty_rotation_quat = true;
+        _rotation_quat = value;
+        return value;
     }
 
     /// gets local-to-world transform
@@ -109,17 +129,33 @@ struct Transform {
             return;
 
         // recompute matrices
-        auto translation_mat = raymath.MatrixTranslate(_position.x, _position.y, _position.z);
-        auto rotation_mat = raymath.MatrixRotateZ(_rotation_z);
-        auto scale_mat = raymath.MatrixScale(_scale.x, _scale.y, _scale.z);
+        if (_dirty_position) {
+            _pos_mat = raymath.MatrixTranslate(_position.x, _position.y, _position.z);
+            _dirty_position = false;
+        }
+        if (_dirty_rotation) {
+            if (_dirty_rotation_z) {
+                _rot_mat = raymath.MatrixRotateZ(_rotation_z);
+                _dirty_rotation_z = false;
+            }
+            if (_dirty_rotation_quat) {
+                // recompute rotation matrix from quaternion
+                _rot_mat = raymath.QuaternionToMatrix(_rotation_quat);
+                _dirty_rotation_quat = false;
+            }
+            _dirty_rotation = false;
+        }
+        if (_dirty_scale) {
+            _scl_mat = raymath.MatrixScale(_scale.x, _scale.y, _scale.z);
+            _dirty_scale = false;
+        }
 
-        auto tmp1 = raymath.MatrixMultiply(scale_mat, rotation_mat);
-        auto tmp2 = raymath.MatrixMultiply(tmp1, translation_mat);
+        auto tmp1 = raymath.MatrixMultiply(_scl_mat, _rot_mat);
+        auto tmp2 = raymath.MatrixMultiply(tmp1, _pos_mat);
 
         _localToWorldTransform = tmp2;
         _worldToLocalTransform = raymath.MatrixInvert(_localToWorldTransform);
 
         _dirty = false;
-
     }
 }
