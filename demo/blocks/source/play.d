@@ -34,14 +34,21 @@ class PlayScene : Scene3D {
         auto block_body = block.add_component(new DynamicBody());
 
         // make small blocks
-        enum small_block_count = 200;
+        enum small_block_count = 3;
         enum small_block_spread = 10;
         for (int i = 0; i < small_block_count; i++) {
             auto x_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
             auto y_off = Rng.next_float() * small_block_spread * 4;
             auto z_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
 
+            auto x_ang = Rng.next_float() * C_2_PI;
+            auto y_ang = Rng.next_float() * C_2_PI;
+            auto z_ang = Rng.next_float() * C_2_PI;
+
+            static import raymath;
+
             auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
+            nt.transform.orientation = raymath.QuaternionFromEuler(x_ang, y_ang, z_ang);
             nt.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto thing_body = nt.add_component(new DynamicBody());
