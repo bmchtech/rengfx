@@ -4,10 +4,10 @@ import std.algorithm.comparison;
 static import raymath;
 import re.math;
 
-static class RectangleExt {
+static class Bounds {
     /** based on
     calculate bounds for an object in 2d space taking into account its transform
-    https://github.com/prime31/Nez/blob/0e97e68bd9df191fb3b893eb69e54238c30fcc80/Nez.Portable/Utils/Extensions/RectangleExt.cs#L184
+    https://github.com/prime31/Nez/blob/0e97e68bd9df191fb3b893eb69e54238c30fcc80/Nez.Portable/Utils/Extensions/Bounds.cs#L184
     */
     public static Rectangle calculate_bounds_2d(Vector2 position, Vector2 origin,
             Vector2 scale, float rotation, float width, float height) {
