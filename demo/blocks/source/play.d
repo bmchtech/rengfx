@@ -36,13 +36,14 @@ class PlayScene : Scene3D {
         block_body.mass = 64;
 
         // make small blocks
-        // enum small_block_count = 256;
-        enum small_block_count = 10;
+        enum small_block_count = 256;
+        // enum small_block_count = 10;
         enum small_block_spread = 10;
         for (int i = 0; i < small_block_count; i++) {
-            auto x_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
+            import re.math.funcs;
+            auto x_off = Distribution.normalRand(0, small_block_spread / 4);
             auto y_off = Rng.next_float() * small_block_spread * 4;
-            auto z_off = Rng.next_float() * small_block_spread * 2 - small_block_spread;
+            auto z_off = Distribution.normalRand(0, small_block_spread / 4);
 
             auto x_ang = Rng.next_float() * C_2_PI;
             auto y_ang = Rng.next_float() * C_2_PI;
