@@ -2,14 +2,32 @@ module re.math.transform;
 
 import re.math;
 
+/// represents an object transform in both 2d and 3d space
 struct Transform {
+    /*
+    
+    The "dirty" system:
+    
+    used internally to keep track of what parts of the transform have been modified
+    and are thus "out-of-sync" with its transformation matrices.
+
+    for example, when you modify rotation via the Z-angle, rotation will be set dirty,
+    and the transform will be synchronized to reflect that new transform. in addition,
+    the orientation quaternion will also be updated so it is in sync.
+
+    this helps save computation: since position and scale were not modified, there's
+    no reason to recompute their matrices; we can reuse our cached matrices for them.
+    whenever a part of the transform is modified, its matrix is marked dirty,
+    so it alone can be recomputed.
+
+    */
+
     /// whether anything is dirty
     private bool _dirty;
     /// whether scale is dirty
     private bool _dirty_scale;
     /// whether position is dirty
     private bool _dirty_position;
-
     /// whether rotation is dirty
     private bool _dirty_rotation;
     /// whether the dirty rotation is the Z-rotation
