@@ -29,7 +29,7 @@ class PlayScene : Scene3D {
 
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 5, 0));
-        block.transform.orientation = raymath.QuaternionFromEuler(C_PI_4, C_PI_4, C_PI_4);
+        block.transform.orientation = raymath.QuaternionFromEuler(0, C_PI_4, C_PI_4);
         block.add_component(new Cube(Vector3(4, 4, 4), Colors.BLUE));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
         auto block_body = block.add_component(new DynamicBody());
