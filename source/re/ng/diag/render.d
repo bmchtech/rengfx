@@ -8,7 +8,8 @@ static import raylib;
 
 static class DebugRender {
     public static Color debug_color = Colors.RED;
-    public static Color debug_color_2 = Colors.GREEN;
+    public static Color debug_color_mesh = Colors.BLACK;
+    public static Color debug_color_collider = Colors.GREEN;
 
     public static void default_debug_render(Renderable2D renderable) {
         raylib.DrawRectangleLinesEx(renderable.bounds, 1, debug_color);
@@ -24,7 +25,7 @@ static class DebugRender {
         default_debug_render(renderable);
         auto comp = cast(Component) renderable;
         raylib.DrawModelWiresEx(model, comp.transform.position, comp.transform.axis_angle.axis,
-                comp.transform.axis_angle.angle * C_RAD2DEG, comp.transform.scale, debug_color);
+                comp.transform.axis_angle.angle * C_RAD2DEG, comp.transform.scale, debug_color_mesh);
 
         // check if renderable has colliders
         auto box_colls = comp.entity.get_components!BoxCollider;
@@ -38,7 +39,7 @@ static class DebugRender {
             // transform by entity transform
             auto bounds = Bounds.calculate(raw_bounds, comp.entity.transform);
             // draw transformed bounding box
-            raylib.DrawBoundingBox(bounds, debug_color_2);
+            raylib.DrawBoundingBox(bounds, debug_color_collider);
         }
     }
 }
