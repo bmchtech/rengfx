@@ -273,39 +273,39 @@ version (physics) {
         test.game.destroy();
     }
 
-    // @("phys-rigid3d-lifecycle") unittest {
-    //     import re.ng.scene : Scene2D;
-    //     import re.util.test : test_scene;
-    //     import re.ecs.entity : Entity;
+    @("phys-rigid3d-lifecycle") unittest {
+        import re.ng.scene : Scene2D;
+        import re.util.test : test_scene;
+        import re.ecs.entity : Entity;
 
-    //     class TestScene : Scene2D {
-    //         private Entity nt1;
+        class TestScene : Scene2D {
+            private Entity nt1;
 
-    //         override void on_start() {
-    //             nt1 = create_entity("one");
-    //             nt1.add_component(new DynamicBody());
-    //             auto nt2 = create_entity("two");
-    //             nt2.add_component(new DynamicBody());
-    //             auto nt3 = create_entity("three");
-    //             nt3.add_component(new DynamicBody());
-    //         }
+            override void on_start() {
+                nt1 = create_entity("one");
+                nt1.add_component(new DynamicBody());
+                auto nt2 = create_entity("two");
+                nt2.add_component(new DynamicBody());
+                auto nt3 = create_entity("three");
+                nt3.add_component(new DynamicBody());
+            }
 
-    //         public void kill_one() {
-    //             nt1.destroy();
-    //         }
-    //     }
+            public void kill_one() {
+                nt1.destroy();
+            }
+        }
 
-    //     auto test = test_scene(new TestScene());
-    //     test.game.run();
+        auto test = test_scene(new TestScene());
+        test.game.run();
 
-    //     // check conditions
-    //     auto mgr = test.scene.get_manager!PhysicsManager;
-    //     assert(!mgr.isNull);
-    //     assert(mgr.get.body_count == 3, "physics body count does not match");
+        // check conditions
+        auto mgr = test.scene.get_manager!PhysicsManager;
+        assert(!mgr.isNull);
+        assert(mgr.get.body_count == 3, "physics body count does not match");
 
-    //     (cast(TestScene) test.scene).kill_one();
-    //     assert(mgr.get.body_count == 2, "physics body was not unregistered on component destroy");
+        (cast(TestScene) test.scene).kill_one();
+        assert(mgr.get.body_count == 2, "physics body was not unregistered on component destroy");
 
-    //     test.game.destroy();
-    // }
+        test.game.destroy();
+    }
 }
