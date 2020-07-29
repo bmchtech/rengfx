@@ -31,11 +31,12 @@ class Model3D : Component, Renderable3D {
     }
 
     @property BoundingBox bounds() {
-        return raylib.MeshBoundingBox(model.meshes[0]);
+        return Bounds.calculate_bounds(raylib.MeshBoundingBox(model.meshes[0]), entity.transform);
     }
 
     public void render() {
-        raylib.DrawModel(model, entity.position, 1, effect.color);
+        raylib.DrawModelEx(model, transform.position, transform.axis_angle.axis,
+                transform.axis_angle.angle, transform.scale, effect.color);
     }
 
     public void debug_render() {
