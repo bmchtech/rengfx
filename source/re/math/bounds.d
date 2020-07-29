@@ -49,4 +49,12 @@ static class Bounds {
             return Rectangle(min_x, min_y, max_x - min_x, max_y - min_y);
         }
     }
+
+    /// calculate the new bounding box by applying the transform to the raw bounding box
+    public static BoundingBox calculate_bounds(BoundingBox bounds, ref Transform transform) {
+        auto t_min = raymath.Vector3Transform(bounds.min, transform.local_to_world_transform);
+        auto t_max = raymath.Vector3Transform(bounds.max, transform.local_to_world_transform);
+
+        return BoundingBox(t_min, t_max);
+    }
 }
