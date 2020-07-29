@@ -266,7 +266,7 @@ class CameraFreeLook : CameraFollow3D {
         auto wheel_delta = Input.scroll_delta();
         auto mouse_delta = Input.mouse_delta;
 
-        auto key_pan = Input.is_mouse_down(MouseButton.MOUSE_RIGHT_BUTTON);
+        auto key_pan = Input.is_mouse_down(MouseButton.MOUSE_RIGHT_BUTTON) || Input.is_key_down(Keys.KEY_LEFT_ALT);
         auto key_alternate = !Input.is_key_down(Keys.KEY_LEFT_SHIFT);
         auto key_smooth = Input.is_key_down(Keys.KEY_LEFT_CONTROL);
 
