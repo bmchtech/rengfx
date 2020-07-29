@@ -1,14 +1,15 @@
-module re.math.rect_ext;
+module re.math.bounds;
 
 import std.algorithm.comparison;
 static import raymath;
 import re.math;
 
 static class RectangleExt {
-    /* based on
+    /** based on
+    calculate bounds for an object in 2d space taking into account its transform
     https://github.com/prime31/Nez/blob/0e97e68bd9df191fb3b893eb69e54238c30fcc80/Nez.Portable/Utils/Extensions/RectangleExt.cs#L184
     */
-    public static Rectangle calculate_bounds(Vector2 position, Vector2 origin,
+    public static Rectangle calculate_bounds_2d(Vector2 position, Vector2 origin,
             Vector2 scale, float rotation, float width, float height) {
         if (rotation == 0) {
             return Rectangle(cast(int)(position.x - (origin.x * scale.x)),
@@ -18,7 +19,8 @@ static class RectangleExt {
             auto tmp1 = Matrix4.init;
 
             // set the reference point to world reference taking origin into account
-            auto transform_mat = raymath.MatrixTranslate(-position.x - origin.x, -position.y - origin.y, 0);
+            auto transform_mat = raymath.MatrixTranslate(-position.x - origin.x,
+                    -position.y - origin.y, 0);
             tmp1 = raymath.MatrixScale(scale.x, scale.y, 1); // scale ->
             transform_mat = raymath.MatrixMultiply(transform_mat, tmp1);
             tmp1 = raymath.MatrixRotateZ(rotation); // rotate ->

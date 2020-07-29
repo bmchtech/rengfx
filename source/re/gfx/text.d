@@ -58,7 +58,7 @@ class Text : Component, Renderable2D {
     }
 
     @property Rectangle bounds() {
-        return RectangleExt.calculate_bounds(entity.position2, _origin,
+        return RectangleExt.calculate_bounds_2d(entity.position2, _origin,
                 entity.transform.scale2, entity.transform.rotation, _text_size.x, _text_size.y);
     }
 
