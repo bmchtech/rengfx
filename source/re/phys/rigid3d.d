@@ -79,32 +79,34 @@ version (physics) {
         override void update() {
             // step the simulation
             phys_time += Time.delta_time;
+            // TODO: should this be while?
             if (phys_time >= timestep) {
                 phys_time -= timestep;
-                world.update(timestep);
-            }
 
-            // sync FROM bodies: physical properties (mass, inertia)
-            // sync TO bodies: transforms, momentum
-            foreach (comp; _bodies) {
-                rb.RigidBody bod = comp._phys_body;
+                // sync FROM bodies: physical properties (mass, inertia)
+                // sync TO bodies: transforms, momentum
+                foreach (comp; _bodies) {
+                    rb.RigidBody bod = comp._phys_body;
 
-                // sync properties -> physics engine
-                if (abs(bod.mass - comp.mass) > float.epsilon) {
-                    bod.mass = comp.mass;
-                    bod.invMass = 1f / comp.mass;
+                    // sync properties -> physics engine
+                    if (abs(bod.mass - comp.mass) > float.epsilon) {
+                        bod.mass = comp.mass;
+                        bod.invMass = 1f / comp.mass;
+                    }
+                    // TODO: sync inertia? right now it's automatically set from mass
+
+                    // sync physics engine -> components
+
+                    // sync position
+                    auto bod_pos = bod.position;
+                    comp.transform.position = convert_vec3(bod_pos);
+
+                    // sync rotation/orientation
+                    auto bod_rot = bod.orientation;
+                    comp.transform.orientation = convert_quat(bod_rot);
                 }
-                // TODO: sync inertia? right now it's automatically set from mass
 
-                // sync physics engine -> components
-
-                // sync position
-                auto bod_pos = bod.position;
-                comp.transform.position = convert_vec3(bod_pos);
-
-                // sync rotation/orientation
-                auto bod_rot = bod.orientation;
-                comp.transform.orientation = convert_quat(bod_rot);
+                world.update(timestep);
             }
         }
 
