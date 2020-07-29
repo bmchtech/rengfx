@@ -18,7 +18,7 @@ class SpriteRenderer : Component, Renderable2D {
 
     @property Rectangle bounds() {
         return Bounds.calculate_bounds_2d(entity.position2, sprite.origin,
-                entity.transform.scale2, entity.transform.rotation,
+                entity.transform.scale2, entity.transform.rotation_z,
                 sprite.src_rect.width, sprite.src_rect.height);
     }
 
@@ -27,7 +27,7 @@ class SpriteRenderer : Component, Renderable2D {
         auto dest_rect = Rectangle(entity.position2.x, entity.position2.y,
                 sprite.src_rect.width, sprite.src_rect.height);
         raylib.DrawTexturePro(sprite.texture, sprite.src_rect, dest_rect,
-                sprite.origin, entity.transform.rotation * C_RAD2DEG, color);
+                sprite.origin, entity.transform.rotation_z * C_RAD2DEG, color);
     }
 
     public void debug_render() {

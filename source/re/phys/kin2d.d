@@ -29,11 +29,11 @@ class KinBody2D : Component, Updatable {
     }
 
     @property public float angle() {
-        return transform.rotation;
+        return transform.rotation_z;
     }
 
     @property public float angle(float value) {
-        return transform.rotation = value;
+        return transform.rotation_z = value;
     }
 
     @property public float stdAngle() {
@@ -126,7 +126,7 @@ class KinBody2D : Component, Updatable {
             angular_velocity += angular_drag * dt;
         }
 
-        transform.rotation = transform.rotation + (angular_velocity * dt);
+        transform.rotation_z = transform.rotation_z + (angular_velocity * dt);
     }
 
     protected void apply_motion(Vector2 pos_delta) {

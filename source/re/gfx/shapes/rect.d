@@ -22,13 +22,13 @@ class ColorRect : Component, Renderable2D {
     @property Rectangle bounds() {
         return Bounds.calculate_bounds_2d(Vector2(entity.position2.x,
                 entity.position2.y), size / 2, entity.transform.scale2,
-                entity.transform.rotation, size.x, size.y);
+                entity.transform.rotation_z, size.x, size.y);
     }
 
     void render() {
         raylib.DrawRectanglePro(Rectangle(entity.position2.x,
                 entity.position2.y, size.x, size.y), size / 2,
-                entity.transform.rotation * C_RAD2DEG, color);
+                entity.transform.rotation_z * C_RAD2DEG, color);
     }
 
     void debug_render() {

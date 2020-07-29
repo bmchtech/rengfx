@@ -6,7 +6,7 @@ struct Transform {
     private bool _dirty;
     private Vector3 _position = Vector3(0, 0, 0);
     private Vector3 _scale = Vector3(1, 1, 1);
-    private float _rotation = 0;
+    private float _rotation_z = 0;
     private Matrix4 _localToWorldTransform;
     private Matrix4 _worldToLocalTransform;
 
@@ -63,15 +63,15 @@ struct Transform {
     }
 
     /// gets Z-axis rotation
-    @property float rotation() {
+    @property float rotation_z() {
         update_transform();
-        return _rotation;
+        return _rotation_z;
     }
 
     /// sets Z-axis rotation
-    @property float rotation(float radians) {
+    @property float rotation_z(float radians) {
         _dirty = true;
-        return _rotation = radians;
+        return _rotation_z = radians;
     }
 
     /// gets local-to-world transform
@@ -92,7 +92,7 @@ struct Transform {
 
         // recompute matrices
         auto translation_mat = raymath.MatrixTranslate(_position.x, _position.y, _position.z);
-        auto rotation_mat = raymath.MatrixRotateZ(_rotation);
+        auto rotation_mat = raymath.MatrixRotateZ(_rotation_z);
         auto scale_mat = raymath.MatrixScale(_scale.x, _scale.y, _scale.z);
 
         auto tmp1 = raymath.MatrixMultiply(scale_mat, rotation_mat);

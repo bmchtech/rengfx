@@ -41,7 +41,7 @@ class SceneCamera2D : SceneCamera {
 
         // copy entity to camera transform
         _camera.target = entity.transform.position2;
-        _camera.rotation = entity.transform.rotation;
+        _camera.rotation = entity.transform.rotation_z;
         _camera.zoom = entity.transform.scale.x;
     }
 }
