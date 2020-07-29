@@ -30,13 +30,11 @@ static class DebugRender {
         auto box_colls = comp.entity.get_components!BoxCollider;
         foreach (box; box_colls) {
             auto raw_bounds = BoundingBox( // min
-                    Vector3(comp.entity.position.x - box.size.x + box.offset.x,
-                    comp.entity.position.y - box.size.y + box.offset.y,
-                    comp.entity.position.z - box.size.z + box.offset.z),
+                    Vector3(box.size.x + box.offset.x,
+                    box.size.y + box.offset.y, box.size.z + box.offset.z),
                     // max
-                    Vector3(comp.entity.position.x + box.size.x + box.offset.x,
-                        comp.entity.position.y + box.size.y + box.offset.y,
-                        comp.entity.position.z + box.size.z + box.offset.z));
+                    Vector3(box.size.x + box.offset.x, box.size.y + box.offset.y,
+                        box.size.z + box.offset.z));
             // transform by entity transform
             auto bounds = Bounds.calculate(raw_bounds, comp.entity.transform);
             // draw transformed bounding box
