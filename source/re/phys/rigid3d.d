@@ -10,6 +10,7 @@ version (physics) {
     import re.ng.scene;
     import re.phys.collider;
     import re.util.dual_map;
+    import re.util.dlib;
     import std.math;
     import std.string : format;
 
@@ -96,25 +97,6 @@ version (physics) {
                 // sync rotation/orientation
                 auto bod_rot = bod.orientation;
                 comp.transform.orientation = convert_quat(bod_rot);
-            }
-        }
-
-        pragma(inline, true) {
-            private dl_vec.Vector3f convert_vec3(const(Vector3) vec) {
-                return dl_vec.Vector3f(vec.x, vec.y, vec.z);
-            }
-
-            private Vector3 convert_vec3(const(dl_vec.Vector3f) vec) {
-                return Vector3(vec.x, vec.y, vec.z);
-            }
-
-            private Quaternion convert_quat(const(dl_quat.Quaternionf) quat) {
-                auto vec = quat.vectorof[];
-                return Quaternion(vec[0], vec[1], vec[2], vec[3]);
-            }
-
-            private dl_quat.Quaternionf convert_quat(const(Quaternion) quat) {
-                return dl_quat.Quaternionf(quat.x, quat.y, quat.z, quat.w);
             }
         }
 
