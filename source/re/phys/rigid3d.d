@@ -27,6 +27,8 @@ version (physics) {
     class PhysicsManager : Manager {
         public static int max_collisions = 1024;
         private mech.PhysicsWorld world;
+        private static float timestep;
+        private static float phys_time = 0;
 
         private DynamicArray!PhysicsBody _bodies;
 
@@ -65,6 +67,7 @@ version (physics) {
             import dlib.core.memory : New;
 
             world = New!(mech.PhysicsWorld)(null, max_collisions);
+            timestep = 1f / Core.target_fps; // set target timestep
         }
 
         override void destroy() {
@@ -75,7 +78,11 @@ version (physics) {
 
         override void update() {
             // step the simulation
-            world.update(Time.delta_time);
+            phys_time += Time.delta_time;
+            if (phys_time >= timestep) {
+                phys_time -= timestep;
+                world.update(timestep);
+            }
 
             // sync FROM bodies: physical properties (mass, inertia)
             // sync TO bodies: transforms, momentum
