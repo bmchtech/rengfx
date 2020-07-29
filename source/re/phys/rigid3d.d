@@ -18,6 +18,7 @@ version (physics) {
     import mech = dmech.world;
     import shape = dmech.shape;
     import dl_vec = dlib.math.vector;
+    import dl_quat = dlib.math.quaternion;
     import dl_mat = dlib.math.matrix;
     import dlib.container.array;
 
@@ -88,14 +89,14 @@ version (physics) {
 
                 // sync physics engine -> components
 
+                // sync position
                 auto bod_pos = bod.position;
                 comp.transform.position = convert_vec3(bod_pos);
 
+                // sync rotation/orientation
                 auto bod_rot = bod.orientation;
-                // TODO: sync rotation/orientation to component
+                comp.transform.orientation = convert_quat(bod_rot);
             }
-
-            // TODO: handle synchronization
         }
 
         pragma(inline, true) {
@@ -105,6 +106,15 @@ version (physics) {
 
             private Vector3 convert_vec3(const(dl_vec.Vector3f) vec) {
                 return Vector3(vec.x, vec.y, vec.z);
+            }
+
+            private Quaternion convert_quat(const(dl_quat.Quaternionf) quat) {
+                auto vec = quat.vectorof[];
+                return Quaternion(vec[0], vec[1], vec[2], vec[3]);
+            }
+
+            private dl_quat.Quaternionf convert_quat(const(Quaternion) quat) {
+                return dl_quat.Quaternionf(quat.x, quat.y, quat.z, quat.w);
             }
         }
 
@@ -205,7 +215,7 @@ version (physics) {
             body_comp._phys_body.position = convert_vec3(body_comp.transform.position);
 
             // sync rotation
-            // TODO: synchronize rotation
+            body_comp._phys_body.orientation = convert_quat(body_comp.transform.orientation);
         }
     }
 
