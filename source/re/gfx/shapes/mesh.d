@@ -19,7 +19,7 @@ abstract class RenderableMesh : Component, Renderable3D {
     }
 
     @property BoundingBox bounds() {
-        return raylib.MeshBoundingBox(_mesh);
+        return Bounds.calculate_bounds(raylib.MeshBoundingBox(_mesh), entity.transform);
     }
 
     /// gets the effect
@@ -49,7 +49,8 @@ abstract class RenderableMesh : Component, Renderable3D {
     }
 
     public void render() {
-        raylib.DrawModel(_model, entity.position, 1, effect.color);
+        raylib.DrawModelEx(_model, transform.position, transform.axis_angle.axis,
+                transform.axis_angle.angle, transform.scale, effect.color);
     }
 
     public void debug_render() {
