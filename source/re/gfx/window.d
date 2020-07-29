@@ -1,5 +1,6 @@
 module re.gfx.window;
 
+import re.core;
 import re.math;
 import std.string;
 static import raylib;
@@ -32,7 +33,7 @@ class Window {
         // create the window
         raylib.InitWindow(_width, _height, "");
         // set options
-        raylib.SetTargetFPS(60);
+        raylib.SetTargetFPS(Core.target_fps);
         // get properties
         dpi = raylib.GetWindowScaleDPI();
     }
