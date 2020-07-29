@@ -234,7 +234,8 @@ abstract class Core {
 @("core-basic")
 unittest {
     import re.util.test : TestGame;
-    import std.string: format;
+    import std.string : format;
+    import std.math : approxEqual;
 
     class Game : TestGame {
         override void initialize() {
@@ -247,7 +248,8 @@ unittest {
 
     // ensure time has passed
     auto target_time = Core.frame_limit / Core.fps;
-    assert((Time.total_time - target_time) < 0.0001, format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
+    assert(approxEqual(Time.total_time, target_time),
+            format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
 
     game.destroy(); // clean up
 
