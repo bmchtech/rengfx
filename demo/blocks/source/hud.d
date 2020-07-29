@@ -3,6 +3,7 @@ module hud;
 import re;
 import re.gfx;
 import re.math;
+import re.ng.diag.fps_counter;
 
 class HUDScene : Scene2D {
     override void on_start() {
@@ -16,5 +17,8 @@ class HUDScene : Scene2D {
         auto hello_text = msg.add_component(new Text(Text.default_font,
                 "blocks - physics", 10, Colors.BROWN));
         hello_text.set_align(Text.Align.Close, Text.Align.Far);
+
+        auto diag = create_entity("diag", Vector2(2, 2));
+        diag.add_component!FPSCounter();
     }
 }
