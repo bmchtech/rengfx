@@ -13,13 +13,21 @@ version (physics) {
     import std.math;
     import std.string : format;
 
+    // import dmech = dmech.geometry;
+    // import dmech = dmech.rigidbody;
+    import mech = dmech.world;
+
+    // import dl = dlib.math.vector;
+    // import dl = dlib.math.matrix;
+
     /// represents a manager for bodies in a NudgeRealm
     class PhysicsManager : Manager {
+        private mech.PhysicsWorld world;
         // private NudgeRealm realm;
         // private uint item_limit = 1024;
 
-        // /// dual map from RigidBody to physics body index
-        // private DualMap!(RigidBody, uint) _body_map;
+        /// dual map from RigidBody to physics body
+        private DualMap!(PhysicsBody, uint) _body_map;
 
         /// checks whether this scene has a nudge manager installed
         public static bool is_installed(Scene scene) {
@@ -35,35 +43,41 @@ version (physics) {
         /// enable a nudge manager in a scene
         public static void install(Scene scene) {
             auto manager = new PhysicsManager();
-            // manager.allocate();
+            manager.allocate();
             scene.managers ~= manager;
         }
 
-        // @property public size_t body_count() {
-        //     return _body_map.count;
-        // }
+        @property public size_t body_count() {
+            return _body_map.count;
+        }
 
         /// allocate resources to run physics
         public void allocate() {
-            // realm = new NudgeRealm(item_limit, item_limit, item_limit);
-            // realm.allocate();
-            // _body_map = new DualMap!(RigidBody, uint);
-            // _box_collider_map = new DualMap!(RigidBody, ColliderRefs);
+            import dlib.core.memory : New;
+
+            // TODO: optionally set max collisions?
+            world = New!(mech.PhysicsWorld)(null);
+            _body_map = new DualMap!(PhysicsBody, uint);
         }
 
         override void destroy() {
-            // realm.destroy();
-            // realm = null;
-            // _body_map.clear();
-            // _body_map = null;
+            import dlib.core.memory : Delete;
+
+            Delete(world);
+            _body_map.clear();
+            _body_map = null;
         }
 
         override void update() {
-            // TODO
+            // step the simulation
+            world.update(Time.delta_time);
+
+            // copy data to bodies
+            // TODO: copy data to bodies
         }
 
         /// register all colliders in this body
-        private void register_colliders(RigidBody body_comp) {
+        private void register_colliders(PhysicsBody body_comp) {
             // we need to use the body's collider list to populate our internal collider registration list
             // then add the colliders to the realm
 
@@ -71,7 +85,7 @@ version (physics) {
         }
 
         /// unregister all colliders in this body
-        private void unregister_colliders(RigidBody body_comp) {
+        private void unregister_colliders(PhysicsBody body_comp) {
             import std.range : front;
             import std.algorithm : countUntil, remove;
 
@@ -84,34 +98,45 @@ version (physics) {
         }
 
         /// registers a body
-        public void register(RigidBody body_comp) {
+        public void register(PhysicsBody body_comp) {
             // TODO
+
+            // _body_map[body_comp]
         }
 
         /// unregisters a body
-        public void unregister(RigidBody body_comp) {
+        public void unregister(PhysicsBody body_comp) {
             // TODO
         }
 
         /// used to sync a body's properties with the physics system when they change
-        public void refresh(RigidBody body_comp) {
+        public void refresh(PhysicsBody body_comp) {
             // TODO
         }
     }
 
-    /// represents a physics body that uses the nudge physics system
-    class RigidBody : Component {
-        /// reference to the body id inside the nudge realm (used internally by the nudge manager)
-        private uint nudge_body_id;
+    /// represents a physics body
+    abstract class PhysicsBody : Component {
+        // /// reference to the body id inside the nudge realm (used internally by the nudge manager)
+        // private uint nudge_body_id;
 
         /// whether this body is currently in sync with the physics system
         public bool physics_synced = false;
 
-        private PhysicsManager mgr;
-
         private float _mass = 1;
         private float _inertia = 1;
-        private bool _static_body = false;
+
+        private PhysicsManager mgr;
+        private BodyType _body_type;
+
+        public enum BodyType {
+            Dynamic,
+            Static
+        }
+
+        this(BodyType type) {
+            _body_type = type;
+        }
 
         override void setup() {
             // ensure the nudge system is installed
@@ -123,18 +148,6 @@ version (physics) {
 
             // register with nudge
             mgr.register(this);
-        }
-
-        /// gets whether the body is static
-        @property public bool is_static() {
-            return _static_body;
-        }
-
-        /// sets whether the body is static
-        @property public bool is_static(bool value) {
-            _static_body = value;
-            mgr.refresh(this);
-            return value;
         }
 
         /// gets the body's mass
@@ -168,6 +181,18 @@ version (physics) {
 
         override void destroy() {
             mgr.unregister(this);
+        }
+    }
+
+    public class RigidBody : PhysicsBody {
+        this() {
+            super(PhysicsBody.BodyType.Dynamic);
+        }
+    }
+
+    public class StaticBody : PhysicsBody {
+        this() {
+            super(PhysicsBody.BodyType.Static);
         }
     }
 
