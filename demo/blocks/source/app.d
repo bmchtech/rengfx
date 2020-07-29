@@ -17,7 +17,7 @@ class Game : Core {
 	}
 
 	override void initialize() {
-		default_resolution = Vector2(WIDTH / 4, HEIGHT / 4);
+		// default_resolution = Vector2(WIDTH / 4, HEIGHT / 4);
 
 		load_scenes([new PlayScene(), new HUDScene()]);
 	}
