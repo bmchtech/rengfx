@@ -25,7 +25,7 @@ version (physics) {
 
     /// represents a manager for physics bodies
     class PhysicsManager : Manager {
-        private enum _max_collisions = 1024;
+        public static int max_collisions = 1024;
         private mech.PhysicsWorld world;
 
         private DynamicArray!PhysicsBody _bodies;
@@ -64,7 +64,7 @@ version (physics) {
         public void allocate() {
             import dlib.core.memory : New;
 
-            world = New!(mech.PhysicsWorld)(null, _max_collisions);
+            world = New!(mech.PhysicsWorld)(null, max_collisions);
         }
 
         override void destroy() {

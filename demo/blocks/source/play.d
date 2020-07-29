@@ -22,6 +22,8 @@ class PlayScene : Scene3D {
         // auto grid = create_entity("grid");
         // grid.add_component(new Grid3D(20, 1));
 
+        PhysicsManager.max_collisions = 4096;
+
         auto floor = create_entity("floor", Vector3(0, -5, 0));
         floor.add_component(new Cube(Vector3(40, 10, 40), Colors.GRAY));
         floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
@@ -37,7 +39,7 @@ class PlayScene : Scene3D {
 
         // make small blocks
         enum small_block_count = 256;
-        // enum small_block_count = 10;
+        // enum small_block_count = 32;
         enum small_block_spread = 10;
         for (int i = 0; i < small_block_count; i++) {
             import re.math.funcs;
