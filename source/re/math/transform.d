@@ -125,7 +125,7 @@ struct Transform {
     }
 
     /// sets orientation quaternion
-    @property Quaternion rotation_z(Quaternion value) {
+    @property Quaternion orientation(Quaternion value) {
         _dirty = _dirty_rotation = _dirty_rotation_quat = true;
         _rotation_quat = value;
         return value;
