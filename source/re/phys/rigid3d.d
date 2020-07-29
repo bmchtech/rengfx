@@ -19,11 +19,14 @@ version (physics) {
     import shape = dmech.shape;
     import dl_vec = dlib.math.vector;
     import dl_mat = dlib.math.matrix;
+    import dlib.container.array;
 
     /// represents a manager for physics bodies
     class PhysicsManager : Manager {
         private enum _max_collisions = 1024;
         private mech.PhysicsWorld world;
+
+        private DynamicArray!PhysicsBody _bodies;
 
         /// checks whether this scene has a nudge manager installed
         public static bool is_installed(Scene scene) {
@@ -74,6 +77,23 @@ version (physics) {
 
             // sync FROM bodies: physical properties (mass, inertia)
             // sync TO bodies: transforms, momentum
+            foreach (comp; _bodies) {
+                rb.RigidBody bod = comp._phys_body;
+
+                // sync properties -> physics engine
+
+                bod.mass = comp.mass;
+                bod.invMass = 1f / comp.mass;
+                // TODO: sync inertia
+
+                // sync physics engine -> components
+
+                auto bod_pos = bod.position;
+                comp.transform.position = convert_vec3(bod_pos);
+
+                auto bod_rot = bod.orientation;
+                // TODO: sync rotation/orientation to component
+            }
 
             // TODO: handle synchronization
         }
@@ -127,7 +147,8 @@ version (physics) {
                 bod = world.addStaticBody(convert_vec3(body_comp.transform.position));
                 break;
             case PhysicsBody.BodyType.Dynamic:
-                bod = world.addDynamicBody(convert_vec3(body_comp.transform.position));
+                bod = world.addDynamicBody(convert_vec3(body_comp.transform.position),
+                        body_comp.mass);
                 break;
             default:
                 assert(0);
@@ -135,6 +156,7 @@ version (physics) {
 
             // update registration
             body_comp._phys_body = bod;
+            _bodies.append(body_comp);
 
             // add colliders
             register_colliders(body_comp);
@@ -167,14 +189,23 @@ version (physics) {
 
             // clear registration
             body_comp._phys_body = null;
+            _bodies.removeFirst(body_comp);
         }
 
-        /// reset a body's registration in the physics engine, necessary when shapes change
-        public void refresh(PhysicsBody body_comp) {
-            // update colliders
-            // this means, remove all existing colliders we own, and (re)add colliders
+        /// sync a body's colliders in the physics engine, necessary when shapes change
+        public void sync_colliders(PhysicsBody body_comp) {
             unregister_colliders(body_comp);
             register_colliders(body_comp);
+        }
+
+        public void sync_transform(PhysicsBody body_comp) {
+            // synchronize the transform from body to physics engine
+
+            // sync position
+            body_comp._phys_body.position = convert_vec3(body_comp.transform.position);
+
+            // sync rotation
+            // TODO: synchronize rotation
         }
     }
 
@@ -215,7 +246,12 @@ version (physics) {
 
         /// used to notify the physics engine to update colliders if they have changed
         public void sync_colliders() {
-            mgr.refresh(this);
+            mgr.sync_colliders(this);
+        }
+
+        /// used to notify the physics engine when transform is directly modified
+        public void sync_transform() {
+            mgr.sync_transform(this);
         }
 
         override void destroy() {
