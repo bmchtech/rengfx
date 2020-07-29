@@ -146,6 +146,7 @@ unittest {
             // add kin body
             auto bod = new KinBody2D();
             bod.accel = Vector2(0, 9.8);
+            bod.angular_accel = C_PI_2;
             nt.add_component(bod);
         }
     }
@@ -156,6 +157,8 @@ unittest {
     // check conditions
     assert(test.scene.get_entity("block").get_component!KinBody2D().pos.y > 0,
             "KinBody2D did not move");
+    assert(test.scene.get_entity("block").get_component!KinBody2D()
+            .angular_velocity > 0, "KinBody2D did not rotate");
 
     test.game.destroy();
 }
