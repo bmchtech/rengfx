@@ -133,6 +133,7 @@ struct Transform {
 
     /// gets orientation as an axis angle
     @property AxisAngle axis_angle() {
+        update_transform();
         return _rotation_axis_angle;
     }
 
