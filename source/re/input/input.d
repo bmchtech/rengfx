@@ -21,19 +21,20 @@ public static class Input {
     }
 
     public static void update() {
+        // update core input pipeline
+        immutable auto current_mouse_pos = mouse_position();
+        mouse_delta = current_mouse_pos - last_mouse_position;
+        last_mouse_position = current_mouse_pos;
+        // update virtual inputs
         debug {
+            // skip virtual input update if console open
             if (Core.debugger.console.open) {
-                // suppress input if console open
                 return;
             }
         }
         foreach (input; virtual_inputs) {
             input.update();
         }
-        // update input pipeline
-        immutable auto current_mouse_pos = mouse_position();
-        mouse_delta = current_mouse_pos - last_mouse_position;
-        last_mouse_position = current_mouse_pos;
     }
 
     // - keyboard
