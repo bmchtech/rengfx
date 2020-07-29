@@ -1,6 +1,7 @@
 module re.math;
 
 public {
+    import re.math.funcs;
     import re.math.transform;
     import re.math.bounds;
     import re.math.vector_ext;
