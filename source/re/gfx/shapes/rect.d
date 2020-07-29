@@ -20,9 +20,7 @@ class ColorRect : Component, Renderable2D {
     }
 
     @property Rectangle bounds() {
-        return Bounds.calculate_bounds_2d(Vector2(entity.position2.x,
-                entity.position2.y), size / 2, entity.transform.scale2,
-                entity.transform.rotation_z, size.x, size.y);
+        return Bounds.calculate(entity.transform, size / 2, size.x, size.y);
     }
 
     void render() {
