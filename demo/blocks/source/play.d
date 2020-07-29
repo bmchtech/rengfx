@@ -19,13 +19,13 @@ class PlayScene : Scene3D {
         cam.entity.position = Vector3(0, 10, 20);
 
         // draw a grid at the origin
-        auto grid = create_entity("grid");
-        grid.add_component(new Grid3D(20, 1));
+        // auto grid = create_entity("grid");
+        // grid.add_component(new Grid3D(20, 1));
 
-        auto floor = create_entity("floor", Vector3(0, -5, 0));
-        floor.add_component(new Cube(Vector3(40, 10, 40), Colors.GRAY));
-        floor.add_component(new BoxCollider(Vector3(40, 5, 40), Vector3Zero));
-        auto floor_body = floor.add_component(new StaticBody());
+        // auto floor = create_entity("floor", Vector3(0, -5, 0));
+        // floor.add_component(new Cube(Vector3(40, 10, 40), Colors.GRAY));
+        // floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
+        // auto floor_body = floor.add_component(new StaticBody());
 
         auto x_ang = Rng.next_float() * C_2_PI;
         auto y_ang = Rng.next_float() * C_2_PI;
@@ -36,7 +36,7 @@ class PlayScene : Scene3D {
         block.transform.orientation = raymath.QuaternionFromEuler(x_ang, y_ang, z_ang);
         block.add_component(new Cube(Vector3(4, 4, 4), Colors.BLUE));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
-        auto block_body = block.add_component(new DynamicBody());
+        // auto block_body = block.add_component(new DynamicBody());
 
         // // make small blocks
         // enum small_block_count = 1;
