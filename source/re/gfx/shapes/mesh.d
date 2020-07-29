@@ -50,7 +50,7 @@ abstract class RenderableMesh : Component, Renderable3D {
 
     public void render() {
         raylib.DrawModelEx(_model, transform.position, transform.axis_angle.axis,
-                transform.axis_angle.angle, transform.scale, effect.color);
+                transform.axis_angle.angle * C_RAD2DEG, transform.scale, effect.color);
     }
 
     public void debug_render() {
