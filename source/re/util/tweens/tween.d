@@ -16,6 +16,8 @@ interface ITween {
     void start(bool attach = true);
     void add_chain(ITween[] tw...);
     @property ITween[] get_chain();
+    @property void delegate(ITween) callback();
+    void set_callback(void delegate(ITween) cb);
 }
 
 /// represents a tween, to be used for easings/interpolation
@@ -30,6 +32,7 @@ class Tween(T) : ITween {
     private ITween[] _chain;
     private float elapsed = 0;
     private TweenState _state;
+    private void delegate(ITween) _callback;
 
     this(TRef[] data, T[] from, T[] to, float duration, EaseFunction ease, float delay = 0) {
         import std.algorithm : map;
@@ -49,6 +52,14 @@ class Tween(T) : ITween {
 
     @property ITween[] get_chain() {
         return _chain;
+    }
+
+    @property void delegate(ITween) callback() {
+        return _callback;
+    }
+
+    public void set_callback(void delegate(ITween) cb) {
+        _callback = cb;
     }
 
     public void update(float dt) {
@@ -183,4 +194,35 @@ unittest {
     // tw_a.update(duration);
     assert(data.r == goal.r && data.g == goal.g && data.b == goal.b
             && data.a == goal.a, format("tween did not match goal (was %f)", data));
+}
+
+@("tween-manager")
+unittest {
+    import re.ng.scene : Scene2D;
+    import re.util.test : test_scene;
+    import re.math : raymath, Vector2, Vector3;
+
+    auto dest_pos = Vector3(60, 60);
+    auto callback_called = false;
+
+    class TestScene : Scene2D {
+        override void on_start() {
+            auto nt = create_entity("square", Vector2(20, 20));
+            auto tw = Tweener.tween(nt.transform.position,
+                    nt.transform.position, dest_pos, 0.5f, &Ease.LinearInOut);
+            tw.set_callback((tw) { callback_called = true; });
+            tw.start();
+        }
+    }
+
+    auto test = test_scene(new TestScene());
+    test.game.run();
+
+    // check conditions
+    auto nt = test.scene.get_entity("square");
+    assert(raymath.Vector3Length(dest_pos - nt.transform.position) <= float.epsilon,
+            "entity did not move to target position");
+    assert(callback_called, "callback was not caled");
+
+    test.game.destroy();
 }

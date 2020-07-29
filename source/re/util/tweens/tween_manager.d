@@ -26,6 +26,9 @@ class TweenManager : Manager {
             _tweens = _tweens.remove!(x => x == tw);
             // add chains to our list
             _tweens ~= tw.get_chain;
+            // call callback
+            auto cb = tw.callback;
+            cb(tw);
         }
     }
 
