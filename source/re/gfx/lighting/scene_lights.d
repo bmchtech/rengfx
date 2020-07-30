@@ -79,7 +79,7 @@ class SceneLightManager : Manager, Updatable {
     }
 
     private void unregister(Light3D light_comp) {
-        import std.range;
+        import std.range : dropExactly, takeOne;
 
         auto removed_index = cast(int) _comps[].countUntil(light_comp);
         // clear all lights
@@ -105,13 +105,17 @@ class SceneLightManager : Manager, Updatable {
 
 /// represents a 3D light
 class Light3D : Component, Renderable3D {
-    public Color color;
     private SceneLightManager _mgr;
     private enum phys_size = 0.2;
     private rlights.Light _light;
 
+    /// the color of the light
+    public Color color;
+
+    /// whether the light is enabled
     public bool light_enabled = true;
 
+    /// creates a new light with a given color
     this(Color color = Colors.WHITE) {
         this.color = color;
     }
