@@ -57,7 +57,7 @@ static class Bounds {
     public static BoundingBox calculate(BoundingBox bounds, ref Transform transform) {
         auto t_min = raymath.Vector3Transform(bounds.min, transform.local_to_world_transform);
         auto t_max = raymath.Vector3Transform(bounds.max, transform.local_to_world_transform);
-        return BoundingBox(bounds.min, bounds.max);
+        return BoundingBox(t_min, t_max);
 
         // this is a crappy workaround, using dlib
         // import re.util.dlib;
