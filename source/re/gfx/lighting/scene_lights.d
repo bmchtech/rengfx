@@ -6,14 +6,16 @@ import re.ng.manager;
 import re.ng.scene3d;
 import re.gfx;
 import re.math;
+import std.algorithm;
 static import raylib;
 import rlights = re.gfx.lighting.rlights;
 
 /// acts as a manager for Light3D components
 class SceneLightManager : Manager, Updatable {
     alias max_lights = rlights.MAX_LIGHTS;
-    private rlights.Light[max_lights] lights;
-    private Light3D[] _light_comps;
+    private rlights.Light[max_lights] _lights;
+    private Light3D[max_lights] _comps;
+    private int light_count;
     public Shader shader;
 
     this() {
@@ -44,15 +46,14 @@ class SceneLightManager : Manager, Updatable {
                 &camera_pos, raylib.ShaderUniformDataType.UNIFORM_VEC3);
 
         // update lights
-        for (int i = 0; i < _light_comps.length; i++) {
-            auto comp = _light_comps[i];
+        for (int i = 0; i < light_count; i++) {
             // sync fields
-            lights[i].position = comp.transform.position;
-            lights[i].color = comp.color;
-            lights[i].enabled = comp.light_enabled;
-            
+            _lights[i].position = _comps[i].transform.position;
+            _lights[i].color = _comps[i].color;
+            _lights[i].enabled = _comps[i].light_enabled;
+
             // update shader values
-            rlights.UpdateLightValues(shader, lights[i]);
+            rlights.UpdateLightValues(shader, _lights[i]);
         }
     }
 
@@ -60,14 +61,49 @@ class SceneLightManager : Manager, Updatable {
         // TODO: clean up after lights
     }
 
-    private void register(Light3D light) {
-        lights[_light_comps.length] = rlights.CreateLight(rlights.LightType.LIGHT_POINT,
-                light.transform.position, Vector3Zero, light.color, shader);
-        _light_comps ~= light;
+    private void register(Light3D light_comp) {
+        assert(light_count < max_lights, "maximum light count exceeded.");
+        // add a light
+        _lights[light_count] = rlights.set_light(light_count, rlights.LightType.LIGHT_POINT,
+                light_comp.transform.position, Vector3Zero, light_comp.color, shader);
+        _comps[light_count] = light_comp;
+        light_comp._light = _lights[light_count];
+        light_count++;
     }
 
-    private void unregister(Light3D light) {
-        // TODO: properly handle this
+    private void unregister(Light3D light_comp) {
+        auto ix = cast(int) _comps[].countUntil(light_comp);
+        Light3D[] new_comps;
+        rlights.Light[] new_lights;
+        // clear all lights
+        for (int i = 0; i < light_count; i++) {
+            rlights.clear_light(ix, shader);
+        }
+        // re-add components
+        for (int i = 0; i < light_count; i++) {
+            auto comp = _comps[i];
+            if (comp == light_comp)
+                continue;
+            new_comps ~= comp;
+        }
+        // re-add lights
+        for (int i = 0; i < light_count; i++) {
+            auto light = _lights[i];
+            if (i == ix)
+                continue;
+            new_lights ~= light;
+        }
+        light_count--; // we're removing a light
+        assert(new_comps.length == new_lights.length);
+        // reactivate the lights
+        for (int i = 0; i < new_lights.length; i++) {
+            _comps[i] = new_comps[i];
+            // update shader
+            _lights[i] = rlights.set_light(light_count, rlights.LightType.LIGHT_POINT,
+                    _comps[i].transform.position, Vector3Zero, _comps[i].color, shader);
+            // set associated light
+            _comps[i]._light = _lights[i];
+        }
     }
 }
 
@@ -76,6 +112,7 @@ class Light3D : Component, Renderable3D {
     public Color color;
     private SceneLightManager _mgr;
     private enum phys_size = 0.2;
+    private rlights.Light _light;
 
     public bool light_enabled = true;
 
