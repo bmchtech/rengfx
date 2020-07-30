@@ -172,7 +172,7 @@ version (physics) {
         }
 
         /// registers a body
-        public void register(PhysicsBody body_comp) {
+        private void register(PhysicsBody body_comp) {
             rb.RigidBody bod;
             switch (body_comp._body_type) {
             case PhysicsBody.BodyType.Static:
@@ -203,7 +203,7 @@ version (physics) {
         }
 
         /// unregisters a body
-        public void unregister(PhysicsBody body_comp) {
+        private void unregister(PhysicsBody body_comp) {
             // remove colliders
             unregister_colliders(body_comp);
 
@@ -230,14 +230,13 @@ version (physics) {
         }
 
         /// sync a body's colliders in the physics engine, necessary when shapes change
-        public void sync_colliders(PhysicsBody body_comp) {
+        private void sync_colliders(PhysicsBody body_comp) {
             unregister_colliders(body_comp);
             register_colliders(body_comp);
         }
 
-        public void sync_transform(PhysicsBody body_comp) {
-            // synchronize the transform from body to physics engine
-
+        /// synchronize the transform from body to physics engine
+        private void sync_transform(PhysicsBody body_comp) {
             // sync position
             body_comp._phys_body.position = convert_vec3(body_comp.transform.position);
 
@@ -245,7 +244,8 @@ version (physics) {
             body_comp._phys_body.orientation = convert_quat(body_comp.transform.orientation);
         }
 
-        public void sync_properties(PhysicsBody body_comp) {
+        /// sync physical properties from body to physics engine
+        private void sync_properties(PhysicsBody body_comp) {
             auto bod = body_comp._phys_body;
             if (body_comp.custom_gravity) {
                 bod.useOwnGravity = true;
@@ -256,20 +256,39 @@ version (physics) {
 
     /// represents a physics body
     abstract class PhysicsBody : Component {
-        /// whether this body is currently in sync with the physics system
-        public bool physics_synced = false;
-
+        // - references to things in the physics engine
         private rb.RigidBody _phys_body;
         private shape.ShapeComponent[] _phys_shapes;
 
+        // - physical properties
+        /// object mass
         public float mass = 0;
+        /// moment of inertia
         // public float inertia = 1;
+        /// max speed of object
         public float max_speed = float.max;
+        /// current linear velocity of object
         public Vector3 velocity = Vector3(0, 0, 0);
+        /// current angular velocity of object
         public Vector3 angular_velocity = Vector3(0, 0, 0);
+        /// whether to use a custom gravity value
         public bool custom_gravity = false;
+        /// if custom gravity is enabled, the gravity to use
         public Vector3 gravity = Vector3(0, 0, 0);
 
+        /// whether this body is currently in sync with the physics system
+        public bool physics_synced = false;
+
+        private PhysicsManager mgr;
+        private BodyType _body_type;
+
+        /// physics body mode: dynamic or static
+        public enum BodyType {
+            Dynamic,
+            Static
+        }
+
+        // - used to queue forces and impulses to be applied by the physics engine
         private DynamicArray!VecAtPoint _forces;
         private DynamicArray!VecAtPoint _impulses;
 
@@ -278,14 +297,7 @@ version (physics) {
             Vector3 pos;
         }
 
-        private PhysicsManager mgr;
-        private BodyType _body_type;
-
-        public enum BodyType {
-            Dynamic,
-            Static
-        }
-
+        /// creates a physics body with a given mass and type
         this(float mass, BodyType type) {
             this.mass = mass;
             _body_type = type;
@@ -335,12 +347,14 @@ version (physics) {
         }
     }
 
+    /// a dynamic physics body that is affected by forces
     public class DynamicBody : PhysicsBody {
         this(float mass = 1f) {
             super(mass, PhysicsBody.BodyType.Dynamic);
         }
     }
 
+    /// a static physics body that is not affected by forces
     public class StaticBody : PhysicsBody {
         this(float mass = 1f) {
             super(mass, PhysicsBody.BodyType.Static);
