@@ -105,13 +105,14 @@ version (physics) {
 
                     // apply forces and impulses
                     // these are queued up, then we apply them all to the object
-                    auto loc_to_world = convert_mat(comp.transform.local_to_world_transform);
                     foreach (force; comp._forces) {
-                        bod.applyForceAtPos(convert_vec3(force.value), convert_vec3(force.pos));
+                        bod.applyForceAtPos(convert_vec3(force.value),
+                                convert_vec3(force.pos) + bod.position);
                     }
                     comp._forces.removeBack(cast(uint) comp._forces.length);
                     foreach (impulse; comp._impulses) {
-                        bod.applyImpulse(convert_vec3(impulse.value), convert_vec3(impulse.pos) * loc_to_world);
+                        bod.applyImpulse(convert_vec3(impulse.value),
+                                convert_vec3(impulse.pos) + bod.position);
                     }
                     comp._impulses.removeBack(cast(uint) comp._impulses.length);
                 }
