@@ -173,7 +173,7 @@ version (physics) {
                 world.shapeComponents.removeFirst(shape);
             }
 
-            // then clear our internal collider list
+            // then clear the internal collider list
             body_comp._shapes.clear();
         }
 
