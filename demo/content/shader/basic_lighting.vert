@@ -18,16 +18,15 @@ out vec3 fragNormal;
 
 // NOTE: Add here your custom variables
 
-void main()
-{
-    // Send vertex attributes to fragment shader
-    fragPosition = vec3(matModel*vec4(vertexPosition, 1.0));
-    fragTexCoord = vertexTexCoord;
-    fragColor = vertexColor;
-    
-    mat3 normalMatrix = transpose(inverse(mat3(matModel)));
-    fragNormal = normalize(normalMatrix*vertexNormal);
+void main() {
+  // Send vertex attributes to fragment shader
+  fragPosition = vec3(matModel * vec4(vertexPosition, 1.0));
+  fragTexCoord = vertexTexCoord;
+  fragColor = vertexColor;
 
-    // Calculate final vertex position
-    gl_Position = mvp*vec4(vertexPosition, 1.0);
+  mat3 normalMatrix = transpose(inverse(mat3(matModel)));
+  fragNormal = normalize(normalMatrix * vertexNormal);
+
+  // Calculate final vertex position
+  gl_Position = mvp * vec4(vertexPosition, 1.0);
 }
