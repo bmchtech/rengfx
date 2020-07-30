@@ -22,6 +22,13 @@ class PlayScene : Scene3D {
     override void on_start() {
         clear_color = color_rgb(60, 60, 60);
 
+        // load a shader effect and add it as a postprocessor
+        auto cel_ish = Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
+        cel_ish.set_shader_var_imm("c_threshold", 0.2f);
+        cel_ish.set_shader_var_imm("c_resolution", cast(float[2]) [resolution.x, resolution.y]);
+        auto postproc = new PostProcessor(resolution, cel_ish);
+        postprocessors ~= postproc;
+
         // set the camera position
         cam.entity.position = Vector3(0, 10, 20);
 
