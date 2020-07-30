@@ -89,7 +89,10 @@ class PlayScene : Scene3D {
             auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1)));
             lil_cube.effect = Effect(lights.shader, color_rgb(209, 153, 56));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
-            nt.add_component(new DynamicBody(2));
+            auto bod = nt.add_component(new DynamicBody(2));
+            bod.bounce = 1.1;
+            bod.friction = 0.7;
+            bod.sync_properties();
         }
 
         // point the camera at the center block
