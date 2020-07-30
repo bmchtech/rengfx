@@ -12,7 +12,6 @@ import rlights = re.gfx.lighting.rlights;
 /// acts as a manager for Light3D components
 class SceneLightManager : Manager, Updatable {
     alias max_lights = rlights.MAX_LIGHTS;
-    private int light_count = 0;
     private rlights.Light[max_lights] lights;
     private Light3D[] _light_comps;
     public Shader shader;
@@ -59,7 +58,7 @@ class SceneLightManager : Manager, Updatable {
     }
 
     private void register(Light3D light) {
-        lights[light_count] = rlights.CreateLight(rlights.LightType.LIGHT_POINT,
+        lights[_light_comps.length] = rlights.CreateLight(rlights.LightType.LIGHT_POINT,
                 light.transform.position, Vector3Zero, light.color, shader);
         _light_comps ~= light;
     }
