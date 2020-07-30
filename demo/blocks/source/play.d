@@ -108,6 +108,13 @@ class PlayScene : Scene3D {
         lights[0].position.z = sin(light_angle) * 8;
 
         rlights.UpdateLightValues(lighting_shader, lights[0]);
+
+        // Update the light shader with the camera view position
+        float[3] cameraPos = [
+            cam.transform.position.x, cam.transform.position.y, cam.transform.position.z
+        ];
+        raylib.SetShaderValue(lighting_shader, lighting_shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW], &cameraPos, raylib.ShaderUniformDataType.UNIFORM_VEC3);
+        //------------------------------------------------------------------------------
     }
 
     override void render_hook() {
