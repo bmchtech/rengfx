@@ -8,6 +8,8 @@ import re.ng.camera;
 import re.phys.collider;
 import re.phys.rigid3d;
 import re.math;
+import comp.input;
+import comp.body;
 static import raylib;
 
 /// simple 3d demo scene
@@ -30,6 +32,8 @@ class PlayScene : Scene3D {
         block.transform.orientation = Vector3(0, C_PI_4, C_PI_4); // euler angles
         block.add_component(new Cube(Vector3(4, 4, 4), color_rgb(141, 113, 176)));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
+        block.add_component!PlayerController();
+        block.add_component!Character();
         auto block_body = block.add_component(new DynamicBody());
         block_body.mass = 64;
 

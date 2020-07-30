@@ -99,6 +99,16 @@ version (physics) {
                     }
                     // TODO: sync inertia? right now it's automatically set from mass
 
+                    // sync velocity
+                    bod.linearVelocity = convert_vec3(comp.velocity);
+                    bod.angularVelocity = convert_vec3(comp.angular_velocity);
+                }
+
+                world.update(timestep);
+
+                foreach (comp; _bodies) {
+                    rb.RigidBody bod = comp._phys_body;
+
                     // sync physics engine -> components
 
                     // sync position
@@ -108,9 +118,11 @@ version (physics) {
                     // sync rotation/orientation
                     auto bod_rot = bod.orientation;
                     comp.transform.orientation = convert_quat(bod_rot);
-                }
 
-                world.update(timestep);
+                    // sync velocity
+                    comp.velocity = convert_vec3(bod.linearVelocity);
+                    comp.angular_velocity = convert_vec3(bod.angularVelocity);
+                }
             }
         }
 
@@ -227,6 +239,8 @@ version (physics) {
 
         public float mass = 1;
         // public float inertia = 1;
+        public Vector3 velocity;
+        public Vector3 angular_velocity;
 
         private PhysicsManager mgr;
         private BodyType _body_type;
