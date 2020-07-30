@@ -237,10 +237,10 @@ version (physics) {
         private rb.RigidBody _phys_body;
         private shape.ShapeComponent[] _phys_shapes;
 
-        public float mass = 1;
+        public float mass = 0;
         // public float inertia = 1;
-        public Vector3 velocity;
-        public Vector3 angular_velocity;
+        public Vector3 velocity = Vector3(0, 0, 0);
+        public Vector3 angular_velocity = Vector3(0, 0, 0);
 
         private PhysicsManager mgr;
         private BodyType _body_type;
@@ -250,7 +250,8 @@ version (physics) {
             Static
         }
 
-        this(BodyType type) {
+        this(float mass, BodyType type) {
+            this.mass = mass;
             _body_type = type;
         }
 
@@ -282,14 +283,14 @@ version (physics) {
     }
 
     public class DynamicBody : PhysicsBody {
-        this() {
-            super(PhysicsBody.BodyType.Dynamic);
+        this(float mass = 1f) {
+            super(mass, PhysicsBody.BodyType.Dynamic);
         }
     }
 
     public class StaticBody : PhysicsBody {
-        this() {
-            super(PhysicsBody.BodyType.Static);
+        this(float mass = 1f) {
+            super(mass, PhysicsBody.BodyType.Static);
         }
     }
 

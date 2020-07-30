@@ -32,10 +32,9 @@ class PlayScene : Scene3D {
         block.transform.orientation = Vector3(0, C_PI_4, C_PI_4); // euler angles
         block.add_component(new Cube(Vector3(4, 4, 4), color_rgb(141, 113, 176)));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
+        block.add_component(new DynamicBody(64));
         block.add_component!PlayerController();
         block.add_component!Character();
-        auto block_body = block.add_component(new DynamicBody());
-        block_body.mass = 64;
 
         // make small blocks
         enum small_block_count = 128;
@@ -57,8 +56,7 @@ class PlayScene : Scene3D {
             nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
             nt.add_component(new Cube(Vector3(1, 1, 1), color_rgb(209, 153, 56)));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
-            auto thing_body = nt.add_component(new DynamicBody());
-            thing_body.mass = 2;
+            auto thing_body = nt.add_component(new DynamicBody(2));
         }
 
         // point the camera at the block, then orbit it
