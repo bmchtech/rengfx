@@ -84,7 +84,7 @@ abstract class Core {
 
         jar = new Jar();
 
-        managers ~= new TweenManager();
+        add_manager(new TweenManager());
 
         debug {
             debugger = new Debugger();
@@ -187,6 +187,13 @@ abstract class Core {
             return Nullable!T(cast(T) matches.front);
         }
         return Nullable!T.init;
+    }
+
+    /// adds a global manager
+    public T add_manager(T)(T manager) {
+        managers ~= manager;
+        manager.setup();
+        return manager;
     }
 
     @property public static Scene[] scenes() {
