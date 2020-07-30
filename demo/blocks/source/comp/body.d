@@ -8,7 +8,7 @@ static import raymath;
 
 class Character : Component, Updatable {
     /// movement speed
-    enum move_speed = 10;
+    enum move_speed = 20;
 
     private InputController controller;
     private DynamicBody bod;
@@ -16,6 +16,8 @@ class Character : Component, Updatable {
     override void setup() {
         controller = entity.get_component!InputController();
         bod = entity.get_component!DynamicBody();
+
+        bod.max_speed  = move_speed;
     }
 
     override void update() {
