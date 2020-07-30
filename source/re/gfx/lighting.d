@@ -194,7 +194,8 @@ class SceneLightManager : Manager, Updatable {
             cast(float) light.color.b / cast(float) 255,
             cast(float) light.color.a / cast(float) 255
         ];
-        raylib.SetShaderValue(shader, light.colorLoc, &color, raylib.ShaderUniformDataType.UNIFORM_VEC4);
+        raylib.SetShaderValue(shader, light.colorLoc, &color,
+                raylib.ShaderUniformDataType.UNIFORM_VEC4);
     }
 }
 
