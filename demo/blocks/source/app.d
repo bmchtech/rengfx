@@ -18,6 +18,7 @@ class Game : Core {
 
 	override void initialize() {
 		// default_resolution = Vector2(WIDTH / 4, HEIGHT / 4);
+		content.paths ~= ["../content/", "content/"];
 
 		load_scenes([new PlayScene(), new HUDScene()]);
 	}
