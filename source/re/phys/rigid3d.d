@@ -355,6 +355,8 @@ version (physics) {
 
         class TestScene : Scene2D {
             override void on_start() {
+                add_manager(new PhysicsManager());
+
                 auto nt = create_entity("block");
                 nt.add_component(new DynamicBody());
             }
@@ -377,6 +379,8 @@ version (physics) {
             private Entity nt1;
 
             override void on_start() {
+                add_manager(new PhysicsManager());
+
                 nt1 = create_entity("one");
                 nt1.add_component(new DynamicBody());
                 auto nt2 = create_entity("two");
@@ -414,6 +418,8 @@ version (physics) {
             private Entity nt1;
 
             override void on_start() {
+                add_manager(new PhysicsManager());
+
                 nt1 = create_entity("block");
                 nt1.add_component(new BoxCollider(Vector3(1, 1, 1), Vector3Zero));
                 nt1.add_component(new DynamicBody());
