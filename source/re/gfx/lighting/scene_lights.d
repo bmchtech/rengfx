@@ -46,6 +46,10 @@ class SceneLightManager : Manager, Updatable {
 
         // update lights
         for (int i = 0; i < _light_comps.length; i++) {
+            auto comp = _light_comps[i];
+            // sync position
+            lights[i].position = comp.transform.position;
+            // update shader values
             rlights.UpdateLightValues(shader, lights[i]);
         }
     }
