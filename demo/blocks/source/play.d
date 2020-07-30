@@ -18,7 +18,7 @@ import rlights = re.gfx.lighting.rlights;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     override void on_start() {
-        clear_color = color_rgb(60, 60, 60);
+        clear_color = color_rgb(209, 199, 159);
 
         // load a shader effect and add it as a postprocessor
         auto cel_ish = Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
@@ -41,19 +41,21 @@ class PlayScene : Scene3D {
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 5, 0));
         block.transform.orientation = Vector3(0, C_PI_4, C_PI_4); // euler angles
+        auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4)));
+        block_cube.effect = Effect(lights.shader, color_rgb(141, 113, 176));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
         block.add_component(new DynamicBody(64));
-        auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4)));
         block.add_component!PlayerController();
         block.add_component!Character();
 
-        // set up lighting
-        block_cube.effect = Effect(lights.shader, color_rgb(141, 113, 176));
-
         // create a point light
-        auto light1_nt = create_entity("light1");
-        light1_nt.add_component(new Light3D(color_rgb(150, 150, 150)));
-        light1_nt.add_component(new Orbit(Vector3(0, 8, 0), 10, C_PI / 8));
+        auto light1 = create_entity("light1");
+        light1.add_component(new Light3D(color_rgb(150, 150, 150)));
+        light1.add_component(new Orbit(Vector3(0, 8, 0), 10, C_PI / 8));
+
+        auto light2 = create_entity("light2");
+        light2.add_component(new Light3D(color_rgb(100, 0, 0, 100)));
+        light2.add_component(new Orbit(Vector3(0, 4, 0), 16, C_PI / 8, C_PI));
 
         // make small blocks
         enum small_block_count = 128;
