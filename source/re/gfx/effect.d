@@ -10,6 +10,11 @@ struct Effect {
     /// the tint color
     Color color = Colors.WHITE;
 
+    public void set_shader_var_imm(T)(string name, T value) {
+        T var = value;
+        set_shader_var(name, var);
+    }
+
     public void set_shader_var(T)(string name, ref T value) {
         import std.string : toStringz;
 
