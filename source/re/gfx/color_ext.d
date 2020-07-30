@@ -37,6 +37,11 @@ pragma(inline) {
     public Color color_rgb(ubyte r, ubyte g, ubyte b, ubyte a = 255) {
         return Color(r, g, b, 255);
     }
+
+    /// gets a color from rgb in a single value
+    public Color color_rgb(ubyte v) {
+        return color_rgb(v, v, v);
+    }
 }
 
 /// color blending algorithm - from https://stackoverflow.com/a/39924008/13240621

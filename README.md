@@ -6,6 +6,8 @@ RE ENGINE FX
 
 lightweight, expressive, extensible game engine 
 
+![demo gif](https://raw.githubusercontent.com/wiki/xdrie/rengfx/img/rec-2020-07-30_12.21.42.gif)
+
 ## features
 
 + only library dependency is [`raylib`](https://github.com/xdrie/raylib)

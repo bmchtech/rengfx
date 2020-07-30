@@ -35,7 +35,7 @@ abstract class RenderableMesh : Component, Renderable3D {
     }
 
     /// gets the model
-    @property Model model() {
+    @property ref Model model() {
         return _model;
     }
 

@@ -34,6 +34,8 @@ abstract class Scene2D : Scene {
             }
         }
 
+        render_hook();
+
         raylib.EndMode2D();
     }
 
