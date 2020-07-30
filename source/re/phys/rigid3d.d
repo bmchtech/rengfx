@@ -102,6 +102,18 @@ version (physics) {
                     // sync velocity
                     bod.linearVelocity = convert_vec3(comp.velocity);
                     bod.angularVelocity = convert_vec3(comp.angular_velocity);
+
+                    // apply forces and impulses
+                    // these are queued up, then we apply them all to the object
+                    auto loc_to_world = convert_mat(comp.transform.local_to_world_transform);
+                    foreach (force; comp._forces) {
+                        bod.applyForceAtPos(convert_vec3(force.value), convert_vec3(force.pos));
+                    }
+                    comp._forces.removeBack(cast(uint) comp._forces.length);
+                    foreach (impulse; comp._impulses) {
+                        bod.applyImpulse(convert_vec3(impulse.value), convert_vec3(impulse.pos) * loc_to_world);
+                    }
+                    comp._impulses.removeBack(cast(uint) comp._impulses.length);
                 }
 
                 world.update(timestep);
@@ -181,6 +193,9 @@ version (physics) {
             // add colliders
             register_colliders(body_comp);
 
+            // sync properties
+            sync_properties(body_comp);
+
             // mark as synced
             body_comp.physics_synced = true;
         }
@@ -227,6 +242,14 @@ version (physics) {
             // sync rotation
             body_comp._phys_body.orientation = convert_quat(body_comp.transform.orientation);
         }
+
+        public void sync_properties(PhysicsBody body_comp) {
+            auto bod = body_comp._phys_body;
+            if (body_comp.custom_gravity) {
+                bod.useOwnGravity = true;
+                bod.gravity = convert_vec3(body_comp.gravity);
+            }
+        }
     }
 
     /// represents a physics body
@@ -241,6 +264,16 @@ version (physics) {
         // public float inertia = 1;
         public Vector3 velocity = Vector3(0, 0, 0);
         public Vector3 angular_velocity = Vector3(0, 0, 0);
+        public bool custom_gravity = false;
+        public Vector3 gravity = Vector3(0, 0, 0);
+
+        private DynamicArray!VecAtPoint _forces;
+        private DynamicArray!VecAtPoint _impulses;
+
+        private struct VecAtPoint {
+            Vector3 value;
+            Vector3 pos;
+        }
 
         private PhysicsManager mgr;
         private BodyType _body_type;
@@ -265,6 +298,23 @@ version (physics) {
 
             // register with nudge
             mgr.register(this);
+        }
+
+        /// apply an impulse to the physics body
+        public void apply_impulse(Vector3 value, Vector3 pos) {
+            _impulses.append(VecAtPoint(value, pos));
+            // _phys_body.applyImpulse(convert_vec3(value), convert_vec3(pos));
+        }
+
+        /// apply a force to the physics body
+        public void apply_force(Vector3 value, Vector3 pos) {
+            _forces.append(VecAtPoint(value, pos));
+            // _phys_body.applyForceAtPos(convert_vec3(value), convert_vec3(pos));
+        }
+
+        /// notify physics engine about new physical properties, such as gravity
+        public void sync_properties() {
+            mgr.sync_properties(this);
         }
 
         /// used to notify the physics engine to update colliders if they have changed
