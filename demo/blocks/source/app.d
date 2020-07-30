@@ -10,7 +10,7 @@ import hud;
 
 class Game : Core {
 	enum WIDTH = 1280;
-	enum HEIGHT = 960;
+	enum HEIGHT = 720;
 
 	this() {
 		super(WIDTH, HEIGHT, "blocks");
