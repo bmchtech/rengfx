@@ -102,6 +102,7 @@ version (physics) {
                     // sync velocity
                     bod.linearVelocity = convert_vec3(comp.velocity);
                     bod.angularVelocity = convert_vec3(comp.angular_velocity);
+                    bod.maxSpeed = comp.max_speed;
 
                     // apply forces and impulses
                     // these are queued up, then we apply them all to the object
@@ -263,6 +264,7 @@ version (physics) {
 
         public float mass = 0;
         // public float inertia = 1;
+        public float max_speed = float.max;
         public Vector3 velocity = Vector3(0, 0, 0);
         public Vector3 angular_velocity = Vector3(0, 0, 0);
         public bool custom_gravity = false;
