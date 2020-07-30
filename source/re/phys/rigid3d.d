@@ -16,6 +16,7 @@ version (physics) {
 
     import geom = dmech.geometry;
     import rb = dmech.rigidbody;
+    import dm_ray = dmech.raycast;
     import mech = dmech.world;
     import shape = dmech.shape;
     import dl_vec = dlib.math.vector;
@@ -42,7 +43,7 @@ version (physics) {
         /// used to track time to keep physics timestep fixed
         private float _phys_time = 0;
 
-        private DynamicArray!PhysicsBody _bodies;
+        private PhysicsBody[rb.RigidBody] _bodies;
 
         /// the number of dynamic bodies in this physics world
         @property public size_t dynamic_body_count() {
@@ -86,7 +87,7 @@ version (physics) {
 
                 // sync FROM bodies: physical properties (mass, inertia)
                 // sync TO bodies: transforms, momentum
-                foreach (comp; _bodies) {
+                foreach (comp; _bodies.byValue()) {
                     rb.RigidBody bod = comp._phys_body;
 
                     // sync properties -> physics engine
@@ -124,7 +125,7 @@ version (physics) {
 
                 world.update(_timestep);
 
-                foreach (comp; _bodies) {
+                foreach (comp; _bodies.byValue()) {
                     rb.RigidBody bod = comp._phys_body;
 
                     // sync physics engine -> components
@@ -194,7 +195,7 @@ version (physics) {
 
             // update registration
             body_comp._phys_body = bod;
-            _bodies.append(body_comp);
+            _bodies[bod] = body_comp;
 
             // add colliders
             register_colliders(body_comp);
@@ -229,8 +230,8 @@ version (physics) {
             body_comp.physics_synced = false;
 
             // clear registration
+            _bodies.remove(bod);
             body_comp._phys_body = null;
-            _bodies.removeFirst(body_comp);
         }
 
         /// sync a body's colliders in the physics engine, necessary when shapes change
