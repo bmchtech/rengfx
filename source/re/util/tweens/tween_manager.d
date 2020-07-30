@@ -9,14 +9,9 @@ import std.algorithm;
 class TweenManager : Manager {
     /// the tweens being managed (internal)
     private ITween[] _tweens;
-    private uint _update_count;
 
     override void update() {
         super.update();
-        _update_count++;
-        import std.stdio : writefln;
-
-        writefln("beans: %s", _update_count);
 
         // update tweens
         ITween[] done;
