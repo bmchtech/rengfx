@@ -64,7 +64,7 @@ abstract class Scene {
 
     }
 
-    /// called internally to update ecs
+    /// called internally to update ecs. can be overridden, but super.update() must be called.
     public void update() {
         // update ecs
         ecs.update();
@@ -113,6 +113,10 @@ abstract class Scene {
     }
 
     protected abstract void render_scene();
+
+    /// may optionally be used to render global things from a scene
+    protected void render_hook() {
+    }
 
     private void update_render_target() {
         if (Core.headless)
