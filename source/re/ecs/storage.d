@@ -85,7 +85,8 @@ class ComponentStorage {
             }
         }
         assert(0,
-                "no matching component was found. use has_component() to ensure that the component exists.");
+                format("no matching component (%s) was found. use has_component() to ensure that the component exists.",
+                    typeid(T).name));
     }
 
     /// get all components in an entity matching a type
@@ -137,8 +138,8 @@ class ComponentStorage {
         // writefln("storage[%d]: %s", storage.length, storage.array);
 
         // empty the slot, and swap it to the end
-        assert(id.index < storage.length,
-                format("id points to invalid position (%d) in %s storage", id.index, to!string(id.type)));
+        assert(id.index < storage.length, format("id points to invalid position (%d) in %s storage",
+                id.index, to!string(id.type)));
         storage[id.index].destroy(); // cleanup
         storage[id.index] = null; // dereference
         auto last_slot = cast(size_t) storage.length - 1;
