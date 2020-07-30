@@ -20,7 +20,7 @@ class Character : Component, Updatable {
     override void update() {
         if (controller.jump.is_pressed) {
             // jump
-            bod.velocity.y -= 10f;
+            bod.velocity.y += 10f;
         }
     }
 }
