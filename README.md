@@ -22,6 +22,10 @@ lightweight, expressive, extensible game engine
 + highly extensible
 + wip
 
+## documentation
++ see [doc](doc/) for notes.
++ see [api docs](https://xdrie.github.io/rengfx/)
+
 ## hacking
 
 requirements:
