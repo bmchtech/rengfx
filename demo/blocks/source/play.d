@@ -24,7 +24,7 @@ class PlayScene : Scene3D {
 
         // load a shader effect and add it as a postprocessor
         auto cel_ish = Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
-        cel_ish.set_shader_var_imm("c_threshold", 0.2f);
+        cel_ish.set_shader_var_imm("c_threshold", 0.7f);
         cel_ish.set_shader_var_imm("c_resolution", cast(float[2]) [resolution.x, resolution.y]);
         auto postproc = new PostProcessor(resolution, cel_ish);
         postprocessors ~= postproc;
@@ -52,7 +52,7 @@ class PlayScene : Scene3D {
                 "shader/basic_lighting.frag");
         auto lighting_effect = Effect(lighting_shader);
         auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4), color_rgb(141, 113, 176)));
-        block_cube.effect = lighting_effect;
+        // block_cube.effect = lighting_effect;
 
         // Get some shader loactions
         lighting_shader.locs[raylib.ShaderLocationIndex.LOC_MATRIX_MODEL]
@@ -75,7 +75,7 @@ class PlayScene : Scene3D {
         auto fox = create_entity("fox", Vector3(8, 0, 8));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
-        fox_model.effect = lighting_effect;
+        // fox_model.effect = lighting_effect;
 
         // make small blocks
         enum small_block_count = 128;
