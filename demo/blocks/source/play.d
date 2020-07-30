@@ -39,7 +39,7 @@ class PlayScene : Scene3D {
         add_manager(physics);
 
         // set the camera position
-        cam.entity.position = Vector3(0, 10, 20);
+        cam.entity.position = Vector3(5, 10, 20);
 
         // create the static floor
         auto floor = create_entity("floor", Vector3(0, -5, 0));
