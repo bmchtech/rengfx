@@ -119,6 +119,10 @@ version (physics) {
                                 convert_vec3(impulse.pos) + bod.position);
                     }
                     comp._impulses.removeBack(cast(uint) comp._impulses.length);
+                    foreach (torque; comp._torques) {
+                        bod.applyTorque(convert_vec3(torque));
+                    }
+                    comp._torques.removeBack(cast(uint) comp._torques.length);
                 }
 
                 // sync options to world
@@ -331,6 +335,7 @@ version (physics) {
 
         // - used to queue forces and impulses to be applied by the physics engine
         private DynamicArray!VecAtPoint _forces;
+        private DynamicArray!Vector3 _torques;
         private DynamicArray!VecAtPoint _impulses;
 
         private struct VecAtPoint {
@@ -356,13 +361,16 @@ version (physics) {
         /// apply an impulse to the physics body
         public void apply_impulse(Vector3 value, Vector3 pos) {
             _impulses.append(VecAtPoint(value, pos));
-            // _phys_body.applyImpulse(convert_vec3(value), convert_vec3(pos));
         }
 
         /// apply a force to the physics body
         public void apply_force(Vector3 value, Vector3 pos) {
             _forces.append(VecAtPoint(value, pos));
-            // _phys_body.applyForceAtPos(convert_vec3(value), convert_vec3(pos));
+        }
+
+        /// apply a torque to the physics body
+        public void apply_torque(Vector3 value) {
+            _torques.append(value);
         }
 
         /// notify physics engine about new physical properties, such as gravity
