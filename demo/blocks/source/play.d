@@ -35,6 +35,7 @@ class PlayScene : Scene3D {
         // enable scene physics
         auto physics = new PhysicsManager();
         physics.max_collisions = 1024;
+        physics.gravity = Vector3(0, -16, 0);
         add_manager(physics);
 
         // set the camera position
@@ -70,7 +71,7 @@ class PlayScene : Scene3D {
         light3.add_component(new Orbit(Vector3(0, 6, 0), 6, C_PI / 8, C_PI / 4));
 
         // make small blocks
-        enum small_block_count = 128;
+        enum small_block_count = 160;
         enum small_block_spread = 10;
         for (int i = 0; i < small_block_count; i++) {
             import re.math.funcs : Distribution;
