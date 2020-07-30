@@ -20,7 +20,7 @@ class PlayScene : Scene3D {
     private Shader lighting_shader;
 
     override void on_start() {
-        clear_color = Colors.LIGHTGRAY;
+        clear_color = color_rgb(60, 60, 60);
 
         // set the camera position
         cam.entity.position = Vector3(0, 10, 20);
@@ -54,13 +54,20 @@ class PlayScene : Scene3D {
 
         // ambient light level
         int ambient_loc = raylib.GetShaderLocation(lighting_shader, "ambient");
-        auto ambient_val = [0.2f, 0.2f, 0.2f, 1.0f];
+        auto ambient_val = [0.6f, 0.6f, 0.6f, 1.0f];
         raylib.SetShaderValue(lighting_shader, ambient_loc, &ambient_val,
                 raylib.ShaderUniformDataType.UNIFORM_VEC4);
 
         // create a point light
         lights[0] = rlights.CreateLight(rlights.LightType.LIGHT_POINT,
-                Vector3(4, 2, 4), Vector3Zero, Colors.WHITE, lighting_shader);
+                Vector3(8, 4, 8), Vector3Zero, Colors.ORANGE, lighting_shader);
+
+        import re.gfx.shapes.model;
+
+        auto fox = create_entity("fox", Vector3(8, 0, 8));
+        auto fox_asset = Core.content.load_model("models/fox.obj");
+        auto fox_model = fox.add_component(new Model3D(fox_asset));
+        fox_model.model.materials[0].shader = lighting_shader;
 
         // make small blocks
         enum small_block_count = 128;
@@ -97,9 +104,13 @@ class PlayScene : Scene3D {
         import std.math : sin, cos;
 
         light_angle -= 0.02f;
-        lights[0].position.x = cos(light_angle) * 4.0f;
-        lights[0].position.z = sin(light_angle) * 4.0f;
+        lights[0].position.x = cos(light_angle) * 8;
+        lights[0].position.z = sin(light_angle) * 8;
 
         rlights.UpdateLightValues(lighting_shader, lights[0]);
+    }
+
+    override void render_hook() {
+        raylib.DrawSphereEx(lights[0].position, 0.2f, 8, 8, Colors.WHITE);
     }
 }
