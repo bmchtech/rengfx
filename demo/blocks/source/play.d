@@ -17,6 +17,8 @@ import rlights = re.gfx.lighting.rlights;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
+    private Entity light3;
+
     override void on_start() {
         clear_color = color_rgb(209, 199, 159);
 
@@ -57,6 +59,10 @@ class PlayScene : Scene3D {
         light2.add_component(new Light3D(color_rgb(100, 0, 0, 100)));
         light2.add_component(new Orbit(Vector3(0, 4, 0), 16, C_PI / 8, C_PI));
 
+        light3 = create_entity("light3");
+        light3.add_component(new Light3D(color_rgb(0, 0, 100, 100)));
+        light3.add_component(new Orbit(Vector3(0, 6, 0), 6, C_PI / 8, C_PI / 4));
+
         // make small blocks
         enum small_block_count = 128;
         enum small_block_spread = 10;
@@ -84,5 +90,14 @@ class PlayScene : Scene3D {
         // point the camera at the block, then orbit it
         cam.look_at(block);
         cam.entity.add_component(new CameraFreeLook(block));
+    }
+
+    override void update() {
+        super.update();
+
+        // if Q pressed, remove the third light
+        if (Input.is_key_pressed(Keys.KEY_Q)) {
+            light3.destroy();
+        }
     }
 }
