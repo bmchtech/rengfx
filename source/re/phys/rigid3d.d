@@ -255,6 +255,7 @@ version (physics) {
                 bod.useOwnGravity = true;
                 bod.gravity = convert_vec3(body_comp.gravity);
             }
+            bod.damping = body_comp.damping;
             bod.bounce = body_comp.bounce;
             bod.friction = body_comp.friction;
         }
@@ -277,6 +278,8 @@ version (physics) {
         public Vector3 velocity = Vector3(0, 0, 0);
         /// current angular velocity of object
         public Vector3 angular_velocity = Vector3(0, 0, 0);
+        /// damping amount
+        public float damping = 0.5;
         /// bounce amount
         public float bounce = 0;
         /// coefficient of friction
