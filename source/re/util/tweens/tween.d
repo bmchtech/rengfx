@@ -195,36 +195,3 @@ unittest {
     assert(data.r == goal.r && data.g == goal.g && data.b == goal.b
             && data.a == goal.a, format("tween did not match goal (was %f)", data));
 }
-
-@("tween-manager")
-unittest {
-    import re.ng.scene : Scene2D;
-    import re.util.test : test_scene;
-    import re.math : raymath, Vector2, Vector3;
-    import std.string : format;
-
-    auto dest_pos = Vector3(60, 60);
-    auto callback_called = false;
-
-    class TestScene : Scene2D {
-        override void on_start() {
-            auto nt = create_entity("square", Vector2(20, 20));
-            auto tw = Tweener.tween(nt.transform.position,
-                    nt.transform.position, dest_pos, 0.1f, &Ease.LinearInOut);
-            tw.set_callback((tw) { callback_called = true; });
-            tw.start();
-        }
-    }
-
-    auto test = test_scene(new TestScene());
-    test.game.run();
-
-    // check conditions
-    auto nt = test.scene.get_entity("square");
-    assert(raymath.Vector3Length(dest_pos - nt.transform.position) <= float.epsilon,
-            format("entity did not move to target position (expected %s, but was %s)",
-                dest_pos, nt.transform.position));
-    assert(callback_called, "callback was not caled");
-
-    test.game.destroy();
-}
