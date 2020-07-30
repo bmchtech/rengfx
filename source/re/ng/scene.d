@@ -180,6 +180,12 @@ abstract class Scene {
         return Nullable!T.init;
     }
 
+    public T add_manager(T)(T manager) {
+        managers ~= manager;
+        manager.scene = this;
+        return manager;
+    }
+
     // - ecs
 
     /// create an entity given a name
