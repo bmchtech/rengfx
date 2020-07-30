@@ -13,6 +13,7 @@ version (physics) {
     import re.util.dlib;
     import std.math;
     import std.string : format;
+    import std.typecons;
 
     import geom = dmech.geometry;
     import rb = dmech.rigidbody;
@@ -158,7 +159,7 @@ version (physics) {
                 auto box_geom = New!(geom.GeomBox)(world, convert_vec3(box.size));
                 auto shape = world.addShapeComponent(bod, box_geom,
                         convert_vec3(box.offset), bod.mass);
-                body_comp._phys_shapes ~= shape;
+                body_comp._shapes[shape] = box;
             }
         }
 
@@ -168,12 +169,12 @@ version (physics) {
             import std.algorithm : countUntil, remove;
 
             // we need to remove from the world each collider that we internally have registered to that body
-            foreach (shape; body_comp._phys_shapes) {
+            foreach (shape; body_comp._shapes.byKey()) {
                 world.shapeComponents.removeFirst(shape);
             }
 
             // then clear our internal collider list
-            body_comp._phys_shapes = [];
+            body_comp._shapes.clear();
         }
 
         /// registers a body
@@ -260,13 +261,39 @@ version (physics) {
             bod.bounce = body_comp.bounce;
             bod.friction = body_comp.friction;
         }
+
+        /// cast a ray of a given length in a given direction and return the result. null if no hits.
+        public Nullable!RaycastResult raycast(Vector3 start, Vector3 direction, float dist) {
+            import std.algorithm.searching : countUntil;
+
+            dm_ray.CastResult cr;
+            if (world.raycast(convert_vec3(start), convert_vec3(direction), dist, cr, true, true)) {
+                // get matching physics body
+                auto body_comp = _bodies[cr.rbody];
+                // get matching collider
+                auto collider = body_comp._shapes[cr.shape];
+                auto res = RaycastResult(convert_vec3(cr.point),
+                        convert_vec3(cr.normal), body_comp, collider);
+                return Nullable!RaycastResult(res);
+            }
+            // no result
+            return Nullable!RaycastResult.init;
+        }
+    }
+
+    public struct RaycastResult {
+        Vector3 point;
+        Vector3 normal;
+        PhysicsBody pbody;
+        Collider collider;
     }
 
     /// represents a physics body
     abstract class PhysicsBody : Component {
         // - references to things in the physics engine
         private rb.RigidBody _phys_body;
-        private shape.ShapeComponent[] _phys_shapes;
+        // private shape.ShapeComponent[] _phys_shapes;
+        private Collider[shape.ShapeComponent] _shapes;
 
         // - physical properties
         /// object mass
@@ -471,21 +498,21 @@ version (physics) {
 
         // check that colliders are registered
         assert(mgr.world.dynamicBodies.data.canFind(bod._phys_body));
-        auto shape1 = bod._phys_shapes[0];
+        auto shape1 = bod._shapes.keys[0];
         immutable auto collider1_size_x = (cast(geom.GeomBox)(shape1.geometry)).halfSize.x;
         assert(collider1_size_x == 1,
                 "collider #1 size from physics engine does not match provided collider size");
 
         // sync the colliders, then ensure that the registration is different
         scn.reload_colliders();
-        auto shape2 = bod._phys_shapes[0];
+        auto shape2 = bod._shapes.keys[0];
         assert(shape1 != shape2,
                 "colliders were synced, which was supposed to reset collider registration, but entry was not changed");
 
         // replace the colliders
         scn.replace_colliders();
-        assert(bod._phys_shapes.length > 0, "registration entry for new collider missing");
-        auto shape3 = bod._phys_shapes[0];
+        assert(bod._shapes.length > 0, "registration entry for new collider missing");
+        auto shape3 = bod._shapes.keys[0];
         immutable auto collider3_size_x = (cast(geom.GeomBox)(shape3.geometry)).halfSize.x;
         assert(collider3_size_x == 2,
                 "collider #3 size from physics engine does not match replaced collider size");
