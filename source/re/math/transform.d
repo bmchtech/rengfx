@@ -131,6 +131,12 @@ struct Transform {
         return value;
     }
 
+    /// sets orientation quaternion from euler angles
+    @property Vector3 orientation(Vector3 value) {
+        orientation = raymath.QuaternionFromEuler(value.x, value.y, value.z);
+        return value;
+    }
+
     /// gets orientation as an axis angle
     @property AxisAngle axis_angle() {
         update_transform();

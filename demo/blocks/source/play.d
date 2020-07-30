@@ -18,10 +18,6 @@ class PlayScene : Scene3D {
         // set the camera position
         cam.entity.position = Vector3(0, 10, 20);
 
-        // draw a grid at the origin
-        // auto grid = create_entity("grid");
-        // grid.add_component(new Grid3D(20, 1));
-
         PhysicsManager.max_collisions = 4096;
 
         auto floor = create_entity("floor", Vector3(0, -5, 0));
@@ -31,18 +27,18 @@ class PlayScene : Scene3D {
 
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 5, 0));
-        block.transform.orientation = raymath.QuaternionFromEuler(0, C_PI_4, C_PI_4);
+        block.transform.orientation = Vector3(0, C_PI_4, C_PI_4); // euler angles
         block.add_component(new Cube(Vector3(4, 4, 4), color_rgb(141, 113, 176)));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
         auto block_body = block.add_component(new DynamicBody());
         block_body.mass = 64;
 
         // make small blocks
-        enum small_block_count = 256;
-        // enum small_block_count = 32;
+        enum small_block_count = 128;
         enum small_block_spread = 10;
         for (int i = 0; i < small_block_count; i++) {
             import re.math.funcs;
+
             auto x_off = Distribution.normalRand(0, small_block_spread / 4);
             auto y_off = Rng.next_float() * small_block_spread * 4;
             auto z_off = Distribution.normalRand(0, small_block_spread / 4);
@@ -54,7 +50,7 @@ class PlayScene : Scene3D {
             static import raymath;
 
             auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
-            nt.transform.orientation = raymath.QuaternionFromEuler(x_ang, y_ang, z_ang);
+            nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
             nt.add_component(new Cube(Vector3(1, 1, 1), color_rgb(209, 153, 56)));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto thing_body = nt.add_component(new DynamicBody());
@@ -63,7 +59,6 @@ class PlayScene : Scene3D {
 
         // point the camera at the block, then orbit it
         cam.look_at(block);
-        // cam.entity.add_component(new CameraOrbit(block, 0.15));
         cam.entity.add_component(new CameraFreeLook(block));
     }
 }
