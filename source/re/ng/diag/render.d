@@ -15,8 +15,10 @@ static class DebugRender {
         raylib.DrawRectangleLinesEx(renderable.bounds, 1, debug_color);
     }
 
-    private static void draw_bounding_box(BoundingBox box, ref Transform transform, Color color) {
+    private static void draw_bounding_box(BoundingBox raw_box, ref Transform transform, Color color) {
         import std.math : abs;
+
+        auto box = Bounds.calculate(raw_box, transform);
 
         auto size = Vector3(abs(box.max.x - box.min.x),
                 abs(box.max.y - box.min.y), abs(box.max.z - box.min.z));
