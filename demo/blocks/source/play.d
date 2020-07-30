@@ -33,7 +33,9 @@ class PlayScene : Scene3D {
         auto lights = add_manager(new SceneLightManager());
 
         // enable scene physics
-        auto physics = add_manager(new PhysicsManager());
+        auto physics = new PhysicsManager();
+        physics.max_collisions = 1024;
+        add_manager(physics);
 
         // set the camera position
         cam.entity.position = Vector3(0, 10, 20);
