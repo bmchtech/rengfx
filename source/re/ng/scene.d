@@ -180,9 +180,11 @@ abstract class Scene {
         return Nullable!T.init;
     }
 
+    /// adds a manager to this scene
     public T add_manager(T)(T manager) {
         managers ~= manager;
         manager.scene = this;
+        manager.setup();
         return manager;
     }
 

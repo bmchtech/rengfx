@@ -25,49 +25,40 @@ version (physics) {
 
     /// represents a manager for physics bodies
     class PhysicsManager : Manager {
-        public static int max_collisions = 1024;
+        /// the maximum number of collisions to support in this world
+        public int max_collisions = 1024;
+
+        /// the internal dmech physics world
         private mech.PhysicsWorld world;
-        private static float timestep;
-        private static float phys_time = 0;
+
+        /// physics target timestep
+        private float _timestep;
+        /// used to track time to keep physics timestep fixed
+        private float _phys_time = 0;
 
         private DynamicArray!PhysicsBody _bodies;
 
-        /// checks whether this scene has a nudge manager installed
-        public static bool is_installed(Scene scene) {
-            auto existing = scene.get_manager!PhysicsManager();
-            return !existing.isNull;
-        }
-
-        /// get the nudge manager in a scene
-        public static PhysicsManager get_current(Scene scene) {
-            return scene.get_manager!PhysicsManager().get;
-        }
-
-        /// enable a nudge manager in a scene
-        public static void install(Scene scene) {
-            auto manager = new PhysicsManager();
-            manager.allocate();
-            scene.managers ~= manager;
-        }
-
+        /// the number of dynamic bodies in this physics world
         @property public size_t dynamic_body_count() {
             return world.dynamicBodies.length;
         }
 
+        /// the number of static bodies in this physics world
         @property public size_t static_body_count() {
             return world.staticBodies.length;
         }
 
+        /// the total number of bodies in this physics world
         @property public size_t body_count() {
             return dynamic_body_count + static_body_count;
         }
 
-        /// allocate resources to run physics
-        public void allocate() {
+        override void setup() {
+            /// allocate resources to run physics
             import dlib.core.memory : New;
 
             world = New!(mech.PhysicsWorld)(null, max_collisions);
-            timestep = 1f / Core.target_fps; // set target timestep
+            _timestep = 1f / Core.target_fps; // set target _timestep
         }
 
         override void destroy() {
@@ -78,10 +69,10 @@ version (physics) {
 
         override void update() {
             // step the simulation
-            phys_time += Time.delta_time;
+            _phys_time += Time.delta_time;
             // TODO: should this be while?
-            if (phys_time >= timestep) {
-                phys_time -= timestep;
+            if (_phys_time >= _timestep) {
+                _phys_time -= _timestep;
 
                 // sync FROM bodies: physical properties (mass, inertia)
                 // sync TO bodies: transforms, momentum
@@ -118,7 +109,7 @@ version (physics) {
                     comp._impulses.removeBack(cast(uint) comp._impulses.length);
                 }
 
-                world.update(timestep);
+                world.update(_timestep);
 
                 foreach (comp; _bodies) {
                     rb.RigidBody bod = comp._phys_body;
@@ -279,7 +270,7 @@ version (physics) {
         /// whether this body is currently in sync with the physics system
         public bool physics_synced = false;
 
-        private PhysicsManager mgr;
+        private PhysicsManager _mgr;
         private BodyType _body_type;
 
         /// physics body mode: dynamic or static
@@ -304,15 +295,12 @@ version (physics) {
         }
 
         override void setup() {
-            // ensure the nudge system is installed
-            if (!PhysicsManager.is_installed(entity.scene)) {
-                PhysicsManager.install(entity.scene);
-            }
-
-            mgr = PhysicsManager.get_current(entity.scene);
-
-            // register with nudge
-            mgr.register(this);
+            // register the body in the physics manager
+            auto mgr = entity.scene.get_manager!PhysicsManager();
+            assert(!mgr.isNull, "scene did not have PhysicsManager registered."
+                    ~ "please add that to the scene before creating this component.");
+            _mgr = mgr.get;
+            _mgr.register(this);
         }
 
         /// apply an impulse to the physics body
@@ -329,21 +317,21 @@ version (physics) {
 
         /// notify physics engine about new physical properties, such as gravity
         public void sync_properties() {
-            mgr.sync_properties(this);
+            _mgr.sync_properties(this);
         }
 
         /// used to notify the physics engine to update colliders if they have changed
         public void sync_colliders() {
-            mgr.sync_colliders(this);
+            _mgr.sync_colliders(this);
         }
 
         /// used to notify the physics engine when transform is directly modified
         public void sync_transform() {
-            mgr.sync_transform(this);
+            _mgr.sync_transform(this);
         }
 
         override void destroy() {
-            mgr.unregister(this);
+            _mgr.unregister(this);
         }
     }
 

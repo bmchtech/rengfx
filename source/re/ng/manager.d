@@ -6,6 +6,11 @@ import re.ng.scene;
 abstract class Manager {
     /// set when attached to a scene
     public Scene scene;
+
+    /// performs any setup needed for this manager
+    void setup() {
+    }
+
     /// updates this manager
     void update() {
     }
