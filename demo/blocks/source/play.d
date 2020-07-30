@@ -17,6 +17,13 @@ class PlayScene : Scene3D {
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
+        // load a shader effect and add it as a postprocessor
+        auto cel_ish = Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
+        cel_ish.set_shader_var_imm("c_threshold", 0.2f);
+        cel_ish.set_shader_var_imm("c_resolution", cast(float[2]) [resolution.x, resolution.y]);
+        auto postproc = new PostProcessor(resolution, cel_ish);
+        postprocessors ~= postproc;
+
         // set the camera position
         cam.entity.position = Vector3(0, 10, 20);
 
@@ -37,27 +44,27 @@ class PlayScene : Scene3D {
         block.add_component!Character();
 
         // make small blocks
-        enum small_block_count = 128;
-        enum small_block_spread = 10;
-        for (int i = 0; i < small_block_count; i++) {
-            import re.math.funcs;
+        // enum small_block_count = 128;
+        // enum small_block_spread = 10;
+        // for (int i = 0; i < small_block_count; i++) {
+        //     import re.math.funcs;
 
-            auto x_off = Distribution.normalRand(0, small_block_spread / 4);
-            auto y_off = Rng.next_float() * small_block_spread * 4;
-            auto z_off = Distribution.normalRand(0, small_block_spread / 4);
+        //     auto x_off = Distribution.normalRand(0, small_block_spread / 4);
+        //     auto y_off = Rng.next_float() * small_block_spread * 4;
+        //     auto z_off = Distribution.normalRand(0, small_block_spread / 4);
 
-            auto x_ang = Rng.next_float() * C_2_PI;
-            auto y_ang = Rng.next_float() * C_2_PI;
-            auto z_ang = Rng.next_float() * C_2_PI;
+        //     auto x_ang = Rng.next_float() * C_2_PI;
+        //     auto y_ang = Rng.next_float() * C_2_PI;
+        //     auto z_ang = Rng.next_float() * C_2_PI;
 
-            static import raymath;
+        //     static import raymath;
 
-            auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
-            nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
-            nt.add_component(new Cube(Vector3(1, 1, 1), color_rgb(209, 153, 56)));
-            nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
-            auto thing_body = nt.add_component(new DynamicBody(2));
-        }
+        //     auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
+        //     nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
+        //     nt.add_component(new Cube(Vector3(1, 1, 1), color_rgb(209, 153, 56)));
+        //     nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
+        //     auto thing_body = nt.add_component(new DynamicBody(2));
+        // }
 
         // point the camera at the block, then orbit it
         cam.look_at(block);
