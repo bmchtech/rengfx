@@ -55,13 +55,6 @@ class PlayScene : Scene3D {
         light1_nt.add_component(new Light3D(color_rgb(150, 150, 150)));
         light1_nt.add_component(new Orbit(Vector3(0, 8, 0), 10, C_PI / 8));
 
-        import re.gfx.shapes.model;
-
-        auto fox = create_entity("fox", Vector3(8, 0, 8));
-        auto fox_asset = Core.content.load_model("models/fox.obj");
-        auto fox_model = fox.add_component(new Model3D(fox_asset));
-        fox_model.effect = Effect(lights.shader);
-
         // make small blocks
         enum small_block_count = 128;
         enum small_block_spread = 10;
