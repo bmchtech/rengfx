@@ -7,14 +7,15 @@ import re.ng.scene3d;
 import re.gfx;
 import re.math;
 import std.algorithm;
+import std.container.array;
 static import raylib;
 import rlights = re.gfx.lighting.rlights;
 
 /// acts as a manager for Light3D components
 class SceneLightManager : Manager, Updatable {
     alias max_lights = rlights.MAX_LIGHTS;
-    private rlights.Light[max_lights] _lights;
-    private Light3D[max_lights] _comps;
+    private Array!(rlights.Light) _lights;
+    private Array!Light3D _comps;
     private int light_count;
     public Shader shader;
 
@@ -34,6 +35,9 @@ class SceneLightManager : Manager, Updatable {
         float[4] ambient_val = [col_ambient, col_ambient, col_ambient, 1];
         raylib.SetShaderValue(shader, ambient_loc, &ambient_val,
                 raylib.ShaderUniformDataType.UNIFORM_VEC4);
+
+        _lights.reserve(max_lights);
+        _comps.reserve(max_lights);
     }
 
     override void update() {
@@ -66,42 +70,32 @@ class SceneLightManager : Manager, Updatable {
     private void register(Light3D light_comp) {
         assert(light_count < max_lights, "maximum light count exceeded.");
         // add a light
-        _lights[light_count] = rlights.set_light(light_count, rlights.LightType.LIGHT_POINT,
-                light_comp.transform.position, Vector3Zero, light_comp.color, shader);
-        _comps[light_count] = light_comp;
+        _lights.insertBack(rlights.set_light(light_count, rlights.LightType.LIGHT_POINT,
+                light_comp.transform.position, Vector3Zero, light_comp.color, shader));
+        _comps.insertBack(light_comp);
+        // set internal light reference
         light_comp._light = _lights[light_count];
         light_count++;
     }
 
     private void unregister(Light3D light_comp) {
-        auto ix = cast(int) _comps[].countUntil(light_comp);
-        Light3D[] new_comps;
-        rlights.Light[] new_lights;
+        import std.range;
+
+        auto removed_index = cast(int) _comps[].countUntil(light_comp);
         // clear all lights
         for (int i = 0; i < light_count; i++) {
-            rlights.clear_light(ix, shader);
+            rlights.clear_light(i, shader);
         }
-        // re-add components
-        for (int i = 0; i < light_count; i++) {
-            auto comp = _comps[i];
-            if (comp == light_comp)
-                continue;
-            new_comps ~= comp;
-        }
-        // re-add lights
-        for (int i = 0; i < light_count; i++) {
-            auto light = _lights[i];
-            if (i == ix)
-                continue;
-            new_lights ~= light;
-        }
+        _comps.linearRemove(_comps[].dropExactly(removed_index).takeOne);
+        _lights.linearRemove(_lights[].dropExactly(removed_index).takeOne);
         light_count--; // we're removing a light
-        assert(new_comps.length == new_lights.length);
+        // ensure our lengths match
+        assert(_lights.length == light_count);
+        assert(_lights.length == _comps.length);
         // reactivate the lights
-        for (int i = 0; i < new_lights.length; i++) {
-            _comps[i] = new_comps[i];
+        for (int i = 0; i < light_count; i++) {
             // update shader
-            _lights[i] = rlights.set_light(light_count, rlights.LightType.LIGHT_POINT,
+            _lights[i] = rlights.set_light(i, rlights.LightType.LIGHT_POINT,
                     _comps[i].transform.position, Vector3Zero, _comps[i].color, shader);
             // set associated light
             _comps[i]._light = _lights[i];
