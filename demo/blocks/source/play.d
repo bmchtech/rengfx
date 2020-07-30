@@ -43,8 +43,9 @@ class PlayScene : Scene3D {
         // set up lighting
         lighting_shader = Core.content.load_shader("shader/basic_lighting.vert",
                 "shader/basic_lighting.frag");
+        auto lighting_effect = Effect(lighting_shader);
         auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4), color_rgb(141, 113, 176)));
-        block_cube.model.materials[0].shader = lighting_shader;
+        block_cube.effect = lighting_effect;
 
         // Get some shader loactions
         lighting_shader.locs[raylib.ShaderLocationIndex.LOC_MATRIX_MODEL]
@@ -67,7 +68,7 @@ class PlayScene : Scene3D {
         auto fox = create_entity("fox", Vector3(8, 0, 8));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
-        fox_model.model.materials[0].shader = lighting_shader;
+        fox_model.effect = lighting_effect;
 
         // make small blocks
         enum small_block_count = 128;
@@ -90,7 +91,7 @@ class PlayScene : Scene3D {
             auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1), color_rgb(209, 153, 56)));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto thing_body = nt.add_component(new DynamicBody(2));
-            lil_cube.model.materials[0].shader = lighting_shader;
+            lil_cube.effect = lighting_effect;
         }
 
         // point the camera at the block, then orbit it
@@ -111,9 +112,11 @@ class PlayScene : Scene3D {
 
         // Update the light shader with the camera view position
         float[3] cameraPos = [
-            cam.transform.position.x, cam.transform.position.y, cam.transform.position.z
+            cam.transform.position.x, cam.transform.position.y,
+            cam.transform.position.z
         ];
-        raylib.SetShaderValue(lighting_shader, lighting_shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW], &cameraPos, raylib.ShaderUniformDataType.UNIFORM_VEC3);
+        raylib.SetShaderValue(lighting_shader, lighting_shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW],
+                &cameraPos, raylib.ShaderUniformDataType.UNIFORM_VEC3);
         //------------------------------------------------------------------------------
     }
 
