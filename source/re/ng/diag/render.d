@@ -29,15 +29,15 @@ static class DebugRender {
         raylib.DrawCubeWires(center, size.x, size.y, size.z, color);
     }
 
-    public static void default_debug_render(Renderable3D renderable) {
-        auto comp = cast(Component) renderable;
-        draw_bounding_box(renderable.bounds, comp.transform, debug_color);
-    }
+    // public static void default_debug_render(Renderable3D renderable) {
+    //     auto comp = cast(Component) renderable;
+    //     draw_bounding_box(renderable.bounds, comp.transform, debug_color);
+    // }
 
     public static void default_debug_render(Renderable3D renderable, Model model) {
         import re.phys.collider;
 
-        default_debug_render(renderable);
+        // default_debug_render(renderable);
         auto comp = cast(Component) renderable;
         raylib.DrawModelWiresEx(model, comp.transform.position, comp.transform.axis_angle.axis,
                 comp.transform.axis_angle.angle * C_RAD2DEG, comp.transform.scale, debug_color_mesh);
