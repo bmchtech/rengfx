@@ -94,7 +94,7 @@ static int lightsCount = 0; // Current amount of created lights
 
 // Defines a light and get locations from PBR shader
 static Light CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Shader shader) {
-    Light light = {0};
+    Light light;
 
     if (lightsCount < MAX_LIGHTS) {
         light.enabled = true;
@@ -130,26 +130,28 @@ static Light CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Shade
     return light;
 }
 
-// Send to PBR shader light values
-static void UpdateLightValues(Shader shader, Light light) {
+// Send light properties to shader
+// NOTE: Light shader locations should be available 
+void UpdateLightValues(Shader shader, Light light) {
     // Send to shader light enabled state and type
-    SetShaderValue(shader, light.enabledLoc, &light.enabled, ShaderUniformDataType.UNIFORM_INT);
-    SetShaderValue(shader, light.typeLoc, &light.type, ShaderUniformDataType.UNIFORM_INT);
+    SetShaderValue(shader, light.enabledLoc, &light.enabled,
+            raylib.ShaderUniformDataType.UNIFORM_INT);
+    SetShaderValue(shader, light.typeLoc, &light.type, raylib.ShaderUniformDataType.UNIFORM_INT);
 
     // Send to shader light position values
     float[3] position = [light.position.x, light.position.y, light.position.z];
-    SetShaderValue(shader, light.posLoc, &position, ShaderUniformDataType.UNIFORM_VEC3);
+    SetShaderValue(shader, light.posLoc, &position, raylib.ShaderUniformDataType.UNIFORM_VEC3);
 
     // Send to shader light target position values
     float[3] target = [light.target.x, light.target.y, light.target.z];
-    SetShaderValue(shader, light.targetLoc, &target, ShaderUniformDataType.UNIFORM_VEC3);
+    SetShaderValue(shader, light.targetLoc, &target, raylib.ShaderUniformDataType.UNIFORM_VEC3);
 
     // Send to shader light color values
-    float[4] diff = [
+    float[4] color = [
         cast(float) light.color.r / cast(float) 255,
         cast(float) light.color.g / cast(float) 255,
         cast(float) light.color.b / cast(float) 255,
         cast(float) light.color.a / cast(float) 255
     ];
-    SetShaderValue(shader, light.colorLoc, &diff, ShaderUniformDataType.UNIFORM_VEC4);
+    SetShaderValue(shader, light.colorLoc, &color, raylib.ShaderUniformDataType.UNIFORM_VEC4);
 }
