@@ -11,14 +11,11 @@ import re.math;
 import comp.input;
 import comp.body;
 static import raylib;
+import re.gfx.lighting.scene_lights;
 import rlights = re.gfx.lighting.rlights;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
-    private rlights.Light[rlights.MAX_LIGHTS] lights;
-    private float light_angle = 6.282f;
-    private Shader lighting_shader;
-
     override void on_start() {
         clear_color = color_rgb(60, 60, 60);
 
@@ -33,6 +30,7 @@ class PlayScene : Scene3D {
 
         // set the camera position
         cam.entity.position = Vector3(0, 10, 20);
+        auto lights = add_manager(new SceneLightManager());
 
         auto floor = create_entity("floor", Vector3(0, -5, 0));
         floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(82, 80, 68)));
@@ -44,38 +42,23 @@ class PlayScene : Scene3D {
         block.transform.orientation = Vector3(0, C_PI_4, C_PI_4); // euler angles
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
         block.add_component(new DynamicBody(64));
+        auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4)));
         block.add_component!PlayerController();
         block.add_component!Character();
 
         // set up lighting
-        lighting_shader = Core.content.load_shader("shader/basic_lighting.vert",
-                "shader/basic_lighting.frag");
-        auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4)));
-        block_cube.effect = Effect(lighting_shader, color_rgb(141, 113, 176));
-
-        // Get some shader loactions
-        lighting_shader.locs[raylib.ShaderLocationIndex.LOC_MATRIX_MODEL]
-            = raylib.GetShaderLocation(lighting_shader, "matModel");
-        lighting_shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW]
-            = raylib.GetShaderLocation(lighting_shader, "viewPos");
-
-        // ambient light level
-        int ambient_loc = raylib.GetShaderLocation(lighting_shader, "ambient");
-        auto col_ambient = 0.4;
-        float[4] ambient_val = [col_ambient, col_ambient, col_ambient, 1];
-        raylib.SetShaderValue(lighting_shader, ambient_loc, &ambient_val,
-                raylib.ShaderUniformDataType.UNIFORM_VEC4);
+        block_cube.effect = Effect(lights.shader, color_rgb(141, 113, 176));
 
         // create a point light
-        lights[0] = rlights.CreateLight(rlights.LightType.LIGHT_POINT, Vector3(8,
-                8, 8), Vector3Zero, color_rgb(150, 150, 150), lighting_shader);
+        auto light_nt = create_entity("light1", Vector3(8, 8, 8));
+        light_nt.add_component(new Light3D(color_rgb(150, 150, 150)));
 
         import re.gfx.shapes.model;
 
         auto fox = create_entity("fox", Vector3(8, 0, 8));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
-        fox_model.effect = Effect(lighting_shader);
+        fox_model.effect = Effect(lights.shader);
 
         // make small blocks
         enum small_block_count = 128;
@@ -98,7 +81,7 @@ class PlayScene : Scene3D {
             auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1)));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto thing_body = nt.add_component(new DynamicBody(2));
-            lil_cube.effect = Effect(lighting_shader, color_rgb(209, 153, 56));
+            lil_cube.effect = Effect(lights.shader, color_rgb(209, 153, 56));
         }
 
         // point the camera at the block, then orbit it
@@ -110,24 +93,5 @@ class PlayScene : Scene3D {
         super.update();
 
         import std.math : sin, cos;
-
-        light_angle -= 0.02f;
-        lights[0].position.x = cos(light_angle) * 8;
-        lights[0].position.z = sin(light_angle) * 8;
-
-        rlights.UpdateLightValues(lighting_shader, lights[0]);
-
-        // Update the light shader with the camera view position
-        float[3] cameraPos = [
-            cam.transform.position.x, cam.transform.position.y,
-            cam.transform.position.z
-        ];
-        raylib.SetShaderValue(lighting_shader, lighting_shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW],
-                &cameraPos, raylib.ShaderUniformDataType.UNIFORM_VEC3);
-        //------------------------------------------------------------------------------
-    }
-
-    override void render_hook() {
-        raylib.DrawSphereEx(lights[0].position, 0.2f, 8, 8, Colors.WHITE);
     }
 }
