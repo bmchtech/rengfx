@@ -37,9 +37,7 @@ import raylib;
 //----------------------------------------------------------------------------------
 // Defines and Macros
 //----------------------------------------------------------------------------------
-enum MAX_LIGHTS = 4; // Max lights supported by shader
-enum LIGHT_DISTANCE = 3.5f; // Light distance from world center
-enum LIGHT_HEIGHT = 1.0f; // Light height position
+enum MAX_LIGHTS = 4; // max lights supported by shader
 
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
@@ -50,11 +48,13 @@ enum LightType {
 }
 
 struct Light {
-    bool enabled;
-    LightType type;
+    int type;
     Vector3 position;
     Vector3 target;
     Color color;
+    bool enabled;
+
+    // Shader locations
     int enabledLoc;
     int typeLoc;
     int posLoc;
@@ -81,7 +81,6 @@ struct Light {
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-static Light[MAX_LIGHTS] lights;
 static int lightsCount = 0; // Current amount of created lights
 
 //----------------------------------------------------------------------------------
@@ -94,7 +93,7 @@ static int lightsCount = 0; // Current amount of created lights
 //----------------------------------------------------------------------------------
 
 // Defines a light and get locations from PBR shader
-static void CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Shader shader) {
+static Light CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Shader shader) {
     Light light = {0};
 
     if (lightsCount < MAX_LIGHTS) {
@@ -109,6 +108,8 @@ static void CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Shader
         char[32] posName = "lights[x].position\0";
         char[32] targetName = "lights[x].target\0";
         char[32] colorName = "lights[x].color\0";
+
+        // Set location name [x] depending on lights count
         enabledName[7] = cast(char)('0' + lightsCount);
         typeName[7] = cast(char)('0' + lightsCount);
         posName[7] = cast(char)('0' + lightsCount);
@@ -123,9 +124,10 @@ static void CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Shader
 
         UpdateLightValues(shader, light);
 
-        lights[lightsCount] = light;
         lightsCount++;
     }
+
+    return light;
 }
 
 // Send to PBR shader light values
