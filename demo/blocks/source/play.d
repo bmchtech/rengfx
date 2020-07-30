@@ -18,7 +18,7 @@ class PlayScene : Scene3D {
     private Entity light3;
 
     override void on_start() {
-        clear_color = color_rgb(209, 199, 159);
+        clear_color = color_rgb(224, 176, 153);
 
         // load a shader effect and add it as a postprocessor
         auto cel_ish = Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
@@ -43,7 +43,7 @@ class PlayScene : Scene3D {
 
         // create the static floor
         auto floor = create_entity("floor", Vector3(0, -5, 0));
-        floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(82, 80, 68)));
+        floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(91, 64, 54)));
         floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
         floor.add_component(new StaticBody());
 
@@ -87,7 +87,7 @@ class PlayScene : Scene3D {
             auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
             nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
             auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1)));
-            lil_cube.effect = Effect(lights.shader, color_rgb(209, 153, 56));
+            lil_cube.effect = Effect(lights.shader, color_rgb(209, 107, 56));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto bod = nt.add_component(new DynamicBody(2));
             bod.bounce = 1.1;
