@@ -10,16 +10,13 @@ import re.phys.rigid3d;
 import re.math;
 import comp.input;
 import comp.body;
+import comp.orbit;
 static import raylib;
 import re.gfx.lighting.scene_lights;
 import rlights = re.gfx.lighting.rlights;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
-    private Light3D light1;
-    private float light_angle = 6.282f;
-    private float orbit_radius = 8f;
-
     override void on_start() {
         clear_color = color_rgb(60, 60, 60);
 
@@ -54,12 +51,13 @@ class PlayScene : Scene3D {
         block_cube.effect = Effect(lights.shader, color_rgb(141, 113, 176));
 
         // create a point light
-        auto light1_nt = create_entity("light1", Vector3(8, 8, 8));
-        light1 = light1_nt.add_component(new Light3D(color_rgb(150, 150, 150)));
+        auto light1_nt = create_entity("light1");
+        light1_nt.add_component(new Light3D(color_rgb(150, 150, 150)));
+        light1_nt.add_component(new Orbit(Vector3(0, 8, 0), 10, C_PI / 8));
 
         import re.gfx.shapes.model;
 
-        auto fox = create_entity("fox", Vector3(orbit_radius, 0, orbit_radius));
+        auto fox = create_entity("fox", Vector3(8, 0, 8));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
         fox_model.effect = Effect(lights.shader);
@@ -91,15 +89,5 @@ class PlayScene : Scene3D {
         // point the camera at the block, then orbit it
         cam.look_at(block);
         cam.entity.add_component(new CameraFreeLook(block));
-    }
-
-    override void update() {
-        super.update();
-
-        import std.math : sin, cos;
-
-        light_angle -= 0.02f;
-        light1.entity.position = Vector3(cos(light_angle) * orbit_radius,
-                light1.entity.position.y, sin(light_angle) * orbit_radius);
     }
 }
