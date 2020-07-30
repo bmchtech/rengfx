@@ -94,7 +94,7 @@ version (physics) {
                         bod.invMass = 1f / comp.mass;
                         // TODO: update mass contribtion of shapes?
                         // foreach (shape; body_comp._phys_shapes) {
-                            
+
                         // }
                     }
                     // TODO: sync inertia? right now it's automatically set from mass
