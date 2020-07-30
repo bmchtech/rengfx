@@ -37,7 +37,7 @@ import raylib;
 //----------------------------------------------------------------------------------
 // Defines and Macros
 //----------------------------------------------------------------------------------
-enum MAX_LIGHTS = 4; // max lights supported by shader
+enum MAX_LIGHTS = 2; // max lights supported by shader
 
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
