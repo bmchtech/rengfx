@@ -46,16 +46,12 @@ static class DebugRender {
         auto box_colls = comp.entity.get_components!BoxCollider;
         foreach (box; box_colls) {
             auto raw_bounds = BoundingBox( // min
-                    Vector3(box.size.x + box.offset.x,
-                    box.size.y + box.offset.y, box.size.z + box.offset.z),
+                    Vector3(-box.size.x + box.offset.x,
+                    -box.size.y + box.offset.y, -box.size.z + box.offset.z),
                     // max
                     Vector3(box.size.x + box.offset.x, box.size.y + box.offset.y,
                         box.size.z + box.offset.z));
             draw_bounding_box(raw_bounds, comp.entity.transform, debug_color_collider);
-            // // transform by entity transform
-            // auto bounds = Bounds.calculate(raw_bounds, comp.entity.transform);
-            // // draw transformed bounding box
-            // raylib.DrawBoundingBox(bounds, debug_color_collider);
         }
     }
 }
