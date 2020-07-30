@@ -54,7 +54,7 @@ dub run # run demo
 
 ## license
 
-licensed under LGPL v2.1
+available to use under the [LGPL v2.1](LICENSE)
 
 libraries:
 + [raylib](https://github.com/raysan5/raylib/blob/be7f717a24e72e0bc84389491a063de65c106048/LICENSE), Zlib license
