@@ -34,8 +34,8 @@ class Character : Component, Updatable {
         }
 
         if (raymath.Vector2LengthSqr(controller.turn.value) > 0) {
-            bod.apply_torque(Vector3(controller.turn.value.x * turn_speed * bod.mass,
-                    0, controller.turn.value.y * turn_speed * bod.mass));
+            bod.apply_torque(Vector3(controller.turn.value.y * turn_speed * bod.mass,
+                    0, -controller.turn.value.x * turn_speed * bod.mass));
         }
     }
 }
