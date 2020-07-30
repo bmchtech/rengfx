@@ -52,9 +52,8 @@ class PlayScene : Scene3D {
         // set up lighting
         lighting_shader = Core.content.load_shader("shader/basic_lighting.vert",
                 "shader/basic_lighting.frag");
-        auto lighting_effect = Effect(lighting_shader);
-        auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4), color_rgb(141, 113, 176)));
-        // block_cube.effect = lighting_effect;
+        auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4)));
+        block_cube.effect = Effect(lighting_shader, color_rgb(141, 113, 176));
 
         // Get some shader loactions
         lighting_shader.locs[raylib.ShaderLocationIndex.LOC_MATRIX_MODEL]
@@ -64,20 +63,20 @@ class PlayScene : Scene3D {
 
         // ambient light level
         int ambient_loc = raylib.GetShaderLocation(lighting_shader, "ambient");
-        auto ambient_val = [0.6f, 0.6f, 0.6f, 1.0f];
+        float[4] ambient_val = [0.2f, 0.2f, 0.2f, 1.0f];
         raylib.SetShaderValue(lighting_shader, ambient_loc, &ambient_val,
                 raylib.ShaderUniformDataType.UNIFORM_VEC4);
 
         // create a point light
         lights[0] = rlights.CreateLight(rlights.LightType.LIGHT_POINT,
-                Vector3(8, 4, 8), Vector3Zero, Colors.ORANGE, lighting_shader);
+                Vector3(8, 8, 8), Vector3Zero, Colors.WHITE, lighting_shader);
 
         import re.gfx.shapes.model;
 
         auto fox = create_entity("fox", Vector3(8, 0, 8));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
-        // fox_model.effect = lighting_effect;
+        fox_model.effect = Effect(lighting_shader);
 
         // make small blocks
         enum small_block_count = 128;
@@ -97,10 +96,10 @@ class PlayScene : Scene3D {
 
             auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
             nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
-            auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1), color_rgb(209, 153, 56)));
+            auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1)));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto thing_body = nt.add_component(new DynamicBody(2));
-            lil_cube.effect = lighting_effect;
+            lil_cube.effect = Effect(lighting_shader, color_rgb(209, 153, 56));
         }
 
         // point the camera at the block, then orbit it
