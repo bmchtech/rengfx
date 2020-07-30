@@ -274,14 +274,26 @@ version (physics) {
             if (world.raycast(convert_vec3(start), convert_vec3(direction), dist, cr, true, true)) {
                 // get matching physics body
                 auto body_comp = _bodies[cr.rbody];
+                auto res = RaycastResult(convert_vec3(cr.point), convert_vec3(cr.normal), body_comp);
                 // get matching collider
-                auto collider = body_comp._shapes[cr.shape];
-                auto res = RaycastResult(convert_vec3(cr.point),
-                        convert_vec3(cr.normal), body_comp, collider);
+                if (cr.shape !is null) {
+                    auto col = body_comp._shapes[cr.shape];
+                    res.collider = Nullable!Collider(col);
+                }
                 return Nullable!RaycastResult(res);
             }
             // no result
             return Nullable!RaycastResult.init;
+        }
+
+        /// raycast from a physics body in a certain direction, excluding the source body
+        public Nullable!RaycastResult raycast_from(PhysicsBody source,
+                Vector3 offset, Vector3 direction, float dist) {
+            // we want to exclude this body, so we're temporarily going to disable it
+            source._phys_body.raycastable = false;
+            auto res = raycast(source.transform.position + offset, direction, dist);
+            source._phys_body.raycastable = true;
+            return res;
         }
     }
 
@@ -289,7 +301,7 @@ version (physics) {
         Vector3 point;
         Vector3 normal;
         PhysicsBody pbody;
-        Collider collider;
+        Nullable!Collider collider;
     }
 
     /// represents a physics body
