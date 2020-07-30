@@ -62,8 +62,6 @@ struct Light {
     int colorLoc;
 }
 
-static int light_count = 0; // Current amount of created lights
-
 static Light set_light(int index, LightType type, Vector3 pos, Vector3 target,
         Color color, Shader shader, bool enabled = true) {
     Light light;
