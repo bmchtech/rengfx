@@ -34,8 +34,6 @@ class PlayScene : Scene3D {
         // set the camera position
         cam.entity.position = Vector3(0, 10, 20);
 
-        PhysicsManager.max_collisions = 4096;
-
         auto floor = create_entity("floor", Vector3(0, -5, 0));
         floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(82, 80, 68)));
         floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
