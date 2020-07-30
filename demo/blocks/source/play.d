@@ -1,19 +1,17 @@
 module play;
 
 import re;
+import re.math;
 import re.gfx;
-import re.gfx.shapes.cube;
-import re.gfx.shapes.grid;
 import re.ng.camera;
 import re.phys.collider;
 import re.phys.rigid3d;
-import re.math;
+import re.gfx.shapes.cube;
+import re.gfx.shapes.grid;
+import re.gfx.lighting.scene_lights;
 import comp.input;
 import comp.body;
 import comp.orbit;
-static import raylib;
-import re.gfx.lighting.scene_lights;
-import rlights = re.gfx.lighting.rlights;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
@@ -31,10 +29,13 @@ class PlayScene : Scene3D {
         auto postproc = new PostProcessor(resolution, cel_ish);
         postprocessors ~= postproc;
 
-        // set the camera position
-        cam.entity.position = Vector3(0, 10, 20);
+        // enable scene lighting
         auto lights = add_manager(new SceneLightManager());
 
+        // set the camera position
+        cam.entity.position = Vector3(0, 10, 20);
+
+        // create the static floor
         auto floor = create_entity("floor", Vector3(0, -5, 0));
         floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(82, 80, 68)));
         floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
@@ -67,7 +68,7 @@ class PlayScene : Scene3D {
         enum small_block_count = 128;
         enum small_block_spread = 10;
         for (int i = 0; i < small_block_count; i++) {
-            import re.math.funcs;
+            import re.math.funcs : Distribution;
 
             auto x_off = Distribution.normalRand(0, small_block_spread / 4);
             auto y_off = Rng.next_float() * small_block_spread * 4;
@@ -77,17 +78,15 @@ class PlayScene : Scene3D {
             auto y_ang = Rng.next_float() * C_2_PI;
             auto z_ang = Rng.next_float() * C_2_PI;
 
-            static import raymath;
-
             auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
             nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
             auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1)));
-            nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
-            auto thing_body = nt.add_component(new DynamicBody(2));
             lil_cube.effect = Effect(lights.shader, color_rgb(209, 153, 56));
+            nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
+            nt.add_component(new DynamicBody(2));
         }
 
-        // point the camera at the block, then orbit it
+        // point the camera at the center block
         cam.look_at(block);
         cam.entity.add_component(new CameraFreeLook(block));
     }
