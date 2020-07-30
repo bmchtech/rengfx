@@ -63,13 +63,14 @@ class PlayScene : Scene3D {
 
         // ambient light level
         int ambient_loc = raylib.GetShaderLocation(lighting_shader, "ambient");
-        float[4] ambient_val = [0.2f, 0.2f, 0.2f, 1.0f];
+        auto col_ambient = 0.4;
+        float[4] ambient_val = [col_ambient, col_ambient, col_ambient, 1];
         raylib.SetShaderValue(lighting_shader, ambient_loc, &ambient_val,
                 raylib.ShaderUniformDataType.UNIFORM_VEC4);
 
         // create a point light
-        lights[0] = rlights.CreateLight(rlights.LightType.LIGHT_POINT,
-                Vector3(8, 8, 8), Vector3Zero, Colors.WHITE, lighting_shader);
+        lights[0] = rlights.CreateLight(rlights.LightType.LIGHT_POINT, Vector3(8,
+                8, 8), Vector3Zero, color_rgb(150, 150, 150), lighting_shader);
 
         import re.gfx.shapes.model;
 
