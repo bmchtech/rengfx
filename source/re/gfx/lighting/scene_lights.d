@@ -46,8 +46,11 @@ class SceneLightManager : Manager, Updatable {
         // update lights
         for (int i = 0; i < _light_comps.length; i++) {
             auto comp = _light_comps[i];
-            // sync position
+            // sync fields
             lights[i].position = comp.transform.position;
+            lights[i].color = comp.color;
+            lights[i].enabled = comp.light_enabled;
+            
             // update shader values
             rlights.UpdateLightValues(shader, lights[i]);
         }
@@ -73,6 +76,8 @@ class Light3D : Component, Renderable3D {
     public Color color;
     private SceneLightManager _mgr;
     private enum phys_size = 0.2;
+
+    public bool light_enabled = true;
 
     this(Color color = Colors.WHITE) {
         this.color = color;
