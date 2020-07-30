@@ -58,7 +58,9 @@ class SceneLightManager : Manager, Updatable {
     }
 
     override void destroy() {
-        // TODO: clean up after lights
+        while (light_count > 0) {
+            unregister(_comps[0]);
+        }
     }
 
     private void register(Light3D light_comp) {
