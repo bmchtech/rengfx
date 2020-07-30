@@ -356,7 +356,6 @@ version (physics) {
         class TestScene : Scene2D {
             override void on_start() {
                 auto nt = create_entity("block");
-                // add nudge physics
                 nt.add_component(new DynamicBody());
             }
         }
