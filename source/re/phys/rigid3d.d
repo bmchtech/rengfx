@@ -27,6 +27,12 @@ version (physics) {
     class PhysicsManager : Manager {
         /// the maximum number of collisions to support in this world
         public int max_collisions = 1024;
+        /// position correction iterations used by physics engine
+        public int pos_correction_iterations = 20;
+        /// velocity correction iterations used by physics engine
+        public int vel_correction_iterations = 40;
+        /// gravity in the physics world
+        public Vector3 gravity = Vector3(0.0f, -9.80665f, 0.0f); // earth's gravity
 
         /// the internal dmech physics world
         private mech.PhysicsWorld world;
@@ -59,6 +65,9 @@ version (physics) {
 
             world = New!(mech.PhysicsWorld)(null, max_collisions);
             world.broadphase = true;
+            world.positionCorrectionIterations = pos_correction_iterations;
+            world.constraintIterations = vel_correction_iterations;
+            world.gravity = convert_vec3(gravity);
             _timestep = 1f / Core.target_fps; // set target _timestep
         }
 
@@ -109,6 +118,9 @@ version (physics) {
                     }
                     comp._impulses.removeBack(cast(uint) comp._impulses.length);
                 }
+
+                // sync options to world
+                world.gravity = convert_vec3(gravity);
 
                 world.update(_timestep);
 
