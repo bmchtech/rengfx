@@ -62,72 +62,45 @@ struct Light {
     int colorLoc;
 }
 
-/***********************************************************************************
-*
-*   RLIGHTS IMPLEMENTATION
-*
-************************************************************************************/
+static int light_count = 0; // Current amount of created lights
 
-//----------------------------------------------------------------------------------
-// Defines and Macros
-//----------------------------------------------------------------------------------
-// ...
-
-//----------------------------------------------------------------------------------
-// Types and Structures Definition
-//----------------------------------------------------------------------------------
-// ...
-
-//----------------------------------------------------------------------------------
-// Global Variables Definition
-//----------------------------------------------------------------------------------
-static int lightsCount = 0; // Current amount of created lights
-
-//----------------------------------------------------------------------------------
-// Module specific Functions Declaration
-//----------------------------------------------------------------------------------
-// ...
-
-//----------------------------------------------------------------------------------
-// Module Functions Definition
-//----------------------------------------------------------------------------------
-
-// Defines a light and get locations from PBR shader
-static Light CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Shader shader) {
+static Light set_light(int index, LightType type, Vector3 pos, Vector3 target,
+        Color color, Shader shader, bool enabled = true) {
     Light light;
 
-    if (lightsCount < MAX_LIGHTS) {
-        light.enabled = true;
-        light.type = cast(LightType) type;
-        light.position = pos;
-        light.target = targ;
-        light.color = color;
+    light.enabled = enabled;
+    light.type = type;
+    light.position = pos;
+    light.target = target;
+    light.color = color;
 
-        char[32] enabledName = "lights[x].enabled\0";
-        char[32] typeName = "lights[x].type\0";
-        char[32] posName = "lights[x].position\0";
-        char[32] targetName = "lights[x].target\0";
-        char[32] colorName = "lights[x].color\0";
+    char[32] enabledName = "lights[x].enabled\0";
+    char[32] typeName = "lights[x].type\0";
+    char[32] posName = "lights[x].position\0";
+    char[32] targetName = "lights[x].target\0";
+    char[32] colorName = "lights[x].color\0";
 
-        // Set location name [x] depending on lights count
-        enabledName[7] = cast(char)('0' + lightsCount);
-        typeName[7] = cast(char)('0' + lightsCount);
-        posName[7] = cast(char)('0' + lightsCount);
-        targetName[7] = cast(char)('0' + lightsCount);
-        colorName[7] = cast(char)('0' + lightsCount);
+    // Set location name [x] depending on lights count
+    enabledName[7] = cast(char)('0' + index);
+    typeName[7] = cast(char)('0' + index);
+    posName[7] = cast(char)('0' + index);
+    targetName[7] = cast(char)('0' + index);
+    colorName[7] = cast(char)('0' + index);
 
-        light.enabledLoc = GetShaderLocation(shader, cast(char*) enabledName);
-        light.typeLoc = GetShaderLocation(shader, cast(char*) typeName);
-        light.posLoc = GetShaderLocation(shader, cast(char*) posName);
-        light.targetLoc = GetShaderLocation(shader, cast(char*) targetName);
-        light.colorLoc = GetShaderLocation(shader, cast(char*) colorName);
+    light.enabledLoc = GetShaderLocation(shader, cast(char*) enabledName);
+    light.typeLoc = GetShaderLocation(shader, cast(char*) typeName);
+    light.posLoc = GetShaderLocation(shader, cast(char*) posName);
+    light.targetLoc = GetShaderLocation(shader, cast(char*) targetName);
+    light.colorLoc = GetShaderLocation(shader, cast(char*) colorName);
 
-        UpdateLightValues(shader, light);
-
-        lightsCount++;
-    }
+    UpdateLightValues(shader, light);
 
     return light;
+}
+
+static void clear_light(int index, Shader shader) {
+    // reset the light
+    set_light(index, LightType.LIGHT_POINT, Vector3Zero, Vector3Zero, Colors.BLANK, shader, false);
 }
 
 // Send light properties to shader
