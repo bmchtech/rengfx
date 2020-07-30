@@ -58,6 +58,7 @@ version (physics) {
             import dlib.core.memory : New;
 
             world = New!(mech.PhysicsWorld)(null, max_collisions);
+            world.broadphase = true;
             _timestep = 1f / Core.target_fps; // set target _timestep
         }
 
@@ -242,6 +243,8 @@ version (physics) {
                 bod.useOwnGravity = true;
                 bod.gravity = convert_vec3(body_comp.gravity);
             }
+            bod.bounce = body_comp.bounce;
+            bod.friction = body_comp.friction;
         }
     }
 
@@ -262,6 +265,10 @@ version (physics) {
         public Vector3 velocity = Vector3(0, 0, 0);
         /// current angular velocity of object
         public Vector3 angular_velocity = Vector3(0, 0, 0);
+        /// bounce amount
+        public float bounce = 0;
+        /// coefficient of friction
+        public float friction = 0.5;
         /// whether to use a custom gravity value
         public bool custom_gravity = false;
         /// if custom gravity is enabled, the gravity to use
