@@ -23,7 +23,7 @@ class Character : Component, Updatable {
     override void update() {
         if (controller.jump.is_pressed) {
             // jump
-            bod.apply_impulse(Vector3(0, bod.mass * 4, 0), Vector3Zero);
+            bod.apply_impulse(Vector3(0, bod.mass * 16, 0), Vector3Zero);
         }
 
         if (raymath.Vector2LengthSqr(controller.move.value) > 0) {
