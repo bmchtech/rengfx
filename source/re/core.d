@@ -130,7 +130,7 @@ abstract class Core {
             return; // pause
         }
         version (unittest) {
-            Time.update(1f / fps); // 60 fps
+            Time.update(1f / target_fps); // 60 fps
         } else {
             Time.update(raylib.GetFrameTime());
         }
