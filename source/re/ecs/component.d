@@ -5,7 +5,7 @@ import re.math.transform;
 public import re.util.reflect;
 
 /// the composable unit of functionality
-abstract class Component {
+abstract class Component : ReflectableObject {
     mixin Reflect;
 
     /// owner entity

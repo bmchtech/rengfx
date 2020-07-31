@@ -21,16 +21,16 @@ debug class Inspector {
     /// whether the inspector is open
     public bool open = false;
     private Vector2 _panel_scroll;
-    private InspectedComponent[] _components;
+    private InspectedObject[] _inspected;
     private Entity entity;
     private enum btn_close = ['x', '\0'];
 
-    private class InspectedComponent {
-        public Component obj;
+    private class InspectedObject {
+        public ReflectableObject obj;
         public Class obj_class;
         public string[string] fields;
 
-        this(Component obj) {
+        this(ReflectableObject obj) {
             this.obj = obj;
             this.obj_class = obj.getMetaType;
         }
@@ -49,13 +49,13 @@ debug class Inspector {
     }
 
     private void reset() {
-        _components = [];
+        _inspected = [];
         entity = null;
     }
 
     public void update() {
         // update all inspected components
-        foreach (comp; _components) {
+        foreach (comp; _inspected) {
             comp.update_fields();
         }
     }
@@ -83,7 +83,7 @@ debug class Inspector {
         // this is going to calculate the space required for each component
         int[] component_section_heights;
 
-        foreach (comp; _components) {
+        foreach (comp; _inspected) {
             component_section_heights ~= (header_padding + header_padding) // header
              + ((field_height + field_padding) // field and padding
                      * ((cast(int) comp.fields.length) + 1)); // number of fields
@@ -125,7 +125,7 @@ debug class Inspector {
 
         // - now draw each component section
         auto panel_y_offset = (title_height + title_padding); // the offset from the y start of the panel (this is based on component index)
-        foreach (i, comp; _components) {
+        foreach (i, comp; _inspected) {
             auto field_names = comp.fields.keys.sort();
             auto field_index = 0;
 
@@ -160,11 +160,11 @@ debug class Inspector {
 
     /// attach the inspector to an object
     public void inspect(Entity nt) {
-        assert(_components.length == 0, "only one inspector may be open at a time");
+        assert(_inspected.length == 0, "only one inspector may be open at a time");
         open = true;
         this.entity = nt;
         // add components
-        _components ~= nt.get_all_components.map!(x => new InspectedComponent(x)).array;
+        _inspected ~= nt.get_all_components.map!(x => new InspectedObject(x)).array;
     }
 
     /// close the inspector
