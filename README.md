@@ -46,6 +46,7 @@ sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_
 ```
 
 raylib needs to be in your linker search path for `dray` to find. if it is installed, it should be detected automatically.
+on windows, simply copy `raylib.lib` and `raylib.dll` to your dub project directory.
 
 build engine:
 ```sh
