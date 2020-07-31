@@ -7,7 +7,9 @@ RE ENGINE FX
 
 lightweight, expressive, extensible game engine 
 
-![demo gif](https://raw.githubusercontent.com/wiki/xdrie/rengfx/img/rec-2020-07-30_12.21.42.gif)
+![blocks demo gif](https://raw.githubusercontent.com/wiki/xdrie/rengfx/img/rec-2020-07-30_17.17.12.gif)
+
+[demo (win/linux)](https://github.com/xdrie/rengfx/releases/tag/v0.3.3)
 
 ## features
 
