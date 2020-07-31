@@ -5,6 +5,7 @@ import re.math;
 
 /// a data class that represents a collider
 abstract class Collider : Component {
+    mixin Reflect;
     public const(Vector3) offset;
     this(Vector3 offset) {
         this.offset = offset;
@@ -13,6 +14,7 @@ abstract class Collider : Component {
 
 /// a rectangular prism collider
 class BoxCollider : Collider {
+    mixin Reflect;
     /// the half-size x,y,z dimensions of the collision box
     public const(Vector3) size;
 
@@ -24,6 +26,7 @@ class BoxCollider : Collider {
 
 /// a sphere collider
 class SphereCollider : Collider {
+    mixin Reflect;
     /// the radius of the collision box
     public const(float) radius;
 

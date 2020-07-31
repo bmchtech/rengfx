@@ -306,6 +306,7 @@ version (physics) {
 
     /// represents a physics body
     abstract class PhysicsBody : Component {
+        mixin Reflect;
         // - references to things in the physics engine
         private rb.RigidBody _phys_body;
         // private shape.ShapeComponent[] _phys_shapes;
@@ -407,6 +408,7 @@ version (physics) {
 
     /// a dynamic physics body that is affected by forces
     public class DynamicBody : PhysicsBody {
+        mixin Reflect;
         this(float mass = 1f) {
             super(mass, PhysicsBody.BodyType.Dynamic);
         }
@@ -414,6 +416,7 @@ version (physics) {
 
     /// a static physics body that is not affected by forces
     public class StaticBody : PhysicsBody {
+        mixin Reflect;
         this(float mass = 1f) {
             super(mass, PhysicsBody.BodyType.Static);
         }
