@@ -53,10 +53,16 @@ class SceneLightManager : Manager, Updatable {
 
         // ambient light level
         auto ambient_loc = raylib.GetShaderLocation(shader, "ambient");
-        auto col_ambient = 0.4;
+        immutable auto col_ambient = 0.4;
         float[4] ambient_val = [col_ambient, col_ambient, col_ambient, 1];
         raylib.SetShaderValue(shader, ambient_loc, &ambient_val,
                 raylib.ShaderUniformDataType.UNIFORM_VEC4);
+
+        // specular shine
+        auto shine_loc = raylib.GetShaderLocation(shader, "shine");
+        float shine_amt = 16.0;
+        raylib.SetShaderValue(shader, shine_loc, &shine_amt,
+                raylib.ShaderUniformDataType.UNIFORM_FLOAT);
 
         _lights.reserve(max_lights);
         _comps.reserve(max_lights);
