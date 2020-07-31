@@ -38,6 +38,7 @@ build raylib:
 ```sh
 git clone https://github.com/xdrie/raylib.git && cd raylib
 git checkout 3.0.0_patch
+git submodule update --init --recursive
 cd src
 make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc)
 # install (optional)
