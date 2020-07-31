@@ -17,7 +17,7 @@ static import raygui;
 /// real-time object inspector
 debug class Inspector {
     /// panel width
-    enum width = 400;
+    public int width = 400;
     /// whether the inspector is open
     public bool open = false;
     private Vector2 _panel_scroll;
@@ -73,7 +73,7 @@ debug class Inspector {
         enum field_value_text_size = 12;
         enum field_padding = 2;
         enum field_label_width = 120;
-        enum field_value_width = 240;
+        const auto field_value_width = width - 40;
         enum header_height = field_height; // for each component
         enum header_padding = 4;
         enum header_line_margin = 4;

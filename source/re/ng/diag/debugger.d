@@ -30,6 +30,7 @@ debug class Debugger {
         console = new Console();
         if (!Core.headless) {
             _render_target = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
+            inspector.width = cast(int)(Core.window.width * 0.7);
         }
     }
 
