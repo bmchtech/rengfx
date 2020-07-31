@@ -199,4 +199,13 @@ struct Transform {
 
         _dirty = false;
     }
+
+    public string toString() {
+        import std.string : format;
+
+        import re.util.format : format_vec;
+
+        return format("[pos: %s, ori: %s, scl: %s]", position.format_vec(2),
+                orientation.format_vec(2), scale.format_vec(2));
+    }
 }
