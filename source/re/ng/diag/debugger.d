@@ -30,11 +30,15 @@ debug class Debugger {
         console = new Console();
         if (!Core.headless) {
             _render_target = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
-            inspector.width = cast(int)(Core.window.width * 0.7);
         }
     }
 
     public void update() {
+        if (!Core.headless) {
+            // auto-resize inspector
+            inspector.width = cast(int)(Core.window.width * 0.7);
+        }
+
         if (Input.is_key_pressed(console.key)) {
             Core.debug_render = !Core.debug_render;
             console.open = !console.open;
