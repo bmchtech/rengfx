@@ -8,12 +8,12 @@ import std.stdio;
 import play;
 import hud;
 
-class Game : Core {
-	enum WIDTH = 1280;
-	enum HEIGHT = 720;
+int width = 1280;
+int height = 720;
 
+class Game : Core {
 	this() {
-		super(WIDTH, HEIGHT, "blocks");
+		super(width, height, "blocks");
 	}
 
 	override void initialize() {
@@ -24,8 +24,17 @@ class Game : Core {
 	}
 }
 
-void main() {
+int main(string[] args) {
+	import std.getopt : getopt, defaultGetoptPrinter;
+
+	auto help = getopt(args, "width", &width, "height", &height);
+	if (help.helpWanted) {
+		defaultGetoptPrinter("Some information about the program.", help.options);
+		return 1;
+	}
+
 	auto game = new Game(); // init game
 	game.run();
 	game.destroy(); // clean up
+	return 0;
 }
