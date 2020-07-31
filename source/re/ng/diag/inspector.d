@@ -70,6 +70,7 @@ debug class Inspector {
 
         // - layout vars
         enum field_height = 16; // for each field
+        enum field_value_text_size = 12;
         enum field_padding = 2;
         enum field_label_width = 120;
         enum field_value_width = 240;
@@ -78,6 +79,7 @@ debug class Inspector {
         enum header_line_margin = 4;
         enum title_height = field_height; // for each entity
         enum title_padding = 8;
+        enum props_count = 1; // transform
 
         // calculate panel bounds
         // this is going to calculate the space required for each component
@@ -88,9 +90,12 @@ debug class Inspector {
              + ((field_height + field_padding) // field and padding
                      * ((cast(int) comp.fields.length) + 1)); // number of fields
         }
+        enum title_offset = title_height + title_padding;
+        enum props_offset = (props_count * (field_height + field_padding));
         // total height
         auto panel_bounds_height = pad + component_section_heights.sum() + (
-                title_height + title_padding);
+                title_offset) // title
+         + props_offset; // props
 
         // bounds of the entire panel
         auto panel_content_bounds = Rectangle(0, 0, width - pad, panel_bounds_height);
@@ -123,8 +128,17 @@ debug class Inspector {
         raylib.DrawRectangleLinesEx(Rectangle(panel_corner.x,
                 panel_corner.y + title_height, panel_bounds.width - pad * 2, 4), 1, Colors.GRAY);
 
+        // entity props
+        // 1. transform
+        auto entity_transform = to!string(entity.transform);
+        raygui.GuiLabel(Rectangle(panel_corner.x, panel_corner.y + title_offset,
+                field_label_width, title_height), "transform".c_str());
+        raygui.GuiTextBox(Rectangle(panel_corner.x + field_label_width, panel_corner.y + title_offset, field_value_width,
+                field_height), entity_transform.c_str(), field_value_text_size, false);
+
         // - now draw each component section
-        auto panel_y_offset = (title_height + title_padding); // the offset from the y start of the panel (this is based on component index)
+        enum first_panel_offset = title_offset + props_offset;
+        auto panel_y_offset = first_panel_offset; // the offset from the y start of the panel (this is based on component index)
         foreach (i, comp; _inspected) {
             auto field_names = comp.fields.keys.sort();
             auto field_index = 0;
@@ -147,9 +161,8 @@ debug class Inspector {
                             field_padding + field_height));
                 raygui.GuiLabel(Rectangle(corner.x, corner.y,
                         field_label_width, field_height), field_name.c_str());
-                raygui.GuiTextBox(Rectangle(corner.x + field_label_width, corner.y,
-                        field_value_width, field_height), field_val.c_str(),
-                        field_value_width, false);
+                raygui.GuiTextBox(Rectangle(corner.x + field_label_width, corner.y, field_value_width,
+                        field_height), field_val.c_str(), field_value_text_size, false);
                 field_index++;
             }
             panel_y_offset += component_section_heights[i]; // go to the bottom of this section
