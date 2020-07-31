@@ -207,6 +207,7 @@ class SceneLightManager : Manager, Updatable {
 
 /// represents a 3D light
 class Light3D : Component, Renderable3D {
+    mixin Reflect;
     private SceneLightManager _mgr;
     private enum phys_size = 0.2;
     private SceneLightManager.ShaderLight _light;
