@@ -11,6 +11,8 @@ class Window {
     private int _height;
     /// the window dpi scale
     public Vector2 dpi;
+    /// the monitor
+    private int _monitor;
 
     /// creates a window instance with the given dimensions
     this(int width, int height) {
@@ -20,11 +22,13 @@ class Window {
 
     /// dpi-scaled window width
     @property int width() {
+        update_window();
         return cast(int)(_width * dpi.x);
     }
 
     /// dpi-scaled window height
     @property int height() {
+        update_window();
         return cast(int)(_height * dpi.y);
     }
 
@@ -41,6 +45,11 @@ class Window {
     public void set_title(string title) {
         // TODO: set window title
         raylib.SetWindowTitle(toStringz(title));
+    }
+
+    private void update_window() {
+        _width = raylib.GetScreenWidth();
+        _height = raylib.GetScreenHeight();
     }
 
     public void destroy() {
