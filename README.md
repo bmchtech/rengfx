@@ -50,14 +50,13 @@ on windows, simply copy `raylib.lib` and `raylib.dll` to your dub project direct
 
 build engine:
 ```sh
-cd src
 dub test # run tests
 dub build # build library
 ```
 
 run demo:
 ```sh
-cd ../demo/<name>
+cd demo/<name>
 dub run # run demo
 ```
 
