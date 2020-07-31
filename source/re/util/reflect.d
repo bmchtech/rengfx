@@ -8,3 +8,8 @@ mixin template Reflect() {
         mixin Witchcraft; /// in debug mode, enable reflection
     }
 }
+
+/// a base class for all objects that can be reflected upon
+abstract class ReflectableObject {
+    mixin Reflect;
+}
