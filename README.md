@@ -34,7 +34,7 @@ requirements:
 + `make` and a C compiler (`gcc`, `clang`)
 + `dub` and a D compiler (`dmd`, `gdc`, `ldc`)
 
-build raylib:
+build raylib ([precompiled](https://github.com/xdrie/raylib/releases/tag/v3.0.0_patch_2)):
 ```sh
 git clone https://github.com/xdrie/raylib.git && cd raylib
 git checkout 3.0.0_patch
