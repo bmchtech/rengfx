@@ -13,6 +13,7 @@ out vec4 finalColor;
 // user vars
 uniform float c_threshold;
 uniform vec2 c_resolution;
+uniform vec4 c_outline_color;
 
 vec4 sample_at(vec2 pos) { return texture(texture0, pos / c_resolution.xy); }
 
@@ -32,7 +33,7 @@ void main() {
                  2.0 * sample_x_at(x, y + 1.0) - sample_x_at(x + 1.0, y + 1.0);
 
   if (length(vec2(xValue, yValue)) > c_threshold) {
-    finalColor = vec4(0, 0, 0, 1);
+    finalColor = c_outline_color;
   } else {
     vec4 currentPixel = texture(texture0, fragTexCoord);
     finalColor = currentPixel;
