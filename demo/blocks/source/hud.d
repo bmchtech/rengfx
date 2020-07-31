@@ -15,7 +15,7 @@ class HUDScene : Scene2D {
 
         auto desc = create_entity("desc", Vector2(pad, resolution.y - pad));
         auto hello_text = desc.add_component(new Text(Text.default_font,
-                "blocks - physics and lighting", 30, Colors.BROWN));
+                "RENG: blocks - physics and lighting", 30, Colors.BROWN));
         hello_text.set_align(Text.Align.Close, Text.Align.Far);
 
         auto diag = create_entity("diag", Vector2(2, 2));
