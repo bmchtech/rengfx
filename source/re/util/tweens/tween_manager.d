@@ -28,7 +28,9 @@ class TweenManager : Manager {
             _tweens ~= tw.get_chain;
             // call callback
             auto cb = tw.callback;
-            cb(tw);
+            if (cb !is null) {
+                cb(tw);
+            }
         }
     }
 
