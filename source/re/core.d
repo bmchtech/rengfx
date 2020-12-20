@@ -4,6 +4,7 @@ import re.input;
 import re.content;
 import re.time;
 import re.gfx.window;
+import re.libs;
 import re.ng.scene;
 import re.ng.diag;
 import re.ng.manager;
@@ -89,6 +90,10 @@ abstract class Core {
         debug {
             debugger = new Debugger();
         }
+
+        // load libraries
+        auto loadlib_result = LibraryDependencies.load_all();
+        assert(loadlib_result, "library dependencies failed to load");
 
         initialize();
     }

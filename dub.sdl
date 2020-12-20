@@ -8,6 +8,7 @@ dependency "dray" version=">=3.0.0-patch4"
 dependency "jar" version="~>0.1.0"
 dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
+dependency "bindbc-loader" version="~>0.3.2"
 libs "raylib"
 
 # documentation
@@ -21,6 +22,7 @@ configuration "lib-standard" {
     versions "physics"
     dependency "dmech" version="~>0.4.1"
     dependency "dlib" version="~>0.19.1"
+    dependency "bindbc-newton" version="~>0.1.1"
 }
 
 # minimal library, no extra libs
