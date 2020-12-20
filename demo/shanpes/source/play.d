@@ -24,7 +24,7 @@ class PlayScene : Scene2D {
         // follow the player
         cam.entity.add_component(new CameraFollow2D(player, 0.05));
 
-        auto turret = create_entity("turret", Vector2(80, 80));
+        auto turret = create_entity("turret", Vector2(60, 60));
         turret.add_component(new ColorRect(Vector2(8, 8), Colors.DARKGRAY));
         turret.add_component!LogicController();
         turret.add_component!ShapeBody();
