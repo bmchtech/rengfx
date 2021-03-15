@@ -90,7 +90,7 @@ public static class Input {
     }
 
     /// the mouse scroll wheel delta
-    @property public static int scroll_delta() {
+    @property public static float scroll_delta() {
         return raylib.GetMouseWheelMove();
     }
 
