@@ -25,7 +25,7 @@ pragma(inline) {
 
     /// gets a color from hsv
     public Color color_hsv(float h, float s, float v) {
-        return raylib.ColorFromHSV(Vector3(h, s, v));
+        return raylib.ColorFromHSV(h, s, v);
     }
 
     /// gets a color from rgb
