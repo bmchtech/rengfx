@@ -43,8 +43,12 @@ class Window {
     }
 
     public void set_title(string title) {
-        // TODO: set window title
         raylib.SetWindowTitle(toStringz(title));
+    }
+
+    public void resize(int width, int height) {
+        raylib.SetWindowSize(width, height);
+        update_window();
     }
 
     private void update_window() {
