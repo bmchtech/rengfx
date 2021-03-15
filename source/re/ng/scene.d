@@ -122,7 +122,7 @@ abstract class Scene {
         if (Core.headless)
             return;
         // free any old render target
-        if (render_target == raylib.RenderTexture2D.init) {
+        if (render_target != raylib.RenderTexture2D.init) {
             raylib.UnloadRenderTexture(render_target);
         }
         // create render target
