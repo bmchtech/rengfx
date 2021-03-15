@@ -78,6 +78,8 @@ abstract class Core {
             window = new Window(width, height);
             window.initialize();
             window.set_title(title);
+            // for some reason this makes dpi scaling work
+            window.resize(window.width, window.height);   
         }
 
         content = new ContentManager();
