@@ -2,7 +2,6 @@
 
 RE ENGINE FX
 
-[![Build Status](https://travis-ci.org/xdrie/rengfx.svg?branch=master)](https://travis-ci.org/xdrie/rengfx)
 [![DUB Package](https://img.shields.io/dub/v/reng.svg)](https://code.dlang.org/packages/reng)
 
 lightweight, expressive, extensible game engine 
