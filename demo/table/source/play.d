@@ -31,8 +31,8 @@ class PlayScene : Scene3D {
         auto fox_model = fox.add_component(new Model3D(fox_asset));
 
         // add a camera to look at the fox
-        // cam.entity.add_component(new CameraOrbit(fox, 0.2));
-        cam.entity.add_component(new CameraFreeLook(fox));
+        cam.entity.add_component(new CameraOrbit(fox, 0.2));
+        // cam.entity.add_component(new CameraFreeLook(fox));
 
         // draw a grid at the origin
         auto grid = create_entity("grid");
