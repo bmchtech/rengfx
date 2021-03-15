@@ -34,19 +34,8 @@ requirements:
 + `make` and a C compiler (`gcc`, `clang`)
 + `dub` and a D compiler (`dmd`, `gdc`, `ldc`)
 
-build raylib ([precompiled](https://github.com/xdrie/raylib/releases/tag/v3.0.0_patch_2)):
-```sh
-git clone https://github.com/xdrie/raylib.git && cd raylib
-git checkout 3.0.0_patch
-git submodule update --init --recursive
-cd src
-make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE -j$(nproc)
-# install (optional)
-sudo make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED RAYLIB_MODULE_RAYGUI=TRUE
-```
-
-raylib needs to be in your linker search path for `dray` to find. if it is installed, it should be detected automatically.
-on windows, simply copy `raylib.lib` and `raylib.dll` to your dub project directory.
+rengfx depends on raylib (via [dray](https://github.com/xdrie/dray) bindings).
+by default, `dray` will run a pre-generate script that automatically builds `raylib`.
 
 build engine:
 ```sh
