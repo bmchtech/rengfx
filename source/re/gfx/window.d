@@ -3,6 +3,7 @@ module re.gfx.window;
 import re.core;
 import re.math;
 import std.string;
+import std.algorithm.comparison: max;
 static import raylib;
 
 class Window {
@@ -10,7 +11,7 @@ class Window {
     private int _width;
     private int _height;
     /// the window dpi scale
-    public Vector2 scale_dpi;
+    public float scale_dpi;
     /// the monitor
     private int _monitor;
 
@@ -23,13 +24,13 @@ class Window {
     /// dpi-scaled window width
     @property int width() {
         update_window();
-        return cast(int)(_width * scale_dpi.x);
+        return cast(int)(_width);
     }
 
     /// dpi-scaled window height
     @property int height() {
         update_window();
-        return cast(int)(_height * scale_dpi.y);
+        return cast(int)(_height);
     }
 
     /// initializes the window
@@ -39,7 +40,8 @@ class Window {
         // set options
         raylib.SetTargetFPS(Core.target_fps);
         // get properties
-        scale_dpi = raylib.GetWindowScaleDPI();
+        auto scale_dpi_vec = raylib.GetWindowScaleDPI();
+        scale_dpi = max(scale_dpi_vec.x, scale_dpi_vec.y);
     }
 
     public void set_title(string title) {
