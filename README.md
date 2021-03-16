@@ -26,8 +26,8 @@ lightweight, expressive, extensible game engine
 + wip
 
 ## documentation
-+ see [doc](doc/) for notes.
-+ see [api docs](https://xdrie.github.io/rengfx/)
++ see [doc](doc/) for some small notes.
++ see [api docs](https://xdrie.github.io/rengfx/) for full api documentation
 
 ## hacking
 
@@ -42,6 +42,11 @@ build engine:
 ```sh
 dub test # run tests
 dub build # build library
+```
+
+open docs locally:
+```sh
+dub run -b ddox
 ```
 
 run demo:
