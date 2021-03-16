@@ -61,6 +61,9 @@ abstract class Core {
     /// whether to pause when unfocused
     public static bool pause_on_focus_lost = true;
 
+    /// whether to automatically scale things to compensate for hidpi
+    public static bool auto_compensate_hidpi = true;
+
     /// the default render resolution for all scenes
     public static Vector2 default_resolution;
 
@@ -78,8 +81,10 @@ abstract class Core {
             window = new Window(width, height);
             window.initialize();
             window.set_title(title);
-            // for some reason this makes dpi scaling work
-            window.resize(window.width, window.height);   
+            if (auto_compensate_hidpi) {
+                // resize window according to dpi scale
+                window.resize(cast(int)(window.width * window.scale_dpi), cast(int)(window.height * window.scale_dpi));
+            }
         }
 
         content = new ContentManager();
