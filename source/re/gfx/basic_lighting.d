@@ -1,4 +1,4 @@
-module re.gfx.lighting;
+module re.gfx.basic_lighting;
 
 import re.core;
 import re.ecs;
@@ -11,7 +11,7 @@ import std.container.array;
 static import raylib;
 
 /// acts as a manager for Light3D components
-class SceneLightManager : Manager, Updatable {
+class BasicSceneLightManager : Manager, Updatable {
     /// max lights supported by shader
     private enum max_lights = 4;
     private Array!(ShaderLight) _lights;
@@ -20,6 +20,9 @@ class SceneLightManager : Manager, Updatable {
 
     /// the lighting shader
     public Shader shader;
+
+    public float ambient_color = 0.4;
+    public float shine_amount = 16;
 
     private enum ShaderLightType {
         LIGHT_DIRECTIONAL,
@@ -51,19 +54,6 @@ class SceneLightManager : Manager, Updatable {
         shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW] = raylib.GetShaderLocation(shader,
                 "viewPos");
 
-        // ambient light level
-        auto ambient_loc = raylib.GetShaderLocation(shader, "ambient");
-        immutable auto col_ambient = 0.4;
-        float[4] ambient_val = [col_ambient, col_ambient, col_ambient, 1];
-        raylib.SetShaderValue(shader, ambient_loc, &ambient_val,
-                raylib.ShaderUniformDataType.UNIFORM_VEC4);
-
-        // specular shine
-        auto shine_loc = raylib.GetShaderLocation(shader, "shine");
-        float shine_amt = 16.0;
-        raylib.SetShaderValue(shader, shine_loc, &shine_amt,
-                raylib.ShaderUniformDataType.UNIFORM_FLOAT);
-
         _lights.reserve(max_lights);
         _comps.reserve(max_lights);
     }
@@ -87,6 +77,8 @@ class SceneLightManager : Manager, Updatable {
             // update shader values
             update_shader_lights(shader, _lights[i]);
         }
+
+        update_light_options();
     }
 
     override void destroy() {
@@ -128,6 +120,19 @@ class SceneLightManager : Manager, Updatable {
             // set associated light
             _comps[i]._light = _lights[i];
         }
+    }
+
+    private void update_light_options() {
+        // ambient light level
+        auto ambient_loc = raylib.GetShaderLocation(shader, "ambient");
+        float[4] ambient_val = [ambient_color, ambient_color, ambient_color, 1];
+        raylib.SetShaderValue(shader, ambient_loc, &ambient_val,
+                raylib.ShaderUniformDataType.UNIFORM_VEC4);
+
+        // specular shine
+        auto shine_loc = raylib.GetShaderLocation(shader, "shine");
+        raylib.SetShaderValue(shader, shine_loc, &shine_amount,
+                raylib.ShaderUniformDataType.UNIFORM_FLOAT);
     }
 
     // - ported from rlights
@@ -208,9 +213,9 @@ class SceneLightManager : Manager, Updatable {
 /// represents a 3D light
 class Light3D : Component, Renderable3D {
     mixin Reflect;
-    private SceneLightManager _mgr;
+    private BasicSceneLightManager _mgr;
     private enum phys_size = 0.2;
-    private SceneLightManager.ShaderLight _light;
+    private BasicSceneLightManager.ShaderLight _light;
 
     /// the color of the light
     public Color color;
@@ -225,8 +230,8 @@ class Light3D : Component, Renderable3D {
 
     override void setup() {
         // register the light in the manager
-        auto mgr = entity.scene.get_manager!SceneLightManager();
-        assert(!mgr.isNull, "scene did not have SceneLightManager registered."
+        auto mgr = entity.scene.get_manager!BasicSceneLightManager();
+        assert(!mgr.isNull, "scene did not have BasicSceneLightManager registered."
                 ~ "please add that to the scene before creating this component.");
         _mgr = mgr.get;
         _mgr.register(this);
