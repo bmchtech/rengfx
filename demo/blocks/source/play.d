@@ -8,7 +8,7 @@ import re.phys.collider;
 import re.phys.rigid3d;
 import re.gfx.shapes.cube;
 import re.gfx.shapes.grid;
-import re.gfx.basic_lighting;
+import re.gfx.lighting.basic;
 import comp.input;
 import comp.body;
 import comp.orbit;
