@@ -8,7 +8,7 @@ import re.phys.collider;
 import re.phys.rigid3d;
 import re.gfx.shapes.cube;
 import re.gfx.shapes.grid;
-import re.gfx.lighting;
+import re.gfx.basic_lighting;
 import comp.input;
 import comp.body;
 import comp.orbit;
@@ -31,7 +31,9 @@ class PlayScene : Scene3D {
         postprocessors ~= postproc;
 
         // enable scene lighting
-        auto lights = add_manager(new SceneLightManager());
+        auto lights = add_manager(new BasicSceneLightManager());
+        lights.ambient_color = 0.6;
+        lights.shine_amount = 32;
 
         // enable scene physics
         auto physics = new PhysicsManager();
@@ -44,9 +46,10 @@ class PlayScene : Scene3D {
 
         // create the static floor
         auto floor = create_entity("floor", Vector3(0, -5, 0));
-        floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(91, 64, 54)));
+        auto floor_box = floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(91, 64, 54)));
         floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
         floor.add_component(new StaticBody());
+        floor_box.effect = Effect(lights.shader, color_rgb(91, 64, 54));
 
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 5, 0));
