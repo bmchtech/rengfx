@@ -1,4 +1,4 @@
-module re.gfx.basic_lighting;
+module re.gfx.lighting.basic;
 
 import re.core;
 import re.ecs;
