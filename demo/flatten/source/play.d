@@ -17,7 +17,7 @@ class PlayScene : Scene3D {
         cam.entity.position = Vector3(10, 12, 10);
 
         auto thing = create_entity("thing", Vector3(0, 0, 0));
-        auto thing_asset = Core.content.load_model("models/fountain2.glb");
+        auto thing_asset = Core.content.load_model("models/fountain3.glb");
         auto thing_model = thing.add_component(new Model3D(thing_asset));
         thing_model.transform.scale = Vector3(4, 4, 4);
         thing_model.transform.orientation = Vector3(C_PI_2, 0, 0); // euler angles
