@@ -8,7 +8,7 @@ import std.stdio;
 import play;
 
 class Game : Core {
-	enum CAPTURE_DIMENS = 32;
+	enum CAPTURE_DIMENS = 64;
 	enum WIDTH = CAPTURE_DIMENS;
 	enum HEIGHT = CAPTURE_DIMENS;
 
