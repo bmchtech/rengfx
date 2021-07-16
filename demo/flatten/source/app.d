@@ -8,8 +8,9 @@ import std.stdio;
 import play;
 
 class Game : Core {
-	enum WIDTH = 240;
-	enum HEIGHT = 240;
+	enum CAPTURE_DIMENS = 32;
+	enum WIDTH = CAPTURE_DIMENS;
+	enum HEIGHT = CAPTURE_DIMENS;
 
 	this() {
 		super(WIDTH, HEIGHT, "flatten");
