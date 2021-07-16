@@ -7,14 +7,17 @@ import re.gfx.shapes.grid;
 import re.ng.camera;
 import re.math;
 static import raylib;
+import core.stdc.math: ceil;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
-    const int CAPTURE_FRAMECOUNT = 10;
-    const int CAPTURE_FRAMESKIP = 6;
+    const int CAPTURE_SHEET_WIDTH = 8;
+    const int CAPTURE_FRAMECOUNT = 16;
+    const int CAPTURE_FRAMESKIP = 6; // 0.1 sec
 
     int start_frame;
     Image[] captured_frames;
+    bool saved_capture = false;
 
     override void on_start() {
         clear_color = Colors.BLACK;
@@ -31,7 +34,7 @@ class PlayScene : Scene3D {
         thing_model.transform.orientation = Vector3(C_PI_2, 0, 0); // euler angles
 
         // add a camera to look at the thing
-        cam.entity.add_component(new CameraOrbit(thing, 2.0));
+        cam.entity.add_component(new CameraOrbit(thing, PI));
         // cam.entity.add_component(new CameraFreeLook(thing));
     }
 
@@ -46,32 +49,38 @@ class PlayScene : Scene3D {
 
                 // correct for capture (is upside down??)
 
-                raylib.ImageFlipVertical(&frame);
+                // raylib.ImageFlipVertical(&frame);
                 // raylib.ImageFlipHorizontal(&frame);
                 captured_frames ~= frame;
             }
-        } else {
+        } else if (!saved_capture) {
             // done capturing
-            auto target = raylib.LoadRenderTexture(cast(int) resolution.x * CAPTURE_FRAMECOUNT,
-                    cast(int) resolution.y);
+            auto target = raylib.LoadRenderTexture(cast(int) resolution.x * CAPTURE_SHEET_WIDTH,
+                    cast(int) resolution.y * cast(int) ceil(
+                        cast(float) CAPTURE_FRAMECOUNT / CAPTURE_SHEET_WIDTH));
 
             raylib.BeginTextureMode(target);
             raylib.BeginDrawing();
 
+            raylib.ClearBackground(Colors.BLANK);
+
             for (int i = 0; i < CAPTURE_FRAMECOUNT; i++) {
                 auto tex = raylib.LoadTextureFromImage(captured_frames[i]);
-                raylib.DrawTexture(tex, i * cast(int) resolution.x, 0, Colors.WHITE);
+                raylib.DrawTexture(tex, (i % CAPTURE_SHEET_WIDTH) * cast(int) resolution.x,
+                        (i / CAPTURE_SHEET_WIDTH) * cast(int) resolution.y, Colors.WHITE);
             }
 
             raylib.EndDrawing();
             raylib.EndTextureMode();
 
             auto target_img = raylib.GetTextureData(target.texture);
+            raylib.ImageFlipVertical(&target_img);
             raylib.ExportImage(target_img, "captures.png");
 
             // TODO: unload everything
 
-            Core.exit();
+            saved_capture = true;
+            // Core.exit();
         }
 
         if (Input.is_mouse_pressed(MouseButton.MOUSE_LEFT_BUTTON)) {
