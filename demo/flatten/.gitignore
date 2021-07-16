@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/flatten
+flatten.so
+flatten.dylib
+flatten.dll
+flatten.a
+flatten.lib
+flatten-test-*
+*.exe
+*.o
+*.obj
+*.lst
