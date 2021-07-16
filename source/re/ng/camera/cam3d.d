@@ -129,15 +129,22 @@ class CameraOrbit : CameraFollow3D {
     mixin Reflect;
     /// the orbit speed, in radians per second
     public float speed;
+    public bool pause = false;
 
     this(Entity target, float speed) {
         super(target);
         this.speed = speed;
     }
 
+    public void set_xz_angle(float val) {
+        _angle.x = val;
+    }
+
     /// based on https://github.com/raysan5/raylib/blob/6fa6757a8bf90d4b2fd0ce82dace7c7223635efa/src/camera.h#L400
     void update() {
-        _angle.x += speed * Time.delta_time; // camera orbit angle
+        if (!pause) {
+            _angle.x += speed * Time.delta_time; // camera xz orbit angle
+        }
 
         // camera distance clamp
         if (_target_dist < third_person_dist)
@@ -266,7 +273,8 @@ class CameraFreeLook : CameraFollow3D {
         auto wheel_delta = Input.scroll_delta();
         auto mouse_delta = Input.mouse_delta;
 
-        auto key_pan = Input.is_mouse_down(MouseButton.MOUSE_RIGHT_BUTTON) || Input.is_key_down(Keys.KEY_LEFT_ALT);
+        auto key_pan = Input.is_mouse_down(MouseButton.MOUSE_RIGHT_BUTTON)
+            || Input.is_key_down(Keys.KEY_LEFT_ALT);
         auto key_alternate = !Input.is_key_down(Keys.KEY_LEFT_SHIFT);
         auto key_smooth = Input.is_key_down(Keys.KEY_LEFT_CONTROL);
 
@@ -280,8 +288,8 @@ class CameraFreeLook : CameraFollow3D {
             if (_target_dist > free_dist_max_clamp)
                 _target_dist = free_dist_max_clamp;
         }  // Camera looking down
-        else if ((entity.position.y > tpos_y) && (_target_dist == free_dist_max_clamp)
-                && (wheel_delta < 0)) {
+        else if ((entity.position.y > tpos_y)
+                && (_target_dist == free_dist_max_clamp) && (wheel_delta < 0)) {
             tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
             tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
             tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
@@ -296,8 +304,8 @@ class CameraFreeLook : CameraFollow3D {
             if (_target_dist < free_dist_min_clamp)
                 _target_dist = free_dist_min_clamp;
         }  // Camera looking up
-        else if ((entity.position.y < tpos_y) && (_target_dist == free_dist_max_clamp)
-                && (wheel_delta < 0)) {
+        else if ((entity.position.y < tpos_y)
+                && (_target_dist == free_dist_max_clamp) && (wheel_delta < 0)) {
             tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
             tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
             tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
