@@ -11,8 +11,8 @@ import core.stdc.math: ceil;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
-    const int CAPTURE_SHEET_WIDTH = 8;
-    const int CAPTURE_FRAMECOUNT = 16;
+    const int CAPTURE_SHEET_WIDTH = 4;
+    const int CAPTURE_FRAMECOUNT = 15;
     const int CAPTURE_FRAMESKIP = 6; // 0.1 sec
 
     int start_frame;
