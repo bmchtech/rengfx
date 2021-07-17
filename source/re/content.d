@@ -30,6 +30,10 @@ class ContentManager {
     }
 
     private const char* get_path(string path) {
+        // check if this is already a valid path
+        if (std.file.exists(path)) {
+            return path.c_str();
+        }
         auto base = string.init;
         alias join_paths = std.path.buildNormalizedPath;
         // check search paths first
