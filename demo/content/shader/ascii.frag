@@ -1,3 +1,8 @@
+/*
+    ASCII SHADER
+    Ported to rengfx/GLSL from: https://www.shadertoy.com/view/4ll3RB
+*/
+
 #version 330
 
 // Input vertex attributes (from vertex shader)

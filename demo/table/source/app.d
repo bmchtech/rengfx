@@ -9,8 +9,8 @@ import play;
 import hud;
 
 class Game : Core {
-	enum WIDTH = 640;
-	enum HEIGHT = 480;
+	enum WIDTH = 960;
+	enum HEIGHT = 540;
 
 	this() {
 		super(WIDTH, HEIGHT, "table");
