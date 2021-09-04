@@ -18,6 +18,9 @@ out vec4 finalColor;
 uniform vec2 c_resolution;
 #define zoom 1.
 
+const float threshold_mix = 1;
+const float glyph_mix = 1;
+
 // char calculation
 #define P(id, a, b, c, d, e, f, g, h) if (id == int(pos.y)) { int pa = a + 2 * (b + 2 * (c + 2 * (d + 2 * (e + 2 * (f + 2 * (g + 2 * (h))))))); cha = floor(mod(float(pa) / pow(2., float(pos.x) - 1.), 2.)); }
 
@@ -149,8 +152,16 @@ vec4 image_shader(sampler2D source_tex, vec2 pix_coord) {
         P(0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
-    vec3 col = samp_col.xyz / max(samp_col.x, max(samp_col.y, samp_col.z));
-    return vec4(cha * col, 1.);
+    // divide color by highest component, has a thresholding effect
+    vec3 adjusted_col = samp_col.xyz / max(samp_col.x, max(samp_col.y, samp_col.z));
+
+    // mix the color with the base color
+    vec3 col = mix(samp_col.xyz, adjusted_col, threshold_mix);
+    
+    // apply the character glyph
+    vec3 char_col = mix(col, cha * col, glyph_mix);
+
+    return vec4(char_col, 1.);
 }
 
 void main() {
