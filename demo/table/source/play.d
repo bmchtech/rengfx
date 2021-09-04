@@ -16,12 +16,20 @@ class PlayScene : Scene3D {
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
+        // // load a shader effect and add it as a postprocessor
+        // auto chrm_abr = Effect(Core.content.load_shader(null,
+        //         "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
+        // chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
+        // glitch_postproc = new PostProcessor(resolution, chrm_abr);
+        // postprocessors ~= glitch_postproc;
+
         // load a shader effect and add it as a postprocessor
-        auto chrm_abr = Effect(Core.content.load_shader(null,
-                "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
-        chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
-        glitch_postproc = new PostProcessor(resolution, chrm_abr);
-        postprocessors ~= glitch_postproc;
+        auto ascii_shd = Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
+        ascii_shd.set_shader_var_imm("c_resolution", cast(float[2])[
+                resolution.x, resolution.y
+                ]);
+        auto ascii_postproc = new PostProcessor(resolution, ascii_shd);
+        postprocessors ~= ascii_postproc;
 
         // set the camera position
         cam.entity.position = Vector3(10, 10, 10);
