@@ -18,7 +18,7 @@ out vec4 finalColor;
 uniform vec2 c_resolution;
 #define zoom 1.
 
-const float threshold_mix = 1;
+const float color_adjust_mix = 1;
 const float glyph_mix = 1;
 
 // char calculation
@@ -156,7 +156,7 @@ vec4 image_shader(sampler2D source_tex, vec2 pix_coord) {
     vec3 adjusted_col = samp_col.xyz / max(samp_col.x, max(samp_col.y, samp_col.z));
 
     // mix the color with the base color
-    vec3 col = mix(samp_col.xyz, adjusted_col, threshold_mix);
+    vec3 col = mix(samp_col.xyz, adjusted_col, color_adjust_mix);
     
     // apply the character glyph
     vec3 char_col = mix(col, cha * col, glyph_mix);
