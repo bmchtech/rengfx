@@ -11,25 +11,24 @@ static import raylib;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     private PostProcessor glitch_postproc;
-    private float[2] aberrationOffset = [0.01, 0];
+    private float[2] aberrationOffset = [0.005, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
-        // // load a shader effect and add it as a postprocessor
-        // auto chrm_abr = Effect(Core.content.load_shader(null,
-        //         "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
-        // chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
-        // glitch_postproc = new PostProcessor(resolution, chrm_abr);
-        // postprocessors ~= glitch_postproc;
-
-        // load a shader effect and add it as a postprocessor
+        // load shader effects and add as a postprocessor
         auto ascii_shd = Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
         ascii_shd.set_shader_var_imm("c_resolution", cast(float[2])[
                 resolution.x, resolution.y
                 ]);
         auto ascii_postproc = new PostProcessor(resolution, ascii_shd);
         postprocessors ~= ascii_postproc;
+
+        auto chrm_abr = Effect(Core.content.load_shader(null,
+                "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
+        chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
+        glitch_postproc = new PostProcessor(resolution, chrm_abr);
+        postprocessors ~= glitch_postproc;
 
         // set the camera position
         cam.entity.position = Vector3(10, 10, 10);
