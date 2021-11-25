@@ -25,7 +25,7 @@ class Game : Core {
 		default_resolution = Vector2(width / lowrez, height / lowrez);
 		content.paths ~= ["../content/", "content/"];
 		
-		version (DEBUG) {
+		debug {
 			raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_ALL);
 		} else {
 			raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
