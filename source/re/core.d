@@ -79,6 +79,8 @@ abstract class Core {
         log = new Logger(Logger.Verbosity.Information);
         log.sinks ~= new Logger.ConsoleSink();
 
+        log.info("initializing rengfx core");
+
         default_resolution = Vector2(width, height);
         if (!Core.headless) {
             window = new Window(width, height);
@@ -102,6 +104,8 @@ abstract class Core {
         debug {
             debugger = new Debugger();
         }
+
+        log.info("initializing game");
 
         initialize();
     }
@@ -136,6 +140,7 @@ abstract class Core {
     /// gracefully exits the game
     public static void exit() {
         running = false;
+        log.info("gracefully exiting");
     }
 
     protected void update() {
