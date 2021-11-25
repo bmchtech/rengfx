@@ -19,8 +19,7 @@ configuration "lib-standard" {
 
     # physics
     versions "physics"
-    dependency "dmech" version="~>0.4.1"
-    dependency "dlib" version="~>0.19.1"
+    dependency "bindbc-newton" version="~>0.2.0"
 }
 
 # minimal library, no extra libs
@@ -36,7 +35,7 @@ configuration "unittest" {
 
     # physics
     versions "physics"
-    dependency "dmech" version="~>0.4.1"
+    dependency "bindbc-newton" version="~>0.2.0"
 }
 
 configuration "ddox" {
