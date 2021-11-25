@@ -7,6 +7,7 @@ import re.math;
 import std.stdio;
 import play;
 import hud;
+static import raylib;
 
 /// window width
 int width = 1280;
@@ -23,6 +24,12 @@ class Game : Core {
 	override void initialize() {
 		default_resolution = Vector2(width / lowrez, height / lowrez);
 		content.paths ~= ["../content/", "content/"];
+		
+		version (DEBUG) {
+			raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_ALL);
+		} else {
+			raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
+		}
 
 		load_scenes([new PlayScene(), new HUDScene()]);
 	}
