@@ -61,6 +61,9 @@ abstract class Core {
     /// whether to pause when unfocused
     public static bool pause_on_focus_lost = true;
 
+    /// whether to exit when escape pressed
+    public static bool exit_on_escape_pressed = true;
+
     /// whether to automatically scale things to compensate for hidpi
     public static bool auto_compensate_hidpi = true;
 
@@ -86,6 +89,9 @@ abstract class Core {
                 window.resize(cast(int)(window.width * window.scale_dpi), cast(int)(window.height * window.scale_dpi));
             }
         }
+
+        // disable default exit key
+        raylib.SetExitKey(raylib.KeyboardKey.KEY_NULL);
 
         content = new ContentManager();
 
@@ -135,6 +141,9 @@ abstract class Core {
     protected void update() {
         if (pause_on_focus_lost && raylib.IsWindowMinimized()) {
             return; // pause
+        }
+        if (exit_on_escape_pressed && raylib.IsKeyPressed(raylib.KeyboardKey.KEY_ESCAPE)) {
+            exit();
         }
         version (unittest) {
             Time.update(1f / target_fps); // 60 fps
