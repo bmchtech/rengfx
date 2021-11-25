@@ -79,7 +79,10 @@ abstract class Core {
         log = new Logger(Logger.Verbosity.Information);
         log.sinks ~= new Logger.ConsoleSink();
 
-        log.info("initializing rengfx core");
+        version (unittest) {
+        } else {
+            log.info("initializing rengfx core");
+        }
 
         default_resolution = Vector2(width, height);
         if (!Core.headless) {
@@ -105,7 +108,10 @@ abstract class Core {
             debugger = new Debugger();
         }
 
-        log.info("initializing game");
+        version (unittest) {
+        } else {
+            log.info("initializing game");
+        }
 
         initialize();
     }
@@ -140,7 +146,10 @@ abstract class Core {
     /// gracefully exits the game
     public static void exit() {
         running = false;
-        log.info("gracefully exiting");
+        version (unittest) {
+        } else {
+            log.info("gracefully exiting");
+        }
     }
 
     protected void update() {
@@ -262,7 +271,7 @@ abstract class Core {
 unittest {
     import re.util.test : TestGame;
     import std.string : format;
-    import std.math : approxEqual;
+    import std.math : isClose;
 
     class Game : TestGame {
         override void initialize() {
@@ -275,7 +284,7 @@ unittest {
 
     // ensure time has passed
     auto target_time = Core.frame_limit / Core.target_fps;
-    assert(approxEqual(Time.total_time, target_time),
+    assert(isClose(Time.total_time, target_time),
             format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
 
     game.destroy(); // clean up
