@@ -19,7 +19,7 @@ static class Bounds {
                     cast(int)(position.y - (origin.y * scale.y)),
                     cast(int)(width * scale.x), cast(int)(height * scale.y));
         } else {
-            auto tmp1 = Matrix4.init;
+            auto tmp1 = Matrix.init;
 
             // set the reference point to world reference taking origin into account
             auto transform_mat = raymath.MatrixTranslate(-position.x - origin.x,
