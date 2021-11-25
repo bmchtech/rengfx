@@ -8,6 +8,7 @@ dependency "dray" version=">=4.0.0-r3"
 dependency "jar" version="~>0.1.0"
 dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
+dependency "bindbc-loader" version="~>1.0.1"
 libs "raylib"
 
 # documentation
