@@ -13,18 +13,10 @@ version (physics) {
     import std.math;
     import std.string : format;
     import std.typecons;
-    
+
     import re.util.newtonphys;
 
-    import geom = dmech.geometry;
-    import rb = dmech.rigidbody;
-    import dm_ray = dmech.raycast;
-    import mech = dmech.world;
-    import shape = dmech.shape;
-    import dl_vec = dlib.math.vector;
-    import dl_quat = dlib.math.quaternion;
-    import dl_mat = dlib.math.matrix;
-    import dlib.container.array;
+    import newton = bindbc.newton;
 
     /// represents a manager for physics bodies
     class PhysicsManager3D : Manager {
@@ -37,8 +29,8 @@ version (physics) {
         /// gravity in the physics world
         public Vector3 gravity = Vector3(0.0f, -9.80665f, 0.0f); // earth's gravity
 
-        /// the internal dmech physics world
-        private mech.PhysicsWorld world;
+        /// the internal newton physics world
+        private newton.NewtonWorld world;
 
         /// physics target timestep
         private float _timestep;
@@ -63,21 +55,18 @@ version (physics) {
         }
 
         override void setup() {
-            /// allocate resources to run physics
-            import dlib.core.memory : New;
+            world = newton.NewtonCreate(null, null);
 
-            world = New!(mech.PhysicsWorld)(null, max_collisions);
-            world.broadphase = true;
-            world.positionCorrectionIterations = pos_correction_iterations;
-            world.constraintIterations = vel_correction_iterations;
-            world.gravity = convert_vec3(gravity);
-            _timestep = 1f / Core.target_fps; // set target _timestep
+            // set to iterative (1) mode https://newtondynamics.com/wiki/index.php/NewtonSetSolverIterations
+            newton.NewtonSetSolverIterations(&world, 1);
+            
+            // world.gravity = convert_vec3(gravity);
+            // _timestep = 1f / Core.target_fps; // set target _timestep
         }
 
         override void destroy() {
-            import dlib.core.memory : Delete;
-
-            Delete(world);
+            newton.NewtonDestroyAllBodies(&world);
+            newton.NewtonDestroy(&world);
         }
 
         override void update() {
@@ -87,84 +76,91 @@ version (physics) {
             if (_phys_time >= _timestep) {
                 _phys_time -= _timestep;
 
-                // sync FROM bodies: physical properties (mass, inertia)
-                // sync TO bodies: transforms, momentum
-                foreach (comp; _bodies.byValue()) {
-                    rb.RigidBody bod = comp._phys_body;
+                // // sync FROM bodies: physical properties (mass, inertia)
+                // // sync TO bodies: transforms, momentum
+                // foreach (comp; _bodies.byValue()) {
+                //     rb.RigidBody bod = comp._phys_body;
 
-                    // sync properties -> physics engine
-                    if (abs(bod.mass - comp.mass) > float.epsilon) {
-                        bod.mass = comp.mass;
-                        bod.invMass = 1f / comp.mass;
-                        // TODO: update mass contribtion of shapes?
-                        // foreach (shape; body_comp._phys_shapes) {
+                //     // sync properties -> physics engine
+                //     if (abs(bod.mass - comp.mass) > float.epsilon) {
+                //         bod.mass = comp.mass;
+                //         bod.invMass = 1f / comp.mass;
+                //         // TODO: update mass contribtion of shapes?
+                //         // foreach (shape; body_comp._phys_shapes) {
 
-                        // }
-                    }
-                    // TODO: sync inertia? right now it's automatically set from mass
+                //         // }
+                //     }
+                //     // TODO: sync inertia? right now it's automatically set from mass
 
-                    // sync velocity
-                    bod.linearVelocity = convert_vec3(comp.velocity);
-                    bod.angularVelocity = convert_vec3(comp.angular_velocity);
-                    bod.maxSpeed = comp.max_speed;
+                //     // sync velocity
+                //     bod.linearVelocity = convert_vec3(comp.velocity);
+                //     bod.angularVelocity = convert_vec3(comp.angular_velocity);
+                //     bod.maxSpeed = comp.max_speed;
 
-                    // apply forces and impulses
-                    // these are queued up, then we apply them all to the object
-                    foreach (force; comp._forces) {
-                        bod.applyForceAtPos(convert_vec3(force.value),
-                                convert_vec3(force.pos) + bod.position);
-                    }
-                    comp._forces.removeBack(cast(uint) comp._forces.length);
-                    foreach (impulse; comp._impulses) {
-                        bod.applyImpulse(convert_vec3(impulse.value),
-                                convert_vec3(impulse.pos) + bod.position);
-                    }
-                    comp._impulses.removeBack(cast(uint) comp._impulses.length);
-                    foreach (torque; comp._torques) {
-                        bod.applyTorque(convert_vec3(torque));
-                    }
-                    comp._torques.removeBack(cast(uint) comp._torques.length);
-                }
+                //     // apply forces and impulses
+                //     // these are queued up, then we apply them all to the object
+                //     foreach (force; comp._forces) {
+                //         bod.applyForceAtPos(convert_vec3(force.value),
+                //                 convert_vec3(force.pos) + bod.position);
+                //     }
+                //     comp._forces.removeBack(cast(uint) comp._forces.length);
+                //     foreach (impulse; comp._impulses) {
+                //         bod.applyImpulse(convert_vec3(impulse.value),
+                //                 convert_vec3(impulse.pos) + bod.position);
+                //     }
+                //     comp._impulses.removeBack(cast(uint) comp._impulses.length);
+                //     foreach (torque; comp._torques) {
+                //         bod.applyTorque(convert_vec3(torque));
+                //     }
+                //     comp._torques.removeBack(cast(uint) comp._torques.length);
+                // }
 
-                // sync options to world
-                world.gravity = convert_vec3(gravity);
+                // // sync options to world
+                // world.gravity = convert_vec3(gravity);
 
-                world.update(_timestep);
+                // world.update(_timestep);
+                newton.NewtonUpdate(&world, _timestep);
 
-                foreach (comp; _bodies.byValue()) {
-                    rb.RigidBody bod = comp._phys_body;
+                // foreach (comp; _bodies.byValue()) {
+                //     rb.RigidBody bod = comp._phys_body;
 
-                    // sync physics engine -> components
+                //     // sync physics engine -> components
 
-                    // sync position
-                    auto bod_pos = bod.position;
-                    comp.transform.position = convert_vec3(bod_pos);
+                //     // sync position
+                //     auto bod_pos = bod.position;
+                //     comp.transform.position = convert_vec3(bod_pos);
 
-                    // sync rotation/orientation
-                    auto bod_rot = bod.orientation;
-                    comp.transform.orientation = convert_quat(bod_rot);
+                //     // sync rotation/orientation
+                //     auto bod_rot = bod.orientation;
+                //     comp.transform.orientation = convert_quat(bod_rot);
 
-                    // sync velocity
-                    comp.velocity = convert_vec3(bod.linearVelocity);
-                    comp.angular_velocity = convert_vec3(bod.angularVelocity);
-                }
+                //     // sync velocity
+                //     comp.velocity = convert_vec3(bod.linearVelocity);
+                //     comp.angular_velocity = convert_vec3(bod.angularVelocity);
+                // }
             }
         }
 
         /// register all colliders in this body
         private void register_colliders(PhysicsBody3D body_comp) {
             // add colliders to the physics world
-            import dlib.core.memory : New;
-
             auto bod = body_comp._phys_body;
 
             auto box_colliders = body_comp.entity.get_components!BoxCollider();
 
             foreach (box; box_colliders) {
-                auto box_geom = New!(geom.GeomBox)(world, convert_vec3(box.size));
-                auto shape = world.addShapeComponent(bod, box_geom,
-                        convert_vec3(box.offset), bod.mass);
-                body_comp._shapes[shape] = box;
+                auto box_size = box.size;
+                auto box_origin = box.offset + box.size * 0.5;
+
+                // auto offset_mat = newton_matrix();
+                // newton.GetId
+                // offset_mat.posit = box_origin;
+                // newton.NewtonCreateBox
+
+                // auto box_geom = New!(geom.GeomBox)(world, convert_vec3(box.size));
+                // auto shape = world.addShapeComponent(bod, box_geom,
+                //         convert_vec3(box.offset), bod.mass);
+                // body_comp._shapes[shape] = box;
             }
         }
 
