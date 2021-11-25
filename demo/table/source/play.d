@@ -49,7 +49,7 @@ class PlayScene : Scene3D {
     override void update() {
         super.update();
 
-        if (Input.is_mouse_pressed(MouseButton.MOUSE_LEFT_BUTTON)) {
+        if (Input.is_mouse_pressed(MouseButton.MOUSE_BUTTON_LEFT)) {
             if (Input.is_cursor_locked) {
                 Input.unlock_cursor();
             } else {
