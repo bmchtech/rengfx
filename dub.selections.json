@@ -1,6 +1,8 @@
 {
 	"fileVersion": 1,
 	"versions": {
+		"bindbc-loader": "1.0.1",
+		"bindbc-newton": "0.2.0",
 		"colorize": "1.0.5",
 		"datefmt": "1.0.4",
 		"ddmp": "0.0.1-0.dev.3",
