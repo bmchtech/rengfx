@@ -68,8 +68,8 @@ abstract class Core {
     public static Vector2 default_resolution;
 
     /// the default texture filtering mode for render targets
-    public static raylib.TextureFilterMode default_filter_mode
-        = raylib.TextureFilterMode.FILTER_POINT;
+    public static raylib.TextureFilter default_filter_mode
+        = raylib.TextureFilter.TEXTURE_FILTER_POINT;
 
     /// sets up a game core
     this(int width, int height, string title) {

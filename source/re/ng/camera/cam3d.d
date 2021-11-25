@@ -43,10 +43,10 @@ class SceneCamera3D : SceneCamera {
         _projection = value;
         switch (_projection) {
         case ProjectionType.Perspective:
-            _camera.type = raylib.CameraType.CAMERA_PERSPECTIVE;
+            _camera.projection = raylib.CameraProjection.CAMERA_PERSPECTIVE;
             break;
         case ProjectionType.Orthographic:
-            _camera.type = raylib.CameraType.CAMERA_ORTHOGRAPHIC;
+            _camera.projection = raylib.CameraProjection.CAMERA_ORTHOGRAPHIC;
             break;
         default:
             assert(0);
@@ -273,7 +273,7 @@ class CameraFreeLook : CameraFollow3D {
         auto wheel_delta = Input.scroll_delta();
         auto mouse_delta = Input.mouse_delta;
 
-        auto key_pan = Input.is_mouse_down(MouseButton.MOUSE_RIGHT_BUTTON)
+        auto key_pan = Input.is_mouse_down(MouseButton.MOUSE_BUTTON_RIGHT)
             || Input.is_key_down(Keys.KEY_LEFT_ALT);
         auto key_alternate = !Input.is_key_down(Keys.KEY_LEFT_SHIFT);
         auto key_smooth = Input.is_key_down(Keys.KEY_LEFT_CONTROL);

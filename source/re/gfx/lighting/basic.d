@@ -49,9 +49,9 @@ class BasicSceneLightManager : Manager, Updatable {
         shader = Core.content.load_shader("shader/basic_lighting.vert",
                 "shader/basic_lighting.frag");
         // get some shader locations
-        shader.locs[raylib.ShaderLocationIndex.LOC_MATRIX_MODEL] = raylib.GetShaderLocation(shader,
+        shader.locs[raylib.ShaderLocationIndex.SHADER_LOC_MATRIX_MODEL] = raylib.GetShaderLocation(shader,
                 "matModel");
-        shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW] = raylib.GetShaderLocation(shader,
+        shader.locs[raylib.ShaderLocationIndex.SHADER_LOC_VECTOR_VIEW] = raylib.GetShaderLocation(shader,
                 "viewPos");
 
         _lights.reserve(max_lights);
@@ -64,8 +64,8 @@ class BasicSceneLightManager : Manager, Updatable {
             (cast(Scene3D) scene).cam.transform.position.x, (cast(Scene3D) scene)
             .cam.transform.position.y, (cast(Scene3D) scene).cam.transform.position.z
         ];
-        raylib.SetShaderValue(shader, shader.locs[raylib.ShaderLocationIndex.LOC_VECTOR_VIEW],
-                &camera_pos, raylib.ShaderUniformDataType.UNIFORM_VEC3);
+        raylib.SetShaderValue(shader, shader.locs[raylib.ShaderLocationIndex.SHADER_LOC_VECTOR_VIEW],
+                &camera_pos, raylib.ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
         // update lights
         for (int i = 0; i < light_count; i++) {
@@ -127,12 +127,12 @@ class BasicSceneLightManager : Manager, Updatable {
         auto ambient_loc = raylib.GetShaderLocation(shader, "ambient");
         float[4] ambient_val = [ambient_color, ambient_color, ambient_color, 1];
         raylib.SetShaderValue(shader, ambient_loc, &ambient_val,
-                raylib.ShaderUniformDataType.UNIFORM_VEC4);
+                raylib.ShaderUniformDataType.SHADER_UNIFORM_VEC4);
 
         // specular shine
         auto shine_loc = raylib.GetShaderLocation(shader, "shine");
         raylib.SetShaderValue(shader, shine_loc, &shine_amount,
-                raylib.ShaderUniformDataType.UNIFORM_FLOAT);
+                raylib.ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
     }
 
     // - ported from rlights
@@ -182,21 +182,21 @@ class BasicSceneLightManager : Manager, Updatable {
     private static void update_shader_lights(Shader shader, ShaderLight light) {
         // Send to shader light enabled state and type
         raylib.SetShaderValue(shader, light.enabledLoc, &light.enabled,
-                raylib.ShaderUniformDataType.UNIFORM_INT);
+                raylib.ShaderUniformDataType.SHADER_UNIFORM_INT);
         raylib.SetShaderValue(shader, light.typeLoc, &light.type,
-                raylib.ShaderUniformDataType.UNIFORM_INT);
+                raylib.ShaderUniformDataType.SHADER_UNIFORM_INT);
 
         // Send to shader light position values
         float[3] position = [
             light.position.x, light.position.y, light.position.z
         ];
         raylib.SetShaderValue(shader, light.posLoc, &position,
-                raylib.ShaderUniformDataType.UNIFORM_VEC3);
+                raylib.ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
         // Send to shader light target position values
         float[3] target = [light.target.x, light.target.y, light.target.z];
         raylib.SetShaderValue(shader, light.targetLoc, &target,
-                raylib.ShaderUniformDataType.UNIFORM_VEC3);
+                raylib.ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
         // Send to shader light color values
         float[4] color = [
@@ -206,7 +206,7 @@ class BasicSceneLightManager : Manager, Updatable {
             cast(float) light.color.a / cast(float) 255
         ];
         raylib.SetShaderValue(shader, light.colorLoc, &color,
-                raylib.ShaderUniformDataType.UNIFORM_VEC4);
+                raylib.ShaderUniformDataType.SHADER_UNIFORM_VEC4);
     }
 }
 

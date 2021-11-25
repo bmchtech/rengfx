@@ -31,7 +31,7 @@ class Model3D : Component, Renderable3D {
     }
 
     @property BoundingBox bounds() {
-        return Bounds.calculate(raylib.MeshBoundingBox(model.meshes[0]), entity.transform);
+        return Bounds.calculate(raylib.GetMeshBoundingBox(model.meshes[0]), entity.transform);
     }
 
     public void render() {

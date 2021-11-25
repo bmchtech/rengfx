@@ -19,7 +19,7 @@ abstract class RenderableMesh : Component, Renderable3D {
     }
 
     @property BoundingBox bounds() {
-        return Bounds.calculate(raylib.MeshBoundingBox(_mesh), entity.transform);
+        return Bounds.calculate(raylib.GetMeshBoundingBox(_mesh), entity.transform);
     }
 
     /// gets the effect
