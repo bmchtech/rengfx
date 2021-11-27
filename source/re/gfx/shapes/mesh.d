@@ -13,6 +13,7 @@ abstract class RenderableMesh : Component, Renderable3D {
     private Effect _effect;
     private Mesh _mesh;
     private Model _model;
+    public Vector3 offset = Vector3.zero;
 
     override void setup() {
         gen_model();
@@ -49,7 +50,7 @@ abstract class RenderableMesh : Component, Renderable3D {
     }
 
     public void render() {
-        raylib.DrawModelEx(_model, transform.position, transform.axis_angle.axis,
+        raylib.DrawModelEx(_model, transform.position + offset, transform.axis_angle.axis,
                 transform.axis_angle.angle * C_RAD2DEG, transform.scale, effect.color);
     }
 
