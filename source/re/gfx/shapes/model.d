@@ -13,6 +13,7 @@ class Model3D : Component, Renderable3D {
     /// the model
     public Model model;
     private Effect _effect;
+    public Vector3 offset = Vector3.zero;
 
     this(Model model) {
         this.model = model;
@@ -35,7 +36,7 @@ class Model3D : Component, Renderable3D {
     }
 
     public void render() {
-        raylib.DrawModelEx(model, transform.position, transform.axis_angle.axis,
+        raylib.DrawModelEx(model, transform.position + offset, transform.axis_angle.axis,
                 transform.axis_angle.angle * C_RAD2DEG, transform.scale, effect.color);
     }
 

@@ -4,6 +4,7 @@ import re;
 import re.gfx;
 import re.gfx.shapes.model;
 import re.gfx.shapes.grid;
+import re.gfx.shapes.cube;
 import re.ng.camera;
 import re.math;
 static import raylib;
@@ -36,6 +37,8 @@ class PlayScene : Scene3D {
         auto fox = create_entity("fox", Vector3(0, 0, 0));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
+        auto cub = fox.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
+        cub.offset = Vector3(0, -4, 0);
 
         // add a camera to look at the fox
         cam.entity.add_component(new CameraOrbit(fox, 0.2));
