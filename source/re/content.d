@@ -77,6 +77,13 @@ class ContentManager {
         return mdl;
     }
 
+    public raylib.ModelAnimation[] load_model_animations(string path) {
+        uint num_loaded_anims = 0;
+        raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(get_path(path), &num_loaded_anims);
+        auto anims = loaded_anims[0..num_loaded_anims]; // access array as slice
+        return anims;
+    }
+
     /// loads a shader from disk (vertex shader, fragment shader).
     /// pass null to either arg to use the default
     public raylib.Shader load_shader(string vs_path, string fs_path) {

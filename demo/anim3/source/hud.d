@@ -14,7 +14,7 @@ class HUDScene : Scene2D {
 
         auto msg = create_entity("msg", Vector2(pad, resolution.y - pad));
         auto hello_text = msg.add_component(new Text(Text.default_font,
-                "table.", 10, Colors.PURPLE));
+                "gltf anim", 40, Colors.PURPLE));
         hello_text.set_align(Text.Align.Close, Text.Align.Far);
     }
 }
