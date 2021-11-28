@@ -21,17 +21,24 @@ abstract class Scene3D : Scene {
         cam = camera_nt.add_component(new SceneCamera3D());
     }
 
+    void render_renderable(Component component) {
+        auto renderable = cast(Renderable3D) component;
+        assert(renderable !is null, "renderable was not 3d");
+        renderable.render();
+        if (Core.debug_render) {
+            renderable.debug_render();
+        }
+    }
+
     override void render_scene() {
         raylib.BeginMode3D(cam.camera);
 
         // render 3d components
         foreach (component; ecs.storage.renderable_components) {
-            auto renderable = cast(Renderable3D) component;
-            assert(renderable !is null, "renderable was not 3d");
-            renderable.render();
-            if (Core.debug_render) {
-                renderable.debug_render();
-            }
+            render_renderable(component);
+        }
+        foreach (component; ecs.storage.updatable_renderable_components) {
+            render_renderable(component);
         }
 
         render_hook();

@@ -64,6 +64,11 @@ abstract class Scene {
 
     }
 
+    void update_updatable(Component component) {
+        auto updatable = cast(Updatable) component;
+        updatable.update();
+    }
+
     /// called internally to update ecs. can be overridden, but super.update() must be called.
     public void update() {
         // update ecs
@@ -76,8 +81,10 @@ abstract class Scene {
 
         // update components
         foreach (component; ecs.storage.updatable_components) {
-            auto updatable = cast(Updatable) component;
-            updatable.update();
+            update_updatable(component);
+        }
+        foreach (component; ecs.storage.updatable_renderable_components) {
+            update_updatable(component);
         }
     }
 
