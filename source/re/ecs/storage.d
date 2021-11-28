@@ -38,15 +38,15 @@ class ComponentStorage {
         if (is_updatable_renderable) {
             updatable_renderable_components ~= component;
             return ComponentId(cast(size_t) updatable_renderable_components.length - 1,
-                    entity.id, ComponentType.UpdatableRenderable);
+                entity.id, ComponentType.UpdatableRenderable);
         } else if (is_updatable) {
             updatable_components ~= component;
             return ComponentId(cast(size_t) updatable_components.length - 1,
-                    entity.id, ComponentType.Updatable);
+                entity.id, ComponentType.Updatable);
         } else if (is_renderable) {
             renderable_components ~= component;
             return ComponentId(cast(size_t) renderable_components.length - 1,
-                    entity.id, ComponentType.Renderable);
+                entity.id, ComponentType.Renderable);
         } else {
             components ~= component;
             return ComponentId(cast(size_t) components.length - 1, entity.id, ComponentType.Base);
@@ -97,8 +97,8 @@ class ComponentStorage {
             }
         }
         assert(0,
-                format("no matching component (%s) was found. use has_component() to ensure that the component exists.",
-                    typeid(T).name));
+            format("no matching component (%s) was found. use has_component() to ensure that the component exists.",
+                typeid(T).name));
     }
 
     /// get all components in an entity matching a type
@@ -134,7 +134,7 @@ class ComponentStorage {
             }
         }
         assert(0,
-                "no matching component was found. use has_component() to ensure that the component exists.");
+            "no matching component was found. use has_component() to ensure that the component exists.");
     }
 
     private void remove(Entity entity, ComponentId id) {
@@ -185,4 +185,106 @@ class ComponentStorage {
             remove(entity, entity.components.front);
         }
     }
+}
+
+@("ecs-storage-basic")
+unittest {
+    import std.string : format;
+
+    static class Thing1 : Component {
+    }
+
+    static class Thing2 : Component, Updatable {
+        void update() {
+        }
+    }
+
+    auto manager = new EntityManager();
+    auto storage = new ComponentStorage(manager);
+    auto nt = manager.create_entity();
+
+    ComponentId manual_nt_add(Entity nt, Component component) {
+        auto id = storage.insert(nt, component);
+        nt.components ~= id;
+        component.entity = nt;
+        component.setup();
+        return id;
+    }
+
+    void manual_nt_remove(Entity nt, ComponentId id) {
+        storage.remove(nt, id);
+    }
+
+    // try adding stuff
+    // insert 6 things1, and 4 thing2
+    auto thing11 = manual_nt_add(nt, new Thing1());
+    auto thing12 = manual_nt_add(nt, new Thing1());
+    auto thing13 = manual_nt_add(nt, new Thing1());
+    auto thing14 = manual_nt_add(nt, new Thing1());
+    auto thing15 = manual_nt_add(nt, new Thing1());
+    auto thing16 = manual_nt_add(nt, new Thing1());
+    auto thing21 = manual_nt_add(nt, new Thing2());
+    auto thing22 = manual_nt_add(nt, new Thing2());
+    auto thing23 = manual_nt_add(nt, new Thing2());
+    auto thing24 = manual_nt_add(nt, new Thing2());
+
+    auto thing1s = storage.get_all!Thing1(nt);
+    assert(thing1s.length == 6, format("expected 6 thing1s, got %d", thing1s.length));
+
+    auto thing2s = storage.get_all!Thing2(nt);
+    assert(thing2s.length == 4, format("expected 4 thing2s, got %d", thing2s.length));
+
+    // try removing random stuff
+    manual_nt_remove(nt, thing13);
+    manual_nt_remove(nt, thing11);
+    thing1s = storage.get_all!Thing1(nt);
+    assert(thing1s.length == 4, format("expected 4 thing1s, got %d", thing1s.length));
+
+    manual_nt_remove(nt, thing22);
+    thing2s = storage.get_all!Thing2(nt);
+    assert(thing2s.length == 3, format("expected 3 thing2s, got %d", thing2s.length));
+}
+
+@("ecs-storage-types")
+unittest {
+    static class Thing1 : Component {
+    }
+
+    static class Thing2 : Component, Updatable {
+        void update() {
+        }
+    }
+
+    static class Thing3 : Component, Renderable {
+        void render() {
+        }
+
+        void debug_render() {
+        }
+    }
+
+    static class Thing4 : Component, Updatable, Renderable {
+        void update() {
+        }
+
+        void render() {
+        }
+
+        void debug_render() {
+        }
+    }
+
+    auto manager = new EntityManager();
+    auto storage = new ComponentStorage(manager);
+    auto nt = manager.create_entity();
+
+    auto cid1 = storage.insert(nt, new Thing1());
+    auto cid2 = storage.insert(nt, new Thing2());
+    auto cid3 = storage.insert(nt, new Thing3());
+    auto cid4 = storage.insert(nt, new Thing4());
+
+    assert(cid1.type == ComponentType.Base);
+    assert(cid2.type == ComponentType.Updatable);
+    assert(cid3.type == ComponentType.Renderable);
+    assert(cid4.type == ComponentType.UpdatableRenderable);
 }
