@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/anim3
+anim3.so
+anim3.dylib
+anim3.dll
+anim3.a
+anim3.lib
+anim3-test-*
+*.exe
+*.o
+*.obj
+*.lst
