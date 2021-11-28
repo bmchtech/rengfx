@@ -3,6 +3,7 @@ module play;
 import re;
 import re.gfx;
 import re.gfx.shapes.anim_model;
+import re.gfx.shapes.model;
 import re.gfx.shapes.grid;
 import re.gfx.shapes.cube;
 import re.ng.camera;
@@ -35,16 +36,17 @@ class PlayScene : Scene3D {
         cam.entity.position = Vector3(0, 3, 6);
 
         auto item1 = create_entity("item1", Vector3(0, 0, 0));
-        auto item1_asset_path = "models/lg/test3.glb";
+        auto item1_asset_path = "models/lg/test1.glb";
         auto item1_asset = Core.content.load_model(item1_asset_path);
         auto item1_asset_anims = Core.content.load_model_animations(item1_asset_path);
         auto item1_model = item1.add_component(new AnimModel3D(item1_asset, item1_asset_anims));
+        // auto item1_model = item1.add_component(new Model3D(item1_asset));
         item1.transform.scale = Vector3(2, 2, 2);
 
         cam.look_at(item1.transform.position + Vector3(0, 2, 0));
 
         // add a camera to look at the item1
-        // cam.entity.add_component(new CameraFreeLook(item1));
+        cam.entity.add_component(new CameraFreeLook(item1));
 
         // draw a grid at the origin
         auto grid = create_entity("grid");
