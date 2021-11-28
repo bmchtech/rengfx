@@ -19,6 +19,8 @@ class ComponentStorage {
     public Array!Component updatable_components;
     /// components that implement Renderable
     public Array!Component renderable_components;
+    /// components that implement Updatable and Renderable
+    public Array!Component updatable_renderable_components;
     /// the entity manager
     public EntityManager manager;
 
@@ -29,11 +31,19 @@ class ComponentStorage {
 
     /// attaches a component to an entity
     public ComponentId insert(Entity entity, Component component) {
-        if (auto updatable = cast(Updatable) component) {
+        bool is_updatable = (cast(Updatable) component) !is null;
+        bool is_renderable = (cast(Renderable) component) !is null;
+        bool is_updatable_renderable = is_updatable && is_renderable;
+
+        if (is_updatable_renderable) {
+            updatable_renderable_components ~= component;
+            return ComponentId(cast(size_t) updatable_renderable_components.length - 1,
+                    entity.id, ComponentType.UpdatableRenderable);
+        } else if (is_updatable) {
             updatable_components ~= component;
             return ComponentId(cast(size_t) updatable_components.length - 1,
                     entity.id, ComponentType.Updatable);
-        } else if (auto renderable = cast(Renderable) component) {
+        } else if (is_renderable) {
             renderable_components ~= component;
             return ComponentId(cast(size_t) renderable_components.length - 1,
                     entity.id, ComponentType.Renderable);
@@ -64,6 +74,8 @@ class ComponentStorage {
             return updatable_components;
         case ComponentType.Renderable:
             return renderable_components;
+        case ComponentType.UpdatableRenderable:
+            return updatable_renderable_components;
         default:
             assert(0);
         }

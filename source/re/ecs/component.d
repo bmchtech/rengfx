@@ -29,7 +29,8 @@ abstract class Component : ReflectableObject {
 enum ComponentType {
     Base,
     Updatable,
-    Renderable
+    Renderable,
+    UpdatableRenderable
 }
 
 /// reference to a stored component
