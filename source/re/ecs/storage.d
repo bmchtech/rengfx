@@ -11,16 +11,20 @@ import std.string : format;
 import std.container.array;
 import std.algorithm;
 
+debug {
+    import std.stdio : writefln;
+}
+
 /// helper class for storing components in an optimized way
 class ComponentStorage {
     /// basic component storage
-    public Array!Component components;
+    public Component[] components;
     /// components that implement Updatable
-    public Array!Component updatable_components;
+    public Component[] updatable_components;
     /// components that implement Renderable
-    public Array!Component renderable_components;
+    public Component[] renderable_components;
     /// components that implement Updatable and Renderable
-    public Array!Component updatable_renderable_components;
+    public Component[] updatable_renderable_components;
     /// the entity manager
     public EntityManager manager;
 
@@ -57,7 +61,7 @@ class ComponentStorage {
     public bool has_component(T)(Entity entity) {
         // check all referenced components, see if any match
         foreach (id; entity.components) {
-            auto component = get(id);
+            auto component = get_from_id(id);
             if (auto match = cast(T) component) {
                 return true;
             }
@@ -66,7 +70,7 @@ class ComponentStorage {
     }
 
     /// get the internal buffer based on the referenced component type
-    private ref Array!Component get_storage(ComponentId id) {
+    private Component[] get_storage(ComponentId id) {
         switch (id.type) {
         case ComponentType.Base:
             return components;
@@ -81,9 +85,29 @@ class ComponentStorage {
         }
     }
 
+    private void set_storage(ComponentId id, ref Component[] buffer) {
+        switch (id.type) {
+        case ComponentType.Base:
+            components = buffer;
+            break;
+        case ComponentType.Updatable:
+            updatable_components = buffer;
+            break;
+        case ComponentType.Renderable:
+            renderable_components = buffer;
+            break;
+        case ComponentType.UpdatableRenderable:
+            updatable_renderable_components = buffer;
+            break;
+        default:
+            assert(0);
+        }
+    }
+
     /// get a component from its id reference
-    public Component get(ComponentId id) {
+    public ref Component get_from_id(ref ComponentId id) {
         auto storage = get_storage(id);
+        writefln("get_from_id: %s (storage: %s)", id, storage);
         return storage[id.index];
     }
 
@@ -91,7 +115,7 @@ class ComponentStorage {
     public T get(T)(Entity entity) {
         // check all referenced components, see if any match
         foreach (id; entity.components) {
-            auto component = get(id);
+            auto component = get_from_id(id);
             if (auto match = cast(T) component) {
                 return match;
             }
@@ -103,31 +127,41 @@ class ComponentStorage {
 
     /// get all components in an entity matching a type
     public T[] get_all(T)(Entity entity) {
-        // check all referenced components, return all matches
-        auto matches = appender!(T[]);
-        foreach (id; entity.components) {
-            auto component = get(id);
-            if (auto match = cast(T) component) {
+        auto all_components = get_all(entity);
+        T[] matches;
+        for (int i = 0; i < all_components.length; i++) {
+            auto component = all_components[i];
+            // auto comp = cast(T) component;
+            //     matches ~= cast(T) component;
+            // }
+            writefln("all components 1: %s", get_all(entity));
+            if (typeid(T) is typeid(component)) {
+                auto match = (cast(T) component);
+                writefln("all components 2: %s", get_all(entity));
                 matches ~= match;
+                writefln("all components 3: %s", get_all(entity));
+                writefln("match: %s", match);
+                writefln("match ref: %s", &match);
+                writefln("all components 4: %s", get_all(entity));
             }
         }
-        return matches.data;
+        return matches;
     }
 
     /// get all components in an entity
     public Component[] get_all(Entity entity) {
-        auto list = appender!(Component[]);
-        foreach (id; entity.components) {
-            list ~= get(id);
+        Component[] list;
+        foreach (ref id; entity.components) {
+            list ~= get_from_id(id);
         }
-        return list.data;
+        return list;
     }
 
     /// removes a component from its owner entity
     public void remove(Entity entity, Component to_remove) {
         // check all referenced components, see if any match, then remove
         foreach (id; entity.components) {
-            auto component = get(id);
+            auto component = get_from_id(id);
             if (component == to_remove) {
                 remove(entity, id);
                 return; // done
@@ -176,7 +210,8 @@ class ComponentStorage {
             other.components[other_id_pos].index = id.index; // point to the new place
         }
         // pop the last element off the array
-        storage.removeBack();
+        storage = storage.remove(last_slot);
+        set_storage(id, storage);
     }
 
     /// destroy all components attached to an entity
@@ -187,17 +222,20 @@ class ComponentStorage {
     }
 }
 
+static class Thing1 : Component {
+}
+
+static class Thing2 : Component, Updatable {
+    void update() {
+    }
+}
+
+// I HAVE NO IDEA WHY THIS DOESNT WORK AND ITS FRUSTRATING ME
+
 @("ecs-storage-basic")
 unittest {
     import std.string : format;
-
-    static class Thing1 : Component {
-    }
-
-    static class Thing2 : Component, Updatable {
-        void update() {
-        }
-    }
+    import std.stdio;
 
     auto manager = new EntityManager();
     auto storage = new ComponentStorage(manager);
@@ -228,6 +266,8 @@ unittest {
     auto thing23 = manual_nt_add(nt, new Thing2());
     auto thing24 = manual_nt_add(nt, new Thing2());
 
+    writefln("nt comps: %s", nt.components);
+    writefln("all components: %s", storage.get_all(nt));
     auto thing1s = storage.get_all!Thing1(nt);
     assert(thing1s.length == 6, format("expected 6 thing1s, got %d", thing1s.length));
 
