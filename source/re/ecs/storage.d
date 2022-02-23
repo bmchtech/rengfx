@@ -107,7 +107,7 @@ class ComponentStorage {
     /// get a component from its id reference
     public ref Component get_from_id(ref ComponentId id) {
         auto storage = get_storage(id);
-        writefln("get_from_id: %s (storage: %s)", id, storage);
+        // writefln("get_from_id: %s (storage: %s)", id, storage);
         return storage[id.index];
     }
 
@@ -134,14 +134,14 @@ class ComponentStorage {
             // auto comp = cast(T) component;
             //     matches ~= cast(T) component;
             // }
-            writefln("all components 1: %s", get_all(entity));
+            // writefln("all components 1: %s", get_all(entity));
             if (typeid(T) is typeid(component)) {
                 auto match = (cast(T) component);
                 // writefln("all components 2: %s", get_all(entity));
                 matches ~= match;
                 // writefln("all components 3: %s", get_all(entity));
-                writefln("match: %s", match);
-                writefln("match ref: %s", &match);
+                // writefln("match: %s", match);
+                // writefln("match ref: %s", &match);
                 // writefln("all components 4: %s", get_all(entity));
             }
         }
@@ -180,13 +180,13 @@ class ComponentStorage {
 
         // - update storage
         auto storage = get_storage(id);
-        // writefln("REMOVING component_type: %s AT %d", to!string(id.type), id.index);
-        // writefln("storage[%d]: %s", storage.length, storage.array);
+        writefln("REMOVING component_type: %s AT %d", to!string(id.type), id.index);
+        writefln("storage[%d]: %s", storage.length, storage.array);
 
         // empty the slot, and swap it to the end
         assert(id.index < storage.length, format("id points to invalid position (%d) in %s storage",
                 id.index, to!string(id.type)));
-        storage[id.index].destroy(); // cleanup
+        storage[id.index].destroy(); // destroy the component
         storage[id.index] = null; // dereference
         auto last_slot = cast(size_t) storage.length - 1;
         // our goal now is to make sure the last slot is null, so we can pop it off the storage
@@ -200,17 +200,26 @@ class ComponentStorage {
             assert(tmp.entity, "entity in tail slot is null");
             storage[last_slot] = storage[id.index];
             storage[id.index] = tmp;
-            // writefln("swapped SLOT (%d) with TAIL (%d)", id.index, last_slot);
+            writefln("swapped SLOT (%d) with TAIL (%d)", id.index, last_slot);
             // find out who owns tmp, and tell them that their component has moved
             auto other = tmp.entity;
             // find the id that points to the old place
             auto other_id_pos = other.components.countUntil!(x => x.index == last_slot);
-            // writefln("working with OTHER, components %s", other.components);
-            // writefln("(%s) updating COMPREF from OLDSLOT (%d) to NEWSLOT (%d)", other.name, other.components[other_id_pos].index, id.index);
+            writefln("working with OTHER, components %s", other.components);
+            writefln("(%s) updating COMPREF from OLDSLOT (%d) to NEWSLOT (%d)", other.name, other
+                    .components[other_id_pos].index, id.index);
             other.components[other_id_pos].index = id.index; // point to the new place
         }
         // pop the last element off the array
         storage = storage.remove(last_slot);
+
+        // now, we need to update the entity's componentid list
+        // so that they point to correct indices in the storage
+        // since we have shuffled around the slots, we need to update the indices
+        // in the entity's componentid list
+        for (int i = 0; i < entity.components.length; i++) {
+        }
+
         set_storage(id, storage);
     }
 
@@ -240,6 +249,7 @@ unittest {
     auto manager = new EntityManager();
     auto storage = new ComponentStorage(manager);
     auto nt = manager.create_entity();
+    nt.name = "testnt";
 
     ComponentId manual_nt_add(Entity nt, Component component) {
         auto id = storage.insert(nt, component);
@@ -321,6 +331,7 @@ unittest {
     auto manager = new EntityManager();
     auto storage = new ComponentStorage(manager);
     auto nt = manager.create_entity();
+    nt.name = "testnt";
 
     auto cid1 = storage.insert(nt, new Thing1());
     auto cid2 = storage.insert(nt, new Thing2());
