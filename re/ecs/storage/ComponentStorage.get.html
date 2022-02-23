@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>ComponentStorage.get - multiple declarations</title>
+		<title>Function ComponentStorage.get</title>
 		<link rel="stylesheet" type="text/css" href="../../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../../scripts/ddox.js">/**/</script>
@@ -68,9 +68,30 @@ $('#symbolSearchPane').show();</script>
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
+					<div class="package ">lighting
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/lighting/basic.html">basic</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/lighting/blinn_phong.html">blinn_phong</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
 					<div class="package ">shapes
 					</div>
 			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/anim_model.html">anim_model</a>
+					</div>
+				</li>
 				<li>
 					<div class="module ">
 						<a href="../../../re/gfx/shapes/cube.html">cube</a>
@@ -106,11 +127,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../re/gfx/effect.html">effect</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../re/gfx/lighting.html">lighting</a>
 					</div>
 				</li>
 				<li>
@@ -319,11 +335,6 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../../re/phys/kin2d.html">kin2d</a>
 					</div>
 				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../re/phys/rigid3d.html">rigid3d</a>
-					</div>
-				</li>
 			</ul>
 				</li>
 				<li class="tree-view collapsed">
@@ -354,11 +365,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../re/util/cache.html">cache</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../re/util/dlib.html">dlib</a>
 					</div>
 				</li>
 				<li>
@@ -423,36 +429,7 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>ComponentStorage.get - multiple declarations</h1>
-			<nav class="page-nav">
-				<ul>
-					<li>
-						<a href="#0">
-							Function <code>ComponentStorage.get</code>
-						</a>
-					</li>
-					<li>
-						<a href="#1">
-							Function <code>ComponentStorage.get</code>
-						</a>
-					</li>
-				</ul>
-			</nav><h2 id="0">Function ComponentStorage.get</h2><p>get a component from its id reference
-</p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<a href="../../../re/ecs/component/Component.html"><span class="typ">Component</span></a> <span class="pln">get</span>
-			<span class="pun">(</span>
-			<br/>
-			&nbsp;&nbsp;<a href="../../../re/ecs/component/ComponentId.html"><span class="typ">ComponentId</span></a> <span class="pln">id</span>
-			<br/>
-			<span class="pun">)</span><span class="pun">;</span>
-					</div>
-				</code>
-			</div>
-			
-			<h2 id="1">Function ComponentStorage.get</h2><p>get the first component in an entity matching a type
+			<h1>Function ComponentStorage.get</h1><p>get the first component in an entity matching a type
 </p>
 			<div class="prototype">
 				<code class="lang-d">

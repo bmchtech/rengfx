@@ -68,9 +68,30 @@ $('#symbolSearchPane').show();</script>
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
+					<div class="package ">lighting
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/lighting/basic.html">basic</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/lighting/blinn_phong.html">blinn_phong</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
 					<div class="package ">shapes
 					</div>
 			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/anim_model.html">anim_model</a>
+					</div>
+				</li>
 				<li>
 					<div class="module ">
 						<a href="../../../re/gfx/shapes/cube.html">cube</a>
@@ -106,11 +127,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../re/gfx/effect.html">effect</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../re/gfx/lighting.html">lighting</a>
 					</div>
 				</li>
 				<li>
@@ -319,11 +335,6 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../../re/phys/kin2d.html">kin2d</a>
 					</div>
 				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../re/phys/rigid3d.html">rigid3d</a>
-					</div>
-				</li>
 			</ul>
 				</li>
 				<li class="tree-view collapsed">
@@ -354,11 +365,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../re/util/cache.html">cache</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../re/util/dlib.html">dlib</a>
 					</div>
 				</li>
 				<li>
@@ -462,7 +468,7 @@ $('#symbolSearchPane').show();</script>
 						<td>
 							<a href="../../../re/ecs/storage/ComponentStorage.components.html" class="public"><code>components</code></a>
 						</td>
-						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">container<wbr/></span><span class="pun">.</span><span class="pln">array<wbr/></span><span class="pun">.</span><span class="typ">Array</span>!(re.ecs.component.Component)</code></td><td>basic component storage
+						<td class="typecol"><code class="prettyprint lang-d"><a href="../../../re/ecs/component/Component.html"><span class="typ">Component</span></a><span class="pun">[]</span></code></td><td>basic component storage
 </td>
 					</tr>
 					<tr>
@@ -476,14 +482,21 @@ $('#symbolSearchPane').show();</script>
 						<td>
 							<a href="../../../re/ecs/storage/ComponentStorage.renderable_components.html" class="public"><code>renderable_components</code></a>
 						</td>
-						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">container<wbr/></span><span class="pun">.</span><span class="pln">array<wbr/></span><span class="pun">.</span><span class="typ">Array</span>!(re.ecs.component.Component)</code></td><td>components that implement Renderable
+						<td class="typecol"><code class="prettyprint lang-d"><a href="../../../re/ecs/component/Component.html"><span class="typ">Component</span></a><span class="pun">[]</span></code></td><td>components that implement Renderable
 </td>
 					</tr>
 					<tr>
 						<td>
 							<a href="../../../re/ecs/storage/ComponentStorage.updatable_components.html" class="public"><code>updatable_components</code></a>
 						</td>
-						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">container<wbr/></span><span class="pun">.</span><span class="pln">array<wbr/></span><span class="pun">.</span><span class="typ">Array</span>!(re.ecs.component.Component)</code></td><td>components that implement Updatable
+						<td class="typecol"><code class="prettyprint lang-d"><a href="../../../re/ecs/component/Component.html"><span class="typ">Component</span></a><span class="pun">[]</span></code></td><td>components that implement Updatable
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/ecs/storage/ComponentStorage.updatable_renderable_components.html" class="public"><code>updatable_renderable_components</code></a>
+						</td>
+						<td class="typecol"><code class="prettyprint lang-d"><a href="../../../re/ecs/component/Component.html"><span class="typ">Component</span></a><span class="pun">[]</span></code></td><td>components that implement Updatable and Renderable
 </td>
 					</tr>
 				</table>
@@ -502,16 +515,6 @@ $('#symbolSearchPane').show();</script>
 							<span class="tableEntryAnnotation">(entity)</span>
 						</td>
 						<td>destroy all components attached to an entity
-</td>
-					</tr>
-					<tr>
-						<td>
-							<a href="../../../re/ecs/storage/ComponentStorage.get.html" class="public">
-								<code>get</code>
-							</a>
-							<span class="tableEntryAnnotation">(id)</span>
-						</td>
-						<td>get a component from its id reference
 </td>
 					</tr>
 					<tr>
@@ -542,6 +545,16 @@ $('#symbolSearchPane').show();</script>
 							<span class="tableEntryAnnotation">(entity)</span>
 						</td>
 						<td>get all components in an entity matching a type
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/ecs/storage/ComponentStorage.get_from_id.html" class="public">
+								<code>get_from_id</code>
+							</a>
+							<span class="tableEntryAnnotation">(id)</span>
+						</td>
+						<td>get a component from its id reference
 </td>
 					</tr>
 					<tr>

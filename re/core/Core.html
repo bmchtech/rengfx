@@ -68,9 +68,30 @@ $('#symbolSearchPane').show();</script>
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
+					<div class="package ">lighting
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../re/gfx/lighting/basic.html">basic</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../re/gfx/lighting/blinn_phong.html">blinn_phong</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
 					<div class="package ">shapes
 					</div>
 			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../re/gfx/shapes/anim_model.html">anim_model</a>
+					</div>
+				</li>
 				<li>
 					<div class="module ">
 						<a href="../../re/gfx/shapes/cube.html">cube</a>
@@ -106,11 +127,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../re/gfx/effect.html">effect</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../re/gfx/lighting.html">lighting</a>
 					</div>
 				</li>
 				<li>
@@ -319,11 +335,6 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../re/phys/kin2d.html">kin2d</a>
 					</div>
 				</li>
-				<li>
-					<div class="module ">
-						<a href="../../re/phys/rigid3d.html">rigid3d</a>
-					</div>
-				</li>
 			</ul>
 				</li>
 				<li class="tree-view collapsed">
@@ -354,11 +365,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../re/util/cache.html">cache</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../re/util/dlib.html">dlib</a>
 					</div>
 				</li>
 				<li>
@@ -483,7 +489,7 @@ $('#symbolSearchPane').show();</script>
 						<td>
 							<a href="../../re/core/Core.default_filter_mode.html" class="public"><code>default_filter_mode</code></a>
 						</td>
-						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">raylib<wbr/></span><span class="pun">.</span><span class="typ">TextureFilterMode</span></code></td><td>the default texture filtering mode for render targets
+						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">raylib<wbr/></span><span class="pun">.</span><span class="typ">TextureFilter</span></code></td><td>the default texture filtering mode for render targets
 </td>
 					</tr>
 					<tr>
@@ -491,6 +497,13 @@ $('#symbolSearchPane').show();</script>
 							<a href="../../re/core/Core.default_resolution.html" class="public"><code>default_resolution</code></a>
 						</td>
 						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">raylib<wbr/></span><span class="pun">.</span><span class="typ">Vector2</span></code></td><td>the default render resolution for all scenes
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../re/core/Core.exit_on_escape_pressed.html" class="public"><code>exit_on_escape_pressed</code></a>
+						</td>
+						<td class="typecol"><code class="prettyprint lang-d"><span class="typ">bool</span></code></td><td>whether to exit when escape pressed
 </td>
 					</tr>
 					<tr>
