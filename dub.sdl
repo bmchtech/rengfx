@@ -1,6 +1,6 @@
 name "reng"
-description "RE_NGINE_FX game framework/engine"
-authors "xdrie"
+description "RE NGINE FX (rengfx) game framework/engine"
+authors "redthing1"
 copyright "Copyright © 2020, xdrie"
 license "LGPL-3.0 or proprietary"
 dependency "datefmt-redthing1" version="~>1.0.6"
