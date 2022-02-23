@@ -180,8 +180,9 @@ class ComponentStorage {
 
         // - update storage
         auto storage = get_storage(id);
-        writefln("REMOVING component_type: %s AT %d", to!string(id.type), id.index);
-        writefln("storage[%d]: %s", storage.length, storage.array);
+        auto storage_type = id.type;
+        // writefln("REMOVING component_type: %s AT %d", to!string(id.type), id.index);
+        // writefln("storage[%d]: %s", storage.length, storage.array);
 
         // empty the slot, and swap it to the end
         assert(id.index < storage.length, format("id points to invalid position (%d) in %s storage",
@@ -197,18 +198,23 @@ class ComponentStorage {
             // handle swapping our nulled slot with the last slot
             auto tmp = storage[last_slot];
             assert(tmp, "storage tail slot is null");
-            assert(tmp.entity, "entity in tail slot is null");
+            assert(tmp.entity, "entity in tail slot is null. this means that"
+                    ~ " the component doesn't have an assocated entity");
             storage[last_slot] = storage[id.index];
             storage[id.index] = tmp;
-            writefln("swapped SLOT (%d) with TAIL (%d)", id.index, last_slot);
+            // the entity we are removing has been swapped with the last slot
+            // writefln("swapped SLOT (%d) with TAIL (%d)", id.index, last_slot);
             // find out who owns tmp, and tell them that their component has moved
             auto other = tmp.entity;
             // find the id that points to the old place
-            auto other_id_pos = other.components.countUntil!(x => x.index == last_slot);
-            writefln("working with OTHER, components %s", other.components);
-            writefln("(%s) updating COMPREF from OLDSLOT (%d) to NEWSLOT (%d)", other.name, other
-                    .components[other_id_pos].index, id.index);
+            // to find it, it has an index pointing to the last slot (because it was swapped, so the component was previously there)
+            // we also need to be sure to be searching the correct storage type
+            auto other_id_pos = other.components.countUntil!(x => x.type == storage_type && x.index == last_slot);
+            // writefln("working with OTHER, components %s", other.components);
+            // writefln("(%s) updating COMPREF from OLDSLOT (%d) to NEWSLOT (%d)", other.name, other
+            //         .components[other_id_pos].index, id.index);
             other.components[other_id_pos].index = id.index; // point to the new place
+            // writefln("OTHER components result: %s", other.components);
         }
         // pop the last element off the array
         storage = storage.remove(last_slot);
@@ -280,23 +286,23 @@ unittest {
     writefln("all components: %s", storage.get_all(nt));
     auto thing1s = storage.get_all!Thing1(nt);
     assert(thing1s.length == 6, format("expected 6 thing1s, got %d", thing1s.length));
-    writefln("match thing1s passed: %s", thing1s);
+    // writefln("match thing1s passed: %s", thing1s);
 
     auto thing2s = storage.get_all!Thing2(nt);
     assert(thing2s.length == 4, format("expected 4 thing2s, got %d", thing2s.length));
-    writefln("match thing2s passed: %s", thing2s);
+    // writefln("match thing2s passed: %s", thing2s);
 
     // try removing random stuff
     manual_nt_remove(nt, thing13);
     manual_nt_remove(nt, thing11);
     thing1s = storage.get_all!Thing1(nt);
     assert(thing1s.length == 4, format("expected 4 thing1s, got %d", thing1s.length));
-    writefln("expected-1 thing1s passed: %s", thing1s);
+    // writefln("expected-1 thing1s passed: %s", thing1s);
 
     manual_nt_remove(nt, thing22);
     thing2s = storage.get_all!Thing2(nt);
     assert(thing2s.length == 3, format("expected 3 thing2s, got %d", thing2s.length));
-    writefln("expected-2 thing2s passed: %s", thing2s);
+    // writefln("expected-2 thing2s passed: %s", thing2s);
 }
 
 @("ecs-storage-types")
