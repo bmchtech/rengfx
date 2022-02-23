@@ -1,0 +1,32 @@
+name: test
+on: [ push, pull_request ]
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04, windows-2019, macos-10.15 ]
+        dc: [ dmd-2.097.0 ]
+        arch: [ x86_64 ]
+        include:
+        # also test an older DMD verrsion
+        - os: ubuntu-20.04
+          dc: dmd-2.082.1
+          arch: x86_64
+        # also test x86 (but only on Windows)
+        - os: windows-2019
+          dc: dmd-2.097.0
+          arch: x86
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install D compiler
+        uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: ${{ matrix.dc }}
+      - if: ${{ matrix.os == 'windows-2019' }} # Avoid OPTLINK race conditions
+        run: |
+          echo "dflags-windows-x86 '-m32mscoff'" >> dub.sdl
+      - run: cat dub.sdl
+      - run: dub test --arch=${{ matrix.arch }}
+      - if: ${{ matrix.os != 'windows-2019' }} # https://github.com/dlang-community/setup-dlang/issues/47
+        run: dub test --arch=${{ matrix.arch }} ae:sys-net-test
