@@ -282,8 +282,8 @@ unittest {
     auto thing23 = manual_nt_add(nt, new Thing2());
     auto thing24 = manual_nt_add(nt, new Thing2());
 
-    writefln("nt comps: %s", nt.components);
-    writefln("all components: %s", storage.get_all(nt));
+    // writefln("nt comps: %s", nt.components);
+    // writefln("all components: %s", storage.get_all(nt));
     auto thing1s = storage.get_all!Thing1(nt);
     assert(thing1s.length == 6, format("expected 6 thing1s, got %d", thing1s.length));
     // writefln("match thing1s passed: %s", thing1s);
