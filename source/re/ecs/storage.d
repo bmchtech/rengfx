@@ -137,12 +137,12 @@ class ComponentStorage {
             writefln("all components 1: %s", get_all(entity));
             if (typeid(T) is typeid(component)) {
                 auto match = (cast(T) component);
-                writefln("all components 2: %s", get_all(entity));
+                // writefln("all components 2: %s", get_all(entity));
                 matches ~= match;
-                writefln("all components 3: %s", get_all(entity));
+                // writefln("all components 3: %s", get_all(entity));
                 writefln("match: %s", match);
                 writefln("match ref: %s", &match);
-                writefln("all components 4: %s", get_all(entity));
+                // writefln("all components 4: %s", get_all(entity));
             }
         }
         return matches;
@@ -270,19 +270,23 @@ unittest {
     writefln("all components: %s", storage.get_all(nt));
     auto thing1s = storage.get_all!Thing1(nt);
     assert(thing1s.length == 6, format("expected 6 thing1s, got %d", thing1s.length));
+    writefln("match thing1s passed: %s", thing1s);
 
     auto thing2s = storage.get_all!Thing2(nt);
     assert(thing2s.length == 4, format("expected 4 thing2s, got %d", thing2s.length));
+    writefln("match thing2s passed: %s", thing2s);
 
     // try removing random stuff
     manual_nt_remove(nt, thing13);
     manual_nt_remove(nt, thing11);
     thing1s = storage.get_all!Thing1(nt);
     assert(thing1s.length == 4, format("expected 4 thing1s, got %d", thing1s.length));
+    writefln("expected-1 thing1s passed: %s", thing1s);
 
     manual_nt_remove(nt, thing22);
     thing2s = storage.get_all!Thing2(nt);
     assert(thing2s.length == 3, format("expected 3 thing2s, got %d", thing2s.length));
+    writefln("expected-2 thing2s passed: %s", thing2s);
 }
 
 @("ecs-storage-types")
