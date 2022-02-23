@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install X11 on Linux
-        if: runner.os == 'ubuntu-20.04'
+        if: runner.os == 'Ubuntu'
         # Xorg dev needed on linux
         run: sudo apt install -y xorg-dev
       - uses: actions/checkout@v2
