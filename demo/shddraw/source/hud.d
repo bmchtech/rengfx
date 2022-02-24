@@ -24,6 +24,6 @@ class HUDScene : Scene2D {
 
     override void render_hook() {
         // draw fps
-        raylib.DrawText(format("%s", Core.fps).c_str(), 8, 8, 8, Colors.BLACK);
+        raylib.DrawText(format("%s", Core.fps).c_str(), 8, 8, 8, Colors.WHITE);
     }
 }
