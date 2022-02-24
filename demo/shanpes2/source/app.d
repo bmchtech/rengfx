@@ -23,6 +23,10 @@ class Game : Core {
 		content.paths ~= ["../content/", "content/"];
 
 		raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_MSAA_4X_HINT);
+		debug {
+		} else {
+			raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
+		}
 
 		load_scenes([new PlayScene(), new HUDScene()]);
 	}
