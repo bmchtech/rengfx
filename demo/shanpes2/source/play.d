@@ -38,7 +38,7 @@ class PlayScene : Scene3D {
         light1.add_component(new Orbit(Vector3(2, 8, 0), 10, C_PI / 8));
 
         auto fox = create_entity("fox", Vector3(0, -0.07, 0));
-        auto fox_asset = Core.content.load_model("models/fox.glb");
+        auto fox_asset = Core.content.load_model("models/foxs.glb");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
         fox.transform.scale = Vector3(0.4, 0.4, 0.4);
         fox.transform.orientation = Vector3(C_PI / 2, 0, 0);
@@ -75,7 +75,7 @@ class PlayScene : Scene3D {
         auto floor = create_entity("floor", Vector3(0, -5, 0));
         auto floor_col = color_rgb(168, 156, 146);
         auto floor_box = floor.add_component(new Cube(Vector3(40, 10, 40), floor_col));
-        floor_box.effect = Effect(lights.shader, floor_col);
+        // floor_box.effect = Effect(lights.shader, floor_col);
 
         auto cel2 = Effect(Core.content.load_shader(null,
                 "shader/cel_light.frag"), Colors.WHITE);
@@ -86,7 +86,7 @@ class PlayScene : Scene3D {
         cel2.set_shader_var_imm("outline_div", cast(float) 8);
         cel2.set_shader_var_imm("outline_lighten", cast(float) 0.1);
         cel2_postproc = new PostProcessor(resolution, cel2);
-        // postprocessors ~= cel2_postproc;
+        postprocessors ~= cel2_postproc;
 
         // auto bokeh = Effect(Core.content.load_shader(null,
         //         "shader/bokeh.frag"), Colors.WHITE);
