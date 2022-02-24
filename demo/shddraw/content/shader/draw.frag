@@ -94,6 +94,13 @@ vec4 draw(sampler2D tex, vec2 frag_coord) {
   cam.xz *= rotate(pi * .75);
   dir.xz *= rotate(pi * .75);
 
+  // time effects
+  // walk the camera back
+  cam += vec3(0, 0, i_time * .5);
+  // rotate the camera
+  cam.xz *= rotate(i_time * .5);
+  dir.yz *= rotate(i_time * .5);
+
   // background color
   vec3 color = vec3(.2 * (length(uv)), .1, .25);
 
