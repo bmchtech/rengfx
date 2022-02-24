@@ -23,8 +23,10 @@ vec4 draw(sampler2D tex, ivec2 pix_coord) {
 }
 
 void main() {
-  ivec2 pix_coord = ivec2(fragTexCoord.xy / i_resolution.xy);
-  vec2 uv = fragTexCoord.xy / i_resolution.xy;
+  ivec2 pix_coord = ivec2(fragTexCoord.xy * i_resolution.xy);
+  vec2 frag_coord = fragTexCoord.xy * i_resolution.xy;
+
   vec4 draw_col = draw(texture0, pix_coord);
+
   finalColor = draw_col;
 }
