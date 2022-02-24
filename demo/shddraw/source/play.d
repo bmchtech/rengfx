@@ -41,8 +41,12 @@ class PlayScene : Scene3D {
         postprocessors ~= draw_p;
 
         // present shader
+        auto present_shd_path = "shader/present.frag";
+        if (Game.custom_presentshd_path) {
+            present_shd_path = Game.custom_presentshd_path;
+        }
         auto shd_present = Effect(Core.content.load_shader(null,
-                "shader/present.frag"), Colors.WHITE);
+                present_shd_path), Colors.WHITE);
         shd_present.set_shader_var_imm("i_resolution", cast(float[3])[
                 resolution.x, resolution.y, 1.0
             ]);
