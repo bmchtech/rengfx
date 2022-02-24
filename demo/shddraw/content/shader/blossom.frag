@@ -69,7 +69,7 @@ float scene(vec3 p) {
   return d;
 }
 
-vec4 draw(sampler2D tex, vec2 frag_coord) {
+vec4 frag_shader(sampler2D tex, vec2 frag_coord) {
   // set up UVs, jittered for antialiasing
   vec2 uv = (frag_coord.xy + hash2() - .5) / i_resolution.xy - .5;
   uv.x *= i_resolution.z;
@@ -143,7 +143,7 @@ void main() {
                38069);
 
   // draw
-  vec4 draw_col = draw(texture0, frag_coord);
+  vec4 draw_col = frag_shader(texture0, frag_coord);
 
   finalColor = draw_col;
 }

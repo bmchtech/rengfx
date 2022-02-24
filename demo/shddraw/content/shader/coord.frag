@@ -18,7 +18,7 @@ uniform float i_time;
 
 #define T(u) texelFetch(tex, ivec2(pix_coord), 0);
 
-vec4 draw(sampler2D tex, ivec2 pix_coord, vec2 frag_coord) {
+vec4 frag_shader(sampler2D tex, ivec2 pix_coord, vec2 frag_coord) {
   vec4 base = T(pix_coord);
 
   vec2 uv = frag_coord / i_resolution.xy;
@@ -33,7 +33,7 @@ vec4 draw(sampler2D tex, ivec2 pix_coord, vec2 frag_coord) {
 void main() {
   ivec2 pix_coord = ivec2(fragTexCoord.xy * i_resolution.xy);
   vec2 frag_coord = fragTexCoord.xy * i_resolution.xy;
-  vec4 draw_col = draw(texture0, pix_coord, frag_coord);
+  vec4 draw_col = frag_shader(texture0, pix_coord, frag_coord);
 
   finalColor = draw_col;
 }
