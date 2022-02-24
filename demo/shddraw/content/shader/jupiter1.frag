@@ -19,14 +19,39 @@ uniform vec3 i_resolution;
 uniform int i_frame;
 uniform float i_time;
 
+// shadertoy compat
+#define iResolution i_resolution
+#define iFrame i_frame
+#define iTime i_time
+
 #define T(u) texelFetch(tex, ivec2(pix_coord), 0);
 
 /** custom shader code */
+/**
+    jupiter
+    based on https://www.shadertoy.com/view/MdyfWw
+*/
 
 float iteration = 10.;
 float timeScale = 3.;
 vec2 zoom = vec2(25., 5.5);
 vec2 offset = vec2(0, 2.);
+
+vec3 rgb2hsv(vec3 c) {
+  vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+  vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+  vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+
+  float d = q.x - min(q.w, q.y);
+  float e = 1.0e-10;
+  return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c) {
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
 
 float sdSphere(vec3 p, float s) { return length(p) - s; }
 
@@ -93,46 +118,58 @@ mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
 }
 
 vec3 makeJupiter(vec2 uv) {
-  float time = i_time;
+  float time = iTime;
+
+  // uv offset
   vec2 point = uv * zoom + offset;
   float p_x = float(point.x);
   float p_y = float(point.y);
 
+  // detail levels of swirl bands
   float a_x = .2;
   float a_y = .3;
 
+  // compute iterations to get fractal waves
   for (int i = 1; i < int(iteration); i++) {
     float float_i = float(i);
     point.x += a_x * sin(float_i * point.y + time * timeScale);
     point.y += a_y * cos(float_i * point.x);
   }
 
-  float r = sin(point.y) * .5 + .4;
-  float g = cos(point.y) * .5 + .7;
-  float b = cos(point.y) * .5 + .8;
+  // colors from point positions
+  float pr = cos(point.x + point.y + 1.3);
+  float pg = sin(point.x + point.y + 2.0);
+  float pb = (sin(point.x + point.y + 0.9) + cos(point.x + point.y + 0.9));
 
-  r += .3;
+  // linear transform of colors
+  float r = pr * .40 + .50;
+  float g = pg * .40 + .36;
+  float b = pb * .25 + .20;
 
-  r = cos(point.x + point.y + 1.3) * .5 + .5;
-  g = sin(point.x + point.y + 2.) * .5 + .5;
-  b = (sin(point.x + point.y + 1.) + cos(point.x + point.y + 1.)) * .25 + .5;
+  // recurve colors intensity
+  r = pow(r, .98);
+  g = pow(g, .91);
+  b = pow(b, .88);
 
-  r = pow(r, .8);
-  g = pow(g, .8);
-  b = pow(b, 1.);
+  // create color from rgb
+  vec3 rgbcol = vec3(r, g, b);
+  rgbcol += vec3(.1);
 
-  vec3 col = vec3(r, g, b);
-  col += vec3(.1);
+  // transform to hsv for adjustments
+  vec3 hsvcol = rgb2hsv(rgbcol);
+  hsvcol.y *= 0.85;
+  hsvcol.z *= 0.90;
 
-  return col;
+  // return rgb color
+  return hsv2rgb(hsvcol);
 }
 
 vec2 seeCoords(vec2 p) { return p.xy; }
 
 vec2 arrangeCoords(vec2 p) {
-  vec2 q = p.xy / i_resolution.xy;
+  vec2 q = p.xy / iResolution.xy;
   vec2 r = -1.0 + 2.0 * q;
-  r.x *= i_resolution.x / i_resolution.y;
+  r.x *= iResolution.x / iResolution.y;
   return r;
 }
 
@@ -140,7 +177,7 @@ vec4 draw(sampler2D tex, vec2 frag_coord) {
   vec2 p = arrangeCoords(frag_coord);
 
   vec3 lookAt = vec3(0.);
-  vec3 camPos = vec3(5. * sin(i_time * 0.3), 3., -4. * cos(i_time * 0.3));
+  vec3 camPos = vec3(5. * sin(iTime * 0.3), 3., -4. * cos(iTime * 0.3));
   camPos = vec3(2, 2.1, 2.);
 
   mat3 camera = setCamera(camPos, lookAt, 0.);
@@ -178,8 +215,8 @@ vec4 draw(sampler2D tex, vec2 frag_coord) {
 
 void main() {
   // set up coordinates
-  ivec2 pix_coord = ivec2(fragTexCoord.xy * i_resolution.xy);
-  vec2 frag_coord = fragTexCoord.xy * i_resolution.xy;
+  ivec2 pix_coord = ivec2(fragTexCoord.xy * iResolution.xy);
+  vec2 frag_coord = fragTexCoord.xy * iResolution.xy;
 
   // draw
   vec4 draw_col = draw(texture0, frag_coord);
