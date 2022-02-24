@@ -16,6 +16,11 @@ uniform vec3 i_resolution;
 uniform int i_frame;
 uniform float i_time;
 
+// shadertoy compat
+#define iResolution i_resolution
+#define iFrame i_frame
+#define iTime i_time
+
 #define T(u) texelFetch(tex, ivec2(pix_coord), 0);
 
 vec4 draw(sampler2D tex, vec2 frag_coord) {
