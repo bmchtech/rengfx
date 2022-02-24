@@ -65,6 +65,7 @@ abstract class Core {
     public static bool exit_on_escape_pressed = true;
 
     /// whether to automatically scale things to compensate for hidpi
+    /// NOTE: raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI also exists, but we're not using it right now
     public static bool auto_compensate_hidpi = true;
 
     /// the default render resolution for all scenes
