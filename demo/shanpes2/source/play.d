@@ -30,6 +30,7 @@ class PlayScene : Scene3D {
         lights.ambient = 0.4;
         lights.light_clamp = 0.2;
         lights.shine_amount = 16;
+        lights.light_quantize = true;
 
         // create a point light
         auto light1 = create_entity("light1");
