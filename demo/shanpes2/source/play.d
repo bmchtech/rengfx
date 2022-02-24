@@ -18,6 +18,7 @@ class PlayScene : Scene3D {
 
     PostProcessor cel2_postproc;
     PostProcessor bokeh_postproc;
+    Entity mdl1;
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
@@ -37,7 +38,7 @@ class PlayScene : Scene3D {
         light1.add_component(new Light3D(color_rgb(255, 255, 255)));
         light1.add_component(new Orbit(Vector3(2, 8, 0), 10, C_PI / 8));
 
-        auto mdl1 = create_entity("mdl1", Vector3(0, 0, 0));
+        mdl1 = create_entity("mdl1", Vector3(0, 0, 0));
         auto mdl1_asset = Core.content.load_model("models/nieradam.glb");
         auto mdl1_model = mdl1.add_component(new Model3D(mdl1_asset));
         // mdl1.transform.scale = Vector3(0.4, 0.4, 0.4);
@@ -66,8 +67,7 @@ class PlayScene : Scene3D {
         sphr1_model.effect = Effect(lights.shader, Colors.WHITE);
 
         // add a camera to look at the mdl1
-        cam.entity.add_component(new CameraOrbit(mdl1, 0.2));
-        // cam.entity.add_component(new CameraFreeLook(mdl1));
+        set_orbit_cam();
 
         // // draw a grid at the origin
         // auto grid = create_entity("grid");
@@ -100,6 +100,11 @@ class PlayScene : Scene3D {
         // postprocessors ~= bokeh_postproc;
     }
 
+    void set_orbit_cam() {
+        cam.entity.position = Vector3(6, 6, 6);
+        cam.entity.add_component(new CameraOrbit(mdl1, 0.2));
+    }
+
     override void update() {
         super.update();
 
@@ -108,6 +113,17 @@ class PlayScene : Scene3D {
                 Input.unlock_cursor();
             } else {
                 Input.lock_cursor();
+            }
+        }
+
+        // if SPACE is pressed, toggle camera orbit vs free look
+        if (Input.is_key_pressed(Keys.KEY_SPACE)) {
+            if (cam.entity.has_component!CameraOrbit) {
+                cam.entity.remove_component!CameraOrbit;
+                cam.entity.add_component(new CameraFreeLook(mdl1));
+            } else if (cam.entity.has_component!CameraFreeLook) {
+                cam.entity.remove_component!CameraFreeLook;
+                set_orbit_cam();
             }
         }
     }
