@@ -15,6 +15,7 @@ class Game : Core {
 	enum HEIGHT = 540;
 
 	public static string custom_drawshd_path = null;
+	public static string custom_presentshd_path = null;
 
 	this() {
 		super(WIDTH, HEIGHT, "shader drawing");
@@ -29,10 +30,12 @@ class Game : Core {
 }
 
 int main(string[] args) {
-	auto help = getopt(args, "shader|s", &Game.custom_drawshd_path);
+	auto help = getopt(args, "draw-shader|d", &Game.custom_drawshd_path, "present-shader|p", &Game
+			.custom_presentshd_path);
 
 	if (help.helpWanted) {
-		defaultGetoptPrinter("Usage: ./a [--shader /path/to/shader.frag]", help.options);
+		defaultGetoptPrinter("Usage: ./a [-d /path/to/draw.frag -p /path/to/present.frag]", help
+				.options);
 		return 1;
 	}
 
@@ -40,7 +43,7 @@ int main(string[] args) {
 	debug {
 	} else {
 		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
-	}	
+	}
 
 	auto game = new Game(); // init game
 	game.run();
