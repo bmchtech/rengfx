@@ -27,7 +27,10 @@ class Model3D : Component, Renderable3D {
     /// sets the effect
     @property Effect effect(Effect value) {
         _effect = value;
-        model.materials[0].shader = _effect.shader;
+        // set shader for each material
+        for (int i = 0; i < model.materialCount; i++) {
+            model.materials[i].shader = _effect.shader;
+        }
         return value;
     }
 
