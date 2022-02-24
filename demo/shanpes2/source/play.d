@@ -27,13 +27,14 @@ class PlayScene : Scene3D {
 
         // enable scene lighting
         auto lights = add_manager(new BasicSceneLightManager());
-        lights.ambient_color = 0.8;
-        lights.shine_amount = 32;
+        lights.ambient = 0.4;
+        lights.light_clamp = 0.2;
+        lights.shine_amount = 16;
 
         // create a point light
         auto light1 = create_entity("light1");
         light1.add_component(new Light3D(color_rgb(255, 255, 255)));
-        light1.add_component(new Orbit(Vector3(0, 8, 0), 10, C_PI / 8));
+        light1.add_component(new Orbit(Vector3(2, 8, 0), 10, C_PI / 8));
 
         auto fox = create_entity("fox", Vector3(0, -0.07, 0));
         auto fox_asset = Core.content.load_model("models/fox.glb");
@@ -84,7 +85,7 @@ class PlayScene : Scene3D {
         cel2.set_shader_var_imm("outline_div", cast(float) 8);
         cel2.set_shader_var_imm("outline_lighten", cast(float) 0.1);
         cel2_postproc = new PostProcessor(resolution, cel2);
-        postprocessors ~= cel2_postproc;
+        // postprocessors ~= cel2_postproc;
 
         // auto bokeh = Effect(Core.content.load_shader(null,
         //         "shader/bokeh.frag"), Colors.WHITE);

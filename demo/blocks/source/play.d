@@ -32,7 +32,7 @@ class PlayScene : Scene3D {
 
         // enable scene lighting
         auto lights = add_manager(new BasicSceneLightManager());
-        lights.ambient_color = 0.6;
+        lights.ambient = 0.6;
         lights.shine_amount = 32;
 
         // enable scene physics
