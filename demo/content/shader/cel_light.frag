@@ -65,7 +65,8 @@ void main() {
 
   // mouse position controls the divider (2 is half)
   // float mouse_divider = 1. / (iMouse.x / c_resolution.x);
-  float mouse_divider = 1 / 0.5;
+  // float mouse_divider = 1 / 0.5;
+  float mouse_divider = 16;
 
   // clamp outline
   float clamped_outline = clamp(c, 0., 1.);
