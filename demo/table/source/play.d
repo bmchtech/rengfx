@@ -19,9 +19,9 @@ class PlayScene : Scene3D {
 
         // load shader effects and add as a postprocessor
         auto ascii_shd = Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
-        ascii_shd.set_shader_var_imm("c_resolution", cast(float[2])[
-                resolution.x, resolution.y
-                ]);
+        ascii_shd.set_shader_var_imm("i_resolution", cast(float[3])[
+                resolution.x, resolution.y, 1.0
+            ]);
         auto ascii_postproc = new PostProcessor(resolution, ascii_shd);
         postprocessors ~= ascii_postproc;
 
