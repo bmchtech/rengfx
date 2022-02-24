@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/table
+table.so
+table.dylib
+table.dll
+table.a
+table.lib
+table-test-*
+*.exe
+*.o
+*.obj
+*.lst
