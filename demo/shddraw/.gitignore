@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/shddraw
+shddraw.so
+shddraw.dylib
+shddraw.dll
+shddraw.a
+shddraw.lib
+shddraw-test-*
+*.exe
+*.o
+*.obj
+*.lst

@@ -1,0 +1,9 @@
+name "shddraw"
+description "shddraw 3d demo"
+authors "xdrie"
+copyright "Copyright © 2020, xdrie"
+license "proprietary"
+dependency "reng" path="../.."
+lflags "-rpath=$$ORIGIN"
+
+subConfiguration "reng" "lib-minimal"
