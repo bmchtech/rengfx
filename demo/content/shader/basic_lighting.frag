@@ -42,6 +42,7 @@ uniform vec3 viewPos;
 uniform vec4 ambient;
 uniform float shine;
 uniform float light_clamp;
+uniform int light_quantize;
 
 void main() {
   // Texel color fetching from texture sampler
@@ -81,6 +82,17 @@ void main() {
 
   // clamp lighting amount
   lighting_amount = clamp(lighting_amount, 0.0, light_clamp);
+
+  // if quantization, do an all or nothing
+  if (light_quantize > 0) {
+    if (any(lessThan(lighting_amount, vec4(light_clamp)))) {
+      // below threshold
+      lighting_amount = vec4(0.0);
+    } else {
+      // above threshold
+      lighting_amount = vec4(light_clamp);
+    }
+  }
 
   // calculate contributions
   vec4 col_base = texelColor * colDiffuse;

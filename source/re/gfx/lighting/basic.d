@@ -24,6 +24,7 @@ class BasicSceneLightManager : Manager, Updatable {
     public float ambient = 0.4;
     public float light_clamp = 1.0;
     public float shine_amount = 16;
+    public bool light_quantize = false;
 
     private enum ShaderLightType {
         LIGHT_DIRECTIONAL,
@@ -139,6 +140,11 @@ class BasicSceneLightManager : Manager, Updatable {
         auto shine_loc = raylib.GetShaderLocation(shader, "shine");
         raylib.SetShaderValue(shader, shine_loc, &shine_amount,
             raylib.ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
+
+        // light quantize
+        auto light_quantize_loc = raylib.GetShaderLocation(shader, "light_quantize");
+        raylib.SetShaderValue(shader, light_quantize_loc, &light_quantize,
+            raylib.ShaderUniformDataType.SHADER_UNIFORM_INT);
     }
 
     // - ported from rlights
