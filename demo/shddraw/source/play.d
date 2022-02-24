@@ -29,7 +29,11 @@ class PlayScene : Scene3D {
         start_time = Time.total_time;
 
         // draw shader
-        auto shd_draw = Effect(Core.content.load_shader(null, "shader/draw.frag"), Colors.WHITE);
+        auto draw_shd_path = "shader/blossom.frag";
+        if (Game.custom_drawshd_path) {
+            draw_shd_path = Game.custom_drawshd_path;
+        }
+        auto shd_draw = Effect(Core.content.load_shader(null, draw_shd_path), Colors.WHITE);
         shd_draw.set_shader_var_imm("i_resolution", cast(float[3])[
                 resolution.x, resolution.y, 1.0
             ]);
