@@ -25,12 +25,6 @@ class Game : Core {
 		default_resolution = Vector2(WIDTH, HEIGHT);
 		content.paths ~= ["../content/", "content/"];
 
-		raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_MSAA_4X_HINT);
-		debug {
-		} else {
-			raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
-		}
-
 		load_scenes([new PlayScene(), new HUDScene()]);
 	}
 }
@@ -41,6 +35,12 @@ int main(string[] args) {
 	if (help.helpWanted) {
 		defaultGetoptPrinter("Usage: ./a [--model /path/to/model.glb]", help.options);
 		return 1;
+	}
+
+	raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_MSAA_4X_HINT);
+	debug {
+	} else {
+		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
 	}
 
 	auto game = new Game(); // init game
