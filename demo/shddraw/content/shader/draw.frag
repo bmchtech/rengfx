@@ -75,7 +75,8 @@ void main() {
   // set up UVs, jittered for antialiasing
   //   vec2 uv = (gl_FragCoord.xy + hash2() - .5) / i_resolution.xy - .5;
   //   uv.x *= i_resolution.z;
-  vec2 uv = ((gl_FragCoord.xy - .5) / i_resolution.xy) - .5;
+  //   vec2 uv = ((gl_FragCoord.xy - .5) / i_resolution.xy) - .5;
+  vec2 uv = fragTexCoord - .5;
 
   // mess with UVs for a fun wide-angle lens
   uv *= 4. + length(uv);
@@ -100,29 +101,29 @@ void main() {
   // background color
   vec3 color = vec3(.2 * (length(uv)), .1, .25);
 
-  //   // raymarcher loop
-  //   const float epsilon = .001;
-  //   float t = 0.;
-  //   float k = 0.;
-  //   for (int i = 0; i < 200; ++i) {
-  //     k = scene(cam + dir * t);
-  //     if (abs(k) < epsilon)
-  //       break;
-  //     t += k;
-  //   }
+  // raymarcher loop
+  const float epsilon = .001;
+  float t = 0.;
+  float k = 0.;
+  for (int i = 0; i < 200; ++i) {
+    k = scene(cam + dir * t);
+    if (abs(k) < epsilon)
+      break;
+    t += k;
+  }
 
-  //   // surface shading
-  //   if (abs(k) < epsilon) {
-  //     vec3 h = cam + dir * t;
-  //     vec2 o = vec2(epsilon, 0);
-  //     vec3 n = normalize(
-  //         vec3(scene(h + o.xyy), scene(h + o.yxy), scene(h + o.yyx)) - k);
+  // surface shading
+  if (abs(k) < epsilon) {
+    vec3 h = cam + dir * t;
+    vec2 o = vec2(epsilon, 0);
+    vec3 n = normalize(
+        vec3(scene(h + o.xyy), scene(h + o.yxy), scene(h + o.yyx)) - k);
 
-  //     float light = dot(n, normalize(vec3(1, 2, 3))) * .35 + .65;
+    float light = dot(n, normalize(vec3(1, 2, 3))) * .35 + .65;
 
-  //     float fog = min(1., pow(.9, t - 20.));
-  //     color = mix(color, vec3(light), fog);
-  //   }
+    float fog = min(1., pow(.9, t - 20.));
+    color = mix(color, vec3(light), fog);
+  }
 
   finalColor = vec4(color, 1);
 }
