@@ -28,9 +28,9 @@ class PlayScene : Scene3D {
         cam.entity.add_component(new CameraOrbit(fox, 0.2));
         // cam.entity.add_component(new CameraFreeLook(fox));
 
-        // draw a grid at the origin
-        auto grid = create_entity("grid");
-        grid.add_component(new Grid3D(20, 1));
+        // // draw a grid at the origin
+        // auto grid = create_entity("grid");
+        // grid.add_component(new Grid3D(20, 1));
 
         auto cel2 = Effect(Core.content.load_shader(null,
                 "shader/cel_light.frag"), Colors.WHITE);

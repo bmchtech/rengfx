@@ -52,7 +52,7 @@ void main() {
     finalColor = T(pix_coord);
   }
 
-  float outline_diag = 1.;
+  float outline_diag = 8.;
   float outline_div = 8.;
   float outline_lighten = 0.1;
 
