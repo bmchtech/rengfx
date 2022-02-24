@@ -12,6 +12,9 @@ static import raylib;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
 
+    PostProcessor cel2_postproc;
+    PostProcessor bokeh_postproc;
+
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
@@ -55,8 +58,22 @@ class PlayScene : Scene3D {
         cel2.set_shader_var_imm("c_resolution", cast(float[2])[
                 resolution.x, resolution.y
             ]);
-        auto cel2_postproc = new PostProcessor(resolution, cel2);
+        cel2.set_shader_var_imm("outline_diag", cast(float) 8);
+        cel2.set_shader_var_imm("outline_div", cast(float) 8);
+        cel2.set_shader_var_imm("outline_lighten", cast(float) 0.1);
+        cel2_postproc = new PostProcessor(resolution, cel2);
         postprocessors ~= cel2_postproc;
+
+        // auto bokeh = Effect(Core.content.load_shader(null,
+        //         "shader/bokeh.frag"), Colors.WHITE);
+        // bokeh.set_shader_var_imm("c_resolution", cast(float[2])[
+        //         resolution.x, resolution.y
+        //     ]);
+        // bokeh.set_shader_var_imm("bokeh_base", cast(float) 0.005);
+        // bokeh.set_shader_var_imm("bokeh_maxv", cast(float) 1000);
+        // bokeh.set_shader_var_imm("bokeh_focus_dist", cast(float) 5);
+        // bokeh_postproc = new PostProcessor(resolution, bokeh);
+        // postprocessors ~= bokeh_postproc;
     }
 
     override void update() {
