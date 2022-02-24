@@ -23,14 +23,13 @@ class PlayScene : Scene3D {
     float start_time = 0;
 
     override void on_start() {
-        clear_color = Colors.BLACK;
+        clear_color = Colors.WHITE;
 
         start_frame = Time.frame_count;
         start_time = Time.total_time;
 
         // draw shader
-        auto shd_draw = Effect(Core.content.load_shader(null,
-                "shader/draw.frag"), Colors.WHITE);
+        auto shd_draw = Effect(Core.content.load_shader(null, "shader/draw.frag"), Colors.WHITE);
         shd_draw.set_shader_var_imm("i_resolution", cast(float[3])[
                 resolution.x, resolution.y, 1.0
             ]);

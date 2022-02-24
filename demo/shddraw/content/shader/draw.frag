@@ -1,3 +1,6 @@
+// shader based on
+// https://raw.githubusercontent.com/lunasorcery/Blossom/main/blossom/draw.frag
+
 #version 330
 
 // Input vertex attributes (from vertex shader)
@@ -21,6 +24,16 @@ uniform float i_time;
 /* vvv your shader goes here vvv */
 
 const float pi = acos(-1.);
+
+// hash functions adapted from Devour
+// https://www.shadertoy.com/view/3llSzM
+float seed;
+float hash() {
+  float p = fract((seed++) * .1031);
+  p += (p * (p + 19.19)) * 3.;
+  return fract((p + p) * p);
+}
+vec2 hash2() { return vec2(hash(), hash()); }
 
 mat2 rotate(float b) {
   float c = cos(b);
@@ -56,27 +69,10 @@ float scene(vec3 p) {
   return d;
 }
 
-// hash functions adapted from Devour
-// https://www.shadertoy.com/view/3llSzM
-float seed;
-float hash() {
-  float p = fract((seed++) * .1031);
-  p += (p * (p + 19.19)) * 3.;
-  return fract((p + p) * p);
-}
-vec2 hash2() { return vec2(hash(), hash()); }
-
-void main() {
-  // seed the RNG (again taken from Devour)
-  seed = float(((i_frame * 73856093) ^ int(gl_FragCoord.x) * 19349663 ^
-                int(gl_FragCoord.y) * 83492791) %
-               38069);
-
+vec4 draw(sampler2D tex, vec2 frag_coord) {
   // set up UVs, jittered for antialiasing
-  //   vec2 uv = (gl_FragCoord.xy + hash2() - .5) / i_resolution.xy - .5;
-  //   uv.x *= i_resolution.z;
-  //   vec2 uv = ((gl_FragCoord.xy - .5) / i_resolution.xy) - .5;
-  vec2 uv = fragTexCoord - .5;
+  vec2 uv = (frag_coord.xy + hash2() - .5) / i_resolution.xy - .5;
+  uv.x *= i_resolution.z;
 
   // mess with UVs for a fun wide-angle lens
   uv *= 4. + length(uv);
@@ -125,23 +121,22 @@ void main() {
     color = mix(color, vec3(light), fog);
   }
 
-  finalColor = vec4(color, 1);
+  vec4 ret_col = vec4(color, 1);
+  return ret_col;
 }
 
-// vec4 draw(sampler2D tex, ivec2 pix_coord) {
-//   vec4 base = T(pix_coord);
+void main() {
+  // set up coordinates
+  ivec2 pix_coord = ivec2(fragTexCoord.xy * i_resolution.xy);
+  vec2 frag_coord = fragTexCoord.xy * i_resolution.xy;
 
-//   //   float fade = (i_frame / 100.0);
-//   float fade = i_time / 2;
-//   fade = clamp(fade, 0.0, 1.0);
-//   vec3 col_shade = vec3(0.9, 0.7, 0.5) * fade;
-//   vec4 col = vec4(col_shade.rgb, 1.0);
-//   return col;
-// }
+  // seed the RNG (again taken from Devour)
+  seed = float(((i_frame * 73856093) ^ int(frag_coord.x) * 19349663 ^
+                int(frag_coord.y) * 83492791) %
+               38069);
 
-// void main() {
-//   ivec2 pix_coord = ivec2(fragTexCoord.xy / i_resolution.xy);
-//   vec2 uv = fragTexCoord.xy / i_resolution.xy;
-//   vec4 draw_col = draw(texture0, pix_coord);
-//   finalColor = draw_col;
-// }
+  // draw
+  vec4 draw_col = draw(texture0, frag_coord);
+
+  finalColor = draw_col;
+}
