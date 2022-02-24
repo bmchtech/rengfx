@@ -20,9 +20,10 @@ lightweight, expressive, extensible game engine
 + real time runtime debug console and inspector
 + 2d and 3d graphics support
 + multi scene layering and compositing
-+ integration with physics engines (`nudge`, `dmech`)
 + bulit-in shaders for stylized lighting and postprocessing
 + highly extensible
++ wip: physics support and integration
++ wip: tilemaps with tiled
 + wip
 
 ## documentation
@@ -61,4 +62,3 @@ available to use under the [LGPL v3.0](LICENSE)
 
 libraries:
 + [raylib](https://github.com/raysan5/raylib/blob/be7f717a24e72e0bc84389491a063de65c106048/LICENSE), Zlib license
-+ [dmech](https://github.com/gecko0307/dmech/blob/8a93124fe5a57995e7b6820d5fef697e1e537dad/COPYING), Boost license
