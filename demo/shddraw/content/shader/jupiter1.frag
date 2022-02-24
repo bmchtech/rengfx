@@ -173,7 +173,7 @@ vec2 arrangeCoords(vec2 p) {
   return r;
 }
 
-vec4 draw(sampler2D tex, vec2 frag_coord) {
+vec4 frag_shader(sampler2D tex, vec2 frag_coord) {
   vec2 p = arrangeCoords(frag_coord);
 
   vec3 lookAt = vec3(0.);
@@ -219,7 +219,7 @@ void main() {
   vec2 frag_coord = fragTexCoord.xy * iResolution.xy;
 
   // draw
-  vec4 draw_col = draw(texture0, frag_coord);
+  vec4 draw_col = frag_shader(texture0, frag_coord);
 
   finalColor = draw_col;
 }
