@@ -7,12 +7,15 @@ import re.math;
 import std.stdio;
 import play;
 import hud;
+import std.getopt;
 
 static import raylib;
 
 class Game : Core {
 	enum WIDTH = 960;
 	enum HEIGHT = 540;
+
+	public static string custom_mdl1_path = null;
 
 	this() {
 		super(WIDTH, HEIGHT, "shanpes2");
@@ -32,8 +35,17 @@ class Game : Core {
 	}
 }
 
-void main() {
+int main(string[] args) {
+	auto help = getopt(args, "model|m", &Game.custom_mdl1_path);
+
+	if (help.helpWanted) {
+		defaultGetoptPrinter("Usage: ./a [--model /path/to/model.glb]", help.options);
+		return 1;
+	}
+
 	auto game = new Game(); // init game
 	game.run();
 	game.destroy(); // clean up
+
+	return 0;
 }

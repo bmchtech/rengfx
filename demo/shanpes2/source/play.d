@@ -13,6 +13,8 @@ import re.math;
 import re.util.orbit;
 static import raylib;
 
+import app;
+
 /// simple 3d demo scene
 class PlayScene : Scene3D {
 
@@ -38,8 +40,12 @@ class PlayScene : Scene3D {
         light1.add_component(new Light3D(color_rgb(255, 255, 255)));
         light1.add_component(new Orbit(Vector3(2, 8, 0), 10, C_PI / 8));
 
+        auto mdl_asset_path = "models/nieradam.glb";
+        if (Game.custom_mdl1_path) {
+            mdl_asset_path = Game.custom_mdl1_path;
+        }
         mdl1 = create_entity("mdl1", Vector3(0, 0, 0));
-        auto mdl1_asset = Core.content.load_model("models/nieradam.glb");
+        auto mdl1_asset = Core.content.load_model(mdl_asset_path);
         auto mdl1_model = mdl1.add_component(new Model3D(mdl1_asset));
         // mdl1.transform.scale = Vector3(0.4, 0.4, 0.4);
         // mdl1.transform.orientation = Vector3(C_PI / 2, 0, 0);
