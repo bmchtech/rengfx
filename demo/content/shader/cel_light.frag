@@ -12,13 +12,11 @@ out vec4 finalColor;
 
 // user vars
 // uniform float c_threshold;
-uniform vec2 c_resolution;
 // uniform vec4 c_outline_color;
+uniform vec2 c_resolution;
 
 #define T(u)                                                                   \
   texelFetch(texture0, clamp(ivec2(u), ivec2(0), ivec2(c_resolution.xy) - 1), 0)
-// #define T(u)
-// texelFetch(iChannel0,clamp(ivec2(u),ivec2(0),ivec2(iResolution.xy)-1),0)
 
 void main() {
   float x = fragTexCoord.x * c_resolution.x;
