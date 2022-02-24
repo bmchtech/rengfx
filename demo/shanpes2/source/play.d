@@ -37,13 +37,13 @@ class PlayScene : Scene3D {
         light1.add_component(new Light3D(color_rgb(255, 255, 255)));
         light1.add_component(new Orbit(Vector3(2, 8, 0), 10, C_PI / 8));
 
-        auto fox = create_entity("fox", Vector3(0, -0.07, 0));
-        auto fox_asset = Core.content.load_model("models/foxs.glb");
-        auto fox_model = fox.add_component(new Model3D(fox_asset));
-        fox.transform.scale = Vector3(0.4, 0.4, 0.4);
-        fox.transform.orientation = Vector3(C_PI / 2, 0, 0);
-        fox_model.effect = Effect(lights.shader, Colors.WHITE);
-        // auto cub = fox.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
+        auto mdl1 = create_entity("mdl1", Vector3(0, 0, 0));
+        auto mdl1_asset = Core.content.load_model("models/nieradam.glb");
+        auto mdl1_model = mdl1.add_component(new Model3D(mdl1_asset));
+        // mdl1.transform.scale = Vector3(0.4, 0.4, 0.4);
+        // mdl1.transform.orientation = Vector3(C_PI / 2, 0, 0);
+        mdl1_model.effect = Effect(lights.shader, Colors.WHITE);
+        // auto cub = mdl1.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
         // cub.offset = Vector3(0, -4, 0);
 
         auto blk1 = create_entity("blk1", Vector3(2, 0.5, 0.5));
@@ -65,9 +65,9 @@ class PlayScene : Scene3D {
         sphr1.transform.scale = Vector3(0.5, 0.5, 0.5);
         sphr1_model.effect = Effect(lights.shader, Colors.WHITE);
 
-        // add a camera to look at the fox
-        cam.entity.add_component(new CameraOrbit(fox, 0.2));
-        // cam.entity.add_component(new CameraFreeLook(fox));
+        // add a camera to look at the mdl1
+        cam.entity.add_component(new CameraOrbit(mdl1, 0.2));
+        // cam.entity.add_component(new CameraFreeLook(mdl1));
 
         // // draw a grid at the origin
         // auto grid = create_entity("grid");
