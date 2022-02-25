@@ -8,6 +8,7 @@ import re.gfx.shapes.model;
 import re.gfx.shapes.grid;
 import re.gfx.shapes.cube;
 import re.gfx.lighting.basic;
+import re.gfx.effects.frag;
 import re.ng.camera;
 import re.math;
 import re.util.orbit;
@@ -83,26 +84,18 @@ class PlayScene : Scene3D {
         auto floor_box = floor.add_component(new Cube(Vector3(40, 10, 40), floor_col));
         // floor_box.effect = new Effect(lights.shader, floor_col);
 
-        auto cel2 = new Effect(Core.content.load_shader(null,
-                "shader/cel_light.frag"), Colors.WHITE);
-        cel2.set_shader_var_imm("c_resolution", cast(float[2])[
-                resolution.x, resolution.y
-            ]);
+        auto cel2 = new FragEffect(this, Core.content.load_shader(null, "shader/cel_light.frag"));
         cel2.set_shader_var_imm("outline_diag", cast(float) 8);
         cel2.set_shader_var_imm("outline_div", cast(float) 8);
         cel2.set_shader_var_imm("outline_lighten", cast(float) 0.1);
         cel2_postproc = new PostProcessor(resolution, cel2);
         postprocessors ~= cel2_postproc;
 
-        // auto bokeh = new Effect(Core.content.load_shader(null,
-        //         "shader/bokeh.frag"), Colors.WHITE);
-        // bokeh.set_shader_var_imm("c_resolution", cast(float[2])[
-        //         resolution.x, resolution.y
-        //     ]);
-        // bokeh.set_shader_var_imm("bokeh_base", cast(float) 0.005);
-        // bokeh.set_shader_var_imm("bokeh_maxv", cast(float) 1000);
-        // bokeh.set_shader_var_imm("bokeh_focus_dist", cast(float) 5);
-        // bokeh_postproc = new PostProcessor(resolution, bokeh);
+        auto bokeh = new FragEffect(this, Core.content.load_shader(null, "shader/bokeh.frag"));
+        bokeh.set_shader_var_imm("bokeh_base", cast(float) 0.005);
+        bokeh.set_shader_var_imm("bokeh_maxv", cast(float) 1000);
+        bokeh.set_shader_var_imm("bokeh_focus_dist", cast(float) 5);
+        bokeh_postproc = new PostProcessor(resolution, bokeh);
         // postprocessors ~= bokeh_postproc;
     }
 
