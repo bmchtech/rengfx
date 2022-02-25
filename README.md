@@ -10,25 +10,27 @@ lightweight, expressive, extensible game engine
 
 ![table demo gif](https://raw.githubusercontent.com/wiki/xdrie/rengfx/img/rengfx_fox.gif)
 
-[demo binary (v0.3.3) (win/linux)](https://github.com/xdrie/rengfx/releases/tag/v0.3.3)
-
 ## features
 
 + only library dependency is [`raylib`](https://github.com/xdrie/raylib)
-+ modular, data-driven Scene-Entity-Component architecture
-+ full headless execution support, making unit tests simple
-+ real time runtime debug console and inspector
 + 2d and 3d graphics support
-+ multi scene layering and compositing
-+ bulit-in shaders for stylized lighting and postprocessing
-+ highly extensible
-+ wip: physics support and integration
-+ wip: tilemaps with tiled
++ modular, data-driven Scene-Entity-Component architecture
+  + full headless execution support, making unit tests simple
+  + multi scene layering and compositing
+  + highly extensible with custom components and logic
++ fluent debugging
+  + real time runtime debug console and inspector
++ simple and powerful glsl shaders
+  + bulit-in shaders for stylized lighting and postprocessing
+  + streamlined shaders api for custom glsl shaders
 + wip
+  + wip: physics support and integration
+  + wip: tilemaps with tiled
 
 ## documentation
-+ see [doc](doc/) for some small notes.
-+ see [api docs](https://xdrie.github.io/rengfx/) for full api documentation
++ full documentation: [api docs](https://xdrie.github.io/rengfx/)
++ demo projects: [demos](demo/)
++ notes and tips: [doc](doc/)
 
 ## hacking
 
@@ -58,7 +60,9 @@ dub run # run demo
 
 ## license
 
-available to use under the [LGPL v3.0](LICENSE)
+copyright © 2020-2022, redthing1.
+
+available to use under the [LGPL v3.0](LICENSE).
 
 libraries:
 + [raylib](https://github.com/raysan5/raylib/blob/be7f717a24e72e0bc84389491a063de65c106048/LICENSE), Zlib license
