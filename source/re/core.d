@@ -89,7 +89,6 @@ abstract class Core {
 
         default_resolution = Vector2(width, height);
         if (!Core.headless) {
-            raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI);
             window = new Window(width, height);
             window.initialize();
             window.set_title(title);
@@ -101,23 +100,6 @@ abstract class Core {
                         window.width, window.height, scaled_width, scaled_height, window.scale_dpi));
                 window.resize(scaled_width, scaled_height);
             }
-            // auto requested_width = width;
-            // auto requested_height = height;
-            // if (auto_compensate_hidpi) {
-            //     // resize window according to dpi scale
-            //     auto dpi_scale = window.get_display_dpi_scale();
-            //     auto scaled_width = cast(int)(window.width * dpi_scale);
-            //     auto scaled_height = cast(int)(window.height * dpi_scale);
-            //     log.info(format("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
-            //             requested_width, requested_height, scaled_width, scaled_height, dpi_scale));
-
-            //     // update requested width and height
-            //     requested_width = scaled_width;
-            //     requested_height = scaled_height;
-            // }
-            // window = new Window(requested_width, requested_height);
-            // window.initialize();
-            // window.set_title(title);
         }
 
         // disable default exit key

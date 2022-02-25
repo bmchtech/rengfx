@@ -94,16 +94,15 @@ debug class Console {
 
     public void render() {
         alias pad = Core.debugger.screen_padding;
-        // auto screen_br = Core.default_resolution;
-        auto screen_br = Vector2(Core.window.width, Core.window.height);
+        auto screen_br = Vector2(Core.debugger.ui_bounds.width, Core.debugger.ui_bounds.height);
         // Core.log.info(format("screen_br: (%s", screen_br));
         auto console_bg_bounds = Rectangle(pad,
-                screen_br.y - pad - height, screen_br.x - pad * 2, height);
+            screen_br.y - pad - height, screen_br.x - pad * 2, height);
         // console background
         // raylib.DrawRectangleRec(console_bg_bounds, bg_col);
         auto bg_padding = 4;
         auto console_bounds = Rectangle(console_bg_bounds.x + bg_padding, console_bg_bounds.y + bg_padding,
-                console_bg_bounds.width - bg_padding * 2, console_bg_bounds.height - bg_padding * 2);
+            console_bg_bounds.width - bg_padding * 2, console_bg_bounds.height - bg_padding * 2);
         // console text
         if (raygui.GuiTextBox(console_bounds, console_text, 64, true)) {
             auto console_text_str = to!string(console_text);
