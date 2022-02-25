@@ -28,8 +28,8 @@ class Paddle : Component, Updatable {
             entity.position2 = Vector2(spr_ren.bounds.width / 2, entity.position2.y);
         }
 
-        if (entity.position2.x + spr_ren.bounds.width / 2 >= Core.window.width) {
-            entity.position2 = Vector2(Core.window.width - spr_ren.bounds.width / 2, entity.position2.y);
+        if (entity.position2.x + spr_ren.bounds.width / 2 >= entity.scene.resolution.x) {
+            entity.position2 = Vector2(entity.scene.resolution.x - spr_ren.bounds.width / 2, entity.position2.y);
         }
     }
 }
