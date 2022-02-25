@@ -95,9 +95,14 @@ debug static class DefaultCommands {
     }
 
     static void c_inspect(string[] args) {
-        if (args.length == 0 && dbg.inspector.open) {
-            // close inspector when run without args
-            dbg.inspector.close();
+        if (args.length == 0) {
+            if (dbg.inspector.open) {
+                // close inspector when run without args
+                dbg.inspector.close();
+            } else {
+                // inspector isn't open, and no arg was given
+                log.err("usage: inspect <entity>");
+            }
             return;
         }
         Entity entity;
