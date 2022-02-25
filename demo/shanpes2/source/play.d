@@ -83,7 +83,7 @@ class PlayScene : Scene3D {
         auto floor_box = floor.add_component(new Cube(Vector3(40, 10, 40), floor_col));
         // floor_box.effect = Effect(lights.shader, floor_col);
 
-        auto cel2 = Effect(Core.content.load_shader(null,
+        auto cel2 = new Effect(Core.content.load_shader(null,
                 "shader/cel_light.frag"), Colors.WHITE);
         cel2.set_shader_var_imm("c_resolution", cast(float[2])[
                 resolution.x, resolution.y
@@ -94,7 +94,7 @@ class PlayScene : Scene3D {
         cel2_postproc = new PostProcessor(resolution, cel2);
         postprocessors ~= cel2_postproc;
 
-        // auto bokeh = Effect(Core.content.load_shader(null,
+        // auto bokeh = new Effect(Core.content.load_shader(null,
         //         "shader/bokeh.frag"), Colors.WHITE);
         // bokeh.set_shader_var_imm("c_resolution", cast(float[2])[
         //         resolution.x, resolution.y

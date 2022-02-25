@@ -19,14 +19,14 @@ class PlayScene : Scene3D {
         clear_color = Colors.LIGHTGRAY;
 
         // load shader effects and add as a postprocessor
-        // auto ascii_shd = Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
+        // auto ascii_shd = new Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
         // ascii_shd.set_shader_var_imm("c_resolution", cast(float[2])[
         //         resolution.x, resolution.y
         //         ]);
         // auto ascii_postproc = new PostProcessor(resolution, ascii_shd);
         // postprocessors ~= ascii_postproc;
 
-        auto chrm_abr = Effect(Core.content.load_shader(null,
+        auto chrm_abr = new Effect(Core.content.load_shader(null,
                 "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
         chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
         glitch_postproc = new PostProcessor(resolution, chrm_abr);
