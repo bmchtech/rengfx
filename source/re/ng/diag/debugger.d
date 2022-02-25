@@ -16,6 +16,7 @@ static import raygui;
 /// a robust overlay debugging tool
 debug class Debugger {
     public enum screen_padding = 12;
+    public Rectangle ui_bounds;
     private enum bg_col = Color(180, 180, 180, 180);
     private RenderTarget _render_target;
     private enum _render_col = Color(255, 255, 255, 160);
@@ -31,17 +32,18 @@ debug class Debugger {
         inspector = new Inspector();
         console = new Console();
         if (!Core.headless) {
-            _render_target = RenderExt.create_render_target(
-                cast(int) Core.default_resolution.x, cast(int) Core.default_resolution.y);
-            Core.log.info(format("debugger info: render target %s, resolution %s, window (%s,%s)",
-                    _render_target, Core.default_resolution, Core.window.width, Core.window.height));
+            ui_bounds = Rectangle(0, 0, Core.window.width, Core.window.height);
+            _render_target = RenderExt.create_render_target(cast(int) ui_bounds.width, cast(int) ui_bounds
+                    .height);
+            Core.log.info(format("debugger info: ui bounds %s, resolution %s, window (%s,%s)",
+                    ui_bounds, Core.default_resolution, Core.window.width, Core.window.height));
         }
     }
 
     public void update() {
         if (!Core.headless) {
             // auto-resize inspector
-            inspector.width = cast(int)(Core.default_resolution.x * 0.7);
+            inspector.width = cast(int)(ui_bounds.width * 0.7);
         }
 
         if (Input.is_key_pressed(console.key)) {

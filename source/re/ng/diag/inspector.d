@@ -64,7 +64,7 @@ debug class Inspector {
         alias pad = Core.debugger.screen_padding;
 
         // this is the (clipped) scrollable panel bounds
-        auto panel_bounds = Rectangle(pad, pad, width, Core.default_resolution.y - pad * 2);
+        auto panel_bounds = Rectangle(pad, pad, width, Core.debugger.ui_bounds.height - pad * 2);
         // draw indicator of panel bounds
         // raylib.DrawRectangleRec(panel_bounds, Colors.GRAY);
 
