@@ -12,6 +12,10 @@ class Effect {
     /// the tint color
     Color color;
 
+    this() {
+        this(Shader.init);
+    }
+
     this(Shader shader, Color color = Colors.WHITE) {
         this.shader = shader;
         this.color = color;

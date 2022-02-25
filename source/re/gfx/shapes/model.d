@@ -17,6 +17,8 @@ class Model3D : Component, Renderable3D {
 
     this(Model model) {
         this.model = model;
+        // default effect
+        _effect = new Effect();
     }
 
     /// gets the effect
