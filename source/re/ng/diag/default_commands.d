@@ -1,11 +1,13 @@
 module re.ng.diag.default_commands;
 
-import re.core;
-import re.ecs;
 import std.range;
 import std.array;
 import std.algorithm;
 import std.string;
+import std.conv;
+
+import re.core;
+import re.ecs;
 
 debug static class DefaultCommands {
     alias log = Core.log;
@@ -37,8 +39,8 @@ debug static class DefaultCommands {
                 //         entity.position, entity.components.length, component_types);
                 sb ~= format("  ▷ %s: pos(%s) components[%s]\n", entity.name, entity.position, component_types
                         .length);
-                foreach (component_type; component_types) {
-                    sb ~= format("    ■ %s\n", component_type);
+                for (int j = 0; j < component_types.length; j++) {
+                    sb ~= format("    ■ [%s] %s\n", j, component_types[j]);
                 }
             }
         }
@@ -68,15 +70,27 @@ debug static class DefaultCommands {
         Entity entity;
         if (!pick_entity(args[0], entity))
             return false;
-        auto comp_search = args[1].toLower;
-        // find matching component
-        auto matches = entity.get_all_components()
-            .find!(x => x.classinfo.name.toLower.indexOf(comp_search) > 0);
-        if (matches.length == 0) {
-            log.err(format("no matching component for '%s'", comp_search));
-            return false;
+        auto comp_sel = args[1];
+        auto all_comps = entity.get_all_components();
+        // check if we can parse component selector as int
+        try {
+            auto comp_ix = comp_sel.to!int;
+
+            // select component at this index
+            comp = all_comps[comp_ix];
+        } catch (ConvException) {
+            // not an int, try to find component by name
+            auto comp_search = comp_sel.toLower;
+            // find matching component
+            auto matches = all_comps
+                .find!(x => x.classinfo.name.toLower.indexOf(comp_search) > 0);
+            if (matches.length == 0) {
+                log.err(format("no matching component for '%s'", comp_search));
+                return false;
+            }
+            comp = matches.front;
         }
-        comp = matches.front;
+
         return true;
     }
 
@@ -87,9 +101,10 @@ debug static class DefaultCommands {
         // dump this component
         auto sb = appender!(string);
         auto comp_class = comp.getMetaType;
-        log.info(format("dumping: %s", comp_class.getName));
+        // log.info(format("dumping: %s", comp_class.getName));
+        sb ~= format("dump: %s\n", comp_class.getName);
         foreach (field; comp_class.getFields) {
-            sb ~= format("%s = %s\n", field.getName, field.get(comp));
+            sb ~= format("  %s = %s\n", field.getName, field.get(comp));
         }
         log.info(sb.data);
     }
