@@ -25,6 +25,8 @@ class Game : Core {
 		default_resolution = Vector2(WIDTH, HEIGHT);
 		content.paths ~= ["../content/", "content/"];
 
+		raylib.ToggleFullscreen();
+
 		load_scenes([new PlayScene(), new HUDScene()]);
 	}
 }
