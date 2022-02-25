@@ -1,24 +1,35 @@
 module re.gfx.effect;
 
+import std.string : toStringz;
+
 import re.gfx.raytypes;
 static import raylib;
 
 /// represents an effect
-struct Effect {
+class Effect {
     /// the shader program for the effect
     Shader shader;
     /// the tint color
-    Color color = Colors.WHITE;
+    Color color;
 
-    public void set_shader_var_imm(T)(string name, T value) {
-        T var = value;
-        set_shader_var(name, var);
+    this(Shader shader, Color color = Colors.WHITE) {
+        this.shader = shader;
+        this.color = color;
     }
 
-    public void set_shader_var(T)(string name, ref T value) {
-        import std.string : toStringz;
+    public bool set_shader_var_imm(T)(string name, T value) {
+        T var = value;
+        return set_shader_var(name, var);
+    }
 
-        auto loc = raylib.GetShaderLocation(shader, name.toStringz);
+    public bool set_shader_var(T)(string name, ref T value) {
+        auto loc = get_shader_loc(name);
+        if (loc < 0) {
+            // if the shader variable doesn't exist, return false
+            return false;
+        }
+
+        // figure out the uniform var type
         raylib.ShaderUniformDataType val_type;
         alias vartype = raylib.ShaderUniformDataType;
         static if (is(T == float)) {
@@ -41,5 +52,11 @@ struct Effect {
             static assert(0, "unrecognized shader value data type");
         }
         raylib.SetShaderValue(shader, loc, &value, val_type);
+        return true;
+    }
+
+    /// get location of uniform in shader. returns -1 if not found
+    public int get_shader_loc(string name) {
+        return raylib.GetShaderLocation(shader, name.toStringz);
     }
 }

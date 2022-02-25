@@ -21,7 +21,7 @@ class PlayScene : Scene3D {
         clear_color = color_rgb(224, 176, 153);
 
         // load a shader effect and add it as a postprocessor
-        auto cel_ish = Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
+        auto cel_ish = new Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
         cel_ish.set_shader_var_imm("c_threshold", 0.4f);
         cel_ish.set_shader_var_imm("c_resolution", cast(float[2])[
                 resolution.x, resolution.y
