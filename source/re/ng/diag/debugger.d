@@ -1,5 +1,7 @@
 module re.ng.diag.debugger;
 
+import std.format;
+
 import re.core;
 import re.ecs;
 import re.input.input;
@@ -15,7 +17,7 @@ static import raygui;
 debug class Debugger {
     public enum screen_padding = 12;
     private enum bg_col = Color(180, 180, 180, 180);
-    private raylib.RenderTexture2D _render_target;
+    private RenderTarget _render_target;
     private enum _render_col = Color(255, 255, 255, 160);
 
     /// inspector panel
@@ -29,8 +31,10 @@ debug class Debugger {
         inspector = new Inspector();
         console = new Console();
         if (!Core.headless) {
-            _render_target = raylib.LoadRenderTexture(
+            _render_target = RenderExt.create_render_target(
                 cast(int) Core.default_resolution.x, cast(int) Core.default_resolution.y);
+            Core.log.info(format("debugger info: render target %s, resolution %s, window (%s,%s)",
+                    _render_target, Core.default_resolution, Core.window.width, Core.window.height));
         }
     }
 
@@ -70,6 +74,6 @@ debug class Debugger {
         if (inspector.open) {
             inspector.close();
         }
-        raylib.UnloadRenderTexture(_render_target);
+        RenderExt.destroy_render_target(_render_target);
     }
 }

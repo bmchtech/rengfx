@@ -129,12 +129,12 @@ abstract class Scene {
         if (Core.headless)
             return;
         // free any old render target
-        if (render_target != raylib.RenderTexture2D.init) {
-            raylib.UnloadRenderTexture(render_target);
+        if (render_target != RenderTarget.init) {
+            RenderExt.destroy_render_target(render_target);
         }
         // create render target
         // TODO: use scene resolution instead of window resolution
-        render_target = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
+        render_target = RenderExt.create_render_target(cast(int) resolution.x, cast(int) resolution.y);
         // apply texture filter
         raylib.SetTextureFilter(render_target.texture, Core.default_filter_mode);
     }
@@ -172,7 +172,7 @@ abstract class Scene {
 
         if (!Core.headless) {
             // free render target
-            raylib.UnloadRenderTexture(render_target);
+            RenderExt.destroy_render_target(render_target);
         }
     }
 

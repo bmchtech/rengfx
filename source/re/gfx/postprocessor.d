@@ -17,7 +17,7 @@ class PostProcessor {
         this.effect = effect;
 
         // create render target
-        buffer = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
+        buffer = RenderExt.create_render_target(cast(int) resolution.x, cast(int) resolution.y);
     }
 
     /// process the source and render to internal buffer
@@ -27,6 +27,6 @@ class PostProcessor {
 
     /// release resources
     public void destroy() {
-        raylib.UnloadRenderTexture(buffer);
+        RenderExt.destroy_render_target(buffer);
     }
 }

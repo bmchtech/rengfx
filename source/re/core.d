@@ -1,5 +1,9 @@
 module re.core;
 
+import std.array;
+import std.typecons;
+import std.format;
+
 import re.input;
 import re.content;
 import re.time;
@@ -11,8 +15,6 @@ import re.gfx.render_ext;
 import re.math;
 import re.util.logger;
 import re.util.tweens.tween_manager;
-import std.array;
-import std.typecons;
 import jar;
 static import raylib;
 
@@ -87,13 +89,35 @@ abstract class Core {
 
         default_resolution = Vector2(width, height);
         if (!Core.headless) {
+            raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI);
             window = new Window(width, height);
             window.initialize();
             window.set_title(title);
             if (auto_compensate_hidpi) {
                 // resize window according to dpi scale
-                window.resize(cast(int)(window.width * window.scale_dpi), cast(int)(window.height * window.scale_dpi));
+                auto scaled_width = cast(int)(window.width * window.scale_dpi);
+                auto scaled_height = cast(int)(window.height * window.scale_dpi);
+                log.info(format("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
+                        window.width, window.height, scaled_width, scaled_height, window.scale_dpi));
+                window.resize(scaled_width, scaled_height);
             }
+            // auto requested_width = width;
+            // auto requested_height = height;
+            // if (auto_compensate_hidpi) {
+            //     // resize window according to dpi scale
+            //     auto dpi_scale = window.get_display_dpi_scale();
+            //     auto scaled_width = cast(int)(window.width * dpi_scale);
+            //     auto scaled_height = cast(int)(window.height * dpi_scale);
+            //     log.info(format("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
+            //             requested_width, requested_height, scaled_width, scaled_height, dpi_scale));
+
+            //     // update requested width and height
+            //     requested_width = scaled_width;
+            //     requested_height = scaled_height;
+            // }
+            // window = new Window(requested_width, requested_height);
+            // window.initialize();
+            // window.set_title(title);
         }
 
         // disable default exit key
@@ -286,7 +310,7 @@ unittest {
     // ensure time has passed
     auto target_time = Core.frame_limit / Core.target_fps;
     assert(isClose(Time.total_time, target_time),
-            format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
+        format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
 
     game.destroy(); // clean up
 

@@ -1,15 +1,17 @@
 module re.ng.diag.console;
 
+import std.conv;
+import std.string;
+import std.array;
+import std.range;
+import std.format;
+
 import re.input.input;
 import re.core;
 import re.math;
 import re.gfx;
 import re.ng.diag.default_commands;
 import re.util.interop;
-import std.conv;
-import std.string;
-import std.array;
-import std.range;
 static import raygui;
 
 /// overlay debug console
@@ -92,8 +94,11 @@ debug class Console {
 
     public void render() {
         alias pad = Core.debugger.screen_padding;
+        // auto screen_br = Core.default_resolution;
+        auto screen_br = Vector2(Core.window.width, Core.window.height);
+        // Core.log.info(format("screen_br: (%s", screen_br));
         auto console_bg_bounds = Rectangle(pad,
-                Core.default_resolution.y - pad - height, Core.default_resolution.x - pad * 2, height);
+                screen_br.y - pad - height, screen_br.x - pad * 2, height);
         // console background
         // raylib.DrawRectangleRec(console_bg_bounds, bg_col);
         auto bg_padding = 4;
