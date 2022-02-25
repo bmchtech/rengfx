@@ -44,7 +44,7 @@ int main(string[] args) {
 	if (verbose) {
 		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_INFO);
 	} else {
-		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
+		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_ERROR);
 	}
 
 	auto game = new Game(); // init game
