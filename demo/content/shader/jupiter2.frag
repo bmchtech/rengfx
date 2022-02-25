@@ -204,7 +204,7 @@ vec4 frag_shader(sampler2D tex, vec2 frag_coord) {
 
     // Apply light
     vec3 surfaceColor = makeJupiter(texCoord);
-    surfaceColor *= light;
+    surfaceColor = surfaceColor*0.5 + surfaceColor*0.5*light;
 
     // Atmosphere
     float fresnelIntensity = pow(dis / radius, 3.);

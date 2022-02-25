@@ -26,7 +26,7 @@ class PlayScene : Scene3D {
         clear_color = Colors.WHITE;
 
         // draw shader
-        auto draw_shd_path = "shader/blossom.frag";
+        auto draw_shd_path = "shader/jupiter2.frag";
         if (Game.custom_drawshd_path) {
             draw_shd_path = Game.custom_drawshd_path;
         }
@@ -35,7 +35,7 @@ class PlayScene : Scene3D {
         postprocessors ~= draw_p;
 
         // present shader
-        auto present_shd_path = "shader/present.frag";
+        auto present_shd_path = "shader/ascii.frag";
         if (Game.custom_presentshd_path) {
             present_shd_path = Game.custom_presentshd_path;
         }
