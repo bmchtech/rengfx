@@ -49,7 +49,7 @@ class PlayScene : Scene3D {
         auto mdl1_model = mdl1.add_component(new Model3D(mdl1_asset));
         // mdl1.transform.scale = Vector3(0.4, 0.4, 0.4);
         // mdl1.transform.orientation = Vector3(C_PI / 2, 0, 0);
-        mdl1_model.effect = Effect(lights.shader, Colors.WHITE);
+        mdl1_model.effect = new Effect(lights.shader, Colors.WHITE);
         // auto cub = mdl1.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
         // cub.offset = Vector3(0, -4, 0);
 
@@ -58,19 +58,19 @@ class PlayScene : Scene3D {
         writefln("assets: %s", blk1_asset);
         auto blk1_model = blk1.add_component(new Model3D(blk1_asset));
         blk1.transform.scale = Vector3(0.5, 0.5, 0.5);
-        blk1_model.effect = Effect(lights.shader, Colors.WHITE);
+        blk1_model.effect = new Effect(lights.shader, Colors.WHITE);
 
         auto qsphr1 = create_entity("qsphr1", Vector3(-1, 0, -1));
         auto qsphr1_asset = Core.content.load_model("models/qsphr.glb");
         auto qsphr1_model = qsphr1.add_component(new Model3D(qsphr1_asset));
         qsphr1.transform.scale = Vector3(0.5, 0.5, 0.5);
-        qsphr1_model.effect = Effect(lights.shader, Colors.WHITE);
+        qsphr1_model.effect = new Effect(lights.shader, Colors.WHITE);
 
         auto sphr1 = create_entity("sphr1", Vector3(-1, 0.5, 1.5));
         auto sphr1_asset = Core.content.load_model("models/sphr.glb");
         auto sphr1_model = sphr1.add_component(new Model3D(sphr1_asset));
         sphr1.transform.scale = Vector3(0.5, 0.5, 0.5);
-        sphr1_model.effect = Effect(lights.shader, Colors.WHITE);
+        sphr1_model.effect = new Effect(lights.shader, Colors.WHITE);
 
         // add a camera to look at the mdl1
         set_orbit_cam();
@@ -81,7 +81,7 @@ class PlayScene : Scene3D {
         auto floor = create_entity("floor", Vector3(0, -5, 0));
         auto floor_col = color_rgb(168, 156, 146);
         auto floor_box = floor.add_component(new Cube(Vector3(40, 10, 40), floor_col));
-        // floor_box.effect = Effect(lights.shader, floor_col);
+        // floor_box.effect = new Effect(lights.shader, floor_col);
 
         auto cel2 = new Effect(Core.content.load_shader(null,
                 "shader/cel_light.frag"), Colors.WHITE);
