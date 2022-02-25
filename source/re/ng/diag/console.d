@@ -102,9 +102,12 @@ debug class Console {
         // console text
         if (raygui.GuiTextBox(console_bounds, console_text, 64, true)) {
             auto console_text_str = to!string(console_text);
+            // strip extra whitespace
+            console_text_str = console_text_str.strip();
             if (console_text_str.length > 0) {
                 _history_depth = 0; // we just executed a command, no longer in history
                 _history ~= console_text_str; // add to history
+                // get raw command string
                 auto raw_command = console_text_str.split(' ');
                 process_command(raw_command.front, raw_command.drop(1));
                 // pass command
