@@ -11,7 +11,7 @@ class Window {
     private int _width;
     private int _height;
     /// the window dpi scale
-    public float scale_dpi;
+    private float _scale_dpi;
     /// the monitor
     private int _monitor;
 
@@ -21,16 +21,21 @@ class Window {
         _height = height;
     }
 
-    /// dpi-scaled window width
+    /// window width
     @property int width() {
         update_window();
         return cast(int)(_width);
     }
 
-    /// dpi-scaled window height
+    /// window height
     @property int height() {
         update_window();
         return cast(int)(_height);
+    }
+
+    @property float scale_dpi() {
+        update_window();
+        return _scale_dpi;
     }
 
     /// initializes the window
@@ -39,9 +44,14 @@ class Window {
         raylib.InitWindow(_width, _height, "");
         // set options
         raylib.SetTargetFPS(Core.target_fps);
-        // get properties
+        // // get properties
+        // _scale_dpi = get_display_dpi_scale();
+        update_window();
+    }
+
+    public static float get_display_dpi_scale() {
         auto scale_dpi_vec = raylib.GetWindowScaleDPI();
-        scale_dpi = max(scale_dpi_vec.x, scale_dpi_vec.y);
+        return max(scale_dpi_vec.x, scale_dpi_vec.y);
     }
 
     public void set_title(string title) {
@@ -56,6 +66,7 @@ class Window {
     private void update_window() {
         _width = raylib.GetScreenWidth();
         _height = raylib.GetScreenHeight();
+        _scale_dpi = get_display_dpi_scale();
     }
 
     public void destroy() {
