@@ -16,6 +16,7 @@ class Game : Core {
 	enum HEIGHT = 540;
 
 	public static string custom_mdl1_path = null;
+	public static bool free_look = false;
 
 	this() {
 		super(WIDTH, HEIGHT, "celtest");
@@ -31,10 +32,14 @@ class Game : Core {
 
 int main(string[] args) {
 	bool verbose;
-	auto help = getopt(args, "verbose|v", &verbose, "model|m", &Game.custom_mdl1_path);
+	auto help = getopt(args,
+		"verbose|v", &verbose,
+		"model|m", &Game.custom_mdl1_path,
+		"free-cam|f", &Game.free_look,
+	);
 
 	if (help.helpWanted) {
-		defaultGetoptPrinter("Usage: ./a [--model /path/to/model.glb]", help.options);
+		defaultGetoptPrinter("Usage: ./a [--model /path/to/model.glb] [-f]", help.options);
 		return 1;
 	}
 

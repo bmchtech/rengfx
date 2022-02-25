@@ -73,7 +73,11 @@ class PlayScene : Scene3D {
         sphr1_model.effect = new Effect(lights.shader, Colors.WHITE);
 
         // add a camera to look at the mdl1
-        set_orbit_cam();
+        if (Game.free_look) {
+            set_free_cam();
+        } else {
+            set_orbit_cam();
+        }
 
         // // draw a grid at the origin
         // auto grid = create_entity("grid");
@@ -125,7 +129,7 @@ class PlayScene : Scene3D {
         }
 
         // if SPACE is pressed, toggle camera orbit vs free look
-        if (Input.is_key_pressed(Keys.KEY_SPACE)) {
+        if (Input.is_key_pressed(Keys.KEY_F)) {
             if (cam.entity.has_component!CameraOrbit) {
                 cam.entity.remove_component!CameraOrbit;
                 set_free_cam();
