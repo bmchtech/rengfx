@@ -30,7 +30,8 @@ class Game : Core {
 }
 
 int main(string[] args) {
-	auto help = getopt(args, "draw-shader|d", &Game.custom_drawshd_path, "present-shader|p", &Game
+	bool verbose;
+	auto help = getopt(args, "verbose|v", &verbose, "draw-shader|d", &Game.custom_drawshd_path, "present-shader|p", &Game
 			.custom_presentshd_path);
 
 	if (help.helpWanted) {
@@ -40,7 +41,8 @@ int main(string[] args) {
 	}
 
 	raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_MSAA_4X_HINT);
-	debug {
+	if (verbose) {
+		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_INFO);
 	} else {
 		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_WARNING);
 	}
