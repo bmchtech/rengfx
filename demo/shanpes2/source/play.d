@@ -56,7 +56,6 @@ class PlayScene : Scene3D {
 
         auto blk1 = create_entity("blk1", Vector3(2, 0.5, 0.5));
         auto blk1_asset = Core.content.load_model("models/rcube.glb");
-        writefln("assets: %s", blk1_asset);
         auto blk1_model = blk1.add_component(new Model3D(blk1_asset));
         blk1.transform.scale = Vector3(0.5, 0.5, 0.5);
         blk1_model.effect = new Effect(lights.shader, Colors.WHITE);
