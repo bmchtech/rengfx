@@ -256,8 +256,8 @@ class CameraFreeLook : CameraFollow3D {
 
     mixin Reflect;
     // public float move_sensitivity = ;
-    public float look_sensitivity = 0.01;
-    public float zoom_sensitivity = 1.5;
+    public float look_sensitivity = 0.003;
+    public float zoom_sensitivity = 0.9;
     public float smooth_zoom_sensitivity = 0.05;
     protected enum free_min_clamp = 85;
     protected enum free_max_clamp = -85;
