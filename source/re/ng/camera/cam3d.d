@@ -103,19 +103,24 @@ abstract class CameraFollow3D : Component, Updatable {
     protected SceneCamera3D cam;
     /// the target entity
     public Entity target;
+    public Vector3 target_offset;
     protected enum third_person_dist = 1.2f;
     protected Vector2 _angle; // xz plane camera angle
     protected float _target_dist;
 
-    this(Entity target) {
+    this(Entity target, Vector3 target_offset = Vector3.zero) {
         this.target = target;
+        this.target_offset = target_offset;
     }
 
     override void setup() {
         cam = entity.get_component!SceneCamera3D();
-        cam.look_at(target); // start by looking at the target
+        // cam.look_at(target); // start by looking at the target
+        auto look_target = target.position + target_offset;
+        cam.look_at(look_target); // start by looking at the target
 
-        auto to_target = target.position - entity.position;
+        // distance between look target and camera entity position
+        auto to_target = look_target - entity.position;
 
         _target_dist = raymath.Vector3Length(to_target);
         _angle = Vector2(atan2(to_target.x, to_target.z), // Camera angle in plane XZ (0 aligned with Z, move positive CCW)
