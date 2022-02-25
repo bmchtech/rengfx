@@ -17,7 +17,7 @@ static import raygui;
 /// real-time object inspector
 debug class Inspector {
     /// panel width
-    public int width = 400;
+    public int width;
     /// whether the inspector is open
     public bool open = false;
     private Vector2 _panel_scroll;
@@ -64,7 +64,7 @@ debug class Inspector {
         alias pad = Core.debugger.screen_padding;
 
         // this is the (clipped) scrollable panel bounds
-        auto panel_bounds = Rectangle(pad, pad, width, Core.window.height - pad * 2);
+        auto panel_bounds = Rectangle(pad, pad, width, Core.default_resolution.y - pad * 2);
         // draw indicator of panel bounds
         // raylib.DrawRectangleRec(panel_bounds, Colors.GRAY);
 

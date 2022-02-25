@@ -93,7 +93,7 @@ debug class Console {
     public void render() {
         alias pad = Core.debugger.screen_padding;
         auto console_bg_bounds = Rectangle(pad,
-                Core.window.height - pad - height, Core.window.width - pad * 2, height);
+                Core.default_resolution.y - pad - height, Core.default_resolution.x - pad * 2, height);
         // console background
         // raylib.DrawRectangleRec(console_bg_bounds, bg_col);
         auto bg_padding = 4;

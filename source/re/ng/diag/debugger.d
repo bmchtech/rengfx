@@ -29,14 +29,15 @@ debug class Debugger {
         inspector = new Inspector();
         console = new Console();
         if (!Core.headless) {
-            _render_target = raylib.LoadRenderTexture(Core.window.width, Core.window.height);
+            _render_target = raylib.LoadRenderTexture(
+                cast(int) Core.default_resolution.x, cast(int) Core.default_resolution.y);
         }
     }
 
     public void update() {
         if (!Core.headless) {
             // auto-resize inspector
-            inspector.width = cast(int)(Core.window.width * 0.7);
+            inspector.width = cast(int)(Core.default_resolution.x * 0.7);
         }
 
         if (Input.is_key_pressed(console.key)) {
