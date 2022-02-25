@@ -98,9 +98,19 @@ class PlayScene : Scene3D {
         // postprocessors ~= bokeh_postproc;
     }
 
+    void set_free_cam() {
+        auto cam_control = new CameraFreeLook(mdl1);
+        cam_control.target_offset = Vector3(0, 1, 0);
+        cam.entity.add_component(cam_control);
+    }
+
     void set_orbit_cam() {
         cam.entity.position = Vector3(6, 6, 6);
         cam.entity.add_component(new CameraOrbit(mdl1, 0.2));
+        // cam.entity.position = Vector3(3, 3, 3);
+        // auto cam_control = new CameraThirdPerson(mdl1);
+        // cam_control.target_offset = Vector3(0, 1, 0);
+        // cam.entity.add_component(cam_control);
     }
 
     override void update() {
@@ -118,7 +128,7 @@ class PlayScene : Scene3D {
         if (Input.is_key_pressed(Keys.KEY_SPACE)) {
             if (cam.entity.has_component!CameraOrbit) {
                 cam.entity.remove_component!CameraOrbit;
-                cam.entity.add_component(new CameraFreeLook(mdl1));
+                set_free_cam();
             } else if (cam.entity.has_component!CameraFreeLook) {
                 cam.entity.remove_component!CameraFreeLook;
                 set_orbit_cam();

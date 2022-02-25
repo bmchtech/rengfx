@@ -1,10 +1,10 @@
 
-# shanpes2 demo
+# celtest demo
 
 a demo of 3d shapes with a minimalistic thresholded cel shader
 
 ## usage
 
 ```
-./shanpes2 [-m /path/to/model.glb]
+./celtest [-m /path/to/model.glb]
 ```

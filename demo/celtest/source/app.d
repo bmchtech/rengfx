@@ -18,7 +18,7 @@ class Game : Core {
 	public static string custom_mdl1_path = null;
 
 	this() {
-		super(WIDTH, HEIGHT, "shanpes2");
+		super(WIDTH, HEIGHT, "celtest");
 	}
 
 	override void initialize() {
