@@ -7,6 +7,7 @@ import re.gfx;
 import re.gfx.shapes.model;
 import re.gfx.shapes.grid;
 import re.gfx.shapes.cube;
+import re.gfx.effects.frag;
 import re.ng.camera;
 import re.util.hotreload;
 import re.math;
@@ -29,7 +30,9 @@ class Game : Core {
 }
 
 class PlayScene : Scene3D {
-	public Effect postfx1;
+	Effect postfx1;
+	Effect cubefx1;
+	Cube cube1;
 
 	override void on_start() {
 		clear_color = Colors.LIGHTGRAY;
@@ -38,18 +41,17 @@ class PlayScene : Scene3D {
 		cam.entity.position = Vector3(0, 10, 10);
 
 		auto block = create_entity("block", Vector3(0, 0, 0));
-		auto cube = block.add_component(new Cube(Vector3(2, 2, 2)));
+		cube1 = block.add_component(new Cube(Vector3(2, 2, 2)));
 
 		// point the camera at the block, then orbit it
 		cam.look_at(block.position);
 		cam.entity.add_component(new CameraOrbit(block, 0.5));
 
 		// enable an example shader on cube
-		auto cross_stitch = new Effect(Core.content.load_shader(null,
-				"shader/cross_stitch.frag"), Colors.DARKGREEN);
-		auto mixAmt = 0.05f;
-		cross_stitch.set_shader_var("mixAmt", mixAmt);
-		cube.effect = cross_stitch;
+		// auto cross_stitch = new Effect(Core.content.load_shader(null,
+		// 		"shader/cross_stitch.frag"), Colors.DARKGREEN);
+		cubefx1 = new FragEffect(this, new ReloadableShader(null, "shader/cross_stitch.frag"));
+		cubefx1.color = Colors.DARKGREEN;
 
 		// draw a grid at the origin
 		auto grid = create_entity("grid");
@@ -63,6 +65,10 @@ class PlayScene : Scene3D {
 
 	override void update() {
 		super.update();
+
+		cubefx1.update();
+		cube1.effect = cubefx1; // update shader effect
+		// cubefx1.set_shader_var_imm("stitch_mix", cast(float) 0.05);
 
 		postfx1.update();
 		postfx1.set_shader_var_imm("sample_offset", cast(float[2])[0.005, 0.0]);
