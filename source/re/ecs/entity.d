@@ -1,3 +1,5 @@
+/** ecs entity (container of components) */
+
 module re.ecs.entity;
 
 import std.array;

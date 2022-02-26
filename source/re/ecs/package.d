@@ -1,3 +1,5 @@
+/** engine entity component system */
+
 module re.ecs;
 
 public {

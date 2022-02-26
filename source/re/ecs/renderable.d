@@ -1,3 +1,5 @@
+/** base interface for renderable components */
+
 module re.ecs.renderable;
 
 import re.math;

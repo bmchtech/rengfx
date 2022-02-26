@@ -1,3 +1,5 @@
+/** internal engine class for optimized access of component data */
+
 module re.ecs.storage;
 
 import re.ecs.entity;
