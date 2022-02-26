@@ -12,6 +12,7 @@ import re.gfx.effects.frag;
 import re.ng.camera;
 import re.math;
 import re.util.orbit;
+import re.util.hotreload;
 static import raylib;
 
 import app;
@@ -19,6 +20,7 @@ import app;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     FragEffect shd_draw;
+    FragEffect shd_present;
     PostProcessor draw_p;
     PostProcessor present_p;
 
@@ -30,7 +32,7 @@ class PlayScene : Scene3D {
         if (Game.custom_drawshd_path) {
             draw_shd_path = Game.custom_drawshd_path;
         }
-        shd_draw = new FragEffect(this, Core.content.load_shader(null, draw_shd_path));
+        shd_draw = new FragEffect(this, new ReloadableShader(null, draw_shd_path));
         draw_p = new PostProcessor(resolution, shd_draw);
         postprocessors ~= draw_p;
 
@@ -39,8 +41,7 @@ class PlayScene : Scene3D {
         if (Game.custom_presentshd_path) {
             present_shd_path = Game.custom_presentshd_path;
         }
-        auto shd_present = new FragEffect(this, Core.content.load_shader(null,
-                present_shd_path));
+        shd_present = new FragEffect(this, new ReloadableShader(null, present_shd_path));
         present_p = new PostProcessor(resolution, shd_present);
         postprocessors ~= present_p;
     }
@@ -49,5 +50,6 @@ class PlayScene : Scene3D {
         super.update();
 
         shd_draw.update();
+        shd_present.update();
     }
 }
