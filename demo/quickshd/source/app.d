@@ -65,7 +65,7 @@ class PlayScene : Scene3D {
 		super.update();
 
 		postfx1.update();
-		// postfx1.set_shader_var_imm("sample_offset", cast(float[2])[0.005, 0.05]);
+		postfx1.set_shader_var_imm("sample_offset", cast(float[2])[0.005, 0.0]);
 	}
 }
 

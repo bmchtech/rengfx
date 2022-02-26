@@ -25,7 +25,7 @@ uniform float i_time;
 
 // shader vars
 uniform vec2 sample_offset;
-// vec2 sample_offset = vec2(0.005, 0.01);
+// vec2 sample_offset = vec2(0.005, 0.02);
 // #define bean 0
 
 vec4 sample(vec2 offset) {
