@@ -3,6 +3,7 @@ module re.gfx.effect;
 import std.string : toStringz;
 
 import re.gfx.raytypes;
+import re.util.hotreload;
 static import raylib;
 
 /// represents an effect
@@ -11,6 +12,8 @@ class Effect {
     Shader shader;
     /// the tint color
     Color color;
+    /// a reloadable shader if any
+    ReloadableShader reloadable_shader;
 
     this() {
         this(Shader.init);
@@ -21,11 +24,27 @@ class Effect {
         this.color = color;
     }
 
+    this(ReloadableShader reloadable_shader, Color color = Colors.WHITE) {
+        auto shader = reloadable_shader.reload();
+        this(shader, color);
+    }
+
+    public void update() {
+        // update the effect
+        // if hot reload is enabled, check if we need to reload the shader
+        if (reloadable_shader.changed()) {
+            // shader changed, we load it again
+            shader = reloadable_shader.reload();
+        }
+    }
+
+    /// set a uniform value to an immeditae value
     public bool set_shader_var_imm(T)(string name, T value) {
         T var = value;
         return set_shader_var(name, var);
     }
 
+    /// set a uniform value to a variable by reference
     public bool set_shader_var(T)(string name, ref T value) {
         auto loc = get_shader_loc(name);
         if (loc < 0) {
