@@ -7,6 +7,7 @@ import re.gfx;
 import re.gfx.shapes.model;
 import re.gfx.shapes.grid;
 import re.gfx.shapes.cube;
+import re.gfx.shapes.sphere;
 import re.gfx.lighting.basic;
 import re.gfx.effects.frag;
 import re.ng.camera;
@@ -38,7 +39,8 @@ class PlayScene : Scene3D {
 
         // create a point light
         auto light1 = create_entity("light1");
-        light1.add_component(new Light3D(color_rgb(255, 255, 255)));
+        auto light1_essence = light1.add_component(new Light3D(color_rgb(255, 255, 255)));
+        light1.add_component(new Sphere(0.2, 16, 16, light1_essence.color));
         light1.add_component(new Orbit(Vector3(2, 8, 0), 10, C_PI / 8));
 
         auto mdl_asset_path = "models/nieradam.glb";
