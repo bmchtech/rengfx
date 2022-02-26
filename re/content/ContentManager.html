@@ -68,6 +68,17 @@ $('#symbolSearchPane').show();</script>
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
+					<div class="package ">effects
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../re/gfx/effects/frag.html">frag</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
 					<div class="package ">lighting
 					</div>
 			<ul class="tree-view">
@@ -115,6 +126,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../re/gfx/shapes/rect.html">rect</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../re/gfx/shapes/sphere.html">sphere</a>
 					</div>
 				</li>
 			</ul>
@@ -222,6 +238,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../re/math/raytypes.html">raytypes</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../re/math/rectangle_ext.html">rectangle_ext</a>
 					</div>
 				</li>
 				<li>
@@ -335,6 +356,11 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../re/phys/kin2d.html">kin2d</a>
 					</div>
 				</li>
+				<li>
+					<div class="module ">
+						<a href="../../re/phys/rigid3d.html">rigid3d</a>
+					</div>
+				</li>
 			</ul>
 				</li>
 				<li class="tree-view collapsed">
@@ -379,12 +405,22 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../re/util/hotreload.html">hotreload</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../re/util/interop.html">interop</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
 						<a href="../../re/util/logger.html">logger</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../re/util/orbit.html">orbit</a>
 					</div>
 				</li>
 				<li>
@@ -491,6 +527,25 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
+							<a href="../../re/content/ContentManager.drop_caches.html" class="public">
+								<code>drop_caches</code>
+							</a>
+							<span class="tableEntryAnnotation">()</span>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../re/content/ContentManager.get_path.html" class="public">
+								<code>get_path</code>
+							</a>
+							<span class="tableEntryAnnotation">(path)</span>
+						</td>
+						<td>get the physical path to a logical content path
+</td>
+					</tr>
+					<tr>
+						<td>
 							<a href="../../re/content/ContentManager.load_model.html" class="public">
 								<code>load_model</code>
 							</a>
@@ -513,7 +568,7 @@ $('#symbolSearchPane').show();</script>
 							<a href="../../re/content/ContentManager.load_shader.html" class="public">
 								<code>load_shader</code>
 							</a>
-							<span class="tableEntryAnnotation">(vs_path, fs_path)</span>
+							<span class="tableEntryAnnotation">(vs_path, fs_path, bypass_cache)</span>
 						</td>
 						<td>loads a shader from disk (vertex shader, fragment shader).
 pass null to either arg to use the default

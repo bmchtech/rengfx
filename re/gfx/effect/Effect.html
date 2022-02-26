@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Struct Effect</title>
+		<title>Class Effect</title>
 		<link rel="stylesheet" type="text/css" href="../../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../../scripts/ddox.js">/**/</script>
@@ -68,6 +68,17 @@ $('#symbolSearchPane').show();</script>
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
+					<div class="package ">effects
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/effects/frag.html">frag</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
 					<div class="package ">lighting
 					</div>
 			<ul class="tree-view">
@@ -115,6 +126,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../re/gfx/shapes/rect.html">rect</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/sphere.html">sphere</a>
 					</div>
 				</li>
 			</ul>
@@ -222,6 +238,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../re/math/raytypes.html">raytypes</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/math/rectangle_ext.html">rectangle_ext</a>
 					</div>
 				</li>
 				<li>
@@ -335,6 +356,11 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../../re/phys/kin2d.html">kin2d</a>
 					</div>
 				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/phys/rigid3d.html">rigid3d</a>
+					</div>
+				</li>
 			</ul>
 				</li>
 				<li class="tree-view collapsed">
@@ -379,12 +405,22 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../../re/util/hotreload.html">hotreload</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../../re/util/interop.html">interop</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
 						<a href="../../../re/util/logger.html">logger</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/orbit.html">orbit</a>
 					</div>
 				</li>
 				<li>
@@ -429,17 +465,52 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Struct Effect</h1><p>represents an effect
+			<h1>Class Effect</h1><p>represents an effect
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">struct</span> <span class="typ">Effect</span>
+			<span class="kwd">class</span> <span class="typ">Effect</span>
 			<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
 			
+			<section><h2>Constructors</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/gfx/effect/Effect.this.html" class="public">
+								<code>this</code>
+							</a>
+							<span class="tableEntryAnnotation">()</span>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/gfx/effect/Effect.this.html" class="public">
+								<code>this</code>
+							</a>
+							<span class="tableEntryAnnotation">(shader, color)</span>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/gfx/effect/Effect.this.html" class="public">
+								<code>this</code>
+							</a>
+							<span class="tableEntryAnnotation">(reloadable_shader, color)</span>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
 			<section><h2>Fields</h2>
 				<table>
 					<col class="caption"/>
@@ -451,6 +522,13 @@ $('#symbolSearchPane').show();</script>
 							<a href="../../../re/gfx/effect/Effect.color.html" class="public"><code>color</code></a>
 						</td>
 						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">raylib<wbr/></span><span class="pun">.</span><span class="typ">Color</span></code></td><td>the tint color
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/gfx/effect/Effect.reloadable_shader.html" class="public"><code>reloadable_shader</code></a>
+						</td>
+						<td class="typecol"><code class="prettyprint lang-d"><a href="../../../re/util/hotreload/ReloadableShader.html"><span class="typ">ReloadableShader</span></a></code></td><td>a reloadable shader if any
 </td>
 					</tr>
 					<tr>
@@ -470,12 +548,23 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
+							<a href="../../../re/gfx/effect/Effect.get_shader_loc.html" class="public">
+								<code>get_shader_loc</code>
+							</a>
+							<span class="tableEntryAnnotation">(name)</span>
+						</td>
+						<td>get location of uniform in shader. returns -1 if not found
+</td>
+					</tr>
+					<tr>
+						<td>
 							<a href="../../../re/gfx/effect/Effect.set_shader_var.html" class="public">
 								<code>set_shader_var</code>
 							</a>
 							<span class="tableEntryAnnotation">(name, value)</span>
 						</td>
-						<td></td>
+						<td>set a uniform value to a variable by reference
+</td>
 					</tr>
 					<tr>
 						<td>
@@ -483,6 +572,25 @@ $('#symbolSearchPane').show();</script>
 								<code>set_shader_var_imm</code>
 							</a>
 							<span class="tableEntryAnnotation">(name, value)</span>
+						</td>
+						<td>set a uniform value to an immeditae value
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/gfx/effect/Effect.update.html" class="public">
+								<code>update</code>
+							</a>
+							<span class="tableEntryAnnotation">()</span>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../../re/gfx/effect/Effect.reload_shader.html" class="protected">
+								<code>reload_shader</code>
+							</a>
+							<span class="tableEntryAnnotation">()</span>
 						</td>
 						<td></td>
 					</tr>

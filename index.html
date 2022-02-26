@@ -68,6 +68,17 @@ $('#symbolSearchPane').show();</script>
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
+					<div class="package ">effects
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="./re/gfx/effects/frag.html">frag</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
 					<div class="package ">lighting
 					</div>
 			<ul class="tree-view">
@@ -115,6 +126,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="./re/gfx/shapes/rect.html">rect</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="./re/gfx/shapes/sphere.html">sphere</a>
 					</div>
 				</li>
 			</ul>
@@ -222,6 +238,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="./re/math/raytypes.html">raytypes</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="./re/math/rectangle_ext.html">rectangle_ext</a>
 					</div>
 				</li>
 				<li>
@@ -335,6 +356,11 @@ $('#symbolSearchPane').show();</script>
 						<a href="./re/phys/kin2d.html">kin2d</a>
 					</div>
 				</li>
+				<li>
+					<div class="module ">
+						<a href="./re/phys/rigid3d.html">rigid3d</a>
+					</div>
+				</li>
 			</ul>
 				</li>
 				<li class="tree-view collapsed">
@@ -379,12 +405,22 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="./re/util/hotreload.html">hotreload</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="./re/util/interop.html">interop</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
 						<a href="./re/util/logger.html">logger</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="./re/util/orbit.html">orbit</a>
 					</div>
 				</li>
 				<li>
@@ -440,7 +476,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ecs/component.html">re.ecs.component</a>
 				</td>
 				<td>
-					
+					ecs component (unit of composable functionality)
+
 				</td>
 			</tr>
 			<tr>
@@ -448,7 +485,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ecs/entity.html">re.ecs.entity</a>
 				</td>
 				<td>
-					
+					ecs entity (container of components)
+
 				</td>
 			</tr>
 			<tr>
@@ -456,7 +494,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ecs/manager.html">re.ecs.manager</a>
 				</td>
 				<td>
-					
+					internal orhestration of entity/component system
+
 				</td>
 			</tr>
 			<tr>
@@ -464,7 +503,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ecs/renderable.html">re.ecs.renderable</a>
 				</td>
 				<td>
-					
+					base interface for renderable components
+
 				</td>
 			</tr>
 			<tr>
@@ -472,7 +512,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ecs/storage.html">re.ecs.storage</a>
 				</td>
 				<td>
-					
+					internal engine class for optimized access of component data
+
 				</td>
 			</tr>
 			<tr>
@@ -480,7 +521,17 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ecs/updatable.html">re.ecs.updatable</a>
 				</td>
 				<td>
-					
+					base interface for updatable components
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="./re/gfx/effects/frag.html">re.gfx.effects.frag</a>
+				</td>
+				<td>
+					fragment shader effects with auto-synced uniforms
+
 				</td>
 			</tr>
 			<tr>
@@ -488,7 +539,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/lighting/basic.html">re.gfx.lighting.basic</a>
 				</td>
 				<td>
-					
+					basic lighting
+
 				</td>
 			</tr>
 			<tr>
@@ -496,7 +548,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/lighting/blinn_phong.html">re.gfx.lighting.blinn_phong</a>
 				</td>
 				<td>
-					
+					blinn-phong lighting (incomplete)
+
 				</td>
 			</tr>
 			<tr>
@@ -504,7 +557,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/shapes/anim_model.html">re.gfx.shapes.anim_model</a>
 				</td>
 				<td>
-					
+					animated 3d models
+
 				</td>
 			</tr>
 			<tr>
@@ -512,7 +566,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/shapes/cube.html">re.gfx.shapes.cube</a>
 				</td>
 				<td>
-					
+					3d rectangular prism
+
 				</td>
 			</tr>
 			<tr>
@@ -520,7 +575,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/shapes/grid.html">re.gfx.shapes.grid</a>
 				</td>
 				<td>
-					
+					3d grid centered at origin
+
 				</td>
 			</tr>
 			<tr>
@@ -528,7 +584,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/shapes/mesh.html">re.gfx.shapes.mesh</a>
 				</td>
 				<td>
-					
+					renderable mesh, used for procedural meches only. model3d is used for 3d models
+
 				</td>
 			</tr>
 			<tr>
@@ -536,7 +593,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/shapes/model.html">re.gfx.shapes.model</a>
 				</td>
 				<td>
-					
+					renderable 3d model
+
 				</td>
 			</tr>
 			<tr>
@@ -544,7 +602,17 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/shapes/rect.html">re.gfx.shapes.rect</a>
 				</td>
 				<td>
-					
+					color filled rectangle
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="./re/gfx/shapes/sphere.html">re.gfx.shapes.sphere</a>
+				</td>
+				<td>
+					3d sphere
+
 				</td>
 			</tr>
 			<tr>
@@ -552,7 +620,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/color_ext.html">re.gfx.color_ext</a>
 				</td>
 				<td>
-					
+					color functions and utilities
+
 				</td>
 			</tr>
 			<tr>
@@ -560,7 +629,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/effect.html">re.gfx.effect</a>
 				</td>
 				<td>
-					
+					shader based graphical effects
+
 				</td>
 			</tr>
 			<tr>
@@ -568,7 +638,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/postprocessor.html">re.gfx.postprocessor</a>
 				</td>
 				<td>
-					
+					postprocessing effects on any render target
+
 				</td>
 			</tr>
 			<tr>
@@ -576,7 +647,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/raytypes.html">re.gfx.raytypes</a>
 				</td>
 				<td>
-					
+					raylib types
+
 				</td>
 			</tr>
 			<tr>
@@ -584,7 +656,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/render_ext.html">re.gfx.render_ext</a>
 				</td>
 				<td>
-					
+					rendering extensions and utilities
+
 				</td>
 			</tr>
 			<tr>
@@ -592,7 +665,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/sprite.html">re.gfx.sprite</a>
 				</td>
 				<td>
-					
+					basc sprites as texture regions
+
 				</td>
 			</tr>
 			<tr>
@@ -600,7 +674,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/sprite_renderer.html">re.gfx.sprite_renderer</a>
 				</td>
 				<td>
-					
+					handles rendering of sprite data, highly extensible
+
 				</td>
 			</tr>
 			<tr>
@@ -608,7 +683,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/text.html">re.gfx.text</a>
 				</td>
 				<td>
-					
+					renderable text
+
 				</td>
 			</tr>
 			<tr>
@@ -616,7 +692,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx/window.html">re.gfx.window</a>
 				</td>
 				<td>
-					
+					system window
+
 				</td>
 			</tr>
 			<tr>
@@ -624,7 +701,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/input/virtual/axis.html">re.input.virtual.axis</a>
 				</td>
 				<td>
-					
+					virtual axis input
+
 				</td>
 			</tr>
 			<tr>
@@ -632,7 +710,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/input/virtual/base.html">re.input.virtual.base</a>
 				</td>
 				<td>
-					
+					base virtual input
+
 				</td>
 			</tr>
 			<tr>
@@ -640,7 +719,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/input/virtual/button.html">re.input.virtual.button</a>
 				</td>
 				<td>
-					
+					virtual button input
+
 				</td>
 			</tr>
 			<tr>
@@ -648,7 +728,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/input/virtual/joystick.html">re.input.virtual.joystick</a>
 				</td>
 				<td>
-					
+					virtual joystick input
+
 				</td>
 			</tr>
 			<tr>
@@ -656,7 +737,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/input/input.html">re.input.input</a>
 				</td>
 				<td>
-					
+					provides global access to input
+
 				</td>
 			</tr>
 			<tr>
@@ -664,7 +746,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/math/bounds.html">re.math.bounds</a>
 				</td>
 				<td>
-					
+					2d/3d bounds and bounding boxes
+
 				</td>
 			</tr>
 			<tr>
@@ -672,7 +755,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/math/funcs.html">re.math.funcs</a>
 				</td>
 				<td>
-					
+					math funcs
+
 				</td>
 			</tr>
 			<tr>
@@ -680,7 +764,17 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/math/raytypes.html">re.math.raytypes</a>
 				</td>
 				<td>
-					
+					math types
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="./re/math/rectangle_ext.html">re.math.rectangle_ext</a>
+				</td>
+				<td>
+					rectangle utilities
+
 				</td>
 			</tr>
 			<tr>
@@ -688,7 +782,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/math/transform.html">re.math.transform</a>
 				</td>
 				<td>
-					
+					2d/3d combined matrix transformation abstraction layer
+
 				</td>
 			</tr>
 			<tr>
@@ -696,7 +791,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/math/vector_ext.html">re.math.vector_ext</a>
 				</td>
 				<td>
-					
+					vector utilities
+
 				</td>
 			</tr>
 			<tr>
@@ -704,7 +800,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/camera/base.html">re.ng.camera.base</a>
 				</td>
 				<td>
-					
+					scene camera
+
 				</td>
 			</tr>
 			<tr>
@@ -712,7 +809,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/camera/cam2d.html">re.ng.camera.cam2d</a>
 				</td>
 				<td>
-					
+					2d scene camera
+
 				</td>
 			</tr>
 			<tr>
@@ -720,7 +818,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/camera/cam3d.html">re.ng.camera.cam3d</a>
 				</td>
 				<td>
-					
+					3d scene camera
+
 				</td>
 			</tr>
 			<tr>
@@ -728,7 +827,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/diag/console.html">re.ng.diag.console</a>
 				</td>
 				<td>
-					
+					diagnostic console
+
 				</td>
 			</tr>
 			<tr>
@@ -736,7 +836,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/diag/debugger.html">re.ng.diag.debugger</a>
 				</td>
 				<td>
-					
+					provides runtime debugging functionality in an overlay
+
 				</td>
 			</tr>
 			<tr>
@@ -744,7 +845,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/diag/default_commands.html">re.ng.diag.default_commands</a>
 				</td>
 				<td>
-					
+					default console commands
+
 				</td>
 			</tr>
 			<tr>
@@ -752,7 +854,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/diag/fps_counter.html">re.ng.diag.fps_counter</a>
 				</td>
 				<td>
-					
+					2d renderable fps counter
+
 				</td>
 			</tr>
 			<tr>
@@ -760,7 +863,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/diag/inspector.html">re.ng.diag.inspector</a>
 				</td>
 				<td>
-					
+					runtime debug inspector
+
 				</td>
 			</tr>
 			<tr>
@@ -768,7 +872,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/diag/render.html">re.ng.diag.render</a>
 				</td>
 				<td>
-					
+					debug rendering utilities
+
 				</td>
 			</tr>
 			<tr>
@@ -776,7 +881,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/camera.html">re.ng.camera</a>
 				</td>
 				<td>
-					
+					scene cameras
+
 				</td>
 			</tr>
 			<tr>
@@ -784,7 +890,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/diag.html">re.ng.diag</a>
 				</td>
 				<td>
-					
+					engine diagnostics
+
 				</td>
 			</tr>
 			<tr>
@@ -792,7 +899,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/manager.html">re.ng.manager</a>
 				</td>
 				<td>
-					
+					global engine systems
+
 				</td>
 			</tr>
 			<tr>
@@ -800,7 +908,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/scene.html">re.ng.scene</a>
 				</td>
 				<td>
-					
+					represents a set of things to be drawn to screen
+
 				</td>
 			</tr>
 			<tr>
@@ -808,7 +917,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/scene2d.html">re.ng.scene2d</a>
 				</td>
 				<td>
-					
+					scene with 2d rendering
+
 				</td>
 			</tr>
 			<tr>
@@ -816,7 +926,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ng/scene3d.html">re.ng.scene3d</a>
 				</td>
 				<td>
-					
+					scene with 3d rendering
+
 				</td>
 			</tr>
 			<tr>
@@ -824,7 +935,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/phys/collider.html">re.phys.collider</a>
 				</td>
 				<td>
-					
+					2d and 3d colliders
+
 				</td>
 			</tr>
 			<tr>
@@ -832,7 +944,17 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/phys/kin2d.html">re.phys.kin2d</a>
 				</td>
 				<td>
-					
+					2d kinematic body
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="./re/phys/rigid3d.html">re.phys.rigid3d</a>
+				</td>
+				<td>
+					3d rigid body
+
 				</td>
 			</tr>
 			<tr>
@@ -840,7 +962,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/tweens/ease.html">re.util.tweens.ease</a>
 				</td>
 				<td>
-					
+					tween easings
+
 				</td>
 			</tr>
 			<tr>
@@ -848,7 +971,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/tweens/tween.html">re.util.tweens.tween</a>
 				</td>
 				<td>
-					
+					bindings for tweens to common object properties to allow them to be interpolated
+
 				</td>
 			</tr>
 			<tr>
@@ -856,7 +980,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/tweens/tween_manager.html">re.util.tweens.tween_manager</a>
 				</td>
 				<td>
-					
+					manager for handling and coordinating all queued tweens
+
 				</td>
 			</tr>
 			<tr>
@@ -864,7 +989,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/cache.html">re.util.cache</a>
 				</td>
 				<td>
-					
+					caching arbitrary values
+
 				</td>
 			</tr>
 			<tr>
@@ -872,7 +998,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/dual_map.html">re.util.dual_map</a>
 				</td>
 				<td>
-					
+					bidirectional map
+
 				</td>
 			</tr>
 			<tr>
@@ -880,7 +1007,17 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/format.html">re.util.format</a>
 				</td>
 				<td>
-					
+					string formatting
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="./re/util/hotreload.html">re.util.hotreload</a>
+				</td>
+				<td>
+					hot-reloading functionality
+
 				</td>
 			</tr>
 			<tr>
@@ -888,7 +1025,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/interop.html">re.util.interop</a>
 				</td>
 				<td>
-					
+					utilities for interop with c
+
 				</td>
 			</tr>
 			<tr>
@@ -896,7 +1034,17 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/logger.html">re.util.logger</a>
 				</td>
 				<td>
-					
+					game logger
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="./re/util/orbit.html">re.util.orbit</a>
+				</td>
+				<td>
+					component for orbit motion around a point
+
 				</td>
 			</tr>
 			<tr>
@@ -904,7 +1052,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/reflect.html">re.util.reflect</a>
 				</td>
 				<td>
-					
+					makes the members of a class available for runtime reflection
+
 				</td>
 			</tr>
 			<tr>
@@ -912,7 +1061,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/rng.html">re.util.rng</a>
 				</td>
 				<td>
-					
+					random number generator
+
 				</td>
 			</tr>
 			<tr>
@@ -920,7 +1070,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/test.html">re.util.test</a>
 				</td>
 				<td>
-					
+					utilities for unit-testing core features
+
 				</td>
 			</tr>
 			<tr>
@@ -928,7 +1079,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/util/type.html">re.util.type</a>
 				</td>
 				<td>
-					
+					utilities for runtime type reflection
+
 				</td>
 			</tr>
 			<tr>
@@ -936,7 +1088,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/content.html">re.content</a>
 				</td>
 				<td>
-					
+					content/asset loader and manager
+
 				</td>
 			</tr>
 			<tr>
@@ -944,7 +1097,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/core.html">re.core</a>
 				</td>
 				<td>
-					
+					globally available game core, providing access to most key game services and scene control
+
 				</td>
 			</tr>
 			<tr>
@@ -952,7 +1106,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/ecs.html">re.ecs</a>
 				</td>
 				<td>
-					
+					engine entity component system
+
 				</td>
 			</tr>
 			<tr>
@@ -960,7 +1115,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/gfx.html">re.gfx</a>
 				</td>
 				<td>
-					
+					graphics and renderables
+
 				</td>
 			</tr>
 			<tr>
@@ -968,7 +1124,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/input.html">re.input</a>
 				</td>
 				<td>
-					
+					engine input features
+
 				</td>
 			</tr>
 			<tr>
@@ -976,7 +1133,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/math.html">re.math</a>
 				</td>
 				<td>
-					
+					engine math utilities
+
 				</td>
 			</tr>
 			<tr>
@@ -984,7 +1142,8 @@ $('#symbolSearchPane').show();</script>
 					<a href="./re/time.html">re.time</a>
 				</td>
 				<td>
-					
+					game time
+
 				</td>
 			</tr>
 			<tr>

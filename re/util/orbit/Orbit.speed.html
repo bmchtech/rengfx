@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Variable Orbit.speed</title>
+		<link rel="stylesheet" type="text/css" href="../../../styles/ddox.css"/>
+		<link rel="stylesheet" href="../../../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../../scripts/ddox.js">/**/</script>
+	</head>
+	<body onload="setupDdox();">
+		<nav id="main-nav">
+			<noscript>
+				<p style="color: red">The search functionality needs JavaScript enabled</p>
+			</noscript>
+			<div id="symbolSearchPane" style="display: none">
+				<form action="#" method="GET">
+					<input id="symbolSearch" type="text" name="q" placeholder="Search for symbols" autocomplete="off" onchange="performSymbolSearch(40);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+				</form>
+				<ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../../../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../../../";
+$('#symbolSearchPane').show();</script>
+			</div>
+			<ul class="tree-view">
+				<li class="tree-view ">
+					<div class="package ">
+						<a href="../../../re.html">re</a>
+					</div>
+			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">
+						<a href="../../../re/ecs.html">ecs</a>
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/ecs/component.html">component</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ecs/entity.html">entity</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ecs/manager.html">manager</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ecs/renderable.html">renderable</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ecs/storage.html">storage</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ecs/updatable.html">updatable</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">
+						<a href="../../../re/gfx.html">gfx</a>
+					</div>
+			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">effects
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/effects/frag.html">frag</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">lighting
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/lighting/basic.html">basic</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/lighting/blinn_phong.html">blinn_phong</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">shapes
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/anim_model.html">anim_model</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/cube.html">cube</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/grid.html">grid</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/mesh.html">mesh</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/model.html">model</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/rect.html">rect</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/shapes/sphere.html">sphere</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/color_ext.html">color_ext</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/effect.html">effect</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/postprocessor.html">postprocessor</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/raytypes.html">raytypes</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/render_ext.html">render_ext</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/sprite.html">sprite</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/sprite_renderer.html">sprite_renderer</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/text.html">text</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/gfx/window.html">window</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">
+						<a href="../../../re/input.html">input</a>
+					</div>
+			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">virtual
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/input/virtual/axis.html">axis</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/input/virtual/base.html">base</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/input/virtual/button.html">button</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/input/virtual/joystick.html">joystick</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/input/input.html">input</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">
+						<a href="../../../re/math.html">math</a>
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/math/bounds.html">bounds</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/math/funcs.html">funcs</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/math/raytypes.html">raytypes</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/math/rectangle_ext.html">rectangle_ext</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/math/transform.html">transform</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/math/vector_ext.html">vector_ext</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">ng
+					</div>
+			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">
+						<a href="../../../re/ng/camera.html">camera</a>
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/camera/base.html">base</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/camera/cam2d.html">cam2d</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/camera/cam3d.html">cam3d</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">
+						<a href="../../../re/ng/diag.html">diag</a>
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/diag/console.html">console</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/diag/debugger.html">debugger</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/diag/default_commands.html">default_commands</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/diag/fps_counter.html">fps_counter</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/diag/inspector.html">inspector</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/diag/render.html">render</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/manager.html">manager</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/scene.html">scene</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/scene2d.html">scene2d</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/ng/scene3d.html">scene3d</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">phys
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/phys/collider.html">collider</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/phys/kin2d.html">kin2d</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/phys/rigid3d.html">rigid3d</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li class="tree-view ">
+					<div class="package ">util
+					</div>
+			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">tweens
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/tweens/ease.html">ease</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/tweens/tween.html">tween</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/tweens/tween_manager.html">tween_manager</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/cache.html">cache</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/dual_map.html">dual_map</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/format.html">format</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/hotreload.html">hotreload</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/interop.html">interop</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/logger.html">logger</a>
+					</div>
+				</li>
+				<li>
+					<div class="module selected">
+						<a href="../../../re/util/orbit.html">orbit</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/reflect.html">reflect</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/rng.html">rng</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/test.html">test</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/util/type.html">type</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/content.html">content</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/core.html">core</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../re/time.html">time</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+			</ul>
+		</nav>
+		<div id="main-contents">
+			<h1>Variable Orbit.speed</h1><p></p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">class</span> <a href="../../../re/util/orbit/Orbit.html"><span class="typ">Orbit</span></a>
+			<br/>
+			<span class="pun">
+				{
+				<br/>
+			</span>
+			&nbsp;&nbsp;<span class="com">// ...</span>
+			<br/>
+			&nbsp;&nbsp;<span class="typ">float</span> <span class="pln">speed</span>
+			<span class="pun">;</span>
+			<br/>
+			&nbsp;&nbsp;<span class="com">// ...</span>
+			<br/>
+			<span class="pun">}</span>
+					</div>
+				</code>
+			</div>
+			
+			
+			<footer>
+				<table class="license-info">
+					<tr>
+						<th>Authors</th>
+						<td>
+							
+						</td>
+					</tr>
+					<tr>
+						<th>Copyright</th>
+						<td>
+							
+						</td>
+					</tr>
+					<tr>
+						<th>License</th>
+						<td>
+							
+						</td>
+					</tr>
+				</table>
+				<p class="faint">Generated using the DDOX documentation generator</p>
+			</footer>
+		</div>
+	</body>
+</html>
