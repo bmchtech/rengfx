@@ -2,11 +2,13 @@
 
 module re.ng.diag.fps_counter;
 
+import std.format;
+
 import re.core;
 import re.math;
 import re.ecs.component;
 import re.ecs.renderable;
-import std.string : format;
+import re.gfx.raytypes;
 import re.util.interop;
 static import raylib;
 
@@ -24,7 +26,7 @@ class FPSCounter : Component, Renderable2D {
     }
 
     void render() {
-        auto fps_str = format("FPS: %s", Core.fps);
+        auto fps_str = format("%s", Core.fps);
         raylib.DrawText(fps_str.c_str(), cast(int) transform.position2.x,
             cast(int) transform.position2.y, font_size, color);
     }
