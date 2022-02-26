@@ -1,3 +1,5 @@
+/** ecs component (unit of composable functionality) */
+
 module re.ecs.component;
 
 import re.ecs.entity;

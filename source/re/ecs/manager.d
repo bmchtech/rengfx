@@ -1,3 +1,5 @@
+/** internal orhestration of entity/component system */
+
 module re.ecs.manager;
 
 import re.ecs.entity;
