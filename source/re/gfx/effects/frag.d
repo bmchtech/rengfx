@@ -47,6 +47,13 @@ class FragEffect : Effect {
 
     }
 
+    protected override void reload_shader() {
+        super.reload_shader();
+
+        // if reloading, we need to resync uniforms
+        sync_uniforms();
+    }
+
     public override void update() {
         super.update();
 
