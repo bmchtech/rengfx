@@ -28,7 +28,7 @@ lightweight, expressive, extensible game engine
   + wip: tilemaps with tiled
 
 ## documentation
-+ full documentation: [api docs](https://xdrie.github.io/rengfx/)
++ full documentation: [api docs](https://redthing1.github.io/rengfx/)
 + demo projects: [demos](demo/)
 + notes and tips: [doc](doc/)
 
