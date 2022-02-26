@@ -30,10 +30,11 @@ class ContentManager {
         _shd_cache = ShaderCache((shd) { raylib.UnloadShader(shd); });
     }
 
-    private const char* get_path(string path) {
+    /// get the physical path to a logical content path
+    public string get_path(string path) {
         // check if this is already a valid path
         if (std.file.exists(path)) {
-            return path.c_str();
+            return path;
         }
         auto base = string.init;
         alias join_paths = std.path.buildNormalizedPath;
@@ -45,7 +46,11 @@ class ContentManager {
                 break;
             }
         }
-        return join_paths(base, path).c_str();
+        return join_paths(base, path);
+    }
+
+    private char* get_path_cstr(string path) {
+        return get_path(path).c_str;
     }
 
     /// loads a texture from disk
@@ -53,7 +58,7 @@ class ContentManager {
         raylib.Texture2D tex;
         auto cached = _tex_cache.get(path);
         if (cached.isNull) {
-            auto image = raylib.LoadImage(get_path(path));
+            auto image = raylib.LoadImage(get_path_cstr(path));
             tex = raylib.LoadTextureFromImage(image);
             raylib.UnloadImage(image);
             _tex_cache.put(path, tex);
@@ -70,7 +75,7 @@ class ContentManager {
         raylib.Model mdl;
         auto cached = _mdl_cache.get(path);
         if (cached.isNull) {
-            mdl = raylib.LoadModel(get_path(path));
+            mdl = raylib.LoadModel(get_path_cstr(path));
             _mdl_cache.put(path, mdl);
         } else {
             mdl = cached.get;
@@ -80,7 +85,7 @@ class ContentManager {
 
     public raylib.ModelAnimation[] load_model_animations(string path) {
         uint num_loaded_anims = 0;
-        raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(get_path(path), &num_loaded_anims);
+        raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(get_path_cstr(path), &num_loaded_anims);
         auto anims = loaded_anims[0 .. num_loaded_anims]; // access array as slice
         return anims;
     }
@@ -94,8 +99,8 @@ class ContentManager {
         auto path_hash = to!string(sha1Of(vs_path ~ fs_path).toHexString);
         auto cached = _shd_cache.get(path_hash);
         if (cached.isNull || bypass_cache) {
-            auto vs = vs_path.length > 0 ? get_path(vs_path) : null;
-            auto fs = fs_path.length > 0 ? get_path(fs_path) : null;
+            auto vs = vs_path.length > 0 ? get_path_cstr(vs_path) : null;
+            auto fs = fs_path.length > 0 ? get_path_cstr(fs_path) : null;
             shd = raylib.LoadShader(vs, fs);
             if (!bypass_cache)
                 _shd_cache.put(path_hash, shd);
