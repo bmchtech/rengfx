@@ -8,7 +8,6 @@ import std.stdio;
 
 import re.util.cache;
 import re.util.interop;
-import re.util.hotreload;
 static import raylib;
 
 /// manages external content loading
