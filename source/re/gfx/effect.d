@@ -25,16 +25,20 @@ class Effect {
     }
 
     this(ReloadableShader reloadable_shader, Color color = Colors.WHITE) {
+        this.reloadable_shader = reloadable_shader;
         auto shader = reloadable_shader.reload();
         this(shader, color);
     }
 
     public void update() {
         // update the effect
-        // if hot reload is enabled, check if we need to reload the shader
-        if (reloadable_shader.changed()) {
-            // shader changed, we load it again
-            shader = reloadable_shader.reload();
+        // if hot reload is enabled
+        if (reloadable_shader) {
+            // check if we need to reload the shader
+            if (reloadable_shader.changed()) {
+                // shader changed, we load it again
+                shader = reloadable_shader.reload();
+            }
         }
     }
 
