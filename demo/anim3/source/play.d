@@ -13,7 +13,7 @@ static import raylib;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     private PostProcessor glitch_postproc;
-    private float[2] aberrationOffset = [0.002, 0];
+    private float[2] sample_offset = [0.002, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
@@ -28,7 +28,7 @@ class PlayScene : Scene3D {
 
         auto chrm_abr = new Effect(Core.content.load_shader(null,
                 "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
-        chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
+        chrm_abr.set_shader_var("sample_offset", sample_offset);
         glitch_postproc = new PostProcessor(resolution, chrm_abr);
         postprocessors ~= glitch_postproc;
 

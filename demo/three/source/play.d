@@ -11,7 +11,7 @@ static import raylib;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     private PostProcessor glitch_postproc;
-    private float[2] aberrationOffset = [0.01, 0];
+    private float[2] sample_offset = [0.01, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
@@ -57,8 +57,8 @@ class PlayScene : Scene3D {
             // make our postprocess effect fluctuate with time
             import std.math : sin;
 
-            aberrationOffset[0] = 0.010 + 0.005 * sin(Time.total_time / 2);
-            glitch_postproc.effect.set_shader_var("aberrationOffset", aberrationOffset);
+            sample_offset[0] = 0.010 + 0.005 * sin(Time.total_time / 2);
+            glitch_postproc.effect.set_shader_var("sample_offset", sample_offset);
         }
     }
 }
