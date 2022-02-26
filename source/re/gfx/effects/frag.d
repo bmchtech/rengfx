@@ -3,6 +3,7 @@ module re.gfx.effects.frag;
 import re.ng.scene;
 import re.gfx.raytypes;
 import re.gfx.effect;
+import re.util.hotreload;
 static import raylib;
 
 /// fragment shader effect
@@ -18,6 +19,15 @@ class FragEffect : Effect {
 
     this(Scene scene, Shader shader) {
         super(shader, Colors.WHITE);
+        setup(scene);
+    }
+
+    this(Scene scene, ReloadableShader reloadable_shader) {
+        super(reloadable_shader, Colors.WHITE);
+        setup(scene);
+    }
+
+    private void setup(Scene scene) {
         this.scene = scene;
 
         // initialize uniforms
@@ -37,7 +47,9 @@ class FragEffect : Effect {
 
     }
 
-    public void update() {
+    public override void update() {
+        super.update();
+
         this.set_shader_var_imm(shader_uni_frame, cast(int)(Time.frame_count - start_frame));
         this.set_shader_var_imm(shader_uni_time, Time.total_time - start_time);
     }
