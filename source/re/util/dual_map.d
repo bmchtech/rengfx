@@ -1,3 +1,5 @@
+/** bidirectional map */
+
 module re.util.dual_map;
 
 class DualMap(T1, T2) {

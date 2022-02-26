@@ -1,3 +1,5 @@
+/** caching arbitrary values */
+
 module re.util.cache;
 
 import std.array;

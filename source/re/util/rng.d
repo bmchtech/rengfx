@@ -1,3 +1,5 @@
+/** random number generator */
+
 module re.util.rng;
 
 import std.random;

@@ -1,3 +1,5 @@
+/** vector utilities */
+
 module re.math.vector_ext;
 
 import re.math.raytypes;

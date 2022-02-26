@@ -1,3 +1,5 @@
+/** postprocessing effects on any render target */
+
 module re.gfx.postprocessor;
 
 import re.gfx;

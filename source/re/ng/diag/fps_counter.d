@@ -1,4 +1,4 @@
-/** F*/
+/** 2d renderable fps counter */
 
 module re.ng.diag.fps_counter;
 

@@ -1,3 +1,5 @@
+/** utilities for runtime type reflection */
+
 module re.util.type;
 
 template name_of(alias nameType) {

@@ -13,11 +13,18 @@ lightweight, expressive, extensible game engine
 ## features
 
 + only library dependency is [`raylib`](https://github.com/xdrie/raylib)
-+ 2d and 3d graphics support
++ engine features
+  + combined, mixable 2d and 3d graphics support
+  + cross platform, system-independent graphics
+  + composable, modular game components and rendering
+  + virtual input for transparent rebinding and cross platform input
+  + vector/matrix math hidden behind nice abstractions
 + modular, data-driven Scene-Entity-Component architecture
   + full headless execution support, making unit tests simple
+  + emphasis on simplicity and readability, avoidance of unnecessary abstraction
   + multi scene layering and compositing
   + highly extensible with custom components and logic
+  + everything can be overrided or extended
 + fluent debugging
   + real time runtime debug console and inspector
 + simple and powerful glsl shaders

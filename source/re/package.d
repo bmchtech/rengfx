@@ -2,6 +2,8 @@
     The main package of RE ENGINE FX.
     
     Includes Core, Scene, Input, ECS, Tweens, Logger, and some utilities.
+
+    Core is the most important place to start, as it provides access to all key features.
 */
 
 module re;

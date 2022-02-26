@@ -1,3 +1,5 @@
+/** global engine systems */
+
 module re.ng.manager;
 
 import re.ng.scene;

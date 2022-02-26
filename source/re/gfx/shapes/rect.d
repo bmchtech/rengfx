@@ -1,3 +1,5 @@
+/** color filled rectangle */
+
 module re.gfx.shapes.rect;
 
 import re.ecs;

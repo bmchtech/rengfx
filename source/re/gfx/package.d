@@ -1,3 +1,5 @@
+/** graphics and renderables */
+
 module re.gfx;
 
 public {

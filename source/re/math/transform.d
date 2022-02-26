@@ -1,3 +1,5 @@
+/** 2d/3d combined matrix transformation abstraction layer */
+
 module re.math.transform;
 
 import re.math;

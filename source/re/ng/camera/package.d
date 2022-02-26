@@ -1,3 +1,5 @@
+/** scene cameras */
+
 module re.ng.camera;
 
 public {

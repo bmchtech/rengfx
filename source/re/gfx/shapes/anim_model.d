@@ -1,3 +1,5 @@
+/** animated 3d models */
+
 module re.gfx.shapes.anim_model;
 
 import re.ecs;

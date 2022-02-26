@@ -1,3 +1,5 @@
+/** makes the members of a class available for runtime reflection */
+
 module re.util.reflect;
 
 /// in debug mode, allows inspectors to reflect on members

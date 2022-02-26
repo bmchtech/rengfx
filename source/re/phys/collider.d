@@ -1,3 +1,5 @@
+/** 2d and 3d colliders */
+
 module re.phys.collider;
 
 import re.ecs.component;

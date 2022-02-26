@@ -1,3 +1,5 @@
+/** debug rendering utilities */
+
 module re.ng.diag.render;
 
 import re.core;

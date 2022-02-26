@@ -1,3 +1,5 @@
+/** 3d scene camera */
+
 module re.ng.camera.cam3d;
 
 import re.ecs;

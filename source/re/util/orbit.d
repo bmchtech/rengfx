@@ -1,9 +1,12 @@
+/** component for orbit motion around a point */
+
 module re.util.orbit;
 
 import re.ecs;
 import re.math;
 import re.time;
 
+/// orbits an entity around a point
 class Orbit : Component, Updatable {
     public float angle;
     public float speed;

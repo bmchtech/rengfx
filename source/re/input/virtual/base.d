@@ -1,3 +1,5 @@
+/** base virtual input */
+
 module re.input.virtual.base;
 
 import re.input;

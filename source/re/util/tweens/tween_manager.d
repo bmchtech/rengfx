@@ -1,3 +1,5 @@
+/** manager for handling and coordinating all queued tweens */
+
 module re.util.tweens.tween_manager;
 
 import re.ng.manager;

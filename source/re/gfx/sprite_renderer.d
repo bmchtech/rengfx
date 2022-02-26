@@ -1,3 +1,5 @@
+/** handles rendering of sprite data, highly extensible */
+
 module re.gfx.sprite_renderer;
 
 import re.gfx;

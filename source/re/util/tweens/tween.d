@@ -1,3 +1,5 @@
+/** bindings for tweens to common object properties to allow them to be interpolated */
+
 module re.util.tweens.tween;
 
 import re.util.tweens.tween_manager;

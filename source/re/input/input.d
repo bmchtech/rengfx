@@ -1,3 +1,5 @@
+/** provides global access to input */
+
 module re.input.input;
 
 import re.core;
