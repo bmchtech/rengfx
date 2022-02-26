@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/quickshd
+quickshd.so
+quickshd.dylib
+quickshd.dll
+quickshd.a
+quickshd.lib
+quickshd-test-*
+*.exe
+*.o
+*.obj
+*.lst
