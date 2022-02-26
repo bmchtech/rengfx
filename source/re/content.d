@@ -1,12 +1,14 @@
 module re.content;
 
-import re.util.cache;
-import re.util.interop;
 import std.string;
 import std.file;
 import std.conv;
 import std.path;
 import std.stdio;
+
+import re.util.cache;
+import re.util.interop;
+import re.util.hotreload;
 static import raylib;
 
 /// manages external content loading
@@ -80,36 +82,41 @@ class ContentManager {
     public raylib.ModelAnimation[] load_model_animations(string path) {
         uint num_loaded_anims = 0;
         raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(get_path(path), &num_loaded_anims);
-        auto anims = loaded_anims[0..num_loaded_anims]; // access array as slice
+        auto anims = loaded_anims[0 .. num_loaded_anims]; // access array as slice
         return anims;
     }
 
     /// loads a shader from disk (vertex shader, fragment shader).
     /// pass null to either arg to use the default
-    public raylib.Shader load_shader(string vs_path, string fs_path) {
+    public raylib.Shader load_shader(string vs_path, string fs_path, bool bypass_cache = false) {
         raylib.Shader shd;
         import std.digest.sha : sha1Of, toHexString;
 
         auto path_hash = to!string(sha1Of(vs_path ~ fs_path).toHexString);
         auto cached = _shd_cache.get(path_hash);
-        if (cached.isNull) {
+        if (cached.isNull || bypass_cache) {
             auto vs = vs_path.length > 0 ? get_path(vs_path) : null;
             auto fs = fs_path.length > 0 ? get_path(fs_path) : null;
             shd = raylib.LoadShader(vs, fs);
-            _shd_cache.put(path_hash, shd);
+            if (!bypass_cache)
+                _shd_cache.put(path_hash, shd);
         } else {
             shd = cached.get;
         }
         return shd;
     }
 
-    /// releases all resources
-    public void destroy() {
+    public void drop_caches() {
         // delete textures
         _tex_cache.drop();
         // delete models
         _mdl_cache.drop();
         // delete shaders
         _shd_cache.drop();
+    }
+
+    /// releases all resources
+    public void destroy() {
+        drop_caches();
     }
 }
