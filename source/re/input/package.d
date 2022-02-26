@@ -1,3 +1,5 @@
+/** engine input features */
+
 module re.input;
 
 public {

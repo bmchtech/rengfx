@@ -1,3 +1,5 @@
+/** engine math utilities */
+
 module re.math;
 
 public {

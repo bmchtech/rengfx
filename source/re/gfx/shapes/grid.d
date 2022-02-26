@@ -1,3 +1,5 @@
+/** 3d grid centered at origin */
+
 module re.gfx.shapes.grid;
 
 import re.ecs;

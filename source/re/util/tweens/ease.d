@@ -1,3 +1,5 @@
+/** tween easings */
+
 module re.util.tweens.ease;
 
 static import easings;

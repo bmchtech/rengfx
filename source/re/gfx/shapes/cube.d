@@ -1,3 +1,5 @@
+/** 3d rectangular prism */
+
 module re.gfx.shapes.cube;
 
 import re.gfx;

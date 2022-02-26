@@ -1,3 +1,5 @@
+/** scene with 2d rendering */
+
 module re.ng.scene2d;
 
 static import raylib;
@@ -21,17 +23,24 @@ abstract class Scene2D : Scene {
         cam = camera_nt.add_component(new SceneCamera2D());
     }
 
+    void render_renderable(Component component) {
+        auto renderable = cast(Renderable2D) component;
+        assert(renderable !is null, "renderable was not 2d");
+        renderable.render();
+        if (Core.debug_render) {
+            renderable.debug_render();
+        }
+    }
+
     override void render_scene() {
         raylib.BeginMode2D(cam.camera);
 
         // render 2d components
         foreach (component; ecs.storage.renderable_components) {
-            auto renderable = cast(Renderable2D) component;
-            assert(renderable !is null, "renderable was not 2d");
-            renderable.render();
-            if (Core.debug_render) {
-                renderable.debug_render();
-            }
+            render_renderable(component);
+        }
+        foreach (component; ecs.storage.updatable_renderable_components) {
+            render_renderable(component);
         }
 
         render_hook();

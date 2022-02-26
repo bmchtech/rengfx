@@ -1,3 +1,5 @@
+/** blinn-phong lighting (incomplete) */
+
 module re.gfx.lighting.blinn_phong;
 
 import re.core;

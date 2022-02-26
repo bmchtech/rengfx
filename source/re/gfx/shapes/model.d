@@ -1,3 +1,5 @@
+/** renderable 3d model */
+
 module re.gfx.shapes.model;
 
 import re.ecs;
@@ -13,9 +15,12 @@ class Model3D : Component, Renderable3D {
     /// the model
     public Model model;
     private Effect _effect;
+    public Vector3 offset = Vector3.zero;
 
     this(Model model) {
         this.model = model;
+        // default effect
+        _effect = new Effect();
     }
 
     /// gets the effect
@@ -26,7 +31,10 @@ class Model3D : Component, Renderable3D {
     /// sets the effect
     @property Effect effect(Effect value) {
         _effect = value;
-        model.materials[0].shader = _effect.shader;
+        // set shader for each material
+        for (int i = 0; i < model.materialCount; i++) {
+            model.materials[i].shader = _effect.shader;
+        }
         return value;
     }
 
@@ -35,7 +43,7 @@ class Model3D : Component, Renderable3D {
     }
 
     public void render() {
-        raylib.DrawModelEx(model, transform.position, transform.axis_angle.axis,
+        raylib.DrawModelEx(model, transform.position + offset, transform.axis_angle.axis,
                 transform.axis_angle.angle * C_RAD2DEG, transform.scale, effect.color);
     }
 

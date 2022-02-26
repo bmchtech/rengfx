@@ -4,6 +4,7 @@ import re;
 import re.gfx;
 import re.gfx.shapes.model;
 import re.gfx.shapes.grid;
+import re.gfx.shapes.cube;
 import re.ng.camera;
 import re.math;
 static import raylib;
@@ -11,22 +12,22 @@ static import raylib;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     private PostProcessor glitch_postproc;
-    private float[2] aberrationOffset = [0.005, 0];
+    private float[2] sample_offset = [0.005, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
         // load shader effects and add as a postprocessor
-        auto ascii_shd = Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
-        ascii_shd.set_shader_var_imm("c_resolution", cast(float[2])[
-                resolution.x, resolution.y
-                ]);
+        auto ascii_shd = new Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
+        ascii_shd.set_shader_var_imm("i_resolution", cast(float[3])[
+                resolution.x, resolution.y, 1.0
+            ]);
         auto ascii_postproc = new PostProcessor(resolution, ascii_shd);
         postprocessors ~= ascii_postproc;
 
-        auto chrm_abr = Effect(Core.content.load_shader(null,
+        auto chrm_abr = new Effect(Core.content.load_shader(null,
                 "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
-        chrm_abr.set_shader_var("aberrationOffset", aberrationOffset);
+        chrm_abr.set_shader_var("sample_offset", sample_offset);
         glitch_postproc = new PostProcessor(resolution, chrm_abr);
         postprocessors ~= glitch_postproc;
 
@@ -36,6 +37,8 @@ class PlayScene : Scene3D {
         auto fox = create_entity("fox", Vector3(0, 0, 0));
         auto fox_asset = Core.content.load_model("models/fox.obj");
         auto fox_model = fox.add_component(new Model3D(fox_asset));
+        auto cub = fox.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
+        cub.offset = Vector3(0, -4, 0);
 
         // add a camera to look at the fox
         cam.entity.add_component(new CameraOrbit(fox, 0.2));

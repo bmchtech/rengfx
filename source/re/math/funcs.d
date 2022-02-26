@@ -1,3 +1,5 @@
+/** math funcs */
+
 module re.math.funcs;
 
 import std.math;

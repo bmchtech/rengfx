@@ -1,10 +1,11 @@
+/** game logger */
+
 module re.util.logger;
 
 import std.stdio;
 import std.format;
 import std.conv;
 import std.datetime;
-import datefmt;
 import colorize;
 
 /// a utility class for displaying diagnostic messages
@@ -82,8 +83,8 @@ class Logger {
     }
 
     private static string formatMeta(Verbosity level) {
-        auto time = Clock.currTime();
-        return format("[%s/:%s]", shortVerbosity(level), time.format("%H:%M:%S"));
+        auto time = cast(TimeOfDay) Clock.currTime();
+        return format("[%s/%s]", shortVerbosity(level), time.toISOExtString());
     }
 
     /// a sink that accepts log messages

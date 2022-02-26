@@ -18,21 +18,24 @@ class PlayScene : Scene3D {
     private Entity light3;
 
     override void on_start() {
+        static assert(0, "NOTE TO USERS: this demo is currently broken due to physics engine changes."
+                ~ " please try another demo for now. we hope to fix this soon.");
+
         clear_color = color_rgb(224, 176, 153);
 
         // load a shader effect and add it as a postprocessor
-        auto cel_ish = Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
+        auto cel_ish = new Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
         cel_ish.set_shader_var_imm("c_threshold", 0.4f);
         cel_ish.set_shader_var_imm("c_resolution", cast(float[2])[
                 resolution.x, resolution.y
-                ]);
+            ]);
         cel_ish.set_shader_var_imm("c_outline_color", cast(float[4])[0, 0, 0, 1]);
         auto postproc = new PostProcessor(resolution, cel_ish);
         postprocessors ~= postproc;
 
         // enable scene lighting
         auto lights = add_manager(new BasicSceneLightManager());
-        lights.ambient_color = 0.6;
+        lights.ambient = 0.6;
         lights.shine_amount = 32;
 
         // enable scene physics
@@ -49,13 +52,13 @@ class PlayScene : Scene3D {
         auto floor_box = floor.add_component(new Cube(Vector3(40, 10, 40), color_rgb(91, 64, 54)));
         floor.add_component(new BoxCollider(Vector3(20, 5, 20), Vector3Zero));
         floor.add_component(new StaticBody());
-        floor_box.effect = Effect(lights.shader, color_rgb(91, 64, 54));
+        floor_box.effect = new Effect(lights.shader, color_rgb(91, 64, 54));
 
         // create a block, and assign it a physics object
         auto block = create_entity("block", Vector3(0, 5, 0));
         block.transform.orientation = Vector3(0, C_PI_4, C_PI_4); // euler angles
         auto block_cube = block.add_component(new Cube(Vector3(4, 4, 4)));
-        block_cube.effect = Effect(lights.shader, color_rgb(141, 113, 176));
+        block_cube.effect = new Effect(lights.shader, color_rgb(141, 113, 176));
         block.add_component(new BoxCollider(Vector3(2, 2, 2), Vector3Zero));
         block.add_component(new DynamicBody(64));
         block.add_component!PlayerController();
@@ -91,7 +94,7 @@ class PlayScene : Scene3D {
             auto nt = create_entity("thing", Vector3(x_off, y_off, z_off));
             nt.transform.orientation = Vector3(x_ang, y_ang, z_ang); // euler angles
             auto lil_cube = nt.add_component(new Cube(Vector3(1, 1, 1)));
-            lil_cube.effect = Effect(lights.shader, color_rgb(209, 107, 56));
+            lil_cube.effect = new Effect(lights.shader, color_rgb(209, 107, 56));
             nt.add_component(new BoxCollider(Vector3(0.5, 0.5, 0.5), Vector3Zero));
             auto bod = nt.add_component(new DynamicBody(2));
             bod.bounce = 1.1;

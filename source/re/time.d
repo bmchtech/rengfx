@@ -1,3 +1,5 @@
+/** game time */
+
 module re.time;
 static import raylib;
 

@@ -1,3 +1,5 @@
+/** string formatting */
+
 module re.util.format;
 
 import re.math;

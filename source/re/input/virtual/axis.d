@@ -1,3 +1,5 @@
+/** virtual axis input */
+
 module re.input.virtual.axis;
 
 import re.input;

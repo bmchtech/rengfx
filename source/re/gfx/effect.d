@@ -1,24 +1,68 @@
+/** shader based graphical effects */
+
 module re.gfx.effect;
 
+import std.string : toStringz;
+
 import re.gfx.raytypes;
+import re.util.hotreload;
 static import raylib;
 
 /// represents an effect
-struct Effect {
+class Effect {
     /// the shader program for the effect
     Shader shader;
     /// the tint color
-    Color color = Colors.WHITE;
+    Color color;
+    /// a reloadable shader if any
+    ReloadableShader reloadable_shader;
 
-    public void set_shader_var_imm(T)(string name, T value) {
-        T var = value;
-        set_shader_var(name, var);
+    this() {
+        this(Shader.init);
     }
 
-    public void set_shader_var(T)(string name, ref T value) {
-        import std.string : toStringz;
+    this(Shader shader, Color color = Colors.WHITE) {
+        this.shader = shader;
+        this.color = color;
+    }
 
-        auto loc = raylib.GetShaderLocation(shader, name.toStringz);
+    this(ReloadableShader reloadable_shader, Color color = Colors.WHITE) {
+        this.reloadable_shader = reloadable_shader;
+        auto shader = reloadable_shader.reload();
+        this(shader, color);
+    }
+
+    public void update() {
+        // update the effect
+        // if hot reload is enabled
+        if (reloadable_shader) {
+            // check if we need to reload the shader
+            if (reloadable_shader.changed()) {
+                // shader changed, we load it again
+                reload_shader();
+            }
+        }
+    }
+
+    protected void reload_shader() {
+        shader = reloadable_shader.reload();
+    }
+
+    /// set a uniform value to an immeditae value
+    public bool set_shader_var_imm(T)(string name, T value) {
+        T var = value;
+        return set_shader_var(name, var);
+    }
+
+    /// set a uniform value to a variable by reference
+    public bool set_shader_var(T)(string name, ref T value) {
+        auto loc = get_shader_loc(name);
+        if (loc < 0) {
+            // if the shader variable doesn't exist, return false
+            return false;
+        }
+
+        // figure out the uniform var type
         raylib.ShaderUniformDataType val_type;
         alias vartype = raylib.ShaderUniformDataType;
         static if (is(T == float)) {
@@ -41,5 +85,11 @@ struct Effect {
             static assert(0, "unrecognized shader value data type");
         }
         raylib.SetShaderValue(shader, loc, &value, val_type);
+        return true;
+    }
+
+    /// get location of uniform in shader. returns -1 if not found
+    public int get_shader_loc(string name) {
+        return raylib.GetShaderLocation(shader, name.toStringz);
     }
 }

@@ -1,3 +1,5 @@
+/** basc sprites as texture regions */
+
 module re.gfx.sprite;
 
 import re.gfx;

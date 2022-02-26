@@ -1,4 +1,12 @@
+/** diagnostic console */
+
 module re.ng.diag.console;
+
+import std.conv;
+import std.string;
+import std.array;
+import std.range;
+import std.format;
 
 import re.input.input;
 import re.core;
@@ -6,10 +14,6 @@ import re.math;
 import re.gfx;
 import re.ng.diag.default_commands;
 import re.util.interop;
-import std.conv;
-import std.string;
-import std.array;
-import std.range;
 static import raygui;
 
 /// overlay debug console
@@ -92,19 +96,24 @@ debug class Console {
 
     public void render() {
         alias pad = Core.debugger.screen_padding;
+        auto screen_br = Vector2(Core.debugger.ui_bounds.width, Core.debugger.ui_bounds.height);
+        // Core.log.info(format("screen_br: (%s", screen_br));
         auto console_bg_bounds = Rectangle(pad,
-                Core.window.height - pad - height, Core.window.width - pad * 2, height);
+            screen_br.y - pad - height, screen_br.x - pad * 2, height);
         // console background
         // raylib.DrawRectangleRec(console_bg_bounds, bg_col);
         auto bg_padding = 4;
         auto console_bounds = Rectangle(console_bg_bounds.x + bg_padding, console_bg_bounds.y + bg_padding,
-                console_bg_bounds.width - bg_padding * 2, console_bg_bounds.height - bg_padding * 2);
+            console_bg_bounds.width - bg_padding * 2, console_bg_bounds.height - bg_padding * 2);
         // console text
         if (raygui.GuiTextBox(console_bounds, console_text, 64, true)) {
             auto console_text_str = to!string(console_text);
+            // strip extra whitespace
+            console_text_str = console_text_str.strip();
             if (console_text_str.length > 0) {
                 _history_depth = 0; // we just executed a command, no longer in history
                 _history ~= console_text_str; // add to history
+                // get raw command string
                 auto raw_command = console_text_str.split(' ');
                 process_command(raw_command.front, raw_command.drop(1));
                 // pass command

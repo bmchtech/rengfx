@@ -1,3 +1,5 @@
+/** math types */
+
 module re.math.raytypes;
 
 // - raylib types

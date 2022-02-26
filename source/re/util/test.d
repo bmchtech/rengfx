@@ -1,3 +1,5 @@
+/** utilities for unit-testing core features */
+
 module re.util.test;
 
 import re.core;

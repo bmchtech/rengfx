@@ -1,3 +1,5 @@
+/** rendering extensions and utilities */
+
 module re.gfx.render_ext;
 
 import re.math;
@@ -33,5 +35,15 @@ static class RenderExt {
         // blit our render target
         draw_render_target(source, dest_rect, Colors.WHITE);
         raylib.EndTextureMode();
+    }
+
+    /// create render target with a given size
+    public static RenderTarget create_render_target(int width, int height) {
+        return raylib.LoadRenderTexture(width, height);
+    }
+
+    /// destroy render target
+    public static void destroy_render_target(RenderTarget target) {
+        raylib.UnloadRenderTexture(target);
     }
 }

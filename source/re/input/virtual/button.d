@@ -1,3 +1,5 @@
+/** virtual button input */
+
 module re.input.virtual.button;
 
 import re.input;

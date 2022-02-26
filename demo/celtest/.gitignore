@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/celtest
+celtest.so
+celtest.dylib
+celtest.dll
+celtest.a
+celtest.lib
+celtest-test-*
+*.exe
+*.o
+*.obj
+*.lst

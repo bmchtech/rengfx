@@ -24,7 +24,7 @@ class Game : Core {
 	override void initialize() {
 		default_resolution = Vector2(width / lowrez, height / lowrez);
 		content.paths ~= ["../content/", "content/"];
-		
+
 		debug {
 			raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_ALL);
 		} else {
@@ -39,7 +39,7 @@ int main(string[] args) {
 	import std.getopt : getopt, defaultGetoptPrinter;
 
 	auto help = getopt(args, "width", "window width", &width, "height", "window height",
-			&height, "lowrez", "factor by which to divide the render resolution", &lowrez);
+		&height, "lowrez", "factor by which to divide the render resolution", &lowrez);
 	if (help.helpWanted) {
 		defaultGetoptPrinter("Some information about the program.", help.options);
 		return 1;

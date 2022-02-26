@@ -1,3 +1,5 @@
+/** virtual joystick input */
+
 module re.input.virtual.joystick;
 
 import re.input;

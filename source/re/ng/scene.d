@@ -1,3 +1,5 @@
+/** represents a set of things to be drawn to screen */
+
 module re.ng.scene;
 
 import re;
@@ -64,6 +66,11 @@ abstract class Scene {
 
     }
 
+    void update_updatable(Component component) {
+        auto updatable = cast(Updatable) component;
+        updatable.update();
+    }
+
     /// called internally to update ecs. can be overridden, but super.update() must be called.
     public void update() {
         // update ecs
@@ -76,8 +83,10 @@ abstract class Scene {
 
         // update components
         foreach (component; ecs.storage.updatable_components) {
-            auto updatable = cast(Updatable) component;
-            updatable.update();
+            update_updatable(component);
+        }
+        foreach (component; ecs.storage.updatable_renderable_components) {
+            update_updatable(component);
         }
     }
 
@@ -122,12 +131,12 @@ abstract class Scene {
         if (Core.headless)
             return;
         // free any old render target
-        if (render_target != raylib.RenderTexture2D.init) {
-            raylib.UnloadRenderTexture(render_target);
+        if (render_target != RenderTarget.init) {
+            RenderExt.destroy_render_target(render_target);
         }
         // create render target
         // TODO: use scene resolution instead of window resolution
-        render_target = raylib.LoadRenderTexture(cast(int) resolution.x, cast(int) resolution.y);
+        render_target = RenderExt.create_render_target(cast(int) resolution.x, cast(int) resolution.y);
         // apply texture filter
         raylib.SetTextureFilter(render_target.texture, Core.default_filter_mode);
     }
@@ -165,7 +174,7 @@ abstract class Scene {
 
         if (!Core.headless) {
             // free render target
-            raylib.UnloadRenderTexture(render_target);
+            RenderExt.destroy_render_target(render_target);
         }
     }
 

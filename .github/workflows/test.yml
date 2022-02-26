@@ -1,0 +1,23 @@
+name: test
+on: [ push, pull_request ]
+jobs:
+  test:
+    strategy:
+      matrix:
+        # os: [ ubuntu-latest, windows-latest, macOS-latest ]
+        os: [ ubuntu-latest ]
+        dc: [ dmd-2.098.1 ]
+        arch: [ x86_64 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install X11 on Linux
+        if: matrix.os == 'ubuntu-latest'
+        # Xorg dev needed on linux
+        run: sudo apt install -y xorg-dev
+      - uses: actions/checkout@v2
+      - name: Install D compiler
+        uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: ${{ matrix.dc }}
+      - run: cat dub.sdl
+      - run: dub test --arch=${{ matrix.arch }}

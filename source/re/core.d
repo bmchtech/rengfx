@@ -1,4 +1,10 @@
+/** globally available game core, providing access to most key game services and scene control */
+
 module re.core;
+
+import std.array;
+import std.typecons;
+import std.format;
 
 import re.input;
 import re.content;
@@ -12,8 +18,6 @@ import re.gfx.render_ext;
 import re.math;
 import re.util.logger;
 import re.util.tweens.tween_manager;
-import std.array;
-import std.typecons;
 import jar;
 static import raylib;
 
@@ -66,6 +70,7 @@ abstract class Core {
     public static bool exit_on_escape_pressed = true;
 
     /// whether to automatically scale things to compensate for hidpi
+    /// NOTE: raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI also exists, but we're not using it right now
     public static bool auto_compensate_hidpi = true;
 
     /// the default render resolution for all scenes
@@ -92,7 +97,11 @@ abstract class Core {
             window.set_title(title);
             if (auto_compensate_hidpi) {
                 // resize window according to dpi scale
-                window.resize(cast(int)(window.width * window.scale_dpi), cast(int)(window.height * window.scale_dpi));
+                auto scaled_width = cast(int)(window.width * window.scale_dpi);
+                auto scaled_height = cast(int)(window.height * window.scale_dpi);
+                log.info(format("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
+                        window.width, window.height, scaled_width, scaled_height, window.scale_dpi));
+                window.resize(scaled_width, scaled_height);
             }
         }
 
@@ -290,7 +299,7 @@ unittest {
     // ensure time has passed
     auto target_time = Core.frame_limit / Core.target_fps;
     assert(isClose(Time.total_time, target_time),
-            format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
+        format("time did not pass (expected: %s, actual: %s)", target_time, Time.total_time));
 
     game.destroy(); // clean up
 

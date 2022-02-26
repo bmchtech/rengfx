@@ -11,13 +11,13 @@ static import raylib;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     private PostProcessor glitch_postproc;
-    private float[2] aberrationOffset = [0.01, 0];
+    private float[2] sample_offset = [0.01, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
         // load a shader effect and add it as a postprocessor
-        auto chrm_abr = Effect(Core.content.load_shader(null,
+        auto chrm_abr = new Effect(Core.content.load_shader(null,
                 "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
         glitch_postproc = new PostProcessor(resolution, chrm_abr);
         glitch_postproc.enabled = false;
@@ -34,7 +34,7 @@ class PlayScene : Scene3D {
         cam.entity.add_component(new CameraOrbit(block, 0.5));
 
         // enable an example shader on cube
-        auto cross_stitch = Effect(Core.content.load_shader(null,
+        auto cross_stitch = new Effect(Core.content.load_shader(null,
                 "shader/cross_stitch.frag"), Colors.PURPLE);
         auto mixAmt = 0.05f;
         cross_stitch.set_shader_var("mixAmt", mixAmt);
@@ -57,8 +57,8 @@ class PlayScene : Scene3D {
             // make our postprocess effect fluctuate with time
             import std.math : sin;
 
-            aberrationOffset[0] = 0.010 + 0.005 * sin(Time.total_time / 2);
-            glitch_postproc.effect.set_shader_var("aberrationOffset", aberrationOffset);
+            sample_offset[0] = 0.010 + 0.005 * sin(Time.total_time / 2);
+            glitch_postproc.effect.set_shader_var("sample_offset", sample_offset);
         }
     }
 }

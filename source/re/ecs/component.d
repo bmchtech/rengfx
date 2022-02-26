@@ -1,3 +1,5 @@
+/** ecs component (unit of composable functionality) */
+
 module re.ecs.component;
 
 import re.ecs.entity;
@@ -29,7 +31,8 @@ abstract class Component : ReflectableObject {
 enum ComponentType {
     Base,
     Updatable,
-    Renderable
+    Renderable,
+    UpdatableRenderable
 }
 
 /// reference to a stored component

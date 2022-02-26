@@ -1,3 +1,5 @@
+/** ecs entity (container of components) */
+
 module re.ecs.entity;
 
 import std.array;
@@ -120,4 +122,54 @@ class Entity {
 
         return format("Entity[%d, %s]", id, name);
     }
+}
+
+@("ecs-entity-basic")
+unittest {
+    import std.string : format;
+    import re.ecs.renderable;
+    import re.ecs.updatable;
+
+    static class Thing1 : Component {
+    }
+
+    static class Thing2 : Component, Updatable {
+        void update() {
+        }
+    }
+
+    auto ecs = new EntityManager();
+    auto nt = ecs.create_entity();
+
+    // try adding stuff
+    // insert 6 thing1, and 4 thing2
+    auto thing11 = nt.add_component(new Thing1());
+    auto thing12 = nt.add_component(new Thing1());
+    auto thing13 = nt.add_component(new Thing1());
+    auto thing14 = nt.add_component(new Thing1());
+    auto thing15 = nt.add_component(new Thing1());
+    auto thing16 = nt.add_component(new Thing1());
+    auto thing21 = nt.add_component(new Thing2());
+    auto thing22 = nt.add_component(new Thing2());
+    auto thing23 = nt.add_component(new Thing2());
+    auto thing24 = nt.add_component(new Thing2());
+
+    // check that we have the right number of components
+    auto thing1s = nt.get_components!Thing1();
+    assert(thing1s.length == 6, format("expected 6 thing1s, got %d", thing1s.length));
+
+    auto thing2s = nt.get_components!Thing2();
+    assert(thing2s.length == 4, format("expected 4 thing2s, got %d", thing2s.length));
+
+    // try removing random stuff
+    nt.remove_component(thing13);
+    thing1s = nt.get_components!Thing1();
+    assert(thing1s.length == 5, format("expected 5 thing1s, got %d", thing1s.length));
+    nt.remove_component(thing11);
+    thing1s = nt.get_components!Thing1();
+    assert(thing1s.length == 4, format("expected 4 thing1s, got %d", thing1s.length));
+
+    nt.remove_component(thing22);
+    thing2s = nt.get_components!Thing2();
+    assert(thing2s.length == 3, format("expected 3 thing2s, got %d", thing2s.length));
 }
