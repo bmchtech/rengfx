@@ -1,3 +1,5 @@
+/** F*/
+
 module re.ng.diag.fps_counter;
 
 import re.core;
@@ -9,6 +11,14 @@ import re.util.interop;
 static import raylib;
 
 class FPSCounter : Component, Renderable2D {
+    int font_size;
+    Color color;
+
+    this(int font_size, Color color = Colors.WHITE) {
+        this.font_size = font_size;
+        this.color = color;
+    }
+
     @property public Rectangle bounds() {
         return Rectangle(transform.position2.x, transform.position2.y, 60, 10);
     }
@@ -16,7 +26,7 @@ class FPSCounter : Component, Renderable2D {
     void render() {
         auto fps_str = format("FPS: %s", Core.fps);
         raylib.DrawText(fps_str.c_str(), cast(int) transform.position2.x,
-                cast(int) transform.position2.y, 4, raylib.Colors.RED);
+            cast(int) transform.position2.y, font_size, color);
     }
 
     void debug_render() {
