@@ -7,6 +7,8 @@ public {
     import re.math.transform;
     import re.math.bounds;
     import re.math.vector_ext;
+    import re.math.rectangle_ext;
+    import re.math.matrix_ext;
 
     import std.math;
 

@@ -9,6 +9,8 @@ public {
     import raylib : Rectangle;
     import raylib : BoundingBox;
     static import raymath;
+
+    alias Matrix4 = Matrix;
 }
 
 /// represents an angle around a specified axis

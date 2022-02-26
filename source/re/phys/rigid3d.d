@@ -3,6 +3,11 @@
 module re.phys.rigid3d;
 
 version (physics) {
+    import std.math;
+    import std.format;
+    import std.typecons;
+    import std.container.array;
+
     import re.ecs.component;
     import re.ecs.updatable;
     import re.math;
@@ -12,12 +17,8 @@ version (physics) {
     import re.ng.scene;
     import re.phys.collider;
     import re.util.dual_map;
-    import std.math;
-    import std.string : format;
-    import std.typecons;
-
     import re.util.newtonphys;
-
+    import re.phys.newton3d;
     import newton = bindbc.newton;
 
     /// represents a manager for physics bodies
@@ -39,29 +40,19 @@ version (physics) {
         /// used to track time to keep physics timestep fixed
         private float _phys_time = 0;
 
-        private PhysicsBody3D[rb.RigidBody] _bodies;
-
-        /// the number of dynamic bodies in this physics world
-        @property public size_t dynamic_body_count() {
-            return world.dynamicBodies.length;
-        }
-
-        /// the number of static bodies in this physics world
-        @property public size_t static_body_count() {
-            return world.staticBodies.length;
-        }
+        private PhysicsBody3D[newton.NewtonBody] _bodies;
 
         /// the total number of bodies in this physics world
         @property public size_t body_count() {
-            return dynamic_body_count + static_body_count;
+            return newton.NewtonWorldGetBodyCount(&world);
         }
 
         override void setup() {
-            world = newton.NewtonCreate(null, null);
+            world = newton.NewtonCreate();
 
             // set to iterative (1) mode https://newtondynamics.com/wiki/index.php/NewtonSetSolverIterations
             newton.NewtonSetSolverIterations(&world, 1);
-            
+
             // world.gravity = convert_vec3(gravity);
             // _timestep = 1f / Core.target_fps; // set target _timestep
         }
@@ -81,7 +72,7 @@ version (physics) {
                 // // sync FROM bodies: physical properties (mass, inertia)
                 // // sync TO bodies: transforms, momentum
                 // foreach (comp; _bodies.byValue()) {
-                //     rb.RigidBody bod = comp._phys_body;
+                //     newton.NewtonBody bod = comp._phys_body;
 
                 //     // sync properties -> physics engine
                 //     if (abs(bod.mass - comp.mass) > float.epsilon) {
@@ -124,7 +115,7 @@ version (physics) {
                 newton.NewtonUpdate(&world, _timestep);
 
                 // foreach (comp; _bodies.byValue()) {
-                //     rb.RigidBody bod = comp._phys_body;
+                //     newton.NewtonBody bod = comp._phys_body;
 
                 //     // sync physics engine -> components
 
@@ -180,16 +171,29 @@ version (physics) {
             body_comp._shapes.clear();
         }
 
+        private NewtonRigidBody createDynamicBody(NewtonCollisionShape shape, float mass) {
+            NewtonRigidBody b = New!NewtonRigidBody(shape, mass, this, this);
+            b.dynamic = true;
+            // TODO: store a list of bodies
+            return b;
+        }
+
+        private NewtonRigidBody createStaticBody(NewtonCollisionShape shape) {
+            auto b = createDynamicBody(shape, 0.0f);
+            b.dynamic = false;
+            return b;
+        }
+
         /// registers a body
         private void register(PhysicsBody3D body_comp) {
-            rb.RigidBody bod;
+            newton.NewtonBody bod;
             switch (body_comp._body_type) {
             case PhysicsBody3D.BodyType.Static:
                 bod = world.addStaticBody(convert_vec3(body_comp.transform.position));
                 break;
             case PhysicsBody3D.BodyType.Dynamic:
                 bod = world.addDynamicBody(convert_vec3(body_comp.transform.position),
-                        body_comp.mass);
+                    body_comp.mass);
                 break;
             default:
                 assert(0);
@@ -287,7 +291,7 @@ version (physics) {
 
         /// raycast from a physics body in a certain direction, excluding the source body
         public Nullable!RaycastResult raycast_from(PhysicsBody3D source,
-                Vector3 offset, Vector3 direction, float dist) {
+            Vector3 offset, Vector3 direction, float dist) {
             // we want to exclude this body, so we're temporarily going to disable it
             source._phys_body.raycastable = false;
             auto res = raycast(source.transform.position + offset, direction, dist);
@@ -307,9 +311,9 @@ version (physics) {
     abstract class PhysicsBody3D : Component {
         mixin Reflect;
         // - references to things in the physics engine
-        private rb.RigidBody _phys_body;
-        // private shape.ShapeComponent[] _phys_shapes;
-        private Collider[shape.ShapeComponent] _shapes;
+        private newton.NewtonBody _phys_body;
+        // private newton.NewtonCollision*[] _phys_shapes;
+        private Collider[newton.NewtonCollision* ] _shapes;
 
         // - physical properties
         /// object mass
@@ -346,9 +350,9 @@ version (physics) {
         }
 
         // - used to queue forces and impulses to be applied by the physics engine
-        private DynamicArray!VecAtPoint _forces;
-        private DynamicArray!Vector3 _torques;
-        private DynamicArray!VecAtPoint _impulses;
+        private Array!VecAtPoint _forces;
+        private Array!Vector3 _torques;
+        private Array!VecAtPoint _impulses;
 
         private struct VecAtPoint {
             Vector3 value;
@@ -523,13 +527,13 @@ version (physics) {
         auto shape1 = bod._shapes.keys[0];
         immutable auto collider1_size_x = (cast(geom.GeomBox)(shape1.geometry)).halfSize.x;
         assert(collider1_size_x == 1,
-                "collider #1 size from physics engine does not match provided collider size");
+            "collider #1 size from physics engine does not match provided collider size");
 
         // sync the colliders, then ensure that the registration is different
         scn.reload_colliders();
         auto shape2 = bod._shapes.keys[0];
         assert(shape1 != shape2,
-                "colliders were synced, which was supposed to reset collider registration, but entry was not changed");
+            "colliders were synced, which was supposed to reset collider registration, but entry was not changed");
 
         // replace the colliders
         scn.replace_colliders();
@@ -537,7 +541,7 @@ version (physics) {
         auto shape3 = bod._shapes.keys[0];
         immutable auto collider3_size_x = (cast(geom.GeomBox)(shape3.geometry)).halfSize.x;
         assert(collider3_size_x == 2,
-                "collider #3 size from physics engine does not match replaced collider size");
+            "collider #3 size from physics engine does not match replaced collider size");
 
         test.game.destroy();
     }
