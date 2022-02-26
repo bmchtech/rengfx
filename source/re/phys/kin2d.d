@@ -1,3 +1,5 @@
+/** 2d kinematic body */
+
 module re.phys.kin2d;
 
 import re.ecs.component;
