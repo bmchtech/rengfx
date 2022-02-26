@@ -37,9 +37,13 @@ class Effect {
             // check if we need to reload the shader
             if (reloadable_shader.changed()) {
                 // shader changed, we load it again
-                shader = reloadable_shader.reload();
+                reload_shader();
             }
         }
+    }
+
+    protected void reload_shader() {
+        shader = reloadable_shader.reload();
     }
 
     /// set a uniform value to an immeditae value
