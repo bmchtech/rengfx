@@ -33,33 +33,37 @@ version (physics) {
         public Vector3 gravity = Vector3(0.0f, -9.80665f, 0.0f); // earth's gravity
 
         /// the internal newton physics world
-        private newton.NewtonWorld world;
+        private newton.NewtonWorld* world;
+
+        /// some cursed dlib stuff
+        private NewtonWorldManager manager;
 
         /// physics target timestep
         private float _timestep;
         /// used to track time to keep physics timestep fixed
         private float _phys_time = 0;
 
-        private PhysicsBody3D[newton.NewtonBody] _bodies;
+        private PhysicsBody3D[NewtonRigidBody] _bodies;
 
         /// the total number of bodies in this physics world
         @property public size_t body_count() {
-            return newton.NewtonWorldGetBodyCount(&world);
+            return newton.NewtonWorldGetBodyCount(world);
         }
 
         override void setup() {
             world = newton.NewtonCreate();
+            manager = new NewtonWorldManager(world);
 
             // set to iterative (1) mode https://newtondynamics.com/wiki/index.php/NewtonSetSolverIterations
-            newton.NewtonSetSolverIterations(&world, 1);
+            newton.NewtonSetSolverIterations(world, 1);
 
             // world.gravity = convert_vec3(gravity);
             // _timestep = 1f / Core.target_fps; // set target _timestep
         }
 
         override void destroy() {
-            newton.NewtonDestroyAllBodies(&world);
-            newton.NewtonDestroy(&world);
+            newton.NewtonDestroyAllBodies(world);
+            newton.NewtonDestroy(world);
         }
 
         override void update() {
@@ -72,7 +76,7 @@ version (physics) {
                 // // sync FROM bodies: physical properties (mass, inertia)
                 // // sync TO bodies: transforms, momentum
                 // foreach (comp; _bodies.byValue()) {
-                //     newton.NewtonBody bod = comp._phys_body;
+                //     NewtonRigidBody bod = comp._phys_body;
 
                 //     // sync properties -> physics engine
                 //     if (abs(bod.mass - comp.mass) > float.epsilon) {
@@ -112,10 +116,10 @@ version (physics) {
                 // world.gravity = convert_vec3(gravity);
 
                 // world.update(_timestep);
-                newton.NewtonUpdate(&world, _timestep);
+                newton.NewtonUpdate(world, _timestep);
 
                 // foreach (comp; _bodies.byValue()) {
-                //     newton.NewtonBody bod = comp._phys_body;
+                //     NewtonRigidBody bod = comp._phys_body;
 
                 //     // sync physics engine -> components
 
@@ -159,87 +163,87 @@ version (physics) {
 
         /// unregister all colliders in this body
         private void unregister_colliders(PhysicsBody3D body_comp) {
-            import std.range : front;
-            import std.algorithm : countUntil, remove;
+            // import std.range : front;
+            // import std.algorithm : countUntil, remove;
 
-            // we need to remove from the world each collider that we internally have registered to that body
-            foreach (shape; body_comp._shapes.byKey()) {
-                world.shapeComponents.removeFirst(shape);
-            }
+            // // we need to remove from the world each collider that we internally have registered to that body
+            // foreach (shape; body_comp._shapes.byKey()) {
+            //     world.shapeComponents.removeFirst(shape);
+            // }
 
-            // then clear the internal collider list
-            body_comp._shapes.clear();
+            // // then clear the internal collider list
+            // body_comp._shapes.clear();
         }
 
-        private NewtonRigidBody createDynamicBody(NewtonCollisionShape shape, float mass) {
-            NewtonRigidBody b = New!NewtonRigidBody(shape, mass, this, this);
-            b.dynamic = true;
-            // TODO: store a list of bodies
-            return b;
-        }
+        // private NewtonRigidBody createDynamicBody(NewtonCollisionShape shape, float mass) {
+        //     NewtonRigidBody b = New!NewtonRigidBody(shape, mass, this, this);
+        //     b.dynamic = true;
+        //     // TODO: store a list of bodies
+        //     return b;
+        // }
 
-        private NewtonRigidBody createStaticBody(NewtonCollisionShape shape) {
-            auto b = createDynamicBody(shape, 0.0f);
-            b.dynamic = false;
-            return b;
-        }
+        // private NewtonRigidBody createStaticBody(NewtonCollisionShape shape) {
+        //     auto b = createDynamicBody(shape, 0.0f);
+        //     b.dynamic = false;
+        //     return b;
+        // }
 
         /// registers a body
         private void register(PhysicsBody3D body_comp) {
-            newton.NewtonBody bod;
-            switch (body_comp._body_type) {
-            case PhysicsBody3D.BodyType.Static:
-                bod = world.addStaticBody(convert_vec3(body_comp.transform.position));
-                break;
-            case PhysicsBody3D.BodyType.Dynamic:
-                bod = world.addDynamicBody(convert_vec3(body_comp.transform.position),
-                    body_comp.mass);
-                break;
-            default:
-                assert(0);
-            }
+            // NewtonRigidBody bod;
+            // switch (body_comp._body_type) {
+            // case PhysicsBody3D.BodyType.Static:
+            //     bod = world.addStaticBody(convert_vec3(body_comp.transform.position));
+            //     break;
+            // case PhysicsBody3D.BodyType.Dynamic:
+            //     bod = world.addDynamicBody(convert_vec3(body_comp.transform.position),
+            //         body_comp.mass);
+            //     break;
+            // default:
+            //     assert(0);
+            // }
 
-            bod.orientation = convert_quat(body_comp.transform.orientation);
+            // bod.rotation = convert_quat(body_comp.transform.orientation);
 
-            // update registration
-            body_comp._phys_body = bod;
-            _bodies[bod] = body_comp;
+            // // update registration
+            // body_comp._phys_body = bod;
+            // _bodies[bod] = body_comp;
 
-            // add colliders
-            register_colliders(body_comp);
+            // // add colliders
+            // register_colliders(body_comp);
 
-            // sync properties
-            sync_properties(body_comp);
+            // // sync properties
+            // sync_properties(body_comp);
 
-            // mark as synced
-            body_comp.physics_synced = true;
+            // // mark as synced
+            // body_comp.physics_synced = true;
         }
 
         /// unregisters a body
         private void unregister(PhysicsBody3D body_comp) {
-            // remove colliders
-            unregister_colliders(body_comp);
+            // // remove colliders
+            // unregister_colliders(body_comp);
 
-            auto bod = body_comp._phys_body;
+            // auto bod = body_comp._phys_body;
 
-            // remove body
-            switch (body_comp._body_type) {
-            case PhysicsBody3D.BodyType.Static:
-                world.staticBodies.removeFirst(bod);
-                break;
-            case PhysicsBody3D.BodyType.Dynamic:
-                world.dynamicBodies.removeFirst(bod);
-                break;
-            default:
-                assert(0);
-            }
+            // // remove body
+            // switch (body_comp._body_type) {
+            // case PhysicsBody3D.BodyType.Static:
+            //     world.staticBodies.removeFirst(bod);
+            //     break;
+            // case PhysicsBody3D.BodyType.Dynamic:
+            //     world.dynamicBodies.removeFirst(bod);
+            //     break;
+            // default:
+            //     assert(0);
+            // }
 
-            // mark as unsynced
-            body_comp.physics_synced = false;
+            // // mark as unsynced
+            // body_comp.physics_synced = false;
 
-            // clear registration
-            _bodies.remove(bod);
-            body_comp._phys_body = null;
+            // // clear registration
+            // _bodies.remove(bod);
+            // body_comp._phys_body = null;
         }
 
         /// sync a body's colliders in the physics engine, necessary when shapes change
@@ -254,37 +258,37 @@ version (physics) {
             body_comp._phys_body.position = convert_vec3(body_comp.transform.position);
 
             // sync rotation
-            body_comp._phys_body.orientation = convert_quat(body_comp.transform.orientation);
+            body_comp._phys_body.rotation = convert_quat(body_comp.transform.orientation);
         }
 
         /// sync physical properties from body to physics engine
         private void sync_properties(PhysicsBody3D body_comp) {
             auto bod = body_comp._phys_body;
-            if (body_comp.custom_gravity) {
-                bod.useOwnGravity = true;
-                bod.gravity = convert_vec3(body_comp.gravity);
-            }
-            bod.damping = body_comp.damping;
-            bod.bounce = body_comp.bounce;
-            bod.friction = body_comp.friction;
+            // if (body_comp.custom_gravity) {
+            //     bod.useOwnGravity = true;
+            //     bod.gravity = convert_vec3(body_comp.gravity);
+            // }
+            // bod.damping = body_comp.damping;
+            // bod.bounce = body_comp.bounce;
+            // bod.friction = body_comp.friction;
         }
 
         /// cast a ray of a given length in a given direction and return the result. null if no hits.
         public Nullable!RaycastResult raycast(Vector3 start, Vector3 direction, float dist) {
-            import std.algorithm.searching : countUntil;
+            // import std.algorithm.searching : countUntil;
 
-            dm_ray.CastResult cr;
-            if (world.raycast(convert_vec3(start), convert_vec3(direction), dist, cr, true, true)) {
-                // get matching physics body
-                auto body_comp = _bodies[cr.rbody];
-                auto res = RaycastResult(convert_vec3(cr.point), convert_vec3(cr.normal), body_comp);
-                // get matching collider
-                if (cr.shape !is null) {
-                    auto col = body_comp._shapes[cr.shape];
-                    res.collider = Nullable!Collider(col);
-                }
-                return Nullable!RaycastResult(res);
-            }
+            // dm_ray.CastResult cr;
+            // if (world.raycast(convert_vec3(start), convert_vec3(direction), dist, cr, true, true)) {
+            //     // get matching physics body
+            //     auto body_comp = _bodies[cr.rbody];
+            //     auto res = RaycastResult(convert_vec3(cr.point), convert_vec3(cr.normal), body_comp);
+            //     // get matching collider
+            //     if (cr.shape !is null) {
+            //         auto col = body_comp._shapes[cr.shape];
+            //         res.collider = Nullable!Collider(col);
+            //     }
+            //     return Nullable!RaycastResult(res);
+            // }
             // no result
             return Nullable!RaycastResult.init;
         }
@@ -311,7 +315,7 @@ version (physics) {
     abstract class PhysicsBody3D : Component {
         mixin Reflect;
         // - references to things in the physics engine
-        private newton.NewtonBody _phys_body;
+        private NewtonRigidBody _phys_body;
         // private newton.NewtonCollision*[] _phys_shapes;
         private Collider[newton.NewtonCollision* ] _shapes;
 
@@ -376,17 +380,17 @@ version (physics) {
 
         /// apply an impulse to the physics body
         public void apply_impulse(Vector3 value, Vector3 pos) {
-            _impulses.append(VecAtPoint(value, pos));
+            _impulses.insertBack(VecAtPoint(value, pos));
         }
 
         /// apply a force to the physics body
         public void apply_force(Vector3 value, Vector3 pos) {
-            _forces.append(VecAtPoint(value, pos));
+            _forces.insertBack(VecAtPoint(value, pos));
         }
 
         /// apply a torque to the physics body
         public void apply_torque(Vector3 value) {
-            _torques.append(value);
+            _torques.insertBack(value);
         }
 
         /// notify physics engine about new physical properties, such as gravity

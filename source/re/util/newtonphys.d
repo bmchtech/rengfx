@@ -5,7 +5,7 @@ version (physics) {
     import re.math;
 
     struct newton_vector {
-        align(4):
+    align(4):
         newton.dFloat x = 0;
         newton.dFloat y = 0;
         newton.dFloat z = 0;
@@ -13,7 +13,7 @@ version (physics) {
     }
 
     struct newton_matrix {
-        align(4):
+    align(4):
         newton_vector front;
         newton_vector up;
         newton_vector right;
@@ -21,12 +21,24 @@ version (physics) {
     }
 
     pragma(inline, true) {
-        static newton_vector convert_vec3(const(Vector3) vec) {
-            return newton_vector(vec.x, vec.y, vec.z, 1.0);
+        // static newton_vector convert_vec3(const(Vector3) vec) {
+        //     return newton_vector(vec.x, vec.y, vec.z, 1.0);
+        // }
+
+        // static Vector3 convert_vec3(const(newton_vector) vec) {
+        //     return Vector3(vec.x, vec.y, vec.z);
+        // }
+
+        static Vector4 convert_vec3(const(Vector3) vec) {
+            return Vector4(vec.x, vec.y, vec.z, 1.0);
         }
 
-        static Vector3 convert_vec3(const(newton_vector) vec) {
+        static Vector3 convert_vec3(const(Vector4) vec) {
             return Vector3(vec.x, vec.y, vec.z);
+        }
+
+        static Quaternion convert_quat(const(Quaternion) quat) {
+            return quat;
         }
 
         // static Quaternion convert_quat(const(dl_quat.Quaternionf) quat) {
