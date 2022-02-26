@@ -1,3 +1,5 @@
+/** utilities for interop with c */
+
 module re.util.interop;
 
 import std.utf;

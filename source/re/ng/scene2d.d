@@ -1,3 +1,5 @@
+/** scene with 2d rendering */
+
 module re.ng.scene2d;
 
 static import raylib;

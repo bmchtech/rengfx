@@ -1,3 +1,5 @@
+/** default console commands */
+
 module re.ng.diag.default_commands;
 
 import std.range;

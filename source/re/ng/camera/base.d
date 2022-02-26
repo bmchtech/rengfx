@@ -1,3 +1,5 @@
+/** scene camera */
+
 module re.ng.camera.base;
 
 import re.ecs;

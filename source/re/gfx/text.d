@@ -1,3 +1,5 @@
+/** renderable text */
+
 module re.gfx.text;
 
 import re.ecs;

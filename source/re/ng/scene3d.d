@@ -1,3 +1,5 @@
+/** scene with 3d rendering */
+
 module re.ng.scene3d;
 
 static import raylib;

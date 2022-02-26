@@ -1,3 +1,5 @@
+/** 2d/3d bounds and bounding boxes */
+
 module re.math.bounds;
 
 import std.algorithm.comparison;

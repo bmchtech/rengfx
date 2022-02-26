@@ -1,3 +1,5 @@
+/** diagnostic console */
+
 module re.ng.diag.console;
 
 import std.conv;

@@ -1,3 +1,5 @@
+/** color functions and utilities */
+
 module re.gfx.color_ext;
 
 import re.gfx.raytypes;

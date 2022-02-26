@@ -1,3 +1,5 @@
+/** shader based graphical effects */
+
 module re.gfx.effect;
 
 import std.string : toStringz;

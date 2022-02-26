@@ -1,3 +1,5 @@
+/** globally available game core, providing access to most key game services and scene control */
+
 module re.core;
 
 import std.array;

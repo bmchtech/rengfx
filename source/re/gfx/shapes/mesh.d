@@ -1,3 +1,5 @@
+/** renderable mesh, used for procedural meches only. model3d is used for 3d models */
+
 module re.gfx.shapes.mesh;
 
 import re.ecs;

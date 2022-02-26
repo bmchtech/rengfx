@@ -1,3 +1,5 @@
+/** runtime debug inspector */
+
 module re.ng.diag.inspector;
 
 import re.core;

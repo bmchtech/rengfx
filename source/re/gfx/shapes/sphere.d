@@ -1,3 +1,5 @@
+/** 3d sphere */
+
 module re.gfx.shapes.sphere;
 
 import re.gfx;

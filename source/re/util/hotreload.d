@@ -1,3 +1,9 @@
+/**
+    hot-reloading functionality
+
+    currently can reload any file based assets, including shaders, textures, etc.
+*/
+
 module re.util.hotreload;
 
 import std.format;

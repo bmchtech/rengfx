@@ -1,3 +1,5 @@
+/** engine diagnostics */
+
 module re.ng.diag;
 
 public {

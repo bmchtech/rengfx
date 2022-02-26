@@ -1,3 +1,5 @@
+/** renderable 3d model */
+
 module re.gfx.shapes.model;
 
 import re.ecs;

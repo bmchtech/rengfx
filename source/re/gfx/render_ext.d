@@ -1,3 +1,5 @@
+/** rendering extensions and utilities */
+
 module re.gfx.render_ext;
 
 import re.math;

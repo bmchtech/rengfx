@@ -1,3 +1,5 @@
+/** system window */
+
 module re.gfx.window;
 
 import re.core;

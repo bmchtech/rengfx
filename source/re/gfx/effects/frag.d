@@ -1,3 +1,5 @@
+/** fragment shader effects with auto-synced uniforms */
+
 module re.gfx.effects.frag;
 
 import re.ng.scene;

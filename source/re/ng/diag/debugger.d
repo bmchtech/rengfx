@@ -1,3 +1,5 @@
+/** provides runtime debugging functionality in an overlay */
+
 module re.ng.diag.debugger;
 
 import std.format;

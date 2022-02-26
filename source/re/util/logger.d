@@ -1,3 +1,5 @@
+/** game logger */
+
 module re.util.logger;
 
 import std.stdio;

@@ -1,3 +1,5 @@
+/** basic lighting */
+
 module re.gfx.lighting.basic;
 
 import re.core;

@@ -1,3 +1,5 @@
+/** rectangle utilities */
+
 module re.math.rectangle_ext;
 
 import re.math.raytypes;

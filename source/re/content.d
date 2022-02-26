@@ -1,3 +1,5 @@
+/** content/asset loader and manager */
+
 module re.content;
 
 import std.string;

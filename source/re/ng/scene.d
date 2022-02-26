@@ -1,3 +1,5 @@
+/** represents a set of things to be drawn to screen */
+
 module re.ng.scene;
 
 import re;

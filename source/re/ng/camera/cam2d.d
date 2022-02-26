@@ -1,3 +1,5 @@
+/** 2d scene camera */
+
 module re.ng.camera.cam2d;
 
 import re.ecs;

@@ -1,3 +1,5 @@
+/** raylib types */
+
 module re.gfx.raytypes;
 
 static import raylib;
