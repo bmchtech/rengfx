@@ -1,5 +1,7 @@
 module re.util.hotreload;
 
+import std.format;
+
 import re.core;
 import re.content;
 import re.util.interop;
@@ -20,6 +22,8 @@ class ReloadableFile(T) : Reloadable!T {
     }
 
     protected long get_file_mod_time(string file) {
+        if (file == null)
+            return 0;
         return raylib.GetFileModTime(file.c_str);
     }
 
@@ -58,12 +62,19 @@ class ReloadableShader : ReloadableFile!Shader {
     private enum FS_INDEX = 1;
 
     this(string vs_path, string fs_path) {
+        if (vs_path)
+            vs_path = Core.content.get_path(vs_path);
+        if (fs_path)
+            fs_path = Core.content.get_path(fs_path);
         super([vs_path, fs_path]);
     }
 
     override Shader reload() {
         // load shader, bypassing cache
-        return Core.content.load_shader(source_files[VS_INDEX], source_files[FS_INDEX], true);
+        auto vs_path = source_files[VS_INDEX];
+        auto fs_path = source_files[FS_INDEX];
+        Core.log.info(format("reloading shader: (vs: %s, fs: %s)", vs_path, fs_path));
+        return Core.content.load_shader(vs_path, fs_path, true);
     }
 }
 
