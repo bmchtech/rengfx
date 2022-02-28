@@ -27,7 +27,7 @@ configuration "lib-minimal" {
 
 configuration "unittest" {
     # test runner
-    dependency "silly" version="~>1.0.2"
+    dependency "silly" version="~>1.1.1"
 
     # - test additional features
 
