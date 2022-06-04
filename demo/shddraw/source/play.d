@@ -49,6 +49,7 @@ class PlayScene : Scene3D {
         // enable audio
         auto audio = new AudioManager();
         add_manager(audio);
+        audio.play_music(Core.content.load_music("audio/50_50.mp3"));
     }
 
     override void update() {
