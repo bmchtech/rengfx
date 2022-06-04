@@ -27,6 +27,7 @@ class ContentManager {
     private KeyedCache!Texture2D texture_cache;
     private KeyedCache!Model model_cache;
     private KeyedCache!Shader shader_cache;
+    private KeyedCache!Music music_cache;
 
     /// initializes the content manager
     this() {
@@ -34,6 +35,7 @@ class ContentManager {
         texture_cache = KeyedCache!Texture2D(tex => raylib.UnloadTexture(tex));
         model_cache = KeyedCache!Model(mdl => raylib.UnloadModel(mdl));
         shader_cache = KeyedCache!Shader(shd => raylib.UnloadShader(shd));
+        music_cache = KeyedCache!Music(mus => raylib.UnloadMusicStream(mus));
     }
 
     /// get the physical path to a logical content path
@@ -66,6 +68,8 @@ class ContentManager {
             return model_cache;
         } else static if (is(T == Shader)) {
             return shader_cache;
+        } else static if (is(T == Music)) {
+            return music_cache;
         } else {
             static assert(0, format("no cache found for type %s", typeof(T)));
         }
@@ -107,6 +111,7 @@ class ContentManager {
 
     /// loads a shader from disk (vertex shader, fragment shader).
     /// pass null to either arg to use the default
+    /// since loading shaders is a bit of a pain, the loader uses custom logic
     public Optional!Shader load_shader(string vs_path, string fs_path, bool bypass_cache = false) {
         raylib.Shader shd;
         import std.digest.sha : sha1Of, toHexString;
@@ -133,20 +138,15 @@ class ContentManager {
     }
 
     /// loads music from disk
-    public raylib.Music load_music(string file_path) {
-        if (!exists(get_path(file_path)))
-            enforce(0, format("music file not found: %s", file_path));
-        return raylib.LoadMusicStream(get_path_cstr(file_path));
-    }
-
-    public void unload_music(raylib.Music music) {
-        raylib.UnloadMusicStream(music);
+    public Optional!Music load_music(string file_path) {
+        return load_cached_asset!Music(file_path, (x) => raylib.LoadMusicStream(x.c_str));
     }
 
     public void drop_caches() {
         cache_for!Texture2D().drop();
         cache_for!Model().drop();
         cache_for!Shader().drop();
+        cache_for!Music().drop();
     }
 
     /// releases all resources
