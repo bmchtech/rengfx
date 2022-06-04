@@ -13,6 +13,7 @@ import re.ng.camera;
 import re.math;
 import re.util.orbit;
 import re.util.hotreload;
+import re.audio;
 static import raylib;
 
 import app;
@@ -44,6 +45,10 @@ class PlayScene : Scene3D {
         shd_present = new FragEffect(this, new ReloadableShader(null, present_shd_path));
         present_p = new PostProcessor(resolution, shd_present);
         postprocessors ~= present_p;
+
+        // enable audio
+        auto audio = new AudioManager();
+        add_manager(audio);
     }
 
     override void update() {
