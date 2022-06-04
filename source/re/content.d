@@ -7,6 +7,7 @@ import std.file;
 import std.conv;
 import std.path;
 import std.stdio;
+import std.exception: enforce;
 
 import re.util.cache;
 import re.util.interop;
@@ -110,6 +111,16 @@ class ContentManager {
             shd = cached.get;
         }
         return shd;
+    }
+
+    /// loads music from disk
+    public raylib.Music load_music(string file_path) {
+        if (!exists(get_path(file_path))) enforce(0, format("music file not found: %s", file_path));
+        return raylib.LoadMusicStream(get_path_cstr(file_path));
+    }
+
+    public void unload_music(raylib.Music music) {
+        raylib.UnloadMusicStream(music);
     }
 
     public void drop_caches() {
