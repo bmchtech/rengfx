@@ -12,6 +12,7 @@ import re.core;
 import re.content;
 import re.util.interop;
 import re.gfx.raytypes;
+import optional;
 static import raylib;
 
 interface Reloadable(T) {
@@ -80,7 +81,11 @@ class ReloadableShader : ReloadableFile!Shader {
         auto vs_path = source_files[VS_INDEX];
         auto fs_path = source_files[FS_INDEX];
         Core.log.info(format("reloading shader: (vs: %s, fs: %s)", vs_path, fs_path));
-        return Core.content.load_shader(vs_path, fs_path, true);
+        auto maybe_shader = Core.content.load_shader(vs_path, fs_path, true);
+        if (maybe_shader == none) {
+            assert(0, "failed to reload shader");
+        }
+        return maybe_shader.front;
     }
 }
 

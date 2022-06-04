@@ -10,6 +10,7 @@ import re.gfx;
 import re.math;
 import std.algorithm;
 import std.container.array;
+import optional;
 static import raylib;
 
 /// acts as a manager for Light3D components
@@ -50,8 +51,12 @@ class BasicSceneLightManager : Manager, Updatable {
 
     this() {
         // load the shader
-        shader = Core.content.load_shader("shader/basic_lighting.vert",
+        auto maybe_shader = Core.content.load_shader("shader/basic_lighting.vert",
             "shader/basic_lighting.frag");
+        if (maybe_shader == none) {
+            assert(0, "failed to load basic lighting shaders");
+        }
+        shader = maybe_shader.front;
         // get some shader locations
         shader.locs[raylib.ShaderLocationIndex.SHADER_LOC_MATRIX_MODEL] = raylib.GetShaderLocation(shader,
             "matModel");

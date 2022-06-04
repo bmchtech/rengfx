@@ -3,39 +3,26 @@ description "RE NGINE FX (rengfx) game framework/engine"
 authors "redthing1"
 copyright "Copyright © 2020-2022, redthing1"
 license "LGPL-3.0 or proprietary"
+x:ddoxFilterArgs "--min-protection=Protected"
+dependency "optional" version="~>1.3.0"
 dependency "dray" version=">=4.0.0-r5"
 dependency "jar" version="~>0.1.0"
 dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
 libs "raylib"
-
-# documentation
-x:ddoxFilterArgs "--min-protection=Protected"
-
-# standard build (includes: physics)
 configuration "lib-standard" {
-    targetType "library"
-
-    # physics
-    versions "physics"
+	targetType "library"
+	versions "physics"
 }
-
-# minimal library, no extra libs
 configuration "lib-minimal" {
-    targetType "library"
+	targetType "library"
 }
-
 configuration "unittest" {
-    # test runner
-    dependency "silly" version="~>1.1.1"
-
-    # - test additional features
-
-    # physics
-    versions "physics"
+	dependency "silly" version="~>1.1.1"
+	targetType "library"
+	versions "physics"
 }
-
 configuration "ddox" {
-    # physics
-    versions "physics"
+	targetType "library"
+	versions "physics"
 }
