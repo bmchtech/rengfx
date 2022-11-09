@@ -40,6 +40,8 @@ int main(string[] args) {
 		"vr", &Game.vr_enabled,
 	);
 
+	Core.auto_compensate_hidpi = false;
+
 	if (help.helpWanted) {
 		defaultGetoptPrinter("Usage: ./a [--model /path/to/model.glb] [-f]", help.options);
 		return 1;
