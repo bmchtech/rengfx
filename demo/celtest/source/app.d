@@ -17,6 +17,7 @@ class Game : Core {
 
 	public static string custom_mdl1_path = null;
 	public static bool free_look = false;
+	public static bool vr_enabled = false;
 
 	this() {
 		super(WIDTH, HEIGHT, "celtest");
@@ -36,6 +37,7 @@ int main(string[] args) {
 		"verbose|v", &verbose,
 		"model|m", &Game.custom_mdl1_path,
 		"free-cam|f", &Game.free_look,
+		"vr", &Game.vr_enabled,
 	);
 
 	if (help.helpWanted) {
