@@ -6,7 +6,7 @@ jobs:
       matrix:
         # os: [ ubuntu-latest, windows-latest, macOS-latest ]
         os: [ ubuntu-latest ]
-        dc: [ dmd-2.098.1 ]
+        dc: [ dmd-2.100.2 ]
         arch: [ x86_64 ]
     runs-on: ${{ matrix.os }}
     steps:
