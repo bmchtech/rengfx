@@ -12,8 +12,10 @@ import std.getopt;
 static import raylib;
 
 class Game : Core {
-	enum WIDTH = 960;
-	enum HEIGHT = 540;
+	// enum WIDTH = 960;
+	// enum HEIGHT = 540;
+	enum WIDTH = 800;
+	enum HEIGHT = 450;
 
 	public static string custom_mdl1_path = null;
 	public static bool free_look = false;
