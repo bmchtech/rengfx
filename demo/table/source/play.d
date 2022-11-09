@@ -18,7 +18,7 @@ class PlayScene : Scene3D {
         clear_color = Colors.LIGHTGRAY;
 
         // load shader effects and add as a postprocessor
-        auto ascii_shd = new Effect(Core.content.load_shader(null, "shader/ascii.frag"), Colors.WHITE);
+        auto ascii_shd = new Effect(Core.content.load_shader(null, "shader/ascii.frag").front, Colors.WHITE);
         ascii_shd.set_shader_var_imm("i_resolution", cast(float[3])[
                 resolution.x, resolution.y, 1.0
             ]);
@@ -26,7 +26,7 @@ class PlayScene : Scene3D {
         postprocessors ~= ascii_postproc;
 
         auto chrm_abr = new Effect(Core.content.load_shader(null,
-                "shader/chromatic_aberration.frag"), color_alpha_white(0.8));
+                "shader/chromatic_aberration.frag").front, color_alpha_white(0.8));
         chrm_abr.set_shader_var("sample_offset", sample_offset);
         glitch_postproc = new PostProcessor(resolution, chrm_abr);
         postprocessors ~= glitch_postproc;
@@ -35,7 +35,7 @@ class PlayScene : Scene3D {
         cam.entity.position = Vector3(10, 10, 10);
 
         auto fox = create_entity("fox", Vector3(0, 0, 0));
-        auto fox_asset = Core.content.load_model("models/fox.obj");
+        auto fox_asset = Core.content.load_model("models/fox.obj").front;
         auto fox_model = fox.add_component(new Model3D(fox_asset));
         auto cub = fox.add_component(new Cube(Vector3(1, 1, 1), Colors.GREEN));
         cub.offset = Vector3(0, -4, 0);
