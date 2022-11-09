@@ -49,6 +49,8 @@ class PlayScene : Scene3D {
             vr_device_info.chromaAbCorrection[3] = 0.0f;
 
             this.setup_vr(vr_device_info);
+
+            assert(0, "VR not implemented yet");
         }
     }
 
