@@ -50,6 +50,8 @@ int main(string[] args) {
 	}
 
 	raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_MSAA_4X_HINT);
+	import re.util.logger;
+
 	if (verbose) {
 		raylib.SetTraceLogLevel(raylib.TraceLogLevel.LOG_INFO);
 	} else {
@@ -57,6 +59,11 @@ int main(string[] args) {
 	}
 
 	auto game = new Game(); // init game
+
+	if (verbose) {
+		Core.log.verbosity = Logger.Verbosity.Trace;
+	}
+
 	game.run();
 	game.destroy(); // clean up
 
