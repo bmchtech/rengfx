@@ -15,6 +15,12 @@ abstract class Scene3D : Scene {
     /// the 3d scene camera
     public SceneCamera3D cam;
 
+    version (vr) {
+        /// whether VR is enabled
+        public bool vr_enabled = false;
+        public VrStereoConfig vr_config;
+    }
+
     override void setup() {
         super.setup();
 
@@ -33,6 +39,11 @@ abstract class Scene3D : Scene {
     }
 
     override void render_scene() {
+        version (vr) {
+            if (vr_enabled)
+                raylib.BeginVrStereoMode(vr_config);
+        }
+
         raylib.BeginMode3D(cam.camera);
 
         // render 3d components
@@ -46,11 +57,38 @@ abstract class Scene3D : Scene {
         render_hook();
 
         raylib.EndMode3D();
+
+        version (vr) {
+            if (vr_enabled)
+                raylib.EndVrStereoMode();
+        }
     }
 
     override void update() {
         super.update();
 
         cam.update();
+    }
+
+    override void unload() {
+        version (vr) {
+            if (vr_enabled) {
+                assert(vr_config != VrStereoConfig.init, "vr config was not initialized");
+
+                raylib.UnloadVrStereoConfig(vr_config);
+            }
+
+        }
+
+        super.unload();
+    }
+
+    version (vr) {
+        /// set up VR rendering
+        void setup_vr(VrDeviceInfo vr_device_info) {
+            vr_enabled = true;
+
+            vr_config = raylib.LoadVrStereoConfig(vr_device_info);
+        }
     }
 }
