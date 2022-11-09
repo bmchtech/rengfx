@@ -93,6 +93,9 @@ abstract class Scene3D : Scene {
 
             Core.log.info(format("initializing vr stereo config for device: %s", vr_device_info));
 
+            // update render resolution
+            resolution = Vector2(vr_device_info.hResolution, vr_device_info.vResolution);
+
             import re.util.vr_distortion;
             import re.util.interop : c_str;
 

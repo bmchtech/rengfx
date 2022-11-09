@@ -29,8 +29,10 @@ class PlayScene : Scene3D {
         if (Game.vr_enabled) {
             // VR device parameters definition
             raylib.VrDeviceInfo vr_device_info;
-            vr_device_info.hResolution = Core.window.width;
-            vr_device_info.vResolution = Core.window.height;
+            // vr_device_info.hResolution = Core.window.width;
+            // vr_device_info.vResolution = Core.window.height;
+            vr_device_info.hResolution = 2160;
+            vr_device_info.vResolution = 1200;
             vr_device_info.hScreenSize = 0.133793f;
             vr_device_info.vScreenSize = 0.0669f;
             vr_device_info.vScreenCenter = 0.04678f;
@@ -50,7 +52,7 @@ class PlayScene : Scene3D {
 
             this.setup_vr(vr_device_info);
 
-            assert(0, "VR not implemented yet");
+            // assert(0, "VR not implemented yet");
         }
     }
 
