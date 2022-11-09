@@ -102,7 +102,7 @@ debug class Inspector {
         // bounds of the entire panel
         auto panel_content_bounds = Rectangle(0, 0, width - pad, panel_bounds_height);
 
-        auto view = raygui.GuiScrollPanel(panel_bounds, panel_content_bounds, &_panel_scroll);
+        auto view = raygui.GuiScrollPanel(panel_bounds, null, panel_content_bounds, &_panel_scroll);
 
         // start scissor
         raylib.BeginScissorMode(cast(int) view.x, cast(int) view.y,
