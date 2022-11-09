@@ -19,7 +19,7 @@ class HUDScene : Scene2D {
         hello_text.set_align(Text.Align.Close, Text.Align.Far);
 
         auto diag = create_entity("diag", Vector2(2, 2));
-        diag.add_component!FPSCounter();
+        diag.add_component(new FPSCounter(8));
 
         auto instr = create_entity("instr", Vector2(resolution.x - pad * 4, pad * 4));
         auto instr_text = instr.add_component(new Text(Text.default_font,
