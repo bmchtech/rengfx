@@ -22,7 +22,8 @@ class Game : Core {
 	public static bool vr_enabled = false;
 
 	this() {
-		super(WIDTH, HEIGHT, "celtest");
+		// super(WIDTH, HEIGHT, "celtest");
+		super(WIDTH, HEIGHT, vr_enabled ? "celtest [VR]" : "celtest");
 	}
 
 	override void initialize() {
