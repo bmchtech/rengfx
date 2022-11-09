@@ -104,38 +104,39 @@ abstract class Scene3D : Scene {
             auto distortion_shader = raylib.LoadShaderFromMemory(null, VR_DISTORTION_SHADER_GL330
                     .c_str);
 
+            // set shader vars
+            alias vartype = raylib.ShaderUniformDataType;
+            // Update distortion shader with lens and distortion-scale parameters
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "leftLensCenter"),
+                cast(float*) vr_config.leftLensCenter, vartype.SHADER_UNIFORM_VEC2);
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "rightLensCenter"),
+                cast(float*) vr_config.rightLensCenter, vartype.SHADER_UNIFORM_VEC2);
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "leftScreenCenter"),
+                cast(float*) vr_config.leftScreenCenter, vartype.SHADER_UNIFORM_VEC2);
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "rightScreenCenter"),
+                cast(float*) vr_config.rightScreenCenter, vartype.SHADER_UNIFORM_VEC2);
+
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "scale"),
+                cast(float*) vr_config.scale, vartype.SHADER_UNIFORM_VEC2);
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "scaleIn"),
+                cast(float*) vr_config.scaleIn, vartype.SHADER_UNIFORM_VEC2);
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "deviceWarpParam"),
+                cast(float*) vr_device_info.lensDistortionValues, vartype.SHADER_UNIFORM_VEC4);
+            raylib.SetShaderValue(distortion_shader, raylib.GetShaderLocation(distortion_shader, "chromaAbParam"),
+                cast(float*) vr_device_info.chromaAbCorrection, vartype.SHADER_UNIFORM_VEC4);
+
+            // distortion_fx.set_shader_var_imm("leftLensCenter", vr_config.leftLensCenter);
+            // distortion_fx.set_shader_var_imm("rightLensCenter", vr_config.rightLensCenter);
+            // distortion_fx.set_shader_var_imm("leftScreenCenter", vr_config.leftScreenCenter);
+            // distortion_fx.set_shader_var_imm("rightScreenCenter", vr_config.rightScreenCenter);
+
+            // distortion_fx.set_shader_var_imm("scale", vr_config.scale);
+            // distortion_fx.set_shader_var_imm("scaleIn", vr_config.scaleIn);
+            // distortion_fx.set_shader_var_imm("deviceWarpParam", vr_device_info.lensDistortionValues);
+            // distortion_fx.set_shader_var_imm("chromaAbParam", vr_device_info.chromaAbCorrection);
+
             // add postprocessing shader
             auto distortion_fx = new Effect(distortion_shader);
-
-            // set shader vars
-            // Update distortion shader with lens and distortion-scale parameters
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "leftLensCenter"),
-            //     config.leftLensCenter, SHADER_UNIFORM_VEC2);
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "rightLensCenter"),
-            //     config.rightLensCenter, SHADER_UNIFORM_VEC2);
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "leftScreenCenter"),
-            //     config.leftScreenCenter, SHADER_UNIFORM_VEC2);
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "rightScreenCenter"),
-            //     config.rightScreenCenter, SHADER_UNIFORM_VEC2);
-
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "scale"),
-            //     config.scale, SHADER_UNIFORM_VEC2);
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "scaleIn"),
-            //     config.scaleIn, SHADER_UNIFORM_VEC2);
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "deviceWarpParam"),
-            //     device.lensDistortionValues, SHADER_UNIFORM_VEC4);
-            // SetShaderValue(distortion, GetShaderLocation(distortion, "chromaAbParam"),
-            //     device.chromaAbCorrection, SHADER_UNIFORM_VEC4);
-            distortion_fx.set_shader_var_imm("leftLensCenter", vr_config.leftLensCenter);
-            distortion_fx.set_shader_var_imm("rightLensCenter", vr_config.rightLensCenter);
-            distortion_fx.set_shader_var_imm("leftScreenCenter", vr_config.leftScreenCenter);
-            distortion_fx.set_shader_var_imm("rightScreenCenter", vr_config.rightScreenCenter);
-            
-            distortion_fx.set_shader_var_imm("scale", vr_config.scale);
-            distortion_fx.set_shader_var_imm("scaleIn", vr_config.scaleIn);
-            distortion_fx.set_shader_var_imm("deviceWarpParam", vr_device_info.lensDistortionValues);
-            distortion_fx.set_shader_var_imm("chromaAbParam", vr_device_info.chromaAbCorrection);
-
             postprocessors ~= new PostProcessor(resolution, distortion_fx);
         }
     }
