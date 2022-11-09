@@ -25,6 +25,33 @@ class PlayScene : Scene3D {
     PostProcessor bokeh_postproc;
     Entity mdl1;
 
+    this() {
+        if (Game.vr_enabled) {
+            // VR device parameters definition
+            raylib.VrDeviceInfo vr_device_info;
+            vr_device_info.hResolution = Core.window.width;
+            vr_device_info.vResolution = Core.window.height;
+            vr_device_info.hScreenSize = 0.133793f;
+            vr_device_info.vScreenSize = 0.0669f;
+            vr_device_info.vScreenCenter = 0.04678f;
+            vr_device_info.eyeToScreenDistance = 0.041f;
+            vr_device_info.lensSeparationDistance = 0.07f;
+            vr_device_info.interpupillaryDistance = 0.07f;
+            // NOTE: CV1 uses fresnel-hybrid-asymmetric lenses with specific compute shaders
+            // Following parameters are just an approximation to CV1 distortion stereo rendering
+            vr_device_info.lensDistortionValues[0] = 1.0f;
+            vr_device_info.lensDistortionValues[1] = 0.22f;
+            vr_device_info.lensDistortionValues[2] = 0.24f;
+            vr_device_info.lensDistortionValues[3] = 0.0f;
+            vr_device_info.chromaAbCorrection[0] = 0.996f;
+            vr_device_info.chromaAbCorrection[1] = -0.004f;
+            vr_device_info.chromaAbCorrection[2] = 1.014f;
+            vr_device_info.chromaAbCorrection[3] = 0.0f;
+
+            this.setup_vr(vr_device_info);
+        }
+    }
+
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
