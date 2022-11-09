@@ -11,16 +11,25 @@ dependency "colorize" version="~>1.0.5"
 dependency "dray" version=">=4.2.0-r1"
 libs "raylib"
 configuration "lib-standard" {
-	targetType "library"
-	versions "physics"
+    targetType "library"
+
+    # physics
+    versions "physics"
+    dependency "dmech" version="~>0.4.1"
+    dependency "dlib" version="~>0.19.1"
 }
 configuration "lib-minimal" {
 	targetType "library"
 }
 configuration "unittest" {
-	dependency "silly" version="~>1.1.1"
-	targetType "library"
-	versions "physics"
+    # test runner
+    dependency "silly" version="~>1.0.2"
+
+    # - test additional features
+
+    # physics
+    versions "physics"
+    dependency "dmech" version="~>0.4.1"
 }
 configuration "ddox" {
 	targetType "library"
