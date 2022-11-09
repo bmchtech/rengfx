@@ -3,17 +3,14 @@ description "RE NGINE FX (rengfx) game framework/engine"
 authors "redthing1"
 copyright "Copyright © 2020-2022, redthing1"
 license "LGPL-3.0 or proprietary"
-dependency "dray" version=">=4.0.0-r4"
+x:ddoxFilterArgs "--min-protection=Protected"
 dependency "jar" version="~>0.1.0"
+dependency "optional" version="~>1.3.0"
 dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
 dependency "bindbc-loader" version="~>1.0.1"
+dependency "dray" version=">=4.2.0-r1"
 libs "raylib"
-
-# documentation
-x:ddoxFilterArgs "--min-protection=Protected"
-
-# standard build (includes: physics)
 configuration "lib-standard" {
     targetType "library"
 
@@ -21,12 +18,9 @@ configuration "lib-standard" {
     versions "physics"
     dependency "bindbc-newton" version="~>0.2.0"
 }
-
-# minimal library, no extra libs
 configuration "lib-minimal" {
-    targetType "library"
+	targetType "library"
 }
-
 configuration "unittest" {
     # test runner
     dependency "silly" version="~>1.0.2"
@@ -37,8 +31,7 @@ configuration "unittest" {
     versions "physics"
     dependency "bindbc-newton" version="~>0.2.0"
 }
-
 configuration "ddox" {
-    # physics
-    versions "physics"
+	targetType "library"
+	versions "physics"
 }

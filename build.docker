@@ -1,0 +1,21 @@
+FROM debian:buster-slim
+
+# install dependencies
+RUN apt-get update && apt-get install -y \
+  bash \
+  curl wget xz-utils \
+  gcc make libc6-dev libcurl4 \
+  git libxml2 \
+  libgl1-mesa-dev libx11-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev \
+  && rm -rf /var/lib/apt/lists/* && apt autoremove -y && apt clean
+
+
+# install dlang
+# RUN wget https://downloads.dlang.org/releases/2022/dmd_2.100.2-0_amd64.deb -O /tmp/dlang_dmd.deb && apt install -y /tmp/dlang_dmd.deb
+RUN curl -fsS https://dlang.org/install.sh | bash -s install ldc-1.30.0 \
+  && echo "source ~/dlang/ldc-1.30.0/activate" >> ~/.bashrc
+
+# set up main to run bash
+ENTRYPOINT ["/bin/bash"]
+# default arguments to run inside bash
+CMD ["-l", "-c", "cd /prj && git submodule update --init --recursive && dub build --compiler ldc2 -B release"]

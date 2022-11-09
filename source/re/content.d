@@ -7,6 +7,8 @@ import std.file;
 import std.conv;
 import std.path;
 import std.stdio;
+import std.exception : enforce;
+import optional;
 
 import re.util.cache;
 import re.util.interop;
@@ -14,22 +16,26 @@ static import raylib;
 
 /// manages external content loading
 class ContentManager {
-    alias TexCache = KeyedCache!(raylib.Texture2D);
-    private TexCache _tex_cache;
-    alias ModelCache = KeyedCache!(raylib.Model);
-    private ModelCache _mdl_cache;
-    alias ShaderCache = KeyedCache!(raylib.Shader);
-    private ShaderCache _shd_cache;
-
     /// search paths for content
     public string[] paths;
 
+    alias Texture2D = raylib.Texture2D;
+    alias Model = raylib.Model;
+    alias Shader = raylib.Shader;
+    alias Music = raylib.Music;
+
+    private KeyedCache!Texture2D texture_cache;
+    private KeyedCache!Model model_cache;
+    private KeyedCache!Shader shader_cache;
+    private KeyedCache!Music music_cache;
+
     /// initializes the content manager
     this() {
-        // setup
-        _tex_cache = TexCache((tex) { raylib.UnloadTexture(tex); });
-        _mdl_cache = ModelCache((mdl) { raylib.UnloadModel(mdl); });
-        _shd_cache = ShaderCache((shd) { raylib.UnloadShader(shd); });
+        // setup caches
+        texture_cache = KeyedCache!Texture2D(tex => raylib.UnloadTexture(tex));
+        model_cache = KeyedCache!Model(mdl => raylib.UnloadModel(mdl));
+        shader_cache = KeyedCache!Shader(shd => raylib.UnloadShader(shd));
+        music_cache = KeyedCache!Music(mus => raylib.UnloadMusicStream(mus));
     }
 
     /// get the physical path to a logical content path
@@ -55,70 +61,92 @@ class ContentManager {
         return get_path(path).c_str;
     }
 
-    /// loads a texture from disk
-    public raylib.Texture2D load_texture2d(string path) {
-        raylib.Texture2D tex;
-        auto cached = _tex_cache.get(path);
-        if (cached.isNull) {
-            auto image = raylib.LoadImage(get_path_cstr(path));
-            tex = raylib.LoadTextureFromImage(image);
-            raylib.UnloadImage(image);
-            _tex_cache.put(path, tex);
+    private KeyedCache!T cache_for(T)() {
+        static if (is(T == Texture2D)) {
+            return texture_cache;
+        } else static if (is(T == Model)) {
+            return model_cache;
+        } else static if (is(T == Shader)) {
+            return shader_cache;
+        } else static if (is(T == Music)) {
+            return music_cache;
         } else {
-            tex = cached.get;
+            static assert(0, format("no cache found for type %s", typeof(T)));
         }
+    }
 
-        // copy image to VRAM
-        return tex;
+    private Optional!T load_cached_asset(T)(string path, T delegate(string) load_func) {
+        auto cache = cache_for!T();
+        auto cached = cache.get(path);
+        if (cached.isNull) {
+            auto real_path = get_path(path);
+            if (!exists(real_path)) {
+                return no!T;
+            }
+            auto asset = load_func(real_path);
+            cache.put(path, asset);
+            return some(asset);
+        } else {
+            auto asset = cached.get;
+            return some(asset);
+        }
+    }
+
+    /// loads a texture from disk
+    public Optional!Texture2D load_texture2d(string path) {
+        return load_cached_asset!Texture2D(path, (x) => raylib.LoadTexture(x.c_str));
     }
 
     /// loads a model from disk
-    public raylib.Model load_model(string path) {
-        raylib.Model mdl;
-        auto cached = _mdl_cache.get(path);
-        if (cached.isNull) {
-            mdl = raylib.LoadModel(get_path_cstr(path));
-            _mdl_cache.put(path, mdl);
-        } else {
-            mdl = cached.get;
-        }
-        return mdl;
+    public Optional!Model load_model(string path) {
+        return load_cached_asset!Model(path, (x) => raylib.LoadModel(x.c_str));
     }
 
-    public raylib.ModelAnimation[] load_model_animations(string path) {
-        uint num_loaded_anims = 0;
-        raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(get_path_cstr(path), &num_loaded_anims);
-        auto anims = loaded_anims[0 .. num_loaded_anims]; // access array as slice
-        return anims;
-    }
+    // public raylib.ModelAnimation[] load_model_animations(string path) {
+    //     uint num_loaded_anims = 0;
+    //     raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(get_path_cstr(path), &num_loaded_anims);
+    //     auto anims = loaded_anims[0 .. num_loaded_anims]; // access array as slice
+    //     return anims;
+    // }
 
     /// loads a shader from disk (vertex shader, fragment shader).
     /// pass null to either arg to use the default
-    public raylib.Shader load_shader(string vs_path, string fs_path, bool bypass_cache = false) {
+    /// since loading shaders is a bit of a pain, the loader uses custom logic
+    public Optional!Shader load_shader(string vs_path, string fs_path, bool bypass_cache = false) {
         raylib.Shader shd;
         import std.digest.sha : sha1Of, toHexString;
 
         auto path_hash = to!string(sha1Of(vs_path ~ fs_path).toHexString);
-        auto cached = _shd_cache.get(path_hash);
+        auto cache = cache_for!Shader();
+        auto cached = cache.get(path_hash);
         if (cached.isNull || bypass_cache) {
+            auto vs_real_path = get_path(vs_path);
+            auto fs_real_path = get_path(fs_path);
+            if (!exists(vs_real_path) && !exists(fs_real_path)) {
+                // neither path exists
+                return no!Shader;
+            }
             auto vs = vs_path.length > 0 ? get_path_cstr(vs_path) : null;
             auto fs = fs_path.length > 0 ? get_path_cstr(fs_path) : null;
             shd = raylib.LoadShader(vs, fs);
             if (!bypass_cache)
-                _shd_cache.put(path_hash, shd);
+                cache.put(path_hash, shd);
         } else {
             shd = cached.get;
         }
-        return shd;
+        return some(shd);
+    }
+
+    /// loads music from disk
+    public Optional!Music load_music(string file_path) {
+        return load_cached_asset!Music(file_path, (x) => raylib.LoadMusicStream(x.c_str));
     }
 
     public void drop_caches() {
-        // delete textures
-        _tex_cache.drop();
-        // delete models
-        _mdl_cache.drop();
-        // delete shaders
-        _shd_cache.drop();
+        cache_for!Texture2D().drop();
+        cache_for!Model().drop();
+        cache_for!Shader().drop();
+        cache_for!Music().drop();
     }
 
     /// releases all resources

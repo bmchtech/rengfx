@@ -18,13 +18,10 @@ class PlayScene : Scene3D {
     private Entity light3;
 
     override void on_start() {
-        static assert(0, "NOTE TO USERS: this demo is currently broken due to physics engine changes."
-                ~ " please try another demo for now. we hope to fix this soon.");
-
         clear_color = color_rgb(224, 176, 153);
 
         // load a shader effect and add it as a postprocessor
-        auto cel_ish = new Effect(Core.content.load_shader(null, "shader/cel_ish.frag"));
+        auto cel_ish = new Effect(Core.content.load_shader(null, "shader/cel_ish.frag").front);
         cel_ish.set_shader_var_imm("c_threshold", 0.4f);
         cel_ish.set_shader_var_imm("c_resolution", cast(float[2])[
                 resolution.x, resolution.y

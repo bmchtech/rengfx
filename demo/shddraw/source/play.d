@@ -1,6 +1,7 @@
 module play;
 
 import std.stdio;
+import optional;
 
 import re;
 import re.gfx;
@@ -13,6 +14,7 @@ import re.ng.camera;
 import re.math;
 import re.util.orbit;
 import re.util.hotreload;
+import re.audio;
 static import raylib;
 
 import app;
@@ -44,6 +46,11 @@ class PlayScene : Scene3D {
         shd_present = new FragEffect(this, new ReloadableShader(null, present_shd_path));
         present_p = new PostProcessor(resolution, shd_present);
         postprocessors ~= present_p;
+
+        // enable audio
+        auto audio = new AudioManager();
+        add_manager(audio);
+        audio.play_music(Core.content.load_music("audio/50_50.mp3").front);
     }
 
     override void update() {
