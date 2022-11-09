@@ -49,7 +49,7 @@ class PlayScene : Scene3D {
 
 		// enable an example shader on cube
 		// auto cross_stitch = new Effect(Core.content.load_shader(null,
-		// 		"shader/cross_stitch.frag"), Colors.DARKGREEN);
+		// 		"shader/cross_stitch.frag").front, Colors.DARKGREEN);
 		cubefx1 = new FragEffect(this, new ReloadableShader(null, "shader/cross_stitch.frag"));
 		cubefx1.color = Colors.DARKGREEN;
 
