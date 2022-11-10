@@ -54,6 +54,7 @@ class CameraFollow2D : Component, Updatable {
     /// the target entity to follow
     public Entity target;
     public float lerp;
+    private SceneCamera2D cam;
 
     this(Entity target, float lerp) {
         this.target = target;
@@ -61,12 +62,13 @@ class CameraFollow2D : Component, Updatable {
     }
 
     override void setup() {
-        auto cam = entity.get_component!SceneCamera2D();
-        // set offset to half-resolution (so that our target is centered)
-        cam.offset = Vector2(entity.scene.resolution.x / 2, entity.scene.resolution.y / 2);
+        cam = entity.get_component!SceneCamera2D();
     }
 
     void update() {
+        // set offset to half-resolution (so that our target is centered)
+        cam.offset = Vector2(entity.scene.resolution.x / 2, entity.scene.resolution.y / 2);
+        
         // get vector to target
         auto to_target = target.position2 - entity.position2;
         auto scroll = Vector2(to_target.x * lerp, to_target.y * lerp);
