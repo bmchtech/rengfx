@@ -127,6 +127,7 @@ abstract class Scene {
     protected void render_hook() {
     }
 
+    /// recreate the render target
     private void update_render_target() {
         if (Core.headless)
             return;
@@ -176,6 +177,14 @@ abstract class Scene {
         if (!Core.headless) {
             // free render target
             RenderExt.destroy_render_target(render_target);
+        }
+    }
+
+    /// window resize event
+    void on_window_resized() {
+        // if the option is enabled, resize the render target to the new window size
+        if (Core.sync_render_window_resolution) {
+            resolution = Core.default_resolution;
         }
     }
 

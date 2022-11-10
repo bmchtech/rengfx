@@ -72,6 +72,9 @@ abstract class Core {
     /// NOTE: raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI also exists, but we're not using it right now
     public static bool auto_compensate_hidpi = true;
 
+    /// whether to automatically resize the render target to the window size
+    public static bool sync_render_window_resolution = false;
+
     /// the default render resolution for all scenes
     public static Vector2 default_resolution;
 
@@ -101,6 +104,8 @@ abstract class Core {
                 log.info(format("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
                         window.width, window.height, scaled_width, scaled_height, window.scale_dpi));
                 window.resize(scaled_width, scaled_height);
+                // set mouse transform to compensate for dpi scale
+                raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
             }
         }
 
@@ -162,12 +167,34 @@ abstract class Core {
     }
 
     protected void update() {
-        if (pause_on_focus_lost && raylib.IsWindowMinimized()) {
-            return; // pause
+        // update window
+        if (!Core.headless) {
+            if (pause_on_focus_lost && raylib.IsWindowMinimized()) {
+                return; // pause
+            }
+            if (exit_on_escape_pressed && raylib.IsKeyPressed(raylib.KeyboardKey.KEY_ESCAPE)) {
+                exit();
+            }
+            if (raylib.IsWindowResized()) {
+                // window was resized
+                // notify the active scenes
+                foreach (scene; _scenes) {
+                    if (sync_render_window_resolution) {
+                        // copy default resolution from window
+                        auto window_res_x = window.width;
+                        auto window_res_y = window.height;
+                        if (auto_compensate_hidpi) {
+                            window_res_x = cast(int)(window_res_x / window.scale_dpi);
+                            window_res_y = cast(int)(window_res_y / window.scale_dpi);
+                        }
+                        default_resolution = Vector2(window_res_x, window_res_y);
+                        Core.log.info(format("window resized, updating default resolution to %s", default_resolution));
+                    }
+                    scene.on_window_resized();
+                }
+            }
         }
-        if (exit_on_escape_pressed && raylib.IsKeyPressed(raylib.KeyboardKey.KEY_ESCAPE)) {
-            exit();
-        }
+
         version (unittest) {
             Time.update(1f / target_fps); // 60 fps
         } else {
@@ -176,7 +203,9 @@ abstract class Core {
         foreach (manager; managers) {
             manager.update();
         }
+        // update input
         Input.update();
+        // update scenes
         foreach (scene; _scenes) {
             scene.update();
         }

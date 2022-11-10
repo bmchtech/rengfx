@@ -5,7 +5,7 @@ module re.gfx.window;
 import re.core;
 import re.math;
 import std.string;
-import std.algorithm.comparison: max;
+import std.algorithm.comparison : max;
 static import raylib;
 
 class Window {
@@ -38,6 +38,16 @@ class Window {
     @property float scale_dpi() {
         update_window();
         return _scale_dpi;
+    }
+
+    // window dpi-scaled width
+    @property int width_dpi() {
+        return cast(int)(width * scale_dpi);
+    }
+
+    // window dpi-scaled height
+    @property int height_dpi() {
+        return cast(int)(height * scale_dpi);
     }
 
     /// initializes the window
