@@ -30,7 +30,8 @@ class Game : Core {
 		// default_resolution = Vector2(WIDTH, HEIGHT);
 		content.paths ~= ["../content/", "content/"];
 
-		load_scenes([new PlayScene(), new HUDScene()]);
+		// load_scenes([new PlayScene(), new HUDScene()]);
+		load_scenes([new PlayScene()]);
 	}
 }
 
@@ -43,7 +44,7 @@ int main(string[] args) {
 		"vr", &Game.vr_enabled,
 	);
 
-	Core.auto_compensate_hidpi = false;
+	// Core.auto_compensate_hidpi = false;
 
 	if (help.helpWanted) {
 		defaultGetoptPrinter("Usage: ./a [--model /path/to/model.glb] [-f]", help.options);
