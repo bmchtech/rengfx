@@ -24,7 +24,7 @@ configuration "lib-minimal" {
 configuration "lib-liteplat" {
     targetType "library"
 
-    versions "physics" "vr"
+    versions "physics" "vr" "lite"
     dependency "dmech" version="~>0.4.1"
     dependency "dlib" version="~>0.19.1"
 
