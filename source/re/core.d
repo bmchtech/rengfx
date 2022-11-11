@@ -107,8 +107,8 @@ abstract class Core {
                 // resize window according to dpi scale
                 auto scaled_width = cast(int)(window.width * window.scale_dpi);
                 auto scaled_height = cast(int)(window.height * window.scale_dpi);
-                log.info(format("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
-                        window.width, window.height, scaled_width, scaled_height, window.scale_dpi));
+                log.info("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
+                    window.width, window.height, scaled_width, scaled_height, window.scale_dpi);
                 window.resize(scaled_width, scaled_height);
                 // set mouse transform to compensate for dpi scale
                 raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
@@ -130,7 +130,7 @@ abstract class Core {
 
         version (vr) {
             import re.gfx.vr;
-            
+
             vr = new VRSupport();
         }
 
