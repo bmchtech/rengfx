@@ -28,7 +28,6 @@ version (vr) class VRSupport {
         import re.util.interop : c_str;
 
         // set up distortion shader
-        // auto distortion_shader = LoadShader(0, TextFormat("resources/distortion%i.fs", GLSL_VERSION));
         distortion_shader = raylib.LoadShaderFromMemory(null, VR_DISTORTION_SHADER_GL330
                 .c_str);
 
