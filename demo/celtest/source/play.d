@@ -25,6 +25,10 @@ class PlayScene : Scene3D {
     PostProcessor bokeh_postproc;
     Entity mdl1;
 
+    this() {
+
+    }
+
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
 
@@ -90,7 +94,8 @@ class PlayScene : Scene3D {
         auto floor_box = floor.add_component(new Cube(Vector3(40, 10, 40), floor_col));
         // floor_box.effect = new Effect(lights.shader, floor_col);
 
-        auto cel2 = new FragEffect(this, Core.content.load_shader(null, "shader/cel_light.frag").front);
+        auto cel2 = new FragEffect(this, Core.content.load_shader(null, "shader/cel_light.frag")
+                .front);
         cel2.set_shader_var_imm("outline_diag", cast(float) 8);
         cel2.set_shader_var_imm("outline_div", cast(float) 8);
         cel2.set_shader_var_imm("outline_lighten", cast(float) 0.1);

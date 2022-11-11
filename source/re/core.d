@@ -82,6 +82,12 @@ abstract class Core {
     public static raylib.TextureFilter default_filter_mode
         = raylib.TextureFilter.TEXTURE_FILTER_POINT;
 
+    version (vr) {
+        import re.gfx.vr;
+
+        public static VRSupport vr;
+    }
+
     /// sets up a game core
     this(int width, int height, string title) {
         log = new Logger(Logger.Verbosity.Information);
@@ -120,6 +126,12 @@ abstract class Core {
 
         debug {
             debugger = new Debugger();
+        }
+
+        version (vr) {
+            import re.gfx.vr;
+            
+            vr = new VRSupport();
         }
 
         version (unittest) {
@@ -226,10 +238,27 @@ abstract class Core {
             scene.render();
             // post-render
             scene.post_render();
-            // composite screen render to window
-            // TODO: support better compositing
+            // composite  (blit)screen render to window
+            // when the scene is rendered, it is rendered to a texture. this texture is then composited onto the main display buffer.
+
+            version (vr) {
+                bool vr_distort = false;
+                if (vr.enabled) {
+                    assert(vr.distortion_shader != raylib.Shader.init, "vr.distortion_shader is not initialized");
+                    vr_distort = true;
+                }
+
+                if (vr_distort)
+                    raylib.BeginShaderMode(vr.distortion_shader);
+            }
+
             RenderExt.draw_render_target(scene.render_target, Rectangle(0, 0,
                     window.width, window.height), scene.composite_mode.color);
+
+            version (vr) {
+                if (vr_distort)
+                    raylib.EndShaderMode();
+            }
         }
         debug {
             debugger.render();
@@ -291,6 +320,14 @@ abstract class Core {
 
     /// releases all resources and cleans up
     public void destroy() {
+        version (vr) {
+            if (vr.enabled) {
+                assert(vr.config != raylib.VrStereoConfig.init, "vr config was not initialized");
+
+                raylib.UnloadVrStereoConfig(vr.config);
+            }
+
+        }
         debug {
             debugger.destroy();
         }

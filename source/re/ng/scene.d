@@ -137,7 +137,9 @@ abstract class Scene {
         }
         // create render target
         // TODO: use scene resolution instead of window resolution
-        render_target = RenderExt.create_render_target(cast(int) resolution.x, cast(int) resolution.y);
+        render_target = RenderExt.create_render_target(cast(int) resolution.x, cast(int) resolution
+                .y);
+        Core.log.info(format("recreated render target of size %s", resolution));
         // apply texture filter
         raylib.SetTextureFilter(render_target.texture, Core.default_filter_mode);
     }

@@ -6,6 +6,7 @@ static import raylib;
 public import raylib : Camera3D;
 import re.ng.camera;
 import re;
+import re.gfx;
 import std.string;
 import re.ecs;
 import re.math;
@@ -33,6 +34,11 @@ abstract class Scene3D : Scene {
     }
 
     override void render_scene() {
+        version (vr) {
+            if (Core.vr.enabled)
+                raylib.BeginVrStereoMode(Core.vr.config);
+        }
+
         raylib.BeginMode3D(cam.camera);
 
         // render 3d components
@@ -46,11 +52,20 @@ abstract class Scene3D : Scene {
         render_hook();
 
         raylib.EndMode3D();
+
+        version (vr) {
+            if (Core.vr.enabled)
+                raylib.EndVrStereoMode();
+        }
     }
 
     override void update() {
         super.update();
 
         cam.update();
+    }
+
+    override void unload() {
+        super.unload();
     }
 }
