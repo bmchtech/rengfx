@@ -13,4 +13,6 @@ configuration "default" {
 
 configuration "lite" {
     subConfiguration "reng" "lib-lite"
+
+    versions "lite"
 }
