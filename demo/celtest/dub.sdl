@@ -6,4 +6,4 @@ license "proprietary"
 dependency "reng" path="../.."
 lflags "-rpath=$$ORIGIN"
 
-subConfiguration "reng" "lib-minimal"
+subConfiguration "reng" "lib-standard"

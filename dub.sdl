@@ -11,10 +11,12 @@ dependency "witchcraft" version="~>0.1.9"
 dependency "dray" version=">=4.2.0-r1 <4.3.0-0"
 libs "raylib"
 configuration "lib-standard" {
-	dependency "dlib" version="~>0.19.1"
-	dependency "dmech" version="~>0.4.1"
-	targetType "library"
-	versions "physics"
+    targetType "library"
+
+    # physics
+    versions "physics" "vr"
+    dependency "dmech" version="~>0.4.1"
+    dependency "dlib" version="~>0.19.1"
 }
 configuration "lib-minimal" {
 	targetType "library"
