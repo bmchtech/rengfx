@@ -35,8 +35,8 @@ abstract class Scene3D : Scene {
 
     override void render_scene() {
         version (vr) {
-            if (Core.vr_enabled)
-                raylib.BeginVrStereoMode(Core.vr_config);
+            if (Core.vr.enabled)
+                raylib.BeginVrStereoMode(Core.vr.config);
         }
 
         raylib.BeginMode3D(cam.camera);
@@ -54,7 +54,7 @@ abstract class Scene3D : Scene {
         raylib.EndMode3D();
 
         version (vr) {
-            if (Core.vr_enabled)
+            if (Core.vr.enabled)
                 raylib.EndVrStereoMode();
         }
     }
