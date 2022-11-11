@@ -19,6 +19,7 @@ lightweight, expressive, extensible game engine
   + composable, modular game components and rendering
   + virtual input for transparent rebinding and cross platform input
   + vector/matrix math hidden behind nice abstractions
+  + vr support
 + modular, data-driven Scene-Entity-Component architecture
   + full headless execution support, making unit tests simple
   + emphasis on simplicity and readability, avoidance of unnecessary abstraction
