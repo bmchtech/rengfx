@@ -28,8 +28,13 @@ version (vr) class VRSupport {
         import re.util.interop : c_str;
 
         // set up distortion shader
-        distortion_shader = raylib.LoadShaderFromMemory(null, VR_DISTORTION_SHADER_GL330
-                .c_str);
+        version (lite) {
+            distortion_shader = raylib.LoadShaderFromMemory(
+                null, VR_DISTORTION_SHADER_GL100.c_str);
+        } else {
+            distortion_shader = raylib.LoadShaderFromMemory(
+                null, VR_DISTORTION_SHADER_GL330.c_str);
+        }
 
         // set shader vars
         alias vartype = raylib.ShaderUniformDataType;
