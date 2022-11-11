@@ -76,7 +76,7 @@ int main(string[] args) {
 	if (verbose) {
 		Core.log.verbosity = Logger.Verbosity.Trace;
 	} else {
-		Core.log.verbosity = Logger.Verbosity.Information;
+		Core.log.verbosity = Logger.Verbosity.Info;
 	}
 	Core.log.trace("starting game");
 

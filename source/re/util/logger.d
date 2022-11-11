@@ -13,7 +13,7 @@ class Logger {
     /// how verbose the messages are
     enum Verbosity {
         Trace = 4,
-        Information = 3,
+        Info = 3,
         Warning = 2,
         Error = 1,
         Critical = 0
@@ -32,44 +32,44 @@ class Logger {
     }
 
     /// writes a message
-    public void write_line(string log, Verbosity level) {
+    public void write_line(A...)(Verbosity level, A a) {
         if (level <= verbosity) {
             foreach (sink; sinks) {
-                sink.write_line(log, level);
+                sink.write_line(format(a), level);
             }
         }
     }
 
     /// writes a message at TRACE verbosity
-    public void trace(string log) {
-        write_line(log, Verbosity.Trace);
+    public void trace(A...)(A a) {
+        write_line(Verbosity.Trace, a);
     }
 
     /// writes a message at INFO verbosity
-    public void info(string log) {
-        write_line(log, Verbosity.Information);
+    public void info(A...)(A a) {
+        write_line(Verbosity.Info, a);
     }
 
     /// writes a message at WARNING verbosity
-    public void warn(string log) {
-        write_line(log, Verbosity.Warning);
+    public void warn(A...)(A a) {
+        write_line(Verbosity.Warning, a);
     }
 
     /// writes a message at ERROR verbosity
-    public void err(string log) {
-        write_line(log, Verbosity.Error);
+    public void err(A...)(A a) {
+        write_line(Verbosity.Error, a);
     }
 
     /// writes a message at CRITICAL verbosity
-    public void crit(string log) {
-        write_line(log, Verbosity.Critical);
+    public void crit(A...)(A a) {
+        write_line(Verbosity.Critical, a);
     }
 
     private static string shortVerbosity(Verbosity level) {
         switch (level) {
         case Verbosity.Trace:
             return "trce";
-        case Verbosity.Information:
+        case Verbosity.Info:
             return "info";
         case Verbosity.Warning:
             return "warn";
@@ -105,7 +105,7 @@ class Logger {
             switch (level) {
             case Verbosity.Trace:
                 return colorize.fg.light_black;
-            case Verbosity.Information:
+            case Verbosity.Info:
                 return colorize.fg.green;
             case Verbosity.Warning:
                 return colorize.fg.yellow;
