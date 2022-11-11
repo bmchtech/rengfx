@@ -72,8 +72,6 @@ int main(string[] args) {
 	if (Game.vr_enabled) {
 		// VR device parameters definition
 		raylib.VrDeviceInfo vr_device_info;
-		// vr_device_info.hResolution = Core.window.width;
-		// vr_device_info.vResolution = Core.window.height;
 		vr_device_info.hResolution = 2160;
 		vr_device_info.vResolution = 1200;
 		vr_device_info.hScreenSize = 0.133793f;
@@ -93,7 +91,7 @@ int main(string[] args) {
 		vr_device_info.chromaAbCorrection[2] = 1.014f;
 		vr_device_info.chromaAbCorrection[3] = 0.0f;
 
-		Game.setup_vr(vr_device_info);
+		Game.vr.setup_vr(vr_device_info);
 
 		// assert(0, "VR not implemented yet");
 	}
