@@ -83,10 +83,9 @@ abstract class Core {
         = raylib.TextureFilter.TEXTURE_FILTER_POINT;
 
     version (vr) {
-        /// whether VR is enabled
-        public static bool vr_enabled = false;
-        public static raylib.VrStereoConfig vr_config;
-        public static raylib.Shader vr_distortion_shader;
+        import re.gfx.vr;
+
+        public static VRSupport vr;
     }
 
     /// sets up a game core
@@ -127,6 +126,12 @@ abstract class Core {
 
         debug {
             debugger = new Debugger();
+        }
+
+        version (vr) {
+            import re.gfx.vr;
+            
+            vr = new VRSupport();
         }
 
         version (unittest) {
@@ -238,13 +243,13 @@ abstract class Core {
 
             version (vr) {
                 bool vr_distort = false;
-                if (vr_enabled) {
-                    assert(vr_distortion_shader != raylib.Shader.init, "vr_distortion_shader is not initialized");
+                if (vr.enabled) {
+                    assert(vr.distortion_shader != raylib.Shader.init, "vr.distortion_shader is not initialized");
                     vr_distort = true;
                 }
 
                 if (vr_distort)
-                    raylib.BeginShaderMode(vr_distortion_shader);
+                    raylib.BeginShaderMode(vr.distortion_shader);
             }
 
             RenderExt.draw_render_target(scene.render_target, Rectangle(0, 0,
@@ -316,10 +321,10 @@ abstract class Core {
     /// releases all resources and cleans up
     public void destroy() {
         version (vr) {
-            if (vr_enabled) {
-                assert(vr_config != raylib.VrStereoConfig.init, "vr config was not initialized");
+            if (vr.enabled) {
+                assert(vr.config != raylib.VrStereoConfig.init, "vr config was not initialized");
 
-                raylib.UnloadVrStereoConfig(vr_config);
+                raylib.UnloadVrStereoConfig(vr.config);
             }
 
         }
@@ -333,49 +338,6 @@ abstract class Core {
         }
         if (!Core.headless) {
             window.destroy();
-        }
-    }
-
-    version (vr) {
-        /// set up VR rendering
-        public static void setup_vr(raylib.VrDeviceInfo vr_device_info) {
-            vr_enabled = true;
-
-            vr_config = raylib.LoadVrStereoConfig(vr_device_info);
-
-            Core.log.info(format("initializing vr stereo config for device: %s", vr_device_info));
-
-            // // update render resolution
-            // resolution = Vector2(vr_device_info.hResolution, vr_device_info.vResolution);
-
-            import re.util.vr_distortion;
-            import re.util.interop : c_str;
-
-            // set up distortion shader
-            // auto vr_distortion_shader = LoadShader(0, TextFormat("resources/distortion%i.fs", GLSL_VERSION));
-            vr_distortion_shader = raylib.LoadShaderFromMemory(null, VR_DISTORTION_SHADER_GL330
-                    .c_str);
-
-            // set shader vars
-            alias vartype = raylib.ShaderUniformDataType;
-            // Update distortion shader with lens and distortion-scale parameters
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "leftLensCenter"),
-                cast(float*) vr_config.leftLensCenter, vartype.SHADER_UNIFORM_VEC2);
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "rightLensCenter"),
-                cast(float*) vr_config.rightLensCenter, vartype.SHADER_UNIFORM_VEC2);
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "leftScreenCenter"),
-                cast(float*) vr_config.leftScreenCenter, vartype.SHADER_UNIFORM_VEC2);
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "rightScreenCenter"),
-                cast(float*) vr_config.rightScreenCenter, vartype.SHADER_UNIFORM_VEC2);
-
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "scale"),
-                cast(float*) vr_config.scale, vartype.SHADER_UNIFORM_VEC2);
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "scaleIn"),
-                cast(float*) vr_config.scaleIn, vartype.SHADER_UNIFORM_VEC2);
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "deviceWarpParam"),
-                cast(float*) vr_device_info.lensDistortionValues, vartype.SHADER_UNIFORM_VEC4);
-            raylib.SetShaderValue(vr_distortion_shader, raylib.GetShaderLocation(vr_distortion_shader, "chromaAbParam"),
-                cast(float*) vr_device_info.chromaAbCorrection, vartype.SHADER_UNIFORM_VEC4);
         }
     }
 }
