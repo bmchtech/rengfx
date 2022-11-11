@@ -5,5 +5,12 @@ copyright "Copyright © 2020, xdrie"
 license "proprietary"
 dependency "reng" path="../.."
 lflags "-rpath=$$ORIGIN"
+targetType "executable"
 
-subConfiguration "reng" "lib-standard"
+configuration "default" {
+    subConfiguration "reng" "lib-standard"
+}
+
+configuration "lite" {
+    subConfiguration "reng" "lib-lite"
+}
