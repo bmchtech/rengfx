@@ -64,7 +64,10 @@ int main(string[] args) {
 
 	if (verbose) {
 		Core.log.verbosity = Logger.Verbosity.Trace;
+	} else {
+		Core.log.verbosity = Logger.Verbosity.Information;
 	}
+	Core.log.trace("starting game");
 
 	if (Game.vr_enabled) {
 		// VR device parameters definition
