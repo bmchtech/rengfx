@@ -13,7 +13,7 @@ jobs:
         git submodule update --init --recursive
         curl -L https://github.com/ldc-developers/ldc/releases/download/v1.29.0/ldc2-1.29.0-windows-x64.7z --output ldc2-1.29.0-windows-x64.7z
         7z x ldc2-1.29.0-windows-x64.7z
-        curl -L https://github.com/redthing1/dray/releases/download/v$DRAY_VERSION/raylib-dev_win64_msvc16.zip.zip --output raylib-dev_win64_msvc16.zip.zip
+        curl -L https://github.com/redthing1/dray/releases/download/v$env:DRAY_VERSION/raylib-dev_win64_msvc16.zip.zip --output raylib-dev_win64_msvc16.zip.zip
         7z x raylib-dev_win64_msvc16.zip.zip
         7z x raylib-dev_win64_msvc16.zip
         curl -L https://github.com/redthing1/dray/releases/download/v4.0.0-r3/winlibs_extra.7z --output winlibs_extra.7z
@@ -23,7 +23,7 @@ jobs:
         move glfw-3.3.7.bin.WIN64/lib-vc2022/glfw3_mt.lib ./glfw3_mt.lib
         mkdir ext
         cd ext
-        git clone --depth 1 --branch v$DRAY_VERSION https://github.com/redthing1/dray
+        git clone --depth 1 --branch v$env:DRAY_VERSION https://github.com/redthing1/dray
         cd dray
         move ../../raylib-dev_win64_msvc16/lib/raylib.lib ./raylib.lib
         move ../../WinMM.lib ./WinMM.lib
@@ -35,7 +35,7 @@ jobs:
         move ext/dray/WinMM.lib ./WinMM.lib
     - name: 'Build'
       run: |
-        dub add-override dray $DRAY_VERSION ./ext/dray
+        dub add-override dray $env:DRAY_VERSION ./ext/dray
         move ext/dray/raylib.lib ./raylib.lib
         dub build
     
