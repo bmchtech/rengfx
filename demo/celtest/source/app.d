@@ -24,6 +24,10 @@ class Game : Core {
 	public static bool vr_enabled = false;
 
 	this(int width, int height) {
+		// core init here
+		Core.auto_compensate_hidpi = true;
+		Core.auto_oversample_hidpi = true;
+
 		super(width, height, vr_enabled ? "celtest [VR]" : "celtest");
 	}
 
