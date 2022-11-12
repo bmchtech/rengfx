@@ -21,6 +21,7 @@ jobs:
         curl -L https://github.com/glfw/glfw/releases/download/3.3.7/glfw-3.3.7.bin.WIN64.zip --output glfw-3.3.7.bin.WIN64.zip
         unzip glfw-3.3.7.bin.WIN64.zip
         move glfw-3.3.7.bin.WIN64/lib-vc2022/glfw3_mt.lib ./glfw3_mt.lib
+        mkdir ext
         cd ext
         git clone --depth 1 --branch v$DRAY_VERSION https://github.com/redthing1/dray
         cd dray
