@@ -1,0 +1,8 @@
+name "nuidemo"
+description "A minimal D application."
+authors "no"
+copyright "Copyright © 2022, no"
+license "proprietary"
+dependency "dray-nuklear" version="~>0.1.1"
+
+dependency "reng" path="../.."
