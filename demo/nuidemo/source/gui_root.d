@@ -34,8 +34,7 @@ class GuiRoot : Component, Renderable2D, Updatable {
         bg = ColorToNuklearF(Colors.SKYBLUE);
         auto ui_font = raylib.LoadFontEx("./res/SourceSansPro-Regular.ttf", UI_FS, null, 0);
         ctx = InitNuklearEx(ui_font, UI_FS);
-        // ctx.backend_render_scale = cast(int) (Core.window.scale_dpi * Core.render_oversample);
-        ctx.backend_render_scale = cast(int)(Core.window.scale_dpi);
+        ctx.backend_render_scale = cast(int) (Core.window.scale_dpi);
 
         // nk_color[nk_style_colors.NK_COLOR_COUNT] table;
         // table[nk_style_colors.NK_COLOR_TEXT] = nk_rgba(190, 190, 190, 255);
