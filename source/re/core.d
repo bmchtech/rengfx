@@ -78,6 +78,9 @@ abstract class Core {
     /// whether to automatically oversample for hidpi
     public static bool auto_oversample_hidpi = false;
 
+    /// whether to rescale the mouse position to compensate for hidpi
+    public static bool auto_rescale_mouse_hidpi = false;
+
     /// whether to automatically resize the render target to the window size
     public static bool sync_render_window_resolution = false;
 
@@ -341,8 +344,10 @@ abstract class Core {
         window.resize(scaled_width, scaled_height);
         handle_window_resize();
         sync_render_resolution();
-        // set mouse transform to compensate for dpi scale
-        raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
+        if (auto_rescale_mouse_hidpi) {
+            // set mouse transform to compensate for dpi scale
+            raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
+        }
     }
 
     private void handle_window_resize() {
@@ -376,7 +381,7 @@ abstract class Core {
         default_resolution = Vector2(render_res_x, render_res_y);
         // Core.log.info(format("updating render resolution to %s", default_resolution));
         Core.log.info(format("updating render resolution to %s (dpi scale %s) (oversample %s)",
-            default_resolution, window.scale_dpi, render_oversample));
+                default_resolution, window.scale_dpi, render_oversample));
     }
 }
 
