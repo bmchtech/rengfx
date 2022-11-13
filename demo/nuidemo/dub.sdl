@@ -4,6 +4,5 @@ authors "no"
 copyright "Copyright © 2022, no"
 license "proprietary"
 dependency "reng" path="../.."
-dependency "dray-nuklear" version="~>0.1.2"
-
+dependency "dray-nuklear" version="~>0.1.4"
 subConfiguration "dray-nuklear" "debug"
