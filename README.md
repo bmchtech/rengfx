@@ -4,7 +4,7 @@ RE ENGINE FX
 
 [![DUB Package](https://img.shields.io/dub/v/reng.svg)](https://code.dlang.org/packages/reng)
 
-lightweight, expressive, extensible game engine 
+lightweight, expressive, extensible multimedia engine
 
 ![blocks demo gif](https://raw.githubusercontent.com/wiki/xdrie/rengfx/img/rec-2020-07-30_17.17.12.gif)
 
