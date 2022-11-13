@@ -93,13 +93,7 @@ class GuiRoot : Component, Renderable2D, Updatable {
         UpdateNuklear(ctx);
 
         // GUI
-        if (nk_begin(ctx, "Demo", nk_rect(50, 50, 230, 250),
-                nk_panel_flags.NK_WINDOW_BORDER | nk_panel_flags.NK_WINDOW_MOVABLE | nk_panel_flags.NK_WINDOW_SCALABLE |
-                nk_panel_flags.NK_WINDOW_MINIMIZABLE | nk_panel_flags.NK_WINDOW_TITLE)) {
-            // enum {
-            //     EASY,
-            //     HARD
-            // };
+        if (nk_begin(ctx, "Demo", RectangleToNuklear(ui_bounds), nk_panel_flags.NK_WINDOW_BORDER)) {
             enum EASY = 0;
             enum HARD = 1;
             static int op = EASY;

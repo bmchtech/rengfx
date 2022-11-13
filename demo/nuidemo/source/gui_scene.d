@@ -25,7 +25,8 @@ class GuiScene : Scene2D {
     }
 
     override void render_hook() {
-        // draw fps
-        raylib.DrawText(format("%s", Core.fps).c_str(), 8, 8, 8, Colors.BLACK);
+        // draw fps in bottom right corner
+        // raylib.DrawText(format("%s", Core.fps).c_str(), 8, 8, 8, Colors.BLACK);
+        raylib.DrawText(format("%s", Core.fps).c_str(), cast(int)(resolution.x - 30), cast(int)(resolution.y - 24), 16, Colors.WHITE);
     }
 }
