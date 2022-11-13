@@ -17,7 +17,6 @@ class Game : Core {
 	this() {
 		sync_render_window_resolution = true;
 		auto_compensate_hidpi = true;
-		// auto_oversample_hidpi = true;
 
 		super(WIDTH, HEIGHT, "nuidemo");
 	}
