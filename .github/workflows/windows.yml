@@ -45,8 +45,9 @@ jobs:
     - name: 'Package'
       run: |
         dir
+        7z a rengfx_win_builddir.7z .
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v2
       with:
         name: rengfx-win-builddir
-        path: .
+        path: rengfx_win_builddir.7z
