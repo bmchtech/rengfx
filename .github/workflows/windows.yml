@@ -42,3 +42,6 @@ jobs:
     - name: 'Run Tests'
       run: |
         dub test
+    - name: 'Package'
+      run: |
+        dir
