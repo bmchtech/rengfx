@@ -127,7 +127,7 @@ debug class Console {
         if (cmd in commands) {
             commands[cmd].action(args);
         } else {
-            Core.log.err(format("unrecognized command: %s", cmd));
+            Core.log.err("unrecognized command: %s", cmd);
         }
     }
 }
