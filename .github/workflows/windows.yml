@@ -50,9 +50,9 @@ jobs:
         $demos = Get-ChildItem -Path ./demo -Directory -Recurse
         foreach ($demo in $demos) {
           if (Test-Path "$($demo.FullName)/dub.sdl") {
-            cd $demo.FullName
+            pushd $demo.FullName
             dub build
-            cd ../../..
+            popd
           }
         }
     - name: 'Package'
