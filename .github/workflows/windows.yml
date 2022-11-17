@@ -43,15 +43,18 @@ jobs:
       run: |
         dub test
     - name: 'Build Demos'
-      # run dub build in each demo folder, but ignore folders that don't have a dub.sdl
+      # run dub build in each demo/ folder, but ignore folders that don't have a dub.sdl
+      # using powershell syntax
+      shell: powershell
       run: |
-        for /d %%d in (demos\*) do (
-          if exist "%%d\dub.sdl" (
-            cd %%d
+        $demos = Get-ChildItem -Path ./demo -Directory -Recurse
+        foreach ($demo in $demos) {
+          if (Test-Path $demo\dub.sdl) {
+            cd $demo
             dub build
             cd ..
-          )
-        )
+          }
+        }
     - name: 'Package'
       run: |
         dir
