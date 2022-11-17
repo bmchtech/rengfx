@@ -37,8 +37,8 @@ class PlayScene : Scene3D {
 
         auto item1 = create_entity("item1", Vector3(0, 0, 0));
         auto item1_asset_path = "models/lg/test1.glb";
-        auto item1_asset = Core.content.load_model(item1_asset_path);
-        auto item1_asset_anims = Core.content.load_model_animations(item1_asset_path);
+        auto item1_asset = Core.content.load_model(item1_asset_path).front;
+        auto item1_asset_anims = Core.content.load_model_animations(item1_asset_path).front;
         auto item1_model = item1.add_component(new AnimModel3D(item1_asset, item1_asset_anims));
         // auto item1_model = item1.add_component(new Model3D(item1_asset));
         item1.transform.scale = Vector3(2, 2, 2);

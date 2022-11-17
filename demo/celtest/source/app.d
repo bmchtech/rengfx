@@ -78,9 +78,9 @@ int main(string[] args) {
 	auto game = new Game(resolution_parsed[0], resolution_parsed[1]);
 
 	if (verbose) {
-		Core.log.verbosity = Logger.Verbosity.Trace;
+		Core.log.verbosity = Verbosity.trace;
 	} else {
-		Core.log.verbosity = Logger.Verbosity.Info;
+		Core.log.verbosity = Verbosity.info;
 	}
 	Core.log.trace("starting game");
 

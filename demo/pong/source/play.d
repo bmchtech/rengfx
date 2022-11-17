@@ -13,8 +13,8 @@ class PlayScene : Scene2D {
     override void on_start() {
         clear_color = Colors.BLACK;
 
-        auto ball_tex = Core.content.load_texture2d("ball.png");
-        auto paddle_tex = Core.content.load_texture2d("paddle.png");
+        auto ball_tex = Core.content.load_texture2d("ball.png").front;
+        auto paddle_tex = Core.content.load_texture2d("paddle.png").front;
 
         auto padding = 20;
 
