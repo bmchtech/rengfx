@@ -99,8 +99,7 @@ abstract class Core {
 
     /// sets up a game core
     this(int width, int height, string title) {
-        log = new Logger(Logger.Verbosity.Info);
-        log.sinks ~= new Logger.ConsoleSink();
+        log = Logger(Verbosity.info);
 
         version (unittest) {
         } else {

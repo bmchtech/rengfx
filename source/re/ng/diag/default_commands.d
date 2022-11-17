@@ -54,13 +54,13 @@ debug static class DefaultCommands {
         foreach (scene; scenes) {
             if (scene.ecs.has_entity(name)) {
                 entity = scene.get_entity(name);
-                log.info(format("selected entity '%s' in scene %s",
-                        entity.name, typeid(scene).name));
+                log.info("selected entity '%s' in scene %s",
+                        entity.name, typeid(scene).name);
                 return true;
             }
         }
 
-        log.err(format("entity '%s' not found", name));
+        log.err("entity '%s' not found", name);
         return false;
     }
 
@@ -87,7 +87,7 @@ debug static class DefaultCommands {
             auto matches = all_comps
                 .find!(x => x.classinfo.name.toLower.indexOf(comp_search) > 0);
             if (matches.length == 0) {
-                log.err(format("no matching component for '%s'", comp_search));
+                log.err("no matching component for '%s'", comp_search);
                 return false;
             }
             comp = matches.front;
