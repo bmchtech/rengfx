@@ -4,6 +4,6 @@ authors "xdrie"
 copyright "Copyright © 2020, xdrie"
 license "proprietary"
 dependency "reng" path="../.."
-lflags "-rpath=$$ORIGIN"
+lflags "-L/opt/homebrew/lib"
 
 subConfiguration "reng" "lib-minimal"
