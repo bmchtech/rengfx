@@ -1,6 +1,6 @@
 module re.phys.rigid3d;
 
-version (physics) {
+version (physics_dlib) {
     import re.ecs.component;
     import re.ecs.updatable;
     import re.math;
