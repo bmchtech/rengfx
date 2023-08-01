@@ -1,14 +1,14 @@
 name "celtest"
 description "celtest 3d demo"
-authors "xdrie"
-copyright "Copyright © 2020, xdrie"
+authors "redthing1"
+copyright "Copyright © 2020, redthing1"
 license "proprietary"
 dependency "reng" path="../.."
-lflags "-rpath=$$ORIGIN"
+lflags "-L/opt/homebrew/lib"
 targetType "executable"
 
 configuration "default" {
-    subConfiguration "reng" "lib-standard"
+    subConfiguration "reng" "lib-minimal"
 }
 
 configuration "lite" {

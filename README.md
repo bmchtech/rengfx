@@ -6,13 +6,13 @@ RE ENGINE FX
 
 lightweight, expressive, extensible multimedia engine
 
-![blocks demo gif](https://raw.githubusercontent.com/wiki/xdrie/rengfx/img/rec-2020-07-30_17.17.12.gif)
+![blocks demo gif](https://raw.githubusercontent.com/wiki/redthing1/rengfx/img/rec-2020-07-30_17.17.12.gif)
 
-![table demo gif](https://raw.githubusercontent.com/wiki/xdrie/rengfx/img/rengfx_fox.gif)
+![table demo gif](https://raw.githubusercontent.com/wiki/redthing1/rengfx/img/rengfx_fox.gif)
 
 ## features
 
-+ only library dependency is [`raylib`](https://github.com/xdrie/raylib)
++ only library dependency is [`raylib`](https://github.com/redthing1/raylib)
 + engine features
   + combined, mixable 2d and 3d graphics support
   + cross platform, system-independent graphics
@@ -46,7 +46,7 @@ requirements:
 + `make` and a C compiler (`gcc`, `clang`)
 + `dub` and a D compiler (`dmd`, `gdc`, `ldc`)
 
-rengfx depends on raylib (via [dray](https://github.com/xdrie/dray) bindings).
+rengfx depends on raylib (via [dray](https://github.com/redthing1/dray) bindings).
 by default, `dray` will run a pre-generate script that automatically builds `raylib`.
 
 build engine:
