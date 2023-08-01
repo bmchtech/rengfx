@@ -6,7 +6,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
+    - name: Install redbuild
+      run: pip3 install redbuild
     - name: 'redbuild'
       run: |
-        ./redbuild.sh
+        redbuild -v build
