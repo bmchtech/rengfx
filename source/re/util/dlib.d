@@ -1,6 +1,6 @@
 module re.util.dlib;
 
-version (physics) {
+version (physics_dlib) {
     import dl_vec = dlib.math.vector;
     import dl_quat = dlib.math.quaternion;
     import dl_mat = dlib.math.matrix;
