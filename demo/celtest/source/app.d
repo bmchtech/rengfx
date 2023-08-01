@@ -25,7 +25,7 @@ class Game : Core {
 
 	this(int width, int height) {
 		// core init here
-		Core.auto_compensate_hidpi = true;
+		Core.auto_rescale_hidpi = true;
 		Core.auto_oversample_hidpi = true;
 
 		super(width, height, vr_enabled ? "celtest [VR]" : "celtest");
@@ -51,7 +51,7 @@ int main(string[] args) {
 		"resolution|r", &resolution_str,
 	);
 
-	// Core.auto_compensate_hidpi = false;
+	// Core.auto_rescale_hidpi = false;
 
 	// parse resolution
 	auto resolution_parsed = resolution_str.split("x").map!(to!int).array;
