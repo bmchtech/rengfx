@@ -11,7 +11,7 @@ dependency "optional" version="~>1.3.0"
 dependency "colorize" version="~>1.0.5"
 dependency "minlog" version="~>2.0.0"
 lflags "-lglew" "-lglfw" "/System/Library/Frameworks/OpenGL.framework/OpenGL" "-L/opt/homebrew/lib" platform="osx"
-lflags "WinMM.lib" "OLDNAMES.lib" "MSVCRT.lib" "raylib.lib" "$PACKAGE_DIR/*.lib $PACKAGE_DIR/glfw3_mt.lib" "user32.lib" "gdi32.lib" platform="windows"
+lflags "WinMM.lib" "OLDNAMES.lib" "MSVCRT.lib" "$PACKAGE_DIR/raylib.lib" "$PACKAGE_DIR/*.lib $PACKAGE_DIR/glfw3_mt.lib" "user32.lib" "gdi32.lib" platform="windows"
 libs "raylib"
 configuration "lib-standard" {
 	dependency "dmech" version="~>0.4.1"
