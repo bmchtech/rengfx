@@ -47,7 +47,7 @@ int main(string[] args) {
 		"verbose|v", &verbose,
 		"model|m", &Game.custom_mdl1_path,
 		"free-cam|f", &Game.free_look,
-		"vr", &Game.vr_enabled,
+		// "vr", &Game.vr_enabled,
 		"resolution|r", &resolution_str,
 	);
 
@@ -106,7 +106,7 @@ int main(string[] args) {
 		vr_device_info.chromaAbCorrection[2] = 1.014f;
 		vr_device_info.chromaAbCorrection[3] = 0.0f;
 
-		Game.vr.setup_vr(vr_device_info);
+		// Game.vr.setup_vr(vr_device_info);
 
 		// assert(0, "VR not implemented yet");
 	}
