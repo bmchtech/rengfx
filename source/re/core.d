@@ -17,6 +17,7 @@ import re.gfx.render_ext;
 import re.math;
 import re.util.logger;
 import re.util.tweens.tween_manager;
+import re.util.env;
 import jar;
 static import raylib;
 
@@ -72,13 +73,13 @@ abstract class Core {
     public static int render_oversample = 1;
 
     /// whether to scale things to compensate for hidpi
-    public static bool auto_rescale_hidpi = false;
+    public static bool rescale_hidpi = false;
 
     /// whether to automatically oversample for hidpi
-    public static bool auto_oversample_hidpi = false;
+    public static bool oversample_hidpi = false;
 
     /// whether to rescale the mouse position to compensate for hidpi
-    public static bool auto_rescale_mouse_hidpi = false;
+    public static bool mouse_hidpi = false;
 
     /// whether to automatically resize the render target to the window size
     public static bool sync_render_window_resolution = false;
@@ -96,9 +97,24 @@ abstract class Core {
         public static VRSupport vr;
     }
 
+    private void read_environment_config() {
+        target_fps = Environment.get_int("RENG_TARGET_FPS", target_fps);
+        headless = Environment.get_bool("RENG_HEADLESS", headless);
+        pause_on_focus_lost = Environment.get_bool("RENG_PAUSE_ON_FOCUS_LOST", pause_on_focus_lost);
+        exit_on_escape_pressed = Environment.get_bool("RENG_EXIT_ON_ESCAPE_PRESSED", exit_on_escape_pressed);
+        render_oversample = Environment.get_int("RENG_RENDER_OVERSAMPLE", render_oversample);
+        rescale_hidpi = Environment.get_bool("RENG_RESCALE_HIDPI", rescale_hidpi);
+        oversample_hidpi = Environment.get_bool("RENG_OVERSAMPLE_HIDPI", oversample_hidpi);
+        mouse_hidpi = Environment.get_bool("RENG_MOUSE_HIDPI", mouse_hidpi);
+        sync_render_window_resolution = Environment.get_bool(
+            "RENG_SYNC_RENDER_WINDOW_RESOLUTION", sync_render_window_resolution);
+    }
+
     /// sets up a game core
     this(int width, int height, string title) {
         log = Logger(Verbosity.info);
+
+        read_environment_config();
 
         version (unittest) {
         } else {
@@ -110,7 +126,7 @@ abstract class Core {
             window = new Window(width, height);
             window.initialize();
             window.set_title(title);
-            if (auto_rescale_hidpi) {
+            if (rescale_hidpi) {
                 handle_hidpi_compensation();
             }
         }
@@ -333,7 +349,7 @@ abstract class Core {
         auto scaled_width = window.width_dpi;
         auto scaled_height = window.height_dpi;
         // but, if auto-oversampling is enabled, we need to set the oversample factor
-        if (auto_oversample_hidpi) {
+        if (oversample_hidpi) {
             render_oversample = cast(int) window.scale_dpi;
             log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample);
         }
@@ -342,7 +358,7 @@ abstract class Core {
         window.resize(scaled_width, scaled_height);
         handle_window_resize();
         sync_render_resolution();
-        if (auto_rescale_mouse_hidpi) {
+        if (mouse_hidpi) {
             // set mouse transform to compensate for dpi scale
             raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
         }
@@ -365,7 +381,7 @@ abstract class Core {
         // first get the new window size
         auto render_res_x = window.width;
         auto render_res_y = window.height;
-        // if (auto_rescale_hidpi) {
+        // if (rescale_hidpi) {
         //     // if hidpi compensation is enabled, we need to scale the window size by the hidpi scale
         //     render_res_x = cast(int)(render_res_x / window.scale_dpi);
         //     render_res_y = cast(int)(render_res_y / window.scale_dpi);
