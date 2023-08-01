@@ -52,6 +52,9 @@ class Window {
 
     /// initializes the window
     public void initialize() {
+        // set config flags
+        // tell raylib we're hidpi aware
+        raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI);
         // create the window
         raylib.InitWindow(_width, _height, "");
         // set options

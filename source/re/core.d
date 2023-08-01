@@ -71,9 +71,8 @@ abstract class Core {
     /// oversampling factor for internal rendering
     public static int render_oversample = 1;
 
-    /// whether to automatically scale things to compensate for hidpi
-    /// NOTE: raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI also exists, but we're not using it right now
-    public static bool auto_compensate_hidpi = true;
+    /// whether to scale things to compensate for hidpi
+    public static bool auto_rescale_hidpi = false;
 
     /// whether to automatically oversample for hidpi
     public static bool auto_oversample_hidpi = false;
@@ -111,7 +110,7 @@ abstract class Core {
             window = new Window(width, height);
             window.initialize();
             window.set_title(title);
-            if (auto_compensate_hidpi) {
+            if (auto_rescale_hidpi) {
                 handle_hidpi_compensation();
             }
         }
@@ -366,7 +365,7 @@ abstract class Core {
         // first get the new window size
         auto render_res_x = window.width;
         auto render_res_y = window.height;
-        // if (auto_compensate_hidpi) {
+        // if (auto_rescale_hidpi) {
         //     // if hidpi compensation is enabled, we need to scale the window size by the hidpi scale
         //     render_res_x = cast(int)(render_res_x / window.scale_dpi);
         //     render_res_y = cast(int)(render_res_y / window.scale_dpi);
