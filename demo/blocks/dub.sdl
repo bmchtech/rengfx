@@ -1,8 +1,0 @@
-name "blocks"
-description "blocks demo"
-authors "redthing1"
-copyright "Copyright © 2020, redthing1"
-license "proprietary"
-dependency "reng" path="../.."
-
-subConfiguration "reng" "lib-standard"
