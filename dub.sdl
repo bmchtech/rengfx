@@ -10,9 +10,14 @@ dependency "dray" version=">=4.2.0-r1 <4.3.0-0"
 dependency "jar" version="~>0.1.0"
 dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
-lflags "-lglew" "-lglfw" "/System/Library/Frameworks/OpenGL.framework/OpenGL" platform="osx"
-lflags "WinMM.lib" "OLDNAMES.lib" "MSVCRT.lib" "raylib.lib" "$PACKAGE_DIR/*.lib $PACKAGE_DIR/glfw3_mt.lib" "user32.lib" "gdi32.lib" platform="windows"
+
+# link to raylib
 libs "raylib"
+
+# os-specific link flags
+lflags "-lglew" "-lglfw" "/System/Library/Frameworks/OpenGL.framework/OpenGL" "-L/opt/homebrew/lib" platform="osx"
+lflags "WinMM.lib" "OLDNAMES.lib" "MSVCRT.lib" "raylib.lib" "$PACKAGE_DIR/*.lib $PACKAGE_DIR/glfw3_mt.lib" "user32.lib" "gdi32.lib" platform="windows"
+
 configuration "lib-standard" {
 	dependency "dlib" version="~>0.19.1"
 	dependency "dmech" version="~>0.4.1"
