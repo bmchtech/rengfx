@@ -13,26 +13,31 @@ dependency "minlog" version="~>2.0.0"
 lflags "-lglew" "-lglfw" "/System/Library/Frameworks/OpenGL.framework/OpenGL" "-L/opt/homebrew/lib" platform="osx"
 lflags "WinMM.lib" "OLDNAMES.lib" "MSVCRT.lib" "$PACKAGE_DIR/raylib.lib" "$PACKAGE_DIR/*.lib $PACKAGE_DIR/glfw3_mt.lib" "user32.lib" "gdi32.lib" platform="windows"
 libs "raylib"
+
 configuration "lib-standard" {
-	dependency "dmech" version="~>0.4.1"
+	// dependency "dmech" version="~>0.4.1"
 	targetType "library"
 	versions "physics" "vr"
 }
+
 configuration "lib-minimal" {
 	targetType "library"
 }
+
 configuration "lib-lite" {
-	dependency "dmech" version="~>0.4.1"
+	// dependency "dmech" version="~>0.4.1"
 	targetType "library"
 	subConfiguration "dray" "drm-gles2"
 	libs "GL" "EGL" "drm" "gbm"
 	versions "physics" "vr" "lite"
 }
+
 configuration "unittest" {
 	dependency "silly" version="~>1.1.1"
 	targetType "library"
 	versions "physics"
 }
+
 configuration "ddox" {
 	targetType "library"
 	versions "physics"
