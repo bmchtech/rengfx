@@ -13,7 +13,7 @@ static import raylib;
 /// simple 3d demo scene
 class PlayScene : Scene3D {
     private PostProcessor glitch_postproc;
-    private float[2] sample_offset = [0.002, 0];
+    private float[2] sample_offset = [0.004, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
@@ -33,10 +33,10 @@ class PlayScene : Scene3D {
         postprocessors ~= glitch_postproc;
 
         // set the camera position
-        cam.entity.position = Vector3(0, 3, 6);
+        cam.entity.position = Vector3(0, 6, 12);
 
         auto item1 = create_entity("item1", Vector3(0, 0, 0));
-        auto item1_asset_path = "models/lg/test1.glb";
+        auto item1_asset_path = "models/rcube.glb";
         auto item1_asset = Core.content.load_model(item1_asset_path).front;
         auto item1_asset_anims = Core.content.load_model_animations(item1_asset_path).front;
         auto item1_model = item1.add_component(new AnimModel3D(item1_asset, item1_asset_anims));
