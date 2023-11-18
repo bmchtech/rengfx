@@ -11,8 +11,10 @@ dependency "minlog" version="~>2.0.0"
 dependency "jar" version="~>0.1.0"
 dependency "dray" version=">=4.2.0-r3 <4.3.0-0"
 dependency "optional" version="~>1.3.0"
-lflags "-lglew" "-lglfw" "/System/Library/Frameworks/OpenGL.framework/OpenGL" "-L/opt/homebrew/lib" platform="osx"
+
+lflags "-lglew" "-lglfw" "-framework" "OpenGL" "-L/opt/homebrew/lib" platform="osx"
 lflags "WinMM.lib" "OLDNAMES.lib" "MSVCRT.lib" "$PACKAGE_DIR/raylib.lib" "$PACKAGE_DIR/*.lib $PACKAGE_DIR/glfw3_mt.lib" "user32.lib" "gdi32.lib" platform="windows"
+
 libs "raylib"
 configuration "lib-standard" {
 	targetType "library"
