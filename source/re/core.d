@@ -343,24 +343,39 @@ abstract class Core {
     }
 
     private void handle_hidpi_compensation() {
-        // when hidpi is enabled,, the window is too small
-        // so we scale the real window but keep the render resolution the same
-        // compute the target window size
-        auto scaled_width = window.width_dpi;
-        auto scaled_height = window.height_dpi;
-        // but, if auto-oversampling is enabled, we need to set the oversample factor
-        if (oversample_hidpi) {
-            render_oversample = cast(int) window.scale_dpi;
-            log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample);
+        void manual_hidpi_compenate() {
+            // when hidpi is enabled,, the window is too small
+            // so we scale the real window but keep the render resolution the same
+            // compute the target window size
+            auto scaled_width = window.width_dpi;
+            auto scaled_height = window.height_dpi;
+            // but, if auto-oversampling is enabled, we need to set the oversample factor
+            if (oversample_hidpi) {
+                render_oversample = cast(int) window.scale_dpi;
+                log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample);
+            }
+            log.info("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
+                window.width, window.height, scaled_width, scaled_height, window.scale_dpi);
+            window.resize(scaled_width, scaled_height);
+            handle_window_resize();
+            sync_render_resolution();
+            if (mouse_hidpi) {
+                // set mouse transform to compensate for dpi scale
+                raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
+            }
         }
-        log.info("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
-            window.width, window.height, scaled_width, scaled_height, window.scale_dpi);
-        window.resize(scaled_width, scaled_height);
-        handle_window_resize();
-        sync_render_resolution();
-        if (mouse_hidpi) {
-            // set mouse transform to compensate for dpi scale
-            raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
+
+        version (OSX) {
+            // on macOS, we don't need to do manual hidpi compensation, because it is done transparently by the window manager
+            return;
+        }
+        version (Windows) {
+            // windows does require manual hidpi compensation
+            manual_hidpi_compenate();
+        }
+        version (linux) {
+            // linux does require manual hidpi compensation
+            manual_hidpi_compenate();
         }
     }
 
