@@ -365,18 +365,20 @@ abstract class Core {
             }
         }
 
-        version (OSX) {
-            // on macOS, we don't need to do manual hidpi compensation, because it is done transparently by the window manager
-            return;
-        }
-        version (Windows) {
-            // windows does require manual hidpi compensation
-            manual_hidpi_compenate();
-        }
-        version (linux) {
-            // linux does require manual hidpi compensation
-            manual_hidpi_compenate();
-        }
+        // we will no longer do manual hidpi compensation
+        // version (OSX) {
+        //     // on macOS, we don't need to do manual hidpi compensation, because it is done transparently by the window manager
+        //     return;
+        // }
+        // version (Windows) {
+        //     // // windows does require manual hidpi compensation
+        //     // manual_hidpi_compenate();
+        //     return;
+        // }
+        // version (linux) {
+        //     // linux does require manual hidpi compensation
+        //     manual_hidpi_compenate();
+        // }
     }
 
     private void handle_window_resize() {
