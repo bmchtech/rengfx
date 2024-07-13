@@ -46,7 +46,7 @@ class PlayScene : Scene3D {
         cam.look_at(item1.transform.position + Vector3(0, 2, 0));
 
         // add a camera to look at the item1
-        cam.entity.add_component(new CameraFreeBrowse(item1));
+        cam.entity.add_component(new CameraMouseNavigation(item1));
 
         // draw a grid at the origin
         auto grid = create_entity("grid");

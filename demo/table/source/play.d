@@ -42,7 +42,7 @@ class PlayScene : Scene3D {
 
         // add a camera to look at the fox
         cam.entity.add_component(new CameraOrbit(fox, 0.2));
-        // cam.entity.add_component(new CameraFreeBrowse(fox));
+        // cam.entity.add_component(new CameraMouseNavigation(fox));
 
         // draw a grid at the origin
         auto grid = create_entity("grid");

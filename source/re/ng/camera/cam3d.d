@@ -32,7 +32,7 @@ class SceneCamera3D : SceneCamera {
     }
 
     /// gets the underlying camera object (used internally)
-    @property ref raylib.Camera3D camera() return  {
+    @property ref raylib.Camera3D camera() return {
         return _camera;
     }
 
@@ -80,8 +80,14 @@ class SceneCamera3D : SceneCamera {
     override void update() {
         super.update();
 
-        // copy entity to camera transform
-        _camera.position = entity.transform.position;
+        if (_rl_camera_mode == raylib.CameraMode.CAMERA_CUSTOM) {
+            // copy entity transform to camera transform
+            _camera.position = entity.transform.position;
+        } else {
+            // otherwise, this is a raylib-controlled camera mode
+            // copy the raylib-computed position back to the entity
+            entity.position = _camera.position;
+        }
 
         // import std.stdio : writefln;
         // writefln("cam pos: %s", _camera.position);
@@ -132,8 +138,8 @@ abstract class CameraFollow3D : Component, Updatable {
 
         _target_dist = raymath.Vector3Length(to_target);
         _angle = Vector2(atan2(to_target.x, to_target.z), // Camera angle in plane XZ (0 aligned with Z, move positive CCW)
-                atan2(to_target.y,
-                    sqrt(to_target.x * to_target.x + to_target.z * to_target.z))); // // Camera angle in plane XY (0 aligned with X, move positive CW)
+            atan2(to_target.y,
+                sqrt(to_target.x * to_target.x + to_target.z * to_target.z))); // // Camera angle in plane XY (0 aligned with X, move positive CW)
     }
 }
 
@@ -166,7 +172,7 @@ class CameraOrbit : CameraFollow3D {
         // update camera position with changes
         auto npos_x = sin(_angle.x) * _target_dist * cos(_angle.y) + target.position.x;
         auto npos_y = ((_angle.y <= 0.0f) ? 1 : -1) * sin(
-                _angle.y) * _target_dist * sin(_angle.y) + target.position.y;
+            _angle.y) * _target_dist * sin(_angle.y) + target.position.y;
         auto npos_z = cos(_angle.x) * _target_dist * cos(_angle.y) + target.position.z;
         entity.position = Vector3(npos_x, npos_y, npos_z);
     }
@@ -258,8 +264,24 @@ class CameraThirdPerson : CameraFollow3D {
     }
 }
 
-/// free-browse camera
-class CameraFreeBrowse : CameraFollow3D {
+/// raylib freecam
+class CameraFreeCam : Component, Updatable {
+    mixin Reflect;
+    protected SceneCamera3D cam;
+
+    override void setup() {
+        cam = entity.get_component!SceneCamera3D();
+        // clear target
+        cam.camera.target = Vector3(0, 0, 0);
+    }
+
+    void update() {
+        cam.set_mode(raylib.CameraMode.CAMERA_FREE);
+    }
+}
+
+/// mouse navigation camera
+class CameraMouseNavigation : CameraFollow3D {
     import re.input : Keys, MouseButton, Input;
 
     mixin Reflect;
@@ -302,7 +324,7 @@ class CameraFreeBrowse : CameraFollow3D {
                 _target_dist = free_dist_max_clamp;
         }  // Camera looking down
         else if ((entity.position.y > tpos_y)
-                && (_target_dist == free_dist_max_clamp) && (wheel_delta < 0)) {
+            && (_target_dist == free_dist_max_clamp) && (wheel_delta < 0)) {
             tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
             tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
             tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
@@ -318,7 +340,7 @@ class CameraFreeBrowse : CameraFollow3D {
                 _target_dist = free_dist_min_clamp;
         }  // Camera looking up
         else if ((entity.position.y < tpos_y)
-                && (_target_dist == free_dist_max_clamp) && (wheel_delta < 0)) {
+            && (_target_dist == free_dist_max_clamp) && (wheel_delta < 0)) {
             tpos_x += wheel_delta * (tpos_x - entity.position.x) * zoom_sensitivity / _target_dist;
             tpos_y += wheel_delta * (tpos_y - entity.position.y) * zoom_sensitivity / _target_dist;
             tpos_z += wheel_delta * (tpos_z - entity.position.z) * zoom_sensitivity / _target_dist;
@@ -356,12 +378,12 @@ class CameraFreeBrowse : CameraFollow3D {
                 // Camera panning
                 tpos_x += ((mouse_delta.x * look_sensitivity) * cos(_angle.x) + (
                         mouse_delta.y * look_sensitivity) * sin(_angle.x) * sin(_angle.y)) * (
-                        _target_dist / free_pan_divider);
+                    _target_dist / free_pan_divider);
                 tpos_y += ((mouse_delta.y * look_sensitivity) * cos(_angle.y)) * (
-                        _target_dist / free_pan_divider);
+                    _target_dist / free_pan_divider);
                 tpos_z += ((mouse_delta.x * -look_sensitivity) * sin(_angle.x) + (
                         mouse_delta.y * look_sensitivity) * cos(_angle.x) * sin(_angle.y)) * (
-                        _target_dist / free_pan_divider);
+                    _target_dist / free_pan_divider);
             }
         }
 
