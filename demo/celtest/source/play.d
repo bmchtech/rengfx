@@ -111,7 +111,7 @@ class PlayScene : Scene3D {
     }
 
     void set_free_cam() {
-        auto cam_control = new CameraFreeLook(mdl1);
+        auto cam_control = new CameraFreeBrowse(mdl1);
         cam_control.target_offset = Vector3(0, 1, 0);
         cam.entity.add_component(cam_control);
     }
@@ -141,8 +141,8 @@ class PlayScene : Scene3D {
             if (cam.entity.has_component!CameraOrbit) {
                 cam.entity.remove_component!CameraOrbit;
                 set_free_cam();
-            } else if (cam.entity.has_component!CameraFreeLook) {
-                cam.entity.remove_component!CameraFreeLook;
+            } else if (cam.entity.has_component!CameraFreeBrowse) {
+                cam.entity.remove_component!CameraFreeBrowse;
                 set_orbit_cam();
             }
         }

@@ -15,6 +15,7 @@ class SceneCamera3D : SceneCamera {
     mixin Reflect;
     private raylib.Camera3D _camera;
     private ProjectionType _projection;
+    private raylib.CameraMode _rl_camera_mode = raylib.CameraMode.CAMERA_CUSTOM;
 
     /// the projection used for the camera
     public enum ProjectionType {
@@ -86,7 +87,7 @@ class SceneCamera3D : SceneCamera {
         // writefln("cam pos: %s", _camera.position);
 
         // update raylib camera
-        raylib.UpdateCamera(&_camera);
+        raylib.UpdateCamera(&_camera, _rl_camera_mode);
     }
 
     /// orient the camera in the direction of a point
@@ -97,6 +98,11 @@ class SceneCamera3D : SceneCamera {
     /// orient the camera in the direction of an entity
     public void look_at(Entity entity) {
         look_at(entity.position);
+    }
+
+    /// set the internal camera mode
+    public void set_mode(raylib.CameraMode mode) {
+        _rl_camera_mode = mode;
     }
 }
 
@@ -252,8 +258,8 @@ class CameraThirdPerson : CameraFollow3D {
     }
 }
 
-/// free-look camera
-class CameraFreeLook : CameraFollow3D {
+/// free-browse camera
+class CameraFreeBrowse : CameraFollow3D {
     import re.input : Keys, MouseButton, Input;
 
     mixin Reflect;

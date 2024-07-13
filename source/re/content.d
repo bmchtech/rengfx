@@ -104,16 +104,11 @@ class ContentManager {
 
     /// loads model animations from disk
     public Optional!(raylib.ModelAnimation[]) load_model_animations(string path) {
-        // uint num_loaded_anims = 0;
-        // raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(get_path_cstr(path), &num_loaded_anims);
-        // auto anims = loaded_anims[0 .. num_loaded_anims]; // access array as slice
-        // return anims;
-
         auto real_path = get_path(path);
         if (!exists(real_path)) {
             return no!(raylib.ModelAnimation[]);
         }
-        uint num_loaded_anims = 0;
+        int num_loaded_anims = 0;
         raylib.ModelAnimation* loaded_anims = raylib.LoadModelAnimations(real_path.c_str, &num_loaded_anims);
         auto anims = loaded_anims[0 .. num_loaded_anims]; // access array as slice
         return some(anims);
