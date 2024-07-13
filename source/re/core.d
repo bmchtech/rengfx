@@ -18,7 +18,7 @@ import re.math;
 import re.util.logger;
 import re.util.tweens.tween_manager;
 import re.util.env;
-import jar;
+import re.util.jar;
 static import raylib;
 
 /**
