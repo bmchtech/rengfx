@@ -2,7 +2,7 @@ module app;
 
 import std.stdio;
 import std.array;
-import std.algorithm.iteration: map, filter;
+import std.algorithm.iteration : map, filter;
 import std.conv;
 import std.format;
 
@@ -46,8 +46,7 @@ int main(string[] args) {
 	auto help = getopt(args,
 		"verbose|v", &verbose,
 		"model|m", &Game.custom_mdl1_path,
-		"free-cam|f", &Game.free_look,
-		// "vr", &Game.vr_enabled,
+		"free-cam|f", &Game.free_look, // "vr", &Game.vr_enabled,
 		"resolution|r", &resolution_str,
 	);
 
@@ -57,8 +56,10 @@ int main(string[] args) {
 	auto resolution_parsed = resolution_str.split("x").map!(to!int).array;
 	if (resolution_parsed.length != 2) {
 		resolution_parsed = [Game.DEFAULT_WIDTH, Game.DEFAULT_HEIGHT];
-		// log error
-		writefln("invalid resolution: %s", resolution_str);
+		if (resolution_str.length > 0) {
+			// log error
+			writefln("invalid resolution: %s", resolution_str);
+		}
 	}
 
 	if (help.helpWanted) {
