@@ -14,6 +14,7 @@ static import raylib;
 
 public {
     import re.time;
+    import re.ng.scenebasic;
     import re.ng.scene2d;
     import re.ng.scene3d;
 }

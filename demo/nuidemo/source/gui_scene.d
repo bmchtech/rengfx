@@ -11,7 +11,7 @@ import gui_root;
 static import raylib;
 static import raygui;
 
-class GuiScene : Scene2D {
+class GuiScene : SceneBasic {
     override void on_start() {
         clear_color = Colors.RAYWHITE;
 
