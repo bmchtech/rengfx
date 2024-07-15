@@ -4,7 +4,7 @@ jobs:
   test-windows:
     runs-on: windows-latest
     env:
-      DRAY_VERSION: 4.2.0-r2
+      DRAY_VERSION: 5.0.0-r1
     steps:
     - uses: actions/checkout@v3
     - uses: dlang-community/setup-dlang@4c99aa991ce7d19dd3064de0a4f2f6b2f152e2d7
