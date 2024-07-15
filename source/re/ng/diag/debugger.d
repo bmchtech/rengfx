@@ -60,12 +60,19 @@ debug class Debugger {
     }
 
     public void render() {
+        if (!inspector.open && !console.open) {
+            // nothing to render
+            return;
+        }
+
         raylib.BeginTextureMode(_render_target);
         raylib.ClearBackground(Colors.BLANK);
+
         if (inspector.open)
             inspector.render();
         if (console.open)
             console.render();
+
         raylib.EndTextureMode();
 
         // draw render target
