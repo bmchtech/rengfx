@@ -64,12 +64,13 @@ class GuiRoot : Component, Renderable2D, Updatable {
     private string status_text = "";
     int active_tab = 0;
     bool tab_picker_open = false;
+    string[] tab_labels = ["TAB1", "TAB2"];
 
     void update() {
         // keyboard shortcuts
         if (Input.is_key_down(Keys.KEY_LEFT_CONTROL) && Input.is_key_pressed(Keys.KEY_TAB)) {
             // advance tab
-            // active_tab = cast(int)((active_tab + 1) % tab_mds.length);
+            active_tab = cast(int)((active_tab + 1) % tab_labels.length);
         }
     }
 
@@ -92,10 +93,10 @@ class GuiRoot : Component, Renderable2D, Updatable {
             enum TAB1 = 0;
             enum TAB2 = 1;
             static int tab_state = TAB1;
-            if (nk_tab(ctx, "TAB1", tab_state == TAB1)) {
+            if (nk_tab(ctx, cast(char*) tab_labels[0], tab_state == TAB1)) {
                 tab_state = TAB1;
             }
-            if (nk_tab(ctx, "TAB2", tab_state == TAB2)) {
+            if (nk_tab(ctx, cast(char*) tab_labels[0], tab_state == TAB2)) {
                 tab_state = TAB2;
             }
 
