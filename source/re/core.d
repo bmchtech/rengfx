@@ -70,7 +70,7 @@ abstract class Core {
     public static bool exit_on_escape_pressed = true;
 
     /// oversampling factor for internal rendering
-    public static int render_oversample = 1;
+    public static int render_oversample_factor = 1;
 
     // /// whether to scale things to compensate for hidpi
     // public static bool rescale_hidpi = false;
@@ -105,7 +105,7 @@ abstract class Core {
         headless = Environment.get_bool("RENG_HEADLESS", headless);
         pause_on_focus_lost = Environment.get_bool("RENG_PAUSE_ON_FOCUS_LOST", pause_on_focus_lost);
         exit_on_escape_pressed = Environment.get_bool("RENG_EXIT_ON_ESCAPE_PRESSED", exit_on_escape_pressed);
-        render_oversample = Environment.get_int("RENG_RENDER_OVERSAMPLE", render_oversample);
+        render_oversample_factor = Environment.get_int("RENG_RENDER_OVERSAMPLE_FACTOR", render_oversample_factor);
         // rescale_hidpi = Environment.get_bool("RENG_RESCALE_HIDPI", rescale_hidpi);
         oversample_hidpi = Environment.get_bool("RENG_OVERSAMPLE_HIDPI", oversample_hidpi);
         mouse_hidpi = Environment.get_bool("RENG_MOUSE_HIDPI", mouse_hidpi);
@@ -130,9 +130,8 @@ abstract class Core {
             window.set_resizable(window_resizable);
             window.initialize();
             window.set_title(title);
-            // if (rescale_hidpi) {
-            //     handle_hidpi_compensation();
-            // }
+            calculate_hidpi_scaling();
+            sync_render_resolution();
         }
 
         // disable default exit key
@@ -346,6 +345,17 @@ abstract class Core {
         }
     }
 
+    private void calculate_hidpi_scaling() {
+        // get dpi scale factor
+        auto scale_dpi = cast(int) window.scale_dpi;
+
+        if (oversample_hidpi) {
+            // if oversampling is enabled, calculate the oversample factor
+            render_oversample_factor = scale_dpi;
+            log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample_factor);
+        }
+    }
+
     // private void handle_hidpi_compensation() {
     //     void manual_hidpi_compenate() {
     //         // when hidpi is enabled,, the window is too small
@@ -409,14 +419,24 @@ abstract class Core {
         //     // if hidpi compensation is on then the window size will be scale*resolution
         //     // so we need to divide by the scale to get the render resolution
         // }
-        // if oversampling is enabled, we need to multiply by the oversampling factor
-        render_res_x *= render_oversample;
-        render_res_y *= render_oversample;
+
+        // reset mouse scale
+        raylib.SetMouseScale(1.0, 1.0);
+
+        if (render_oversample_factor > 1) {
+            // if oversampling is enabled, we need to multiply by the oversampling factor
+            render_res_x *= render_oversample_factor;
+            render_res_y *= render_oversample_factor;
+
+            // set mouse scale to compensate for oversampling
+            raylib.SetMouseScale(1.0 * render_oversample_factor, 1.0 * render_oversample_factor);
+        }
+
         // set the render resolution
         default_resolution = Vector2(render_res_x, render_res_y);
         // Core.log.info(format("updating render resolution to %s", default_resolution));
         Core.log.info(format("updating render resolution to %s (dpi scale %s) (oversample %s)",
-                default_resolution, window.scale_dpi, render_oversample));
+                default_resolution, window.scale_dpi, render_oversample_factor));
     }
 }
 
