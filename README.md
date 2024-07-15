@@ -12,7 +12,7 @@ lightweight, expressive, extensible multimedia engine
 
 ## features
 
-+ only library dependency is [`raylib`](https://github.com/redthing1/raylib)
++ only library dependency is [`raylib` (v5.0)](https://github.com/redthing1/raylib)
 + engine features
   + combined, mixable 2d and 3d graphics support
   + cross platform, system-independent graphics
