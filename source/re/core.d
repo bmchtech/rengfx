@@ -72,17 +72,11 @@ abstract class Core {
     /// oversampling factor for internal rendering
     public static int render_oversample_factor = 1;
 
-    // /// whether to scale things to compensate for hidpi
-    // public static bool rescale_hidpi = false;
-
     /// whether to automatically oversample for hidpi
-    public static bool oversample_hidpi = false;
-
-    /// whether to rescale the mouse position to compensate for hidpi
-    public static bool mouse_hidpi = false;
+    public static bool render_oversample_hidpi = false;
 
     /// whether to automatically resize the render target to the window size
-    public static bool sync_render_window_resolution = false;
+    public static bool sync_render_target_to_window_resolution = false;
 
     /// whether to make the window resizable
     public static bool window_resizable = false;
@@ -105,12 +99,6 @@ abstract class Core {
         headless = Environment.get_bool("RENG_HEADLESS", headless);
         pause_on_focus_lost = Environment.get_bool("RENG_PAUSE_ON_FOCUS_LOST", pause_on_focus_lost);
         exit_on_escape_pressed = Environment.get_bool("RENG_EXIT_ON_ESCAPE_PRESSED", exit_on_escape_pressed);
-        render_oversample_factor = Environment.get_int("RENG_RENDER_OVERSAMPLE_FACTOR", render_oversample_factor);
-        // rescale_hidpi = Environment.get_bool("RENG_RESCALE_HIDPI", rescale_hidpi);
-        oversample_hidpi = Environment.get_bool("RENG_OVERSAMPLE_HIDPI", oversample_hidpi);
-        mouse_hidpi = Environment.get_bool("RENG_MOUSE_HIDPI", mouse_hidpi);
-        sync_render_window_resolution = Environment.get_bool(
-            "RENG_SYNC_RENDER_WINDOW_RESOLUTION", sync_render_window_resolution);
     }
 
     /// sets up a game core
@@ -131,7 +119,7 @@ abstract class Core {
             window.initialize();
             window.set_title(title);
             calculate_hidpi_scaling();
-            sync_render_resolution();
+            calculate_render_resolution();
         }
 
         // disable default exit key
@@ -345,61 +333,11 @@ abstract class Core {
         }
     }
 
-    private void calculate_hidpi_scaling() {
-        // get dpi scale factor
-        auto scale_dpi = cast(int) window.scale_dpi;
-
-        if (oversample_hidpi) {
-            // if oversampling is enabled, calculate the oversample factor
-            render_oversample_factor = scale_dpi;
-            log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample_factor);
-        }
-    }
-
-    // private void handle_hidpi_compensation() {
-    //     void manual_hidpi_compenate() {
-    //         // when hidpi is enabled,, the window is too small
-    //         // so we scale the real window but keep the render resolution the same
-    //         // compute the target window size
-    //         auto scaled_width = window.width_dpi;
-    //         auto scaled_height = window.height_dpi;
-    //         // but, if auto-oversampling is enabled, we need to set the oversample factor
-    //         if (oversample_hidpi) {
-    //             render_oversample = cast(int) window.scale_dpi;
-    //             log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample);
-    //         }
-    //         log.info("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
-    //             window.width, window.height, scaled_width, scaled_height, window.scale_dpi);
-    //         window.resize(scaled_width, scaled_height);
-    //         handle_window_resize();
-    //         sync_render_resolution();
-    //         if (mouse_hidpi) {
-    //             // set mouse transform to compensate for dpi scale
-    //             raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
-    //         }
-    //     }
-
-    //     // we will no longer do manual hidpi compensation
-    //     // version (OSX) {
-    //     //     // on macOS, we don't need to do manual hidpi compensation, because it is done transparently by the window manager
-    //     //     return;
-    //     // }
-    //     // version (Windows) {
-    //     //     // // windows does require manual hidpi compensation
-    //     //     // manual_hidpi_compenate();
-    //     //     return;
-    //     // }
-    //     // version (linux) {
-    //     //     // linux does require manual hidpi compensation
-    //     //     manual_hidpi_compenate();
-    //     // }
-    // }
-
     private void handle_window_resize() {
         log.info("window resized to (%s,%s)", window.width, window.height);
         // window was resized
-        if (sync_render_window_resolution) {
-            sync_render_resolution();
+        if (sync_render_target_to_window_resolution) {
+            calculate_render_resolution();
         }
         // notify the active scenes
         foreach (scene; _scenes) {
@@ -407,18 +345,22 @@ abstract class Core {
         }
     }
 
-    private void sync_render_resolution() {
+    private void calculate_hidpi_scaling() {
+        // get dpi scale factor
+        auto scale_dpi = cast(int) window.scale_dpi;
+
+        if (render_oversample_hidpi) {
+            // if oversampling is enabled, calculate the oversample factor
+            render_oversample_factor = scale_dpi;
+            log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample_factor);
+        }
+    }
+
+    private void calculate_render_resolution() {
         // since window was resized, update our render resolution
         // first get the new window size
         auto render_res_x = window.width;
         auto render_res_y = window.height;
-        // if (rescale_hidpi) {
-        //     // if hidpi compensation is enabled, we need to scale the window size by the hidpi scale
-        //     render_res_x = cast(int)(render_res_x / window.scale_dpi);
-        //     render_res_y = cast(int)(render_res_y / window.scale_dpi);
-        //     // if hidpi compensation is on then the window size will be scale*resolution
-        //     // so we need to divide by the scale to get the render resolution
-        // }
 
         // reset mouse scale
         raylib.SetMouseScale(1.0, 1.0);
@@ -434,7 +376,6 @@ abstract class Core {
 
         // set the render resolution
         default_resolution = Vector2(render_res_x, render_res_y);
-        // Core.log.info(format("updating render resolution to %s", default_resolution));
         Core.log.info(format("updating render resolution to %s (dpi scale %s) (oversample %s)",
                 default_resolution, window.scale_dpi, render_oversample_factor));
     }

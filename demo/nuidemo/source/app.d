@@ -16,8 +16,8 @@ class Game : Core {
 
 	this() {
 		window_resizable = true;
-		oversample_hidpi = true;
-		sync_render_window_resolution = true;
+		render_oversample_hidpi = true;
+		sync_render_target_to_window_resolution = true;
 
 		super(WIDTH, HEIGHT, "nuidemo");
 	}

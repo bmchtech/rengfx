@@ -185,7 +185,7 @@ abstract class Scene {
     /// window resize event
     void on_window_resized() {
         // if the option is enabled, resize the render target to the new window size
-        if (Core.sync_render_window_resolution) {
+        if (Core.sync_render_target_to_window_resolution) {
             resolution = Core.default_resolution;
         }
     }

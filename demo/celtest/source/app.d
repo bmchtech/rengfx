@@ -25,7 +25,7 @@ class Game : Core {
 
 	this(int width, int height) {
 		// core init here
-		Core.oversample_hidpi = true;
+		Core.render_oversample_hidpi = true;
 
 		super(width, height, vr_enabled ? "celtest [VR]" : "celtest");
 	}
