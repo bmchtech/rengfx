@@ -44,12 +44,14 @@ class GuiRoot : Component, Renderable2D, Updatable {
 
     nk_context* ctx;
     nk_colorf bg;
+    float ui_scale = 1.0;
 
     override void setup() {
         bg = ColorToNuklearF(Colors.SKYBLUE);
         auto ui_font = raylib.LoadFontEx("./res/SourceSansPro-Regular.ttf", UI_FS, null, 0);
         ctx = InitNuklearEx(ui_font, UI_FS);
-        SetNuklearScaling(ctx, cast(int) Core.render_oversample_factor);
+        ui_scale = Core.window.dpi_scale * Core.render_oversample_factor;
+        SetNuklearScaling(ctx, ui_scale);
         apply_style(ctx);
 
         status("ready.");
@@ -80,7 +82,10 @@ class GuiRoot : Component, Renderable2D, Updatable {
         UpdateNuklear(ctx);
 
         // GUI
-        auto window_bounds = Rectangle(0, 0, Core.window.render_width, Core.window.render_height);
+        auto window_bounds = Rectangle(
+            0, 0,
+            Core.window.screen_width * ui_scale, Core.window.screen_height * ui_scale
+        );
         if (nk_begin(ctx, "Demo", RectangleToNuklear(ctx, window_bounds),
                 nk_panel_flags.NK_WINDOW_BORDER | nk_panel_flags.NK_WINDOW_TITLE)) {
             enum EASY = 0;

@@ -16,7 +16,8 @@ class Game : Core {
 
 	this() {
 		window_resizable = true;
-		render_oversample_factor = 1;
+		render_oversample_factor = 2;
+		default_filter_mode = raylib.TextureFilter.TEXTURE_FILTER_ANISOTROPIC_16X;
 		sync_render_target_to_window_resolution = true;
 
 		super(WIDTH, HEIGHT, "nuidemo");
