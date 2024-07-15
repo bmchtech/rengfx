@@ -25,7 +25,7 @@ abstract class SceneBasic : Scene {
     }
 
     override void render_scene() {
-        // render 2d components
+        // render components
         foreach (component; ecs.storage.renderable_components) {
             render_renderable(component);
         }
