@@ -84,6 +84,9 @@ abstract class Core {
     /// whether to automatically resize the render target to the window size
     public static bool sync_render_window_resolution = false;
 
+    /// whether to make the window resizable
+    public static bool window_resizable = false;
+
     /// the default render resolution for all scenes
     public static Vector2 default_resolution;
 
@@ -124,6 +127,7 @@ abstract class Core {
         default_resolution = Vector2(width, height);
         if (!Core.headless) {
             window = new Window(width, height);
+            window.set_resizable(window_resizable);
             window.initialize();
             window.set_title(title);
             // if (rescale_hidpi) {

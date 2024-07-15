@@ -9,6 +9,8 @@ import std.algorithm.comparison : max;
 static import raylib;
 
 class Window {
+    /// whether window has been created
+    private bool _created = false;
     // raw window width and height
     private int _width;
     private int _height;
@@ -16,6 +18,10 @@ class Window {
     private float _scale_dpi;
     /// the monitor
     private int _monitor;
+    /// flags
+    private uint _window_flags;
+    /// properties
+    private bool _resizable;
 
     /// creates a window instance with the given dimensions
     this(int width, int height) {
@@ -54,9 +60,13 @@ class Window {
     public void initialize() {
         // set config flags
         // tell raylib we're hidpi aware
-        raylib.SetConfigFlags(raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI);
+        _window_flags |= raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI;
+        raylib.SetConfigFlags(_window_flags);
+
         // create the window
         raylib.InitWindow(_width, _height, "");
+        _created = true; // window has been created
+
         // set options
         raylib.SetTargetFPS(Core.target_fps);
         // // get properties
@@ -76,6 +86,20 @@ class Window {
     public void resize(int width, int height) {
         raylib.SetWindowSize(width, height);
         update_window();
+    }
+
+    public void set_resizable(bool resizable) {
+        _resizable = resizable;
+        if (_created) {
+            // fail, you can't set resizable after window creation
+            Core.log.error("Window.set_resizable: cannot set resizable after window creation");
+            assert(false);
+        }
+        if (resizable) {
+            _window_flags |= raylib.ConfigFlags.FLAG_WINDOW_RESIZABLE;
+        } else {
+            _window_flags &= ~raylib.ConfigFlags.FLAG_WINDOW_RESIZABLE;
+        }
     }
 
     private void update_window() {

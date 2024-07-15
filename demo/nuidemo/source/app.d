@@ -16,7 +16,8 @@ class Game : Core {
 
 	this() {
 		sync_render_window_resolution = true;
-		// oversample_hidpi = true;
+		oversample_hidpi = true;
+		window_resizable = true;
 
 		super(WIDTH, HEIGHT, "nuidemo");
 	}
@@ -28,8 +29,6 @@ class Game : Core {
 }
 
 int main(string[] args) {
-	raylib.SetWindowState(raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI | raylib.ConfigFlags.FLAG_WINDOW_RESIZABLE);
-
 	auto game = new Game(); // init game
 	game.run();
 	game.destroy(); // clean up
