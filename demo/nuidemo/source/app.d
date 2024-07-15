@@ -16,20 +16,19 @@ class Game : Core {
 
 	this() {
 		sync_render_window_resolution = true;
-		rescale_hidpi = true;
+		// oversample_hidpi = true;
 
 		super(WIDTH, HEIGHT, "nuidemo");
 	}
 
 	override void initialize() {
 		content.paths ~= ["./content/", "./res/"];
-		raylib.SetWindowState(raylib.ConfigFlags.FLAG_WINDOW_RESIZABLE);
 		load_scenes([new GuiScene()]);
 	}
 }
 
 int main(string[] args) {
-	raylib.SetWindowState(raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI);
+	raylib.SetWindowState(raylib.ConfigFlags.FLAG_WINDOW_HIGHDPI | raylib.ConfigFlags.FLAG_WINDOW_RESIZABLE);
 
 	auto game = new Game(); // init game
 	game.run();

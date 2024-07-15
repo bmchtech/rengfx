@@ -72,8 +72,8 @@ abstract class Core {
     /// oversampling factor for internal rendering
     public static int render_oversample = 1;
 
-    /// whether to scale things to compensate for hidpi
-    public static bool rescale_hidpi = false;
+    // /// whether to scale things to compensate for hidpi
+    // public static bool rescale_hidpi = false;
 
     /// whether to automatically oversample for hidpi
     public static bool oversample_hidpi = false;
@@ -103,7 +103,7 @@ abstract class Core {
         pause_on_focus_lost = Environment.get_bool("RENG_PAUSE_ON_FOCUS_LOST", pause_on_focus_lost);
         exit_on_escape_pressed = Environment.get_bool("RENG_EXIT_ON_ESCAPE_PRESSED", exit_on_escape_pressed);
         render_oversample = Environment.get_int("RENG_RENDER_OVERSAMPLE", render_oversample);
-        rescale_hidpi = Environment.get_bool("RENG_RESCALE_HIDPI", rescale_hidpi);
+        // rescale_hidpi = Environment.get_bool("RENG_RESCALE_HIDPI", rescale_hidpi);
         oversample_hidpi = Environment.get_bool("RENG_OVERSAMPLE_HIDPI", oversample_hidpi);
         mouse_hidpi = Environment.get_bool("RENG_MOUSE_HIDPI", mouse_hidpi);
         sync_render_window_resolution = Environment.get_bool(
@@ -126,9 +126,9 @@ abstract class Core {
             window = new Window(width, height);
             window.initialize();
             window.set_title(title);
-            if (rescale_hidpi) {
-                handle_hidpi_compensation();
-            }
+            // if (rescale_hidpi) {
+            //     handle_hidpi_compensation();
+            // }
         }
 
         // disable default exit key
@@ -342,44 +342,44 @@ abstract class Core {
         }
     }
 
-    private void handle_hidpi_compensation() {
-        void manual_hidpi_compenate() {
-            // when hidpi is enabled,, the window is too small
-            // so we scale the real window but keep the render resolution the same
-            // compute the target window size
-            auto scaled_width = window.width_dpi;
-            auto scaled_height = window.height_dpi;
-            // but, if auto-oversampling is enabled, we need to set the oversample factor
-            if (oversample_hidpi) {
-                render_oversample = cast(int) window.scale_dpi;
-                log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample);
-            }
-            log.info("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
-                window.width, window.height, scaled_width, scaled_height, window.scale_dpi);
-            window.resize(scaled_width, scaled_height);
-            handle_window_resize();
-            sync_render_resolution();
-            if (mouse_hidpi) {
-                // set mouse transform to compensate for dpi scale
-                raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
-            }
-        }
+    // private void handle_hidpi_compensation() {
+    //     void manual_hidpi_compenate() {
+    //         // when hidpi is enabled,, the window is too small
+    //         // so we scale the real window but keep the render resolution the same
+    //         // compute the target window size
+    //         auto scaled_width = window.width_dpi;
+    //         auto scaled_height = window.height_dpi;
+    //         // but, if auto-oversampling is enabled, we need to set the oversample factor
+    //         if (oversample_hidpi) {
+    //             render_oversample = cast(int) window.scale_dpi;
+    //             log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample);
+    //         }
+    //         log.info("resizing window from (%s,%s) to (%s,%s) to compensate for dpi scale: %s",
+    //             window.width, window.height, scaled_width, scaled_height, window.scale_dpi);
+    //         window.resize(scaled_width, scaled_height);
+    //         handle_window_resize();
+    //         sync_render_resolution();
+    //         if (mouse_hidpi) {
+    //             // set mouse transform to compensate for dpi scale
+    //             raylib.SetMouseScale(1 / window.scale_dpi, 1 / window.scale_dpi);
+    //         }
+    //     }
 
-        // we will no longer do manual hidpi compensation
-        // version (OSX) {
-        //     // on macOS, we don't need to do manual hidpi compensation, because it is done transparently by the window manager
-        //     return;
-        // }
-        // version (Windows) {
-        //     // // windows does require manual hidpi compensation
-        //     // manual_hidpi_compenate();
-        //     return;
-        // }
-        // version (linux) {
-        //     // linux does require manual hidpi compensation
-        //     manual_hidpi_compenate();
-        // }
-    }
+    //     // we will no longer do manual hidpi compensation
+    //     // version (OSX) {
+    //     //     // on macOS, we don't need to do manual hidpi compensation, because it is done transparently by the window manager
+    //     //     return;
+    //     // }
+    //     // version (Windows) {
+    //     //     // // windows does require manual hidpi compensation
+    //     //     // manual_hidpi_compenate();
+    //     //     return;
+    //     // }
+    //     // version (linux) {
+    //     //     // linux does require manual hidpi compensation
+    //     //     manual_hidpi_compenate();
+    //     // }
+    // }
 
     private void handle_window_resize() {
         log.info("window resized to (%s,%s)", window.width, window.height);

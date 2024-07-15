@@ -25,7 +25,6 @@ class Game : Core {
 
 	this(int width, int height) {
 		// core init here
-		Core.rescale_hidpi = true;
 		Core.oversample_hidpi = true;
 
 		super(width, height, vr_enabled ? "celtest [VR]" : "celtest");
@@ -49,8 +48,6 @@ int main(string[] args) {
 		"free-cam|f", &Game.free_look, // "vr", &Game.vr_enabled,
 		"resolution|r", &resolution_str,
 	);
-
-	// Core.rescale_hidpi = false;
 
 	// parse resolution
 	auto resolution_parsed = resolution_str.split("x").map!(to!int).array;
