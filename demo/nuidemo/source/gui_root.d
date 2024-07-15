@@ -35,7 +35,7 @@ class GuiRoot : Component, Renderable2D, Updatable {
         bg = ColorToNuklearF(Colors.SKYBLUE);
         auto ui_font = raylib.LoadFontEx("./res/SourceSansPro-Regular.ttf", UI_FS, null, 0);
         ctx = InitNuklearEx(ui_font, UI_FS);
-        // SetNuklearScaling(ctx, cast(int) Core.window.scale_dpi);
+        SetNuklearScaling(ctx, cast(int) Core.render_oversample_factor);
         apply_style(ctx);
 
         status("ready.");
