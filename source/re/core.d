@@ -349,16 +349,14 @@ abstract class Core {
         auto render_res_x = window.render_width;
         auto render_res_y = window.render_height;
 
-        // reset mouse scale
-        raylib.SetMouseScale(1.0, 1.0);
+        // set mouse scale
+        auto mouse_scale_factor = 1.0 * window.dpi_scale * render_oversample_factor;
+        raylib.SetMouseScale(mouse_scale_factor, mouse_scale_factor);
 
         if (render_oversample_factor > 1) {
             // if oversampling is enabled, we need to multiply by the oversampling factor
             render_res_x *= render_oversample_factor;
             render_res_y *= render_oversample_factor;
-
-            // set mouse scale to compensate for oversampling
-            raylib.SetMouseScale(1.0 * render_oversample_factor, 1.0 * render_oversample_factor);
         }
 
         // set the render resolution
