@@ -80,8 +80,7 @@ class GuiRoot : Component, Renderable2D, Updatable {
         UpdateNuklear(ctx);
 
         // GUI
-        // auto window_bounds = nk_rect(0, 0, GetRenderWidth(), GetRenderHeight());
-        auto window_bounds = Rectangle(0, 0, GetRenderWidth(), GetRenderHeight());
+        auto window_bounds = Rectangle(0, 0, Core.window.render_width, Core.window.render_height);
         if (nk_begin(ctx, "Demo", RectangleToNuklear(ctx, window_bounds),
                 nk_panel_flags.NK_WINDOW_BORDER | nk_panel_flags.NK_WINDOW_TITLE)) {
             enum EASY = 0;

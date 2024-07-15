@@ -72,9 +72,6 @@ abstract class Core {
     /// oversampling factor for internal rendering
     public static int render_oversample_factor = 1;
 
-    /// whether to automatically oversample for hidpi
-    public static bool render_oversample_hidpi = false;
-
     /// whether to automatically resize the render target to the window size
     public static bool sync_render_target_to_window_resolution = false;
 
@@ -114,11 +111,10 @@ abstract class Core {
 
         default_resolution = Vector2(width, height);
         if (!Core.headless) {
-            window = new Window(width, height);
+            window = new Window();
             window.set_resizable(window_resizable);
-            window.initialize();
+            window.initialize(width, height);
             window.set_title(title);
-            calculate_hidpi_scaling();
             calculate_render_resolution();
         }
 
@@ -244,8 +240,10 @@ abstract class Core {
                     raylib.BeginShaderMode(vr.distortion_shader);
             }
 
-            RenderExt.draw_render_target(scene.render_target, Rectangle(0, 0,
-                    window.width, window.height), scene.composite_mode.color);
+            auto render_target_rect = Rectangle(0, 0, window.screen_width, window.screen_height);
+            RenderExt.draw_render_target(
+                scene.render_target, render_target_rect, scene.composite_mode.color
+            );
 
             version (vr) {
                 if (vr_distort)
@@ -334,7 +332,7 @@ abstract class Core {
     }
 
     private void handle_window_resize() {
-        log.info("window resized to (%s,%s)", window.width, window.height);
+        log.info("window resized to (%s,%s)", window.screen_width, window.screen_height);
         // window was resized
         if (sync_render_target_to_window_resolution) {
             calculate_render_resolution();
@@ -345,22 +343,11 @@ abstract class Core {
         }
     }
 
-    private void calculate_hidpi_scaling() {
-        // get dpi scale factor
-        auto scale_dpi = cast(int) window.scale_dpi;
-
-        if (render_oversample_hidpi) {
-            // if oversampling is enabled, calculate the oversample factor
-            render_oversample_factor = scale_dpi;
-            log.info("auto-oversampling enabled, setting oversample factor to %d", render_oversample_factor);
-        }
-    }
-
     private void calculate_render_resolution() {
         // since window was resized, update our render resolution
         // first get the new window size
-        auto render_res_x = window.width;
-        auto render_res_y = window.height;
+        auto render_res_x = window.render_width;
+        auto render_res_y = window.render_height;
 
         // reset mouse scale
         raylib.SetMouseScale(1.0, 1.0);
@@ -376,8 +363,8 @@ abstract class Core {
 
         // set the render resolution
         default_resolution = Vector2(render_res_x, render_res_y);
-        Core.log.info(format("updating render resolution to %s (dpi scale %s) (oversample %s)",
-                default_resolution, window.scale_dpi, render_oversample_factor));
+        Core.log.info(format("updating render resolution to %s (oversample %s)",
+                default_resolution, render_oversample_factor));
     }
 }
 
