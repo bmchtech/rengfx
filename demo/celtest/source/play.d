@@ -12,6 +12,7 @@ import re.gfx.shapes.sphere;
 import re.gfx.lighting.basic;
 import re.gfx.effects.frag;
 import re.ng.camera;
+import re.ng.scene;
 import re.math;
 import re.util.orbit;
 static import raylib;
@@ -20,7 +21,7 @@ import app;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
-
+    SceneCamera3D cam;
     PostProcessor cel2_postproc;
     PostProcessor bokeh_postproc;
     Entity mdl1;
@@ -31,6 +32,8 @@ class PlayScene : Scene3D {
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
+
+        cam = (cast(Viewport3D) viewports[0]).cam;
 
         // set the camera position
         cam.entity.position = Vector3(6, 6, 6);
