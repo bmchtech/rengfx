@@ -1,0 +1,8 @@
+name "multiscene"
+description "multiple scenes"
+authors "redthing1"
+copyright "Copyright © 2020, redthing1"
+license "proprietary"
+dependency "reng" path="../.."
+
+subConfiguration "reng" "lib-minimal"

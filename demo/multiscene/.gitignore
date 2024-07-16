@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/multiscene
+multiscene.so
+multiscene.dylib
+multiscene.dll
+multiscene.a
+multiscene.lib
+multiscene-test-*
+*.exe
+*.o
+*.obj
+*.lst
