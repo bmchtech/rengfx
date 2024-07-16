@@ -34,11 +34,14 @@ debug class Debugger {
         inspector = new Inspector();
         console = new Console();
         if (!Core.headless) {
-            ui_bounds = Rectangle(0, 0, Core.window.render_width, Core.window.render_height);
-            _render_target = RenderExt.create_render_target(cast(int) ui_bounds.width, cast(int) ui_bounds
-                    .height);
-            Core.log.info(format("debugger info: ui_bounds=%s, resolution=%s",
-                    ui_bounds, Core.default_resolution));
+            ui_bounds = Rectangle(0, 0, Core.window.screen_width, Core.window.screen_height);
+            _render_target = RenderExt.create_render_target(
+                cast(int) ui_bounds.width, cast(int) ui_bounds.height
+            );
+            Core.log.info(
+                format("debugger info: ui_bounds=%s, resolution=%s",
+                    ui_bounds, Core.default_resolution)
+            );
         }
     }
 
@@ -60,11 +63,6 @@ debug class Debugger {
     }
 
     public void render() {
-        if (!inspector.open && !console.open) {
-            // nothing to render
-            return;
-        }
-
         raylib.BeginTextureMode(_render_target);
         raylib.ClearBackground(Colors.BLANK);
 
@@ -77,7 +75,7 @@ debug class Debugger {
 
         // draw render target
         RenderExt.draw_render_target(_render_target,
-            Rectangle(0, 0, Core.window.render_width, Core.window.render_height),
+            Rectangle(0, 0, Core.window.screen_width, Core.window.screen_height),
             _render_col
         );
     }
