@@ -14,6 +14,17 @@ static class RenderExt {
                 target.texture.width, -target.texture.height), dest_rect, Vector2(0, 0), 0, color);
     }
 
+    /// draws a render target to the specified destination rect, tinted with color, supporting a subregion of the input texture
+    public static void draw_render_target_crop(RenderTarget target, Rectangle source_rect, Rectangle dest_rect, Color color) {
+        if (source_rect == Rectangle.init) {
+            // default to full texture
+            source_rect = Rectangle(0, 0, target.texture.width, target.texture.height);
+        }
+        // negate height to ensure orientation is correct
+        source_rect.height = -source_rect.height;
+        raylib.DrawTexturePro(target.texture, source_rect, dest_rect, Vector2(0, 0), 0, color);
+    }
+
     /// draws a render target on another with an effect
     public static void draw_render_target_from(RenderTarget source, RenderTarget dest, Effect effect) {
         auto dest_rect = Rectangle(0, 0, dest.texture.width, dest.texture.height);

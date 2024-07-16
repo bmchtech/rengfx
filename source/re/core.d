@@ -241,8 +241,11 @@ abstract class Core {
             }
 
             foreach (viewport; scene.viewports) {
-                RenderExt.draw_render_target(
-                    viewport.render_target, viewport.output_bounds, scene.composite_mode.color
+                // RenderExt.draw_render_target(
+                //     viewport.render_target, viewport.output_bounds, scene.composite_mode.color
+                // );
+                RenderExt.draw_render_target_crop(
+                    viewport.render_target, viewport.crop_region, viewport.output_bounds, scene.composite_mode.color
                 );
             }
 
@@ -351,7 +354,7 @@ abstract class Core {
         auto render_res_y = window.render_height;
 
         // set mouse scale
-        auto mouse_scale_factor = 1.0 * window.dpi_scale * render_oversample_factor;
+        auto mouse_scale_factor = 1.0 * scale_factor;
         raylib.SetMouseScale(mouse_scale_factor, mouse_scale_factor);
 
         if (render_oversample_factor > 1) {
@@ -364,6 +367,11 @@ abstract class Core {
         default_resolution = Vector2(render_res_x, render_res_y);
         Core.log.info(format("updating render resolution to %s (oversample %s)",
                 default_resolution, render_oversample_factor));
+    }
+
+    /// overall scale factor from screen space coordinates to render space
+    static @property float scale_factor() {
+        return window.dpi_scale * render_oversample_factor;
     }
 }
 
