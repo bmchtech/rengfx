@@ -14,6 +14,7 @@ static import raygui;
 class GuiScene : Scene2D {
     override void on_start() {
         clear_color = Colors.RAYWHITE;
+        viewports[0].sync_maximized = true;
 
         // add gui root
         auto ui_root = create_entity("ui_root", Vector2.zero);
