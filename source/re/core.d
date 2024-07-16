@@ -240,9 +240,8 @@ abstract class Core {
                     raylib.BeginShaderMode(vr.distortion_shader);
             }
 
-            auto render_target_rect = Rectangle(0, 0, window.screen_width, window.screen_height);
             RenderExt.draw_render_target(
-                scene.render_target, render_target_rect, scene.composite_mode.color
+                scene.render_target, scene.output_rect, scene.composite_mode.color
             );
 
             version (vr) {

@@ -34,6 +34,8 @@ abstract class Scene {
     public PostProcessor[] postprocessors;
     /// updatable managers
     public Manager[] managers;
+    /// the render target's output rectangle
+    public Rectangle output_rect;
 
     /// the mode for compositing a scene onto the display buffer
     public struct CompositeMode {
@@ -43,6 +45,10 @@ abstract class Scene {
 
     /// creates a new scene
     this() {
+        output_rect = Rectangle(
+            0, 0,
+            Core.window.screen_width, Core.window.screen_height
+        );
     }
 
     /// gets the render resolution. initialized to Core.default_resolution
@@ -138,8 +144,9 @@ abstract class Scene {
         }
         // create render target
         // TODO: use scene resolution instead of window resolution
-        render_target = RenderExt.create_render_target(cast(int) resolution.x, cast(int) resolution
-                .y);
+        render_target = RenderExt.create_render_target(
+            cast(int) resolution.x, cast(int) resolution.y
+        );
         Core.log.info(format("recreated render target of size %s", resolution));
         // apply texture filter
         raylib.SetTextureFilter(render_target.texture, Core.default_filter_mode);
