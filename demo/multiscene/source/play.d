@@ -38,23 +38,23 @@ class PlayScene : Scene2D {
         // cam following the first box
         auto cam1_nt = create_entity("cam1");
         auto cam1 = cam1_nt.add_component(new SceneCamera2D());
-        auto left_half_output_rect = Rectangle(
+        auto left_half_output_bounds = Rectangle(
             0, 0,
             Core.window.screen_width / 2,
             Core.window.screen_height
         );
-        auto vp1 = add_viewport(cam1, left_half_output_rect, half_vp_resolution);
+        auto vp1 = add_viewport(cam1, left_half_output_bounds, half_vp_resolution);
         auto follow1 = cam1_nt.add_component(new CameraFollow2D(vp1, box1, 0.05));
 
         // cam following the second box
         auto cam2_nt = create_entity("cam2");
         auto cam2 = cam2_nt.add_component(new SceneCamera2D());
-        auto right_half_output_rect = Rectangle(
+        auto right_half_output_bounds = Rectangle(
             Core.window.screen_width / 2, 0,
             Core.window.screen_width / 2,
             Core.window.screen_height
         );
-        auto vp2 = add_viewport(cam2, right_half_output_rect, half_vp_resolution);
+        auto vp2 = add_viewport(cam2, right_half_output_bounds, half_vp_resolution);
         auto follow2 = cam2_nt.add_component(new CameraFollow2D(vp2, box2, 0.05));
         follow2.follow_rotation = true;
     }

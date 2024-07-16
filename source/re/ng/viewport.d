@@ -13,8 +13,8 @@ import re.ng.camera.cam3d;
 abstract class Viewport {
     /// the render target's texture
     public RenderTarget render_target;
-    /// the render target's output rectangle
-    public Rectangle output_rect;
+    /// the render target's output bounds: the area of the screen it renders to
+    public Rectangle output_bounds;
     /// the render target's resolution
     public Vector2 resolution;
 

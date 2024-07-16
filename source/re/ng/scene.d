@@ -165,9 +165,9 @@ abstract class Scene {
 
             if (viewport.sync_maximized) {
                 // copy output rect from screen bounds
-                viewport.output_rect = Core.window.screen_bounds;
+                viewport.output_bounds = Core.window.screen_bounds;
                 viewport.resolution = resolution; // copy resolution
-                Core.log.info(format("synced viewport to screen bounds: %s", viewport.output_rect));
+                Core.log.info(format("synced viewport to screen bounds: %s", viewport.output_bounds));
             }
 
             // create render target

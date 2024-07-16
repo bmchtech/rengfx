@@ -25,10 +25,10 @@ abstract class Scene2D : Scene {
         add_viewport(cam, Core.window.screen_bounds, resolution);
     }
 
-    Viewport2D add_viewport(SceneCamera2D cam, Rectangle output_rect, Vector2 resolution) {
+    Viewport2D add_viewport(SceneCamera2D cam, Rectangle output_bounds, Vector2 resolution) {
         auto vp = new Viewport2D();
         vp.cam = cam;
-        vp.output_rect = output_rect;
+        vp.output_bounds = output_bounds;
         vp.resolution = resolution;
         vp.render_target = RenderExt.create_render_target(
             cast(int) vp.resolution.x, cast(int) vp.resolution.y

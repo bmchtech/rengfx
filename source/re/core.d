@@ -242,7 +242,7 @@ abstract class Core {
 
             foreach (viewport; scene.viewports) {
                 RenderExt.draw_render_target(
-                    viewport.render_target, viewport.output_rect, scene.composite_mode.color
+                    viewport.render_target, viewport.output_bounds, scene.composite_mode.color
                 );
             }
 
