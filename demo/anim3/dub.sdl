@@ -1,8 +1,0 @@
-name "anim3"
-description "A minimal D application."
-authors "no"
-copyright "Copyright © 2021, no"
-license "proprietary"
-
-dependency "reng" path="../.."
-subConfiguration "reng" "lib-minimal"
