@@ -25,7 +25,7 @@ class Game : Core {
 
 	this(int width, int height) {
 		// core init here
-		Core.default_filter_mode = raylib.TextureFilter.TEXTURE_FILTER_TRILINEAR;
+		Core.default_filter_mode = raylib.TextureFilter.TEXTURE_FILTER_ANISOTROPIC_4X;
 
 		super(width, height, vr_enabled ? "celtest [VR]" : "celtest");
 	}
