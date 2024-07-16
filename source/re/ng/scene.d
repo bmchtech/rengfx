@@ -166,11 +166,13 @@ abstract class Scene {
             if (viewport.sync_maximized) {
                 // copy output rect from screen bounds
                 viewport.output_rect = Core.window.screen_bounds;
+                viewport.resolution = resolution; // copy resolution
+                Core.log.info(format("synced viewport to screen bounds: %s", viewport.output_rect));
             }
 
             // create render target
             viewport.render_target = RenderExt.create_render_target(
-                cast(int) viewport.output_rect.width, cast(int) viewport.output_rect.height
+                cast(int) viewport.resolution.x, cast(int) viewport.resolution.y
             );
         }
     }

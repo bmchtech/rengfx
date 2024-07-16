@@ -11,18 +11,17 @@ import re.ng.camera.cam3d;
 
 /// represents a view of a scene
 abstract class Viewport {
-    /// the render target texture
+    /// the render target's texture
     public RenderTarget render_target;
     /// the render target's output rectangle
     public Rectangle output_rect;
+    /// the render target's resolution
+    public Vector2 resolution;
+
     /// whether to sync the render target to maximum size
     public bool sync_maximized;
     /// texture filter
     public raylib.TextureFilter filter;
-
-    public @property Vector2 resolution() {
-        return Vector2(render_target.texture.width, render_target.texture.height);
-    }
 
     void update() {
         

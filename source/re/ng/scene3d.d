@@ -29,8 +29,9 @@ abstract class Scene3D : Scene {
         auto vp = new Viewport3D();
         vp.cam = cam;
         vp.output_rect = output_rect;
+        vp.resolution = resolution;
         vp.render_target = RenderExt.create_render_target(
-            cast(int) resolution.x, cast(int) resolution.y
+            cast(int) vp.resolution.x, cast(int) vp.resolution.y
         );
         viewports ~= vp;
         return vp;
