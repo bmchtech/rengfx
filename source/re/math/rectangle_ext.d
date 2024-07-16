@@ -42,5 +42,21 @@ float bottom(Rectangle r) {
     return r.y + r.height;
 }
 
+Rectangle scale(Rectangle r, float factor) {
+    return Rectangle(r.x * factor, r.y * factor, r.width * factor, r.height * factor);
+}
+
+Rectangle scale(Rectangle r, Vector2 factor) {
+    return Rectangle(r.x * factor.x, r.y * factor.y, r.width * factor.x, r.height * factor.y);
+}
+
+Rectangle scale_inplace(Rectangle r, float factor) {
+    return Rectangle(r.x, r.y, r.width * factor, r.height * factor);
+}
+
+Rectangle scale_inplace(Rectangle r, Vector2 factor) {
+    return Rectangle(r.x, r.y, r.width * factor.x, r.height * factor.y);
+}
+
 enum RectangleZero = Rectangle(0, 0, 0, 0);
 enum RectangleUnit = Rectangle(0, 0, 1, 1);

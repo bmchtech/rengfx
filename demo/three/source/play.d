@@ -14,10 +14,21 @@ class PlayScene : Scene3D {
     private PostProcessor glitch_postproc;
     private float[2] sample_offset = [0.01, 0];
 
+    override void setup() {
+        super.setup();
+
+        default_viewport.resolution = Vector2(160, 120);
+        resolution = default_viewport.resolution;
+    }
+
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
+        cam = default_viewport.cam;
 
-        cam = (cast(Viewport3D) viewports[0]).cam;
+        // // sample of cropping
+        // default_viewport.crop_bounds = Rectangle(40, 0, resolution.x - 40, resolution.y);
+        // default_viewport.output_bounds = default_viewport.crop_bounds.scale(
+        //     Core.window.screen_width / resolution.x);
 
         // load a shader effect and add it as a postprocessor
         auto chrm_abr = new Effect(Core.content.load_shader(null,

@@ -171,6 +171,7 @@ abstract class Scene {
             }
 
             // create render target
+            Core.log.info(format("recreating render target of size %s", viewport.resolution));
             viewport.render_target = RenderExt.create_render_target(
                 cast(int) viewport.resolution.x, cast(int) viewport.resolution.y
             );

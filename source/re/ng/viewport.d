@@ -16,7 +16,7 @@ abstract class Viewport {
     /// the render target's output bounds: the area of the screen it renders to
     public Rectangle output_bounds;
     /// the render target's crop region: the area of the render target that is rendered to the output bounds
-    public Rectangle crop_region = RectangleZero; // default to full render target
+    public Rectangle crop_bounds = RectangleZero; // default to full render target
     /// the render target's resolution
     public Vector2 resolution;
 

@@ -22,6 +22,10 @@ static class RenderExt {
         }
         // negate height to ensure orientation is correct
         source_rect.height = -source_rect.height;
+        // import std.stdio;
+        // writefln("target texture size: (%s, %s)", target.texture.width, target.texture.height);
+        // writefln("source rect: (%s, %s, %s, %s)", source_rect.x, source_rect.y, source_rect.width, source_rect.height);
+        // writefln("dest rect: (%s, %s, %s, %s)", dest_rect.x, dest_rect.y, dest_rect.width, dest_rect.height);
         raylib.DrawTexturePro(target.texture, source_rect, dest_rect, Vector2(0, 0), 0, color);
     }
 
