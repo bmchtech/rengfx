@@ -17,6 +17,10 @@ class SceneCamera2D : SceneCamera {
 
     this() {
         _camera = raylib.Camera2D();
+        _camera.offset = Vector2(0, 0);
+        _camera.target = Vector2(0, 0);
+        _camera.rotation = 0;
+        _camera.zoom = 1;
     }
 
     override void setup() {
