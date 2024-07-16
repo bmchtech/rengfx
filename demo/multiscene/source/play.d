@@ -44,7 +44,7 @@ class PlayScene : Scene2D {
             Core.window.screen_height
         );
         auto vp1 = add_viewport(cam1, left_half_output_rect, half_vp_resolution);
-        cam1_nt.add_component(new CameraFollow2D(vp1, box1, 0.05));
+        auto follow1 = cam1_nt.add_component(new CameraFollow2D(vp1, box1, 0.05));
 
         // cam following the second box
         auto cam2_nt = create_entity("cam2");
@@ -55,6 +55,7 @@ class PlayScene : Scene2D {
             Core.window.screen_height
         );
         auto vp2 = add_viewport(cam2, right_half_output_rect, half_vp_resolution);
-        cam2_nt.add_component(new CameraFollow2D(vp2, box2, 0.05));
+        auto follow2 = cam2_nt.add_component(new CameraFollow2D(vp2, box2, 0.05));
+        follow2.follow_rotation = true;
     }
 }

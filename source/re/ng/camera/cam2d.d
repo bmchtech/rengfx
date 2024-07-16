@@ -29,7 +29,7 @@ class SceneCamera2D : SceneCamera {
         _camera.zoom = 1;
     }
 
-    @property ref raylib.Camera2D camera() return  {
+    @property ref raylib.Camera2D camera() return {
         return _camera;
     }
 
@@ -48,7 +48,7 @@ class SceneCamera2D : SceneCamera {
 
         // copy entity to camera transform
         _camera.target = entity.transform.position2;
-        _camera.rotation = entity.transform.rotation_z;
+        _camera.rotation = entity.transform.rotation_z * C_RAD2DEG;
         _camera.zoom = entity.transform.scale.x;
     }
 }
@@ -59,6 +59,7 @@ class CameraFollow2D : Component, Updatable {
     public Entity target;
     public float lerp;
     private SceneCamera2D cam;
+    public bool follow_rotation = false;
 
     this(Viewport viewport, Entity target, float lerp) {
         this.viewport = viewport;
@@ -73,9 +74,19 @@ class CameraFollow2D : Component, Updatable {
     void update() {
         // set offset to half-resolution (so that our target is centered)
         cam.offset = Vector2(viewport.resolution.x / 2, viewport.resolution.y / 2);
-        
+
+        if (follow_rotation) {
+            // // lerp towards target rotation
+            // auto to_target = target.transform.rotation_z - entity.transform.rotation_z;
+            // auto rot_scroll = to_target * lerp;
+            // entity.transform.rotation_z = entity.transform.rotation_z + rot_scroll;
+            // lock target rotation
+            entity.transform.rotation_z = target.transform.rotation_z;
+        }
+
         // get vector to target
         auto to_target = target.position2 - entity.position2;
+        // lerp towards target
         auto scroll = Vector2(to_target.x * lerp, to_target.y * lerp);
         entity.position2 = entity.position2 + scroll;
     }
