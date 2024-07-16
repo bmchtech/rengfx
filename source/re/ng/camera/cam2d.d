@@ -6,6 +6,7 @@ import re.ecs;
 import re.time;
 import re.math;
 import re.ng.camera.base;
+import re.ng.viewport;
 import re.gfx.raytypes;
 import std.math;
 static import raylib;
@@ -54,13 +55,13 @@ class SceneCamera2D : SceneCamera {
 
 class CameraFollow2D : Component, Updatable {
     mixin Reflect;
-    // private SceneCamera2D cam;
-    /// the target entity to follow
+    public Viewport viewport;
     public Entity target;
     public float lerp;
     private SceneCamera2D cam;
 
-    this(Entity target, float lerp) {
+    this(Viewport viewport, Entity target, float lerp) {
+        this.viewport = viewport;
         this.target = target;
         this.lerp = lerp;
     }
@@ -71,7 +72,7 @@ class CameraFollow2D : Component, Updatable {
 
     void update() {
         // set offset to half-resolution (so that our target is centered)
-        cam.offset = Vector2(entity.scene.resolution.x / 2, entity.scene.resolution.y / 2);
+        cam.offset = Vector2(viewport.resolution.x / 2, viewport.resolution.y / 2);
         
         // get vector to target
         auto to_target = target.position2 - entity.position2;

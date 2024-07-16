@@ -34,6 +34,8 @@ abstract class Scene {
     public Manager[] managers;
     /// viewports
     public Viewport[] viewports;
+    /// whether to use a single default viewport
+    public bool use_default_viewport = true;
 
     /// the mode for compositing a scene onto the display buffer
     public struct CompositeMode {
@@ -173,17 +175,13 @@ abstract class Scene {
         }
     }
 
+    abstract void create_default_viewport();
+
     void reset_viewports() {
         foreach (vp; viewports) {
             vp.destroy();
         }
         viewports.length = 0;
-
-        // remove the default camera entity if it exists
-        auto maybe_camera = ecs.get_entity("camera");
-        if (maybe_camera !is null) {
-            ecs.remove_entity(maybe_camera);
-        }
     }
 
     /// called internally on scene creation
@@ -199,6 +197,11 @@ abstract class Scene {
         ecs = new EntityManager;
 
         resolution = Core.default_resolution;
+
+        if (use_default_viewport) {
+            // create default viewport
+            create_default_viewport();
+        }
     }
 
     /// called internally on scene destruction

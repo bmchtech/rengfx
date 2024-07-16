@@ -15,11 +15,9 @@ import std.string;
 abstract class Scene3D : Scene {
     override void setup() {
         super.setup();
-
-        create_default_viewport();
     }
 
-    void create_default_viewport() {
+    override void create_default_viewport() {
         // create a camera entity
         auto camera_nt = create_entity("camera");
         auto cam = camera_nt.add_component(new SceneCamera3D());

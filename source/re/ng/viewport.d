@@ -20,6 +20,10 @@ abstract class Viewport {
     /// texture filter
     public raylib.TextureFilter filter;
 
+    public @property Vector2 resolution() {
+        return Vector2(render_target.texture.width, render_target.texture.height);
+    }
+
     void update() {
         
     }
