@@ -25,6 +25,10 @@ abstract class Scene3D : Scene {
         add_viewport(cam, Core.window.screen_bounds, resolution);
     }
 
+    Viewport3D default_viewport() {
+        return cast(Viewport3D) viewports[0];
+    }
+
     Viewport3D add_viewport(SceneCamera3D cam, Rectangle output_bounds, Vector2 resolution) {
         auto vp = new Viewport3D();
         vp.cam = cam;
