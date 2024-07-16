@@ -178,6 +178,12 @@ abstract class Scene {
             vp.destroy();
         }
         viewports.length = 0;
+
+        // remove the default camera entity if it exists
+        auto maybe_camera = ecs.get_entity("camera");
+        if (maybe_camera !is null) {
+            ecs.remove_entity(maybe_camera);
+        }
     }
 
     /// called internally on scene creation
