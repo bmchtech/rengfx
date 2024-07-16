@@ -4,6 +4,7 @@ import re;
 import re.gfx;
 import re.gfx.shapes.rect;
 import re.ng.camera;
+import re.ng.scene;
 import re.math;
 import comp.input;
 import comp.body;
@@ -11,7 +12,11 @@ import comp.ai;
 static import raylib;
 
 class PlayScene : Scene2D {
+    SceneCamera2D cam;
+
     override void on_start() {
+        cam = (cast(Viewport2D) viewports[0]).cam;
+
         auto bg_tween = Tweener.tween(clear_color, Colors.DARKGRAY,
             Colors.LIGHTGRAY, 2, &Ease.QuadIn);
         bg_tween.start();

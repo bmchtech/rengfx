@@ -11,11 +11,14 @@ static import raylib;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
+    SceneCamera3D cam;
     private PostProcessor glitch_postproc;
     private float[2] sample_offset = [0.005, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
+
+        cam = (cast(Viewport3D) viewports[0]).cam;
 
         // load shader effects and add as a postprocessor
         auto ascii_shd = new Effect(Core.content.load_shader(null, "shader/ascii.frag").front, Colors.WHITE);

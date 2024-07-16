@@ -10,11 +10,14 @@ static import raylib;
 
 /// simple 3d demo scene
 class PlayScene : Scene3D {
+    SceneCamera3D cam;
     private PostProcessor glitch_postproc;
     private float[2] sample_offset = [0.01, 0];
 
     override void on_start() {
         clear_color = Colors.LIGHTGRAY;
+
+        cam = (cast(Viewport3D) viewports[0]).cam;
 
         // load a shader effect and add it as a postprocessor
         auto chrm_abr = new Effect(Core.content.load_shader(null,
