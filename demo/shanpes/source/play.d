@@ -12,9 +12,11 @@ import comp.ai;
 static import raylib;
 
 class PlayScene : Scene2D {
+    Viewport2D viewport;
     SceneCamera2D cam;
 
     override void on_start() {
+        viewport = cast(Viewport2D) viewports[0];
         cam = (cast(Viewport2D) viewports[0]).cam;
 
         auto bg_tween = Tweener.tween(clear_color, Colors.DARKGRAY,
@@ -27,7 +29,7 @@ class PlayScene : Scene2D {
         player.add_component!ShapeBody();
 
         // follow the player
-        cam.entity.add_component(new CameraFollow2D(player, 0.05));
+        cam.entity.add_component(new CameraFollow2D(viewport, player, 0.05));
 
         auto turret = create_entity("turret", Vector2(60, 60));
         turret.add_component(new ColorRect(Vector2(8, 8), Colors.DARKGRAY));
