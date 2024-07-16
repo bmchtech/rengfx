@@ -42,4 +42,5 @@ float bottom(Rectangle r) {
     return r.y + r.height;
 }
 
+enum RectangleZero = Rectangle(0, 0, 0, 0);
 enum RectangleUnit = Rectangle(0, 0, 1, 1);

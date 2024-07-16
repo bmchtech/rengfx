@@ -16,7 +16,7 @@ static class RenderExt {
 
     /// draws a render target to the specified destination rect, tinted with color, supporting a subregion of the input texture
     public static void draw_render_target_crop(RenderTarget target, Rectangle source_rect, Rectangle dest_rect, Color color) {
-        if (source_rect == Rectangle.init) {
+        if (source_rect == RectangleZero) {
             // default to full texture
             source_rect = Rectangle(0, 0, target.texture.width, target.texture.height);
         }
