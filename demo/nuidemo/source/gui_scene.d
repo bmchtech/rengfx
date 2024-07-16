@@ -26,7 +26,12 @@ class GuiScene : SceneBasic {
 
     override void render_hook() {
         // draw fps in bottom right corner
-        // raylib.DrawText(format("%s", Core.fps).c_str(), 8, 8, 8, Colors.BLACK);
-        raylib.DrawText(format("%s", Core.fps).c_str(), cast(int)(resolution.x - 30), cast(int)(resolution.y - 24), 16, Colors.WHITE);
+        auto ui_scale = cast(int)(Core.window.dpi_scale * Core.render_oversample_factor);
+        auto font_size = 16 * ui_scale;
+        raylib.DrawText(
+            format("%s", Core.fps).c_str(),
+            cast(int)(resolution.x - font_size - 30), cast(int)(resolution.y - font_size - 24),
+            font_size, Colors.WHITE
+        );
     }
 }
