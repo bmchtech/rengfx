@@ -25,7 +25,6 @@ class Game : Core {
 
 	this(int width, int height) {
 		// core init here
-		Core.render_oversample_hidpi = true;
 		Core.default_filter_mode = raylib.TextureFilter.TEXTURE_FILTER_TRILINEAR;
 
 		super(width, height, vr_enabled ? "celtest [VR]" : "celtest");
