@@ -8,7 +8,7 @@ dependency "witchcraft" version="~>0.1.9"
 dependency "colorize" version="~>1.0.5"
 dependency "typetips" version="~>0.1.4"
 dependency "minlog" version="~>2.0.0"
-dependency "dray" version=">=5.0.0-r1 <5.1.0-0"
+dependency "dray" version=">=5.0.0-r4 <5.1.0-0"
 dependency "optional" version="~>1.3.0"
 
 configuration "lib-standard" {
