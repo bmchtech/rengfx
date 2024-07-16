@@ -3,24 +3,39 @@
 module re.ng.scene2d;
 
 static import raylib;
-public import raylib : Camera2D;
 import re.ng.camera;
 import re;
-import std.string;
+import re.gfx;
 import re.ecs;
 import re.math;
 
+import std.string;
+
 /// represents a scene rendered in 2d
 abstract class Scene2D : Scene {
-    /// the 2d scene camera
-    public SceneCamera2D cam;
-
     override void setup() {
         super.setup();
 
+        create_default_viewport();
+    }
+
+    void create_default_viewport() {
         // create a camera entity
         auto camera_nt = create_entity("camera");
-        cam = camera_nt.add_component(new SceneCamera2D());
+        auto cam = camera_nt.add_component(new SceneCamera2D());
+
+        add_viewport(cam, Core.window.screen_bounds, resolution);
+    }
+
+    Viewport2D add_viewport(SceneCamera2D cam, Rectangle output_rect, Vector2 resolution) {
+        auto vp = new Viewport2D();
+        vp.cam = cam;
+        vp.output_rect = output_rect;
+        vp.render_target = RenderExt.create_render_target(
+            cast(int) resolution.x, cast(int) resolution.y
+        );
+        viewports ~= vp;
+        return vp;
     }
 
     void render_renderable(Component component) {
@@ -32,8 +47,9 @@ abstract class Scene2D : Scene {
         }
     }
 
-    override void render_scene() {
-        raylib.BeginMode2D(cam.camera);
+    override void render_scene(Viewport viewport) {
+        Viewport2D vp = cast(Viewport2D) viewport;
+        raylib.BeginMode2D(vp.cam.camera);
 
         // render 2d components
         foreach (component; ecs.storage.renderable_components) {
@@ -50,7 +66,5 @@ abstract class Scene2D : Scene {
 
     override void update() {
         super.update();
-
-        cam.update();
     }
 }

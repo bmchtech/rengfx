@@ -62,12 +62,20 @@ class Window {
         return raylib.GetScreenHeight();
     }
 
+    public @property Rectangle screen_bounds() {
+        return Rectangle(0, 0, screen_width, screen_height);
+    }
+
     public @property int render_width() {
         return raylib.GetRenderWidth();
     }
 
     public @property int render_height() {
         return raylib.GetRenderHeight();
+    }
+
+    public @property Rectangle render_bounds() {
+        return Rectangle(0, 0, render_width, render_height);
     }
 
     public @property bool is_minimized() {

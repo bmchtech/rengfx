@@ -240,9 +240,11 @@ abstract class Core {
                     raylib.BeginShaderMode(vr.distortion_shader);
             }
 
-            RenderExt.draw_render_target(
-                scene.render_target, scene.output_rect, scene.composite_mode.color
-            );
+            foreach (viewport; scene.viewports) {
+                RenderExt.draw_render_target(
+                    viewport.render_target, viewport.output_rect, scene.composite_mode.color
+                );
+            }
 
             version (vr) {
                 if (vr_distort)

@@ -6,6 +6,7 @@ import re.core;
 import re.ecs;
 import re.ng.manager;
 import re.ng.scene3d;
+import re.ng.viewport;
 import re.gfx;
 import re.math;
 import std.algorithm;
@@ -68,10 +69,14 @@ class BasicSceneLightManager : Manager, Updatable {
     }
 
     override void update() {
+        // this is only valid on a scene with 1 viewport
+        assert(scene.viewports.length == 1, "BasicSceneLightManager only supports scenes with 1 viewport.");
+        auto vp0 = cast(Viewport3D) scene.viewports[0];
+        auto cam = vp0.cam;
+
         // update camera view pos in light shader
         float[3] camera_pos = [
-            (cast(Scene3D) scene).cam.transform.position.x, (cast(Scene3D) scene)
-            .cam.transform.position.y, (cast(Scene3D) scene).cam.transform.position.z
+            cam.transform.position.x, cam.transform.position.y, cam.transform.position.z
         ];
         raylib.SetShaderValue(shader, shader.locs[raylib.ShaderLocationIndex.SHADER_LOC_VECTOR_VIEW],
             &camera_pos, raylib.ShaderUniformDataType.SHADER_UNIFORM_VEC3);

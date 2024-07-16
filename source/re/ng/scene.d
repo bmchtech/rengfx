@@ -14,9 +14,9 @@ static import raylib;
 
 public {
     import re.time;
-    import re.ng.scenebasic;
     import re.ng.scene2d;
     import re.ng.scene3d;
+    import re.ng.viewport;
 }
 
 /// represents a collection of entities that draw to a texture
@@ -25,8 +25,6 @@ abstract class Scene {
     public raylib.Color clear_color = Colors.WHITE;
     /// the entity manager
     public EntityManager ecs;
-    /// the render target
-    public RenderTarget render_target;
     private Vector2 _resolution;
     /// the mode of compositing
     public CompositeMode composite_mode;
@@ -34,8 +32,8 @@ abstract class Scene {
     public PostProcessor[] postprocessors;
     /// updatable managers
     public Manager[] managers;
-    /// the render target's output rectangle
-    public Rectangle output_rect;
+    /// viewports
+    public Viewport[] viewports;
 
     /// the mode for compositing a scene onto the display buffer
     public struct CompositeMode {
@@ -45,10 +43,6 @@ abstract class Scene {
 
     /// creates a new scene
     this() {
-        output_rect = Rectangle(
-            0, 0,
-            Core.window.screen_width, Core.window.screen_height
-        );
     }
 
     /// gets the render resolution. initialized to Core.default_resolution
@@ -95,16 +89,23 @@ abstract class Scene {
         foreach (component; ecs.storage.updatable_renderable_components) {
             update_updatable(component);
         }
+
+        // update viewports
+        foreach (viewport; viewports) {
+            viewport.update();
+        }
     }
 
     /// called internally to render ecs
     public void render() {
-        raylib.BeginTextureMode(render_target);
-        raylib.ClearBackground(clear_color);
+        foreach (viewport; viewports) {
+            raylib.BeginTextureMode(viewport.render_target);
+            raylib.ClearBackground(clear_color);
+            
+            render_scene(viewport);
 
-        render_scene();
-
-        raylib.EndTextureMode();
+            raylib.EndTextureMode();
+        }
     }
 
     /// run postprocessors
@@ -117,18 +118,20 @@ abstract class Scene {
         if (pipeline.length == 0)
             return;
 
-        pipeline[0].process(render_target);
-        auto last_buf = pipeline[0].buffer;
-        for (auto i = 1; i < pipeline.length; i++) {
-            auto postprocessor = pipeline[i];
-            postprocessor.process(last_buf);
-            last_buf = postprocessor.buffer;
+        foreach (viewport; viewports) {
+            pipeline[0].process(viewport.render_target);
+            auto last_buf = pipeline[0].buffer;
+            for (auto i = 1; i < pipeline.length; i++) {
+                auto postprocessor = pipeline[i];
+                postprocessor.process(last_buf);
+                last_buf = postprocessor.buffer;
+            }
+            // draw the last buf in the chain to the main texture
+            RenderExt.draw_render_target_from(last_buf, viewport.render_target);
         }
-        // draw the last buf in the chain to the main texture
-        RenderExt.draw_render_target_from(last_buf, render_target);
     }
 
-    protected abstract void render_scene();
+    protected abstract void render_scene(Viewport viewport);
 
     /// may optionally be used to render global things from a scene
     protected void render_hook() {
@@ -138,18 +141,43 @@ abstract class Scene {
     private void update_render_target() {
         if (Core.headless)
             return;
-        // free any old render target
-        if (render_target != RenderTarget.init) {
-            RenderExt.destroy_render_target(render_target);
+        
+        // // free any old render target
+        // if (render_target != RenderTarget.init) {
+        //     RenderExt.destroy_render_target(render_target);
+        // }
+        // // create render target
+        // // TODO: use scene resolution instead of window resolution
+        // render_target = RenderExt.create_render_target(
+        //     cast(int) resolution.x, cast(int) resolution.y
+        // );
+        // Core.log.info(format("recreated render target of size %s", resolution));
+        // // apply texture filter
+        // raylib.SetTextureFilter(render_target.texture, Core.default_filter_mode);
+
+        foreach (viewport; viewports) {
+            // free any old render target
+            if (viewport.render_target != RenderTarget.init) {
+                RenderExt.destroy_render_target(viewport.render_target);
+            }
+
+            if (viewport.sync_maximized) {
+                // copy output rect from screen bounds
+                viewport.output_rect = Core.window.screen_bounds;
+            }
+
+            // create render target
+            viewport.render_target = RenderExt.create_render_target(
+                cast(int) viewport.output_rect.width, cast(int) viewport.output_rect.height
+            );
         }
-        // create render target
-        // TODO: use scene resolution instead of window resolution
-        render_target = RenderExt.create_render_target(
-            cast(int) resolution.x, cast(int) resolution.y
-        );
-        Core.log.info(format("recreated render target of size %s", resolution));
-        // apply texture filter
-        raylib.SetTextureFilter(render_target.texture, Core.default_filter_mode);
+    }
+
+    void reset_viewports() {
+        foreach (vp; viewports) {
+            vp.destroy();
+        }
+        viewports.length = 0;
     }
 
     /// called internally on scene creation
@@ -184,8 +212,10 @@ abstract class Scene {
         }
 
         if (!Core.headless) {
-            // free render target
-            RenderExt.destroy_render_target(render_target);
+            // destroy viewports
+            foreach (viewport; viewports) {
+                viewport.destroy();
+            }
         }
     }
 
@@ -193,6 +223,7 @@ abstract class Scene {
     void on_window_resized() {
         // if the option is enabled, resize the render target to the new window size
         if (Core.sync_render_target_to_window_resolution) {
+            // the setter will also trigger update_render_target
             resolution = Core.default_resolution;
         }
     }
