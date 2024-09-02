@@ -201,9 +201,11 @@ abstract class Scene {
 
         resolution = Core.default_resolution;
 
-        if (use_default_viewport) {
-            // create default viewport
-            create_default_viewport();
+        if (!Core.headless) {
+            if (use_default_viewport) {
+                // create default viewport
+                create_default_viewport();
+            }
         }
     }
 
