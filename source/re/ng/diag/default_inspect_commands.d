@@ -1,6 +1,6 @@
 /** default console commands */
 
-module re.ng.diag.default_commands;
+module re.ng.diag.default_inspect_commands;
 
 import std.range;
 import std.array;
@@ -11,10 +11,10 @@ import std.conv;
 import re.core;
 import re.ecs;
 
-debug static class DefaultCommands {
+static class DefaultEntityInspectorCommands {
     alias log = Core.log;
     alias scenes = Core.scenes;
-    alias dbg = Core.debugger;
+    alias dbg = Core.inspector_overlay;
     alias con = dbg.console;
 
     static void c_help(string[] args) {
@@ -113,9 +113,9 @@ debug static class DefaultCommands {
 
     static void c_inspect(string[] args) {
         if (args.length == 0) {
-            if (dbg.inspector.open) {
+            if (dbg.entity_inspect_view.open) {
                 // close inspector when run without args
-                dbg.inspector.close();
+                dbg.entity_inspect_view.close();
             } else {
                 // inspector isn't open, and no arg was given
                 log.err("usage: inspect <entity>");
@@ -125,10 +125,10 @@ debug static class DefaultCommands {
         Entity entity;
         if (!pick_entity(args[0], entity))
             return;
-        if (dbg.inspector.open)
-            dbg.inspector.close(); // close the existing inspector
+        if (dbg.entity_inspect_view.open)
+            dbg.entity_inspect_view.close(); // close the existing inspector
 
         // attach the inspector to this entity
-        dbg.inspector.inspect(entity);
+        dbg.entity_inspect_view.inspect(entity);
     }
 }

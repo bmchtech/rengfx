@@ -46,8 +46,8 @@ abstract class Core {
     /// whether to draw debug information
     public static bool debug_render;
 
-    /// debugger utility
-    debug public static Debugger debugger;
+    /// inspector overlay utility
+    public static InspectorOverlay inspector_overlay;
 
     /// whether the game is running
     public static bool running;
@@ -127,8 +127,12 @@ abstract class Core {
 
         add_manager(new TweenManager());
 
+        inspector_overlay = new InspectorOverlay();
         debug {
-            debugger = new Debugger();
+            // in debug builds, enable the inspector overlay by default
+            inspector_overlay.enabled = true;
+            // add the default inspector commands
+            inspector_overlay.console.add_default_inspector_commands();
         }
 
         version (vr) {
@@ -209,8 +213,9 @@ abstract class Core {
         foreach (scene; _scenes) {
             scene.update();
         }
-        debug {
-            debugger.update();
+
+        if (inspector_overlay.enabled) {
+            inspector_overlay.update();
         }
     }
 
@@ -251,9 +256,11 @@ abstract class Core {
                     raylib.EndShaderMode();
             }
         }
-        debug {
-            debugger.render();
+        
+        if (inspector_overlay.enabled) {
+            inspector_overlay.render();
         }
+
         raylib.EndDrawing();
     }
 
@@ -319,9 +326,7 @@ abstract class Core {
             }
 
         }
-        debug {
-            debugger.destroy();
-        }
+        inspector_overlay.destroy();
         content.destroy();
         load_scenes([]); // end scenes
         foreach (manager; managers) {

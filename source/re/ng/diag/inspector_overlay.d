@@ -1,6 +1,6 @@
 /** provides runtime debugging functionality in an overlay */
 
-module re.ng.diag.debugger;
+module re.ng.diag.inspector_overlay;
 
 import std.format;
 
@@ -11,12 +11,14 @@ import re.math;
 import re.gfx;
 import re.gfx.render_ext;
 import re.ng.diag.console;
-import re.ng.diag.inspector;
+import re.ng.diag.inspector_overlay;
+import re.ng.diag.entity_inspect_view;
 static import raylib;
 static import raygui;
 
 /// a robust overlay debugging tool
-debug class Debugger {
+class InspectorOverlay {
+    public bool enabled = false;
     public enum screen_padding = 12;
     public Rectangle ui_bounds;
     private enum bg_col = Color(180, 180, 180, 180);
@@ -24,15 +26,15 @@ debug class Debugger {
     private enum _render_col = Color(255, 255, 255, 160);
 
     /// inspector panel
-    public static Inspector inspector;
+    public static EntityInspectView entity_inspect_view;
 
     /// debug console
-    public static Console console;
+    public static InspectorConsole console;
 
     /// sets up debugger
     this() {
-        inspector = new Inspector();
-        console = new Console();
+        entity_inspect_view = new EntityInspectView();
+        console = new InspectorConsole();
         if (!Core.headless) {
             ui_bounds = Rectangle(0, 0, Core.window.screen_width, Core.window.screen_height);
             _render_target = RenderExt.create_render_target(
@@ -48,7 +50,7 @@ debug class Debugger {
     public void update() {
         if (!Core.headless) {
             // auto-resize inspector
-            inspector.width = cast(int)(ui_bounds.width * 0.7);
+            entity_inspect_view.width = cast(int)(ui_bounds.width * 0.7);
         }
 
         if (Input.is_key_pressed(console.key)) {
@@ -56,8 +58,8 @@ debug class Debugger {
             console.open = !console.open;
         }
 
-        if (inspector.open)
-            inspector.update();
+        if (entity_inspect_view.open)
+            entity_inspect_view.update();
         if (console.open)
             console.update();
     }
@@ -66,8 +68,8 @@ debug class Debugger {
         raylib.BeginTextureMode(_render_target);
         raylib.ClearBackground(Colors.BLANK);
 
-        if (inspector.open)
-            inspector.render();
+        if (entity_inspect_view.open)
+            entity_inspect_view.render();
         if (console.open)
             console.render();
 
@@ -82,8 +84,8 @@ debug class Debugger {
 
     /// clean up
     public void destroy() {
-        if (inspector.open) {
-            inspector.close();
+        if (entity_inspect_view.open) {
+            entity_inspect_view.close();
         }
         RenderExt.destroy_render_target(_render_target);
     }

@@ -30,7 +30,7 @@ public static class Input {
         // update virtual inputs
         debug {
             // skip virtual input update if console open
-            if (Core.debugger.console.open) {
+            if (Core.inspector_overlay.console.open) {
                 return;
             }
         }

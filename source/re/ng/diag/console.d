@@ -12,12 +12,12 @@ import re.input.input;
 import re.core;
 import re.math;
 import re.gfx;
-import re.ng.diag.default_commands;
+import re.ng.diag.default_inspect_commands;
 import re.util.interop;
 static import raygui;
 
 /// overlay debug console
-debug class Console {
+class InspectorConsole {
     /// the key that opens the console
     public Keys key = Keys.KEY_GRAVE;
     /// the character representation of the console key
@@ -35,7 +35,7 @@ debug class Console {
     private int _history_depth = 0;
 
     /// represents a command for the debug console
-    struct Command {
+    public struct Command {
         string name;
         void function(string[]) action;
         string help;
@@ -44,16 +44,31 @@ debug class Console {
     /// create a debug console
     this() {
         console_text = blank.c_str();
+    }
 
-        // add default commands
-        add_command(Command("help", &DefaultCommands.c_help, "lists available commands"));
-        add_command(Command("entities", &DefaultCommands.c_entities, "lists scene entities"));
-        add_command(Command("dump", &DefaultCommands.c_dump, "dump a component"));
-        add_command(Command("inspect", &DefaultCommands.c_inspect,
+    public void add_default_inspector_commands() {
+        add_command(Command("help", &DefaultEntityInspectorCommands.c_help, "lists available commands"));
+        add_command(Command("entities", &DefaultEntityInspectorCommands.c_entities, "lists scene entities"));
+        add_command(Command("dump", &DefaultEntityInspectorCommands.c_dump, "dump a component"));
+        add_command(Command("inspect", &DefaultEntityInspectorCommands.c_inspect,
                 "open the inspector on a component"));
     }
 
-    private void add_command(Command command) {
+    public void reset_commands() {
+        commands.clear();
+    }
+
+    public void reset_history() {
+        _history.clear();
+        _history_depth = 0;
+    }
+
+    public void reset() {
+        reset_commands();
+        reset_history();
+    }
+
+    public void add_command(Command command) {
         commands[command.name] = command;
     }
 
@@ -95,8 +110,8 @@ debug class Console {
     }
 
     public void render() {
-        alias pad = Core.debugger.screen_padding;
-        auto screen_br = Vector2(Core.debugger.ui_bounds.width, Core.debugger.ui_bounds.height);
+        alias pad = Core.inspector_overlay.screen_padding;
+        auto screen_br = Vector2(Core.inspector_overlay.ui_bounds.width, Core.inspector_overlay.ui_bounds.height);
         // Core.log.info(format("screen_br: (%s", screen_br));
         auto console_bg_bounds = Rectangle(pad,
             screen_br.y - pad - height, screen_br.x - pad * 2, height);
