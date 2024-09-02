@@ -24,6 +24,9 @@ class Game : Core {
 	}
 
 	override void initialize() {
+		// we will use a custom console
+		this.inspector_overlay.console.reset();
+
 		content.paths ~= ["./content/", "./res/"];
 		load_scenes([new GuiScene()]);
 	}

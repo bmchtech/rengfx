@@ -17,17 +17,6 @@ static class DefaultEntityInspectorCommands {
     alias dbg = Core.inspector_overlay;
     alias con = dbg.console;
 
-    static void c_help(string[] args) {
-        auto sb = appender!string();
-        sb ~= "available commmands:\n";
-        auto command_names = con.commands.keys.sort();
-        foreach (command_name; command_names) {
-            auto command = con.commands[command_name];
-            sb ~= format("%s - %s\n", command.name, command.help);
-        }
-        log.info(sb.data);
-    }
-
     static void c_entities(string[] args) {
         auto sb = appender!string();
         sb ~= "entity list:\n";

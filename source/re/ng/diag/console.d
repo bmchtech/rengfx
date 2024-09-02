@@ -7,6 +7,8 @@ import std.string;
 import std.array;
 import std.range;
 import std.format;
+import std.functional;
+import std.algorithm : sort;
 
 import re.input.input;
 import re.core;
@@ -15,6 +17,13 @@ import re.gfx;
 import re.ng.diag.default_inspect_commands;
 import re.util.interop;
 static import raygui;
+
+/// represents a command for the debug console
+public struct ConsoleCommand {
+    string name;
+    void delegate(string[]) action;
+    string help;
+}
 
 /// overlay debug console
 class InspectorConsole {
@@ -28,34 +37,32 @@ class InspectorConsole {
     private enum blank = "\0                                                                ";
 
     /// console commands
-    public Command[string] commands;
+    public ConsoleCommand[string] commands;
     private enum height = 30;
     private char* console_text;
     private Appender!(string[]) _history;
     private int _history_depth = 0;
-
-    /// represents a command for the debug console
-    public struct Command {
-        string name;
-        void function(string[]) action;
-        string help;
-    }
 
     /// create a debug console
     this() {
         console_text = blank.c_str();
     }
 
+    private void add_builtin_commands() {
+        add_command(ConsoleCommand("help", &cmd_help, "lists available commands"));
+    }
+
     public void add_default_inspector_commands() {
-        add_command(Command("help", &DefaultEntityInspectorCommands.c_help, "lists available commands"));
-        add_command(Command("entities", &DefaultEntityInspectorCommands.c_entities, "lists scene entities"));
-        add_command(Command("dump", &DefaultEntityInspectorCommands.c_dump, "dump a component"));
-        add_command(Command("inspect", &DefaultEntityInspectorCommands.c_inspect,
+        add_command(ConsoleCommand("entities", toDelegate(
+                &DefaultEntityInspectorCommands.c_entities), "lists scene entities"));
+        add_command(ConsoleCommand("dump", toDelegate(&DefaultEntityInspectorCommands.c_dump), "dump a component"));
+        add_command(ConsoleCommand("inspect", toDelegate(&DefaultEntityInspectorCommands.c_inspect),
                 "open the inspector on a component"));
     }
 
     public void reset_commands() {
         commands.clear();
+        add_builtin_commands();
     }
 
     public void reset_history() {
@@ -68,8 +75,19 @@ class InspectorConsole {
         reset_history();
     }
 
-    public void add_command(Command command) {
+    public void add_command(ConsoleCommand command) {
         commands[command.name] = command;
+    }
+
+    private void cmd_help(string[] args) {
+        auto sb = appender!string();
+        sb ~= "available commmands:\n";
+        auto command_names = commands.keys.sort();
+        foreach (command_name; command_names) {
+            auto command = commands[command_name];
+            sb ~= format("%s - %s\n", command.name, command.help);
+        }
+        Core.log.info(sb.data);
     }
 
     public void update() {
@@ -111,7 +129,8 @@ class InspectorConsole {
 
     public void render() {
         alias pad = Core.inspector_overlay.screen_padding;
-        auto screen_br = Vector2(Core.inspector_overlay.ui_bounds.width, Core.inspector_overlay.ui_bounds.height);
+        auto screen_br = Vector2(Core.inspector_overlay.ui_bounds.width, Core
+                .inspector_overlay.ui_bounds.height);
         // Core.log.info(format("screen_br: (%s", screen_br));
         auto console_bg_bounds = Rectangle(pad,
             screen_br.y - pad - height, screen_br.x - pad * 2, height);
