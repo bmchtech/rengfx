@@ -65,7 +65,7 @@ abstract class Scene {
     }
 
     /// called right before cleanup
-    protected void unload() {
+    protected void on_unload() {
 
     }
 
@@ -211,7 +211,7 @@ abstract class Scene {
 
     /// called internally on scene destruction
     public void end() {
-        unload();
+        on_unload();
 
         ecs.destroy();
         ecs = null;

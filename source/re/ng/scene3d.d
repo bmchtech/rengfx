@@ -80,8 +80,4 @@ abstract class Scene3D : Scene {
     override void update() {
         super.update();
     }
-
-    override void unload() {
-        super.unload();
-    }
 }
