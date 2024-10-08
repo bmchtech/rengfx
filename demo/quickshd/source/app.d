@@ -30,12 +30,15 @@ class Game : Core {
 }
 
 class PlayScene : Scene3D {
+	SceneCamera3D cam;
 	Effect postfx1;
 	Effect cubefx1;
 	Cube cube1;
 
 	override void on_start() {
 		clear_color = Colors.LIGHTGRAY;
+
+		cam = (cast(Viewport3D) viewports[0]).cam;
 
 		// set the camera position
 		cam.entity.position = Vector3(0, 10, 10);
