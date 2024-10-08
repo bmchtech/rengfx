@@ -17,7 +17,7 @@ static import raylib;
 static import raygui;
 
 /// real-time object inspector
-class EntityInspectView {
+debug class EntityInspectView {
     /// panel width
     public int width;
     /// whether the inspector is open

@@ -26,14 +26,18 @@ class InspectorOverlay {
     private enum _render_col = Color(255, 255, 255, 160);
 
     /// inspector panel
-    public static EntityInspectView entity_inspect_view;
+    debug {
+        public static EntityInspectView entity_inspect_view;
+    }
 
     /// debug console
     public static InspectorConsole console;
 
     /// sets up debugger
     this() {
-        entity_inspect_view = new EntityInspectView();
+        debug {
+            entity_inspect_view = new EntityInspectView();
+        }
         console = new InspectorConsole();
         if (!Core.headless) {
             ui_bounds = Rectangle(0, 0, Core.window.screen_width, Core.window.screen_height);
@@ -48,30 +52,35 @@ class InspectorOverlay {
     }
 
     public void update() {
-        if (!Core.headless) {
-            // auto-resize inspector
-            entity_inspect_view.width = cast(int)(ui_bounds.width * 0.7);
-        }
-
         if (Input.is_key_pressed(console.key)) {
             Core.debug_render = !Core.debug_render;
             console.open = !console.open;
         }
 
-        if (entity_inspect_view.open)
-            entity_inspect_view.update();
         if (console.open)
             console.update();
+
+        debug {
+            if (!Core.headless) {
+                // auto-resize inspector
+                entity_inspect_view.width = cast(int)(ui_bounds.width * 0.7);
+            }
+            if (entity_inspect_view.open)
+                entity_inspect_view.update();
+        }
     }
 
     public void render() {
         raylib.BeginTextureMode(_render_target);
         raylib.ClearBackground(Colors.BLANK);
 
-        if (entity_inspect_view.open)
-            entity_inspect_view.render();
         if (console.open)
             console.render();
+
+        debug {
+            if (entity_inspect_view.open)
+                entity_inspect_view.render();
+        }
 
         raylib.EndTextureMode();
 
@@ -84,8 +93,10 @@ class InspectorOverlay {
 
     /// clean up
     public void destroy() {
-        if (entity_inspect_view.open) {
-            entity_inspect_view.close();
+        debug {
+            if (entity_inspect_view.open) {
+                entity_inspect_view.close();
+            }
         }
         RenderExt.destroy_render_target(_render_target);
     }

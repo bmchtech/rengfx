@@ -52,12 +52,12 @@ class InspectorConsole {
         add_command(ConsoleCommand("help", &cmd_help, "lists available commands"));
     }
 
-    public void add_default_inspector_commands() {
+    debug public void add_default_inspector_commands() {
         add_command(ConsoleCommand("entities", toDelegate(
                 &DefaultEntityInspectorCommands.c_entities), "lists scene entities"));
-        add_command(ConsoleCommand("dump", toDelegate(&DefaultEntityInspectorCommands.c_dump), "dump a component"));
         add_command(ConsoleCommand("inspect", toDelegate(&DefaultEntityInspectorCommands.c_inspect),
                 "open the inspector on a component"));
+        add_command(ConsoleCommand("dump", toDelegate(&DefaultEntityInspectorCommands.c_dump), "dump a component"));
     }
 
     public void reset_commands() {

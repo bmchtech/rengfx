@@ -11,7 +11,7 @@ import std.conv;
 import re.core;
 import re.ecs;
 
-static class DefaultEntityInspectorCommands {
+debug static class DefaultEntityInspectorCommands {
     alias log = Core.log;
     alias scenes = Core.scenes;
     alias dbg = Core.inspector_overlay;
