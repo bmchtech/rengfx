@@ -51,7 +51,7 @@ class GuiRoot : Component, Renderable2D, Updatable {
         auto ui_font = raylib.LoadFontEx("./res/SourceSansPro-Regular.ttf", UI_FS, null, 0);
         raylib.SetTextureFilter(ui_font.texture, raylib.TextureFilter.TEXTURE_FILTER_POINT);
         ctx = InitNuklearEx(ui_font, UI_FS);
-        ui_scale = Core.window.dpi_scale * Core.render_oversample_factor;
+        ui_scale = Core.window.dpi_max_scale * Core.render_oversample_factor;
         SetNuklearScaling(ctx, ui_scale);
         apply_style(ctx);
 
