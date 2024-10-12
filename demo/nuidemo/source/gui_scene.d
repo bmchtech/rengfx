@@ -44,7 +44,7 @@ class GuiScene : Scene2D {
 
     override void render_hook() {
         // draw fps in bottom right corner
-        auto ui_scale = cast(int)(Core.window.dpi_max_scale * Core.render_oversample_factor);
+        auto ui_scale = cast(int)(Core.window.dpi_scale * Core.render_oversample_factor);
         auto font_size = 16 * ui_scale;
         raylib.DrawText(
             format("%s", Core.fps).c_str(),
