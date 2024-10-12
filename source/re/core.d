@@ -247,7 +247,8 @@ abstract class Core {
 
             foreach (viewport; scene.viewports) {
                 RenderExt.draw_render_target_crop(
-                    viewport.render_target, viewport.crop_bounds, viewport.output_bounds, scene.composite_mode.color
+                    viewport.render_target, viewport.crop_bounds, viewport.output_bounds, scene
+                        .composite_mode.color
                 );
             }
 
@@ -256,7 +257,7 @@ abstract class Core {
                     raylib.EndShaderMode();
             }
         }
-        
+
         if (inspector_overlay.enabled) {
             inspector_overlay.render();
         }
@@ -367,8 +368,8 @@ abstract class Core {
 
         // set the render resolution
         default_resolution = Vector2(render_res_x, render_res_y);
-        Core.log.info(format("updating render resolution to %s (oversample %s)",
-                default_resolution, render_oversample_factor));
+        Core.log.info(format("updating render resolution to %s (oversample %s) -> screen rect %s",
+                default_resolution, render_oversample_factor, window.screen_bounds));
     }
 
     /// overall scale factor from screen space coordinates to render space
