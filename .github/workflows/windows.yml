@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     env:
       RAYLIB_PREBUILD_VERSION: 5.0.0-r1
-      DRAY_VERSION: 5.0.0-r4
+      DRAY_VERSION: 5.0.0-r5
     steps:
     - uses: actions/checkout@v3
     - uses: dlang-community/setup-dlang@v2
