@@ -50,7 +50,8 @@ class Window {
     }
 
     public @property float dpi_scale() {
-        return raylib.GetWindowScaleDPI().x;
+        auto scale_dpi_vec = raylib.GetWindowScaleDPI();
+        return max(scale_dpi_vec.x, scale_dpi_vec.y);
     }
 
     public @property int screen_width() {
@@ -62,7 +63,7 @@ class Window {
     }
 
     public @property Rectangle screen_bounds() {
-        return Rectangle(0, 0, screen_width * Core.window.dpi_scale, screen_height * Core.window.dpi_scale);
+        return Rectangle(0, 0, screen_width, screen_height);
     }
 
     public @property int render_width() {
