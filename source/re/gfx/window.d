@@ -49,19 +49,8 @@ class Window {
         raylib.CloseWindow();
     }
 
-    public @property float dpi_max_scale() {
-        auto scale_dpi_vec = raylib.GetWindowScaleDPI();
-        return max(scale_dpi_vec.x, scale_dpi_vec.y);
-    }
-
-    public @property float dpi_scale_x() {
-        auto scale_dpi_vec = raylib.GetWindowScaleDPI();
-        return scale_dpi_vec.x;
-    }
-
-    public @property float dpi_scale_y() {
-        auto scale_dpi_vec = raylib.GetWindowScaleDPI();
-        return scale_dpi_vec.y;
+    public @property float dpi_scale() {
+        return raylib.GetWindowScaleDPI().x;
     }
 
     public @property int screen_width() {
@@ -73,7 +62,7 @@ class Window {
     }
 
     public @property Rectangle screen_bounds() {
-        return Rectangle(0, 0, screen_width * Core.window.dpi_scale_x, screen_height * Core.window.dpi_scale_y);
+        return Rectangle(0, 0, screen_width * Core.window.dpi_scale, screen_height * Core.window.dpi_scale);
     }
 
     public @property int render_width() {

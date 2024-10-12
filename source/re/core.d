@@ -352,8 +352,8 @@ abstract class Core {
     private void calculate_render_resolution() {
         // since window was resized, update our render resolution
         // first get the new window size
-        auto render_res_x = window.render_width * window.dpi_scale_x;
-        auto render_res_y = window.render_height * window.dpi_scale_y;
+        auto render_res_x = window.render_width * window.dpi_scale;
+        auto render_res_y = window.render_height * window.dpi_scale;
 
         // set mouse scale
         auto mouse_scale_factor = 1.0 * scale_factor;
@@ -373,7 +373,7 @@ abstract class Core {
 
     /// overall scale factor from screen space coordinates to render space
     static @property float scale_factor() {
-        return window.dpi_max_scale * render_oversample_factor;
+        return window.dpi_scale * render_oversample_factor;
     }
 }
 
